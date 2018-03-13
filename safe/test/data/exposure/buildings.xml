@@ -170,59 +170,49 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <layer_mode>
+            <gco:CharacterString>classified</gco:CharacterString>
+          </layer_mode>
+          <exposure_unit>
+            <gco:CharacterString/>
+          </exposure_unit>
           <classification>
             <gco:CharacterString>generic_structure_classes</gco:CharacterString>
           </classification>
+          <keyword_version>
+            <gco:CharacterString>4.3</gco:CharacterString>
+          </keyword_version>
+          <source>
+            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
+          <active_band>
+            <gco:Integer/>
+          </active_band>
+          <value_map>
+            <gco:Dictionary>{&quot;government&quot;: [&quot;GOVERNMENT&quot;, &quot;Government&quot;, &quot;government&quot;], &quot;residential&quot;: [&quot;RESIDENTIAL&quot;, &quot;Residential&quot;, &quot;residential&quot;], &quot;commercial&quot;: [&quot;COMMERCIAL&quot;, &quot;Commercial&quot;, &quot;Industrial&quot;, &quot;commercial&quot;], &quot;health&quot;: [&quot;CLINIC/DOCTOR&quot;, &quot;clinic/doctor&quot;], &quot;education&quot;: [&quot;School&quot;, &quot;school&quot;], &quot;place of worship&quot;: [&quot;PLACE OF WORSHIP - ISLAM&quot;, &quot;Place of Worship - Islam&quot;, &quot;place of worship - islam&quot;]}</gco:Dictionary>
+          </value_map>
+          <layer_purpose>
+            <gco:CharacterString>exposure</gco:CharacterString>
+          </layer_purpose>
           <inasafe_fields>
             <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;TYPE&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
-          <source>
-            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
-          </source>
-          <value_map>
-            <gco:Dictionary>{&quot;government&quot;: [&quot;Government&quot;], &quot;residential&quot;: [&quot;Residential&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;, &quot;Industrial&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;]}</gco:Dictionary>
-          </value_map>
-          <layer_geometry>
-            <gco:CharacterString>polygon</gco:CharacterString>
-          </layer_geometry>
+          <extra_keywords>
+            <gco:Dictionary/>
+          </extra_keywords>
           <exposure>
             <gco:CharacterString>structure</gco:CharacterString>
           </exposure>
-          <report>
-            <gco:CharacterString/>
-          </report>
-          <exposure_unit>
-            <gco:CharacterString/>
-          </exposure_unit>
-          <keyword_version>
-            <gco:CharacterString>4.0</gco:CharacterString>
-          </keyword_version>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
-          <allow_resampling>
-            <gco:CharacterString/>
-          </allow_resampling>
-          <layer_purpose>
-            <gco:CharacterString>exposure</gco:CharacterString>
-          </layer_purpose>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
-          <layer_mode>
-            <gco:CharacterString>classified</gco:CharacterString>
-          </layer_mode>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

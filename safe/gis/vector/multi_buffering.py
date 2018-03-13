@@ -3,7 +3,6 @@
 """Buffer a vector layer using many buffers (for volcanoes or rivers)."""
 
 from qgis.core import (
-    QgsVectorLayer,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsGeometry,
@@ -12,13 +11,13 @@ from qgis.core import (
 )
 
 from safe.common.utilities import get_utm_epsg
-from safe.gis.vector.tools import (
-    create_memory_layer,
-    create_field_from_definition)
-from safe.gis.sanity_check import check_layer
 from safe.definitions.fields import hazard_class_field, buffer_distance_field
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.processing_steps import buffer_steps
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import (
+    create_memory_layer,
+    create_field_from_definition)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -73,7 +72,7 @@ def multi_buffering(layer, radii, callback=None):
 
     buffered = create_memory_layer(
         output_layer_name, QGis.Polygon, input_crs, fields)
-    data_provider = buffered.dataProvider()
+    buffered.startEditing()
 
     # Reproject features if needed into UTM if the layer is in 4326.
     if layer.crs().authid() == 'EPSG:4326':
@@ -116,10 +115,12 @@ def multi_buffering(layer, radii, callback=None):
             new_feature.setGeometry(circle)
             new_feature.setAttributes(attributes)
 
-            data_provider.addFeatures([new_feature])
+            buffered.addFeature(new_feature)
 
         if callback:
             callback(current=i, maximum=feature_count, step=processing_step)
+
+    buffered.commitChanges()
 
     # We transfer keywords to the output.
     buffered.keywords = layer.keywords

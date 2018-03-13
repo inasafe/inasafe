@@ -7,8 +7,8 @@ import os
 from datetime import datetime
 from xml.etree import ElementTree
 
-from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.definitions.metadata import TYPE_CONVERSIONS, METADATA_XML_TEMPLATE
 from safe.metadata.encoder import MetadataEncoder
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utilities import (
@@ -153,6 +153,13 @@ class BaseMetadata(object):
             'inasafe/'
             'inasafe_default_values/'
             'gco:Dictionary'),
+        'extra_keywords': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'extra_keywords/'
+            'gco:Dictionary'),
     }
 
     def __getattr__(self, name):
@@ -286,11 +293,11 @@ class BaseMetadata(object):
         :rtype: str
         """
         json_dumps = json.dumps(
-                self.dict,
-                indent=2,
-                sort_keys=True,
-                separators=(',', ': '),
-                cls=MetadataEncoder
+            self.dict,
+            indent=2,
+            sort_keys=True,
+            separators=(',', ': '),
+            cls=MetadataEncoder
         )
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'

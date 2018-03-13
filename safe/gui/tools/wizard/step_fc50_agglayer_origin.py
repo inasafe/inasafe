@@ -3,11 +3,10 @@
 
 from PyQt4.QtGui import QPixmap
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -75,7 +74,7 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         self.parent.pbnNext.setEnabled(True)
 
     def set_widgets(self):
-        """Set widgets on the Aggregation Layer Origin Type tab"""
+        """Set widgets on the Aggregation Layer Origin Type tab."""
         # First, list available layers in order to check if there are
         # any available layers. Note This will be repeated in
         # set_widgets_step_fc_agglayer_from_canvas because we need

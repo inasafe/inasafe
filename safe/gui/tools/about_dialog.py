@@ -1,36 +1,25 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **About Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '26/02/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""About Dialog."""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA
 from PyQt4 import QtGui
 
 from safe.common.version import get_version
 from safe.definitions.messages import limitations, disclaimer
 from safe.utilities.resources import resources_path, get_ui_class
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 FORM_CLASS = get_ui_class('about_dialog_base.ui')
 
 
 class AboutDialog(QtGui.QDialog, FORM_CLASS):
+
     """About dialog for the InaSAFE plugin."""
 
     def __init__(self, parent=None):
@@ -44,6 +33,9 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(self.tr('About InaSAFE %s' % get_version()))
         self.parent = parent
+
+        icon = resources_path('img', 'icons', 'icon.png')
+        self.setWindowIcon(QtGui.QIcon(icon))
 
         # Set Limitations Text
         limitations_text = ''

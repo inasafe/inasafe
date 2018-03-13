@@ -2,21 +2,17 @@
 """InaSAFE Wizard Step Hazard Layer Canvas."""
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import pyqtSignature, Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem, QPixmap
-
+from PyQt4.QtGui import QListWidgetItem, QPixmap, QFont
 from qgis.core import QgsMapLayerRegistry
 
-from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.utilities.resources import resources_path
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
+from safe.definitions.layer_purposes import layer_purpose_hazard
+from safe.gui.tools.wizard.utilities import get_image_path
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -83,10 +79,11 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         else:
             return None
         try:
-            layer_id = item.data(QtCore.Qt.UserRole)
+            layer_id = item.data(Qt.UserRole)
         except (AttributeError, NameError):
             layer_id = None
 
+        # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
@@ -96,20 +93,20 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         :returns: Metadata of found layers.
         :rtype: list of dicts
         """
-        italic_font = QtGui.QFont()
+        italic_font = QFont()
         italic_font.setItalic(True)
         list_widget = self.lstCanvasHazLayers
         # Add compatible layers
         list_widget.clear()
         for layer in self.parent.get_compatible_canvas_layers('hazard'):
             item = QListWidgetItem(layer['name'], list_widget)
-            item.setData(QtCore.Qt.UserRole, layer['id'])
+            item.setData(Qt.UserRole, layer['id'])
             if not layer['keywords']:
                 item.setFont(italic_font)
             list_widget.addItem(item)
 
     def set_widgets(self):
-        """Set widgets on the Hazard Layer From TOC tab"""
+        """Set widgets on the Hazard Layer From TOC tab."""
         # The list is already populated in the previous step, but now we
         # need to do it again in case we're back from the Keyword Wizard.
         # First, preserve self.parent.layer before clearing the list
@@ -122,16 +119,14 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
             layers = []
             for index in xrange(self.lstCanvasHazLayers.count()):
                 item = self.lstCanvasHazLayers.item(index)
-                layers += [item.data(QtCore.Qt.UserRole)]
+                layers += [item.data(Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasHazLayers.setCurrentRow(layers.index(last_layer))
 
         # Set icon
         hazard = self.parent.step_fc_functions1.selected_value(
             layer_purpose_hazard['key'])
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
-                hazard['key'] or 'notset'))
+        icon_path = get_image_path(hazard)
         self.lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))
 
     @property

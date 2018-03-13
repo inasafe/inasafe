@@ -7,17 +7,23 @@
   },
 
   "expected_outputs":{
-    "count": 3
+    "count": 4
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:4326"
+      },
       "process":[
         "Zonal stats between exposure and aggregate hazard",
         "Add default values",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
       ]
+    },
+    "pre_processor": {
+      "info": {},
+      "process": ["Earthquake Contour Pre Processor"]
     },
     "post_processor":{
       "info": {},
@@ -46,14 +52,13 @@
       },
       "process":[
         "Cleaning the aggregation layer",
-        "Aggregation layer already in exposure CRS",
         "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
       "info": {
-        "use_same_projection":true
+        "use_same_projection_as_aggregation":true
       },
       "process":[
         "Clip raster by analysis bounding box",
@@ -66,7 +71,9 @@
       ]
     },
     "exposure":{
-      "info": {},
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
       "process":[
       ]
     }

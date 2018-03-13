@@ -3,15 +3,15 @@
 """Add default values."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm)
 from safe.definitions.processing_steps import assign_default_values_steps
 from safe.definitions.utilities import definition
-from safe.gis.vector.tools import create_field_from_definition
 from safe.gis.sanity_check import check_layer
-from safe.utilities.i18n import tr
+from safe.gis.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -50,7 +50,7 @@ def add_default_values(layer, callback=None):
     """
     output_layer_name = assign_default_values_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
-    processing_step = assign_default_values_steps['step_name']
+    processing_step = assign_default_values_steps['step_name']  # NOQA
 
     fields = layer.keywords.get('inasafe_fields')
     if not isinstance(fields, dict):

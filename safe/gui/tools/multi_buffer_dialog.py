@@ -6,16 +6,17 @@ import os
 from collections import OrderedDict
 from operator import itemgetter
 
-from qgis.core import QgsMapLayerRegistry
-from qgis.gui import QgsMapLayerProxyModel
 from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import QFileDialog, QIcon
+from qgis.core import QgsMapLayerRegistry
+from qgis.gui import QgsMapLayerProxyModel
+
 from safe.common.utilities import unique_filename, temp_dir
 from safe.datastore.folder import Folder
 from safe.gis.vector.multi_buffering import multi_buffering
-from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.help.multi_buffer_help import multi_buffer_help
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
 from safe.utilities.resources import (
     get_ui_class,
@@ -40,6 +41,8 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
+        icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
         self.parent = parent
         self.iface = iface
         self.dock_widget = dock_widget
@@ -244,7 +247,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
         elif (self.hazard_class_form.count() > 0 and
                 self.layer.currentLayer().name() and
-                    len(self.output_form.text()) >= 0):
+                len(self.output_form.text()) >= 0):
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
         else:
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)

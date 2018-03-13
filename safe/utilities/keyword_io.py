@@ -7,12 +7,11 @@ from datetime import datetime
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QUrl, QDateTime
-
 from qgis.core import QgsMapLayer
 
-from safe.definitions.utilities import definition
 from safe import messaging as m
-
+from safe.definitions.keyword_properties import property_extra_keywords
+from safe.definitions.utilities import definition
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
@@ -153,6 +152,7 @@ class KeywordIO(QObject):
             'scale',
             'license',
             'date',
+            'extra_keywords',
             'keyword_version'
         ]  # everything else in arbitrary order
         report = m.Message()
@@ -190,7 +190,7 @@ class KeywordIO(QObject):
             table.add(row)
             # Next the data source
             keyword = tr('Layer source')
-            value = self.layer.source()
+            value = self.layer.publicSource()  # Hide password
             row = self._keyword_to_row(keyword, value, wrap_slash=True)
             table.add(row)
 
@@ -256,6 +256,8 @@ class KeywordIO(QObject):
                 'inasafe_fields',
                 'inasafe_default_values']:
             value = self._dict_to_row(value)
+        elif keyword == 'extra_keywords':
+            value = self._dict_to_row(value, property_extra_keywords)
         elif keyword == 'value_maps':
             value = self._value_maps_row(value)
         elif keyword == 'thresholds':
@@ -287,7 +289,16 @@ class KeywordIO(QObject):
         # otherwise just treat the keyword as literal text
         else:
             # Otherwise just directly read the value
-            value = get_string(value)
+            pretty_value = None
+
+            value_definition = definition(value)
+
+            if value_definition:
+                pretty_value = value_definition.get('name')
+
+            if not pretty_value:
+                pretty_value = get_string(value)
+            value = pretty_value
 
         key = m.ImportantText(keyword_definition)
         row.add(m.Cell(key))
@@ -380,14 +391,15 @@ class KeywordIO(QObject):
             i += 1
             exposure = definition(exposure_key)
             exposure_row = m.Row()
-            exposure_row.add(m.Cell(m.ImportantText('Exposure')))
+            exposure_row.add(m.Cell(m.ImportantText(tr('Exposure'))))
             exposure_row.add(m.Cell(m.Text(exposure['name'])))
             exposure_row.add(m.Cell(''))
             table.add(exposure_row)
 
             active_classification = None
             classification_row = m.Row()
-            classification_row.add(m.Cell(m.ImportantText('Classification')))
+            classification_row.add(m.Cell(m.ImportantText(tr(
+                'Classification'))))
             for classification, value in classifications.items():
                 if value.get('active'):
                     active_classification = definition(classification)
@@ -410,7 +422,7 @@ class KeywordIO(QObject):
             table.add(header)
             classes = active_classification.get('classes')
             # Sort by value, put the lowest first
-            classes = sorted(classes, key=lambda k: k['value'])
+            classes = sorted(classes, key=lambda the_key: the_key['value'])
             for the_class in classes:
                 threshold = classifications[active_classification['key']][
                     'classes'][the_class['key']]
@@ -430,7 +442,7 @@ class KeywordIO(QObject):
         return table
 
     @staticmethod
-    def _dict_to_row(keyword_value):
+    def _dict_to_row(keyword_value, keyword_property=None):
         """Helper to make a message row from a keyword where value is a dict.
 
         .. versionadded:: 3.2
@@ -454,19 +466,30 @@ class KeywordIO(QObject):
             be a string representation of a dict, or a dict.
         :type keyword_value: basestring, dict
 
+        :param keyword_property: The definition of the keyword property.
+        :type keyword_property: dict, None
+
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value in keyword_value.items():
+        # Sorting the key
+        for key in sorted(keyword_value.keys()):
+            value = keyword_value[key]
             row = m.Row()
             # First the heading
-            if definition(key):
-                name = definition(key)['name']
+            if keyword_property is None:
+                if definition(key):
+                    name = definition(key)['name']
+                else:
+                    name = tr(key.replace('_', ' ').capitalize())
             else:
-                name = tr(key.capitalize())
+                default_name = tr(key.replace('_', ' ').capitalize())
+                name = keyword_property.get('member_names', {}).get(
+                    key, default_name)
+
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text
@@ -481,6 +504,27 @@ class KeywordIO(QObject):
                 else:
                     row.add(m.Cell(value[0]))
             else:
+                if keyword_property == property_extra_keywords:
+                    key_definition = definition(key)
+                    if key_definition and key_definition.get('options'):
+                        value_definition = definition(value)
+                        if value_definition:
+                            value = value_definition.get('name', value)
+                    elif key_definition and key_definition.get(
+                            'type') == datetime:
+                        try:
+                            value = datetime.strptime(value, key_definition[
+                                'store_format'])
+                            value = value.strftime(
+                                key_definition['show_format'])
+                        except ValueError:
+                            try:
+                                value = datetime.strptime(
+                                    value, key_definition['store_format2'])
+                                value = value.strftime(
+                                    key_definition['show_format'])
+                            except ValueError:
+                                pass
                 row.add(m.Cell(value))
 
             table.add(row)

@@ -27,6 +27,7 @@ def hello_world_extractor(impact_report, component):
     context['hello_world'] = "Hello World!"
     return context
 
+
 # second step
 hello_world_component = {
     'key': 'hello-world',
@@ -56,6 +57,8 @@ hello_world_metadata_html = {
 
 
 class TestHelloWorldReport(unittest.TestCase):
+
+    """Test about report generation, from scratch."""
 
     @classmethod
     def fixtures_dir(cls, path):

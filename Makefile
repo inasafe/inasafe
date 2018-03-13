@@ -106,15 +106,15 @@ clean:
 
 
 # Run the test suite followed by style checking
-test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
+test: clean flake8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
 
 # Run the test suite for gui only
-guitest: pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck gui_test_suite
+guitest: flake8 disabled_tests dependency_test unwanted_strings testdata_errorcheck gui_test_suite
 
 # Run the test suite followed by style checking includes realtime and requires QGIS 2.0
-qgis2test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations qgis2_test_suite
+qgis2test: clean flake8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations qgis2_test_suite
 
-quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
+quicktest: flake8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
 
 # you can pass an argument called PACKAGE to run only tests in that package
 # usage: make test_suite_quick PACKAGE=common
@@ -127,26 +127,26 @@ test_suite_quick:
 test_suite_all:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v safe/${PACKAGE} --with-id
 
-# Run pep8 style checking
-#http://pypi.python.org/pypi/pep8
-pep8:
-	@echo
-	@echo "-----------"
-	@echo "PEP8 issues"
-	@echo "-----------"
-	@pep8 --version
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402 --exclude venv,pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py  . || true
-
 # Run pep257 style checking
 #http://pypi.python.org/pypi/pep257
 # http://pep257.readthedocs.io/en/latest/error_codes.html
+# D104 will be disabled.
 pep257:
 	@echo
 	@echo "-----------"
 	@echo "PEP257 issues"
 	@echo "-----------"
 	@pep257 --version
-	@pep257 --ignore=D100,D101,D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 --count safe/ || true
+	@pep257 --ignore=D102,D103,D104,D105,D200,D202,D203,D205,D210,D211,D300,D301,D302,D400,D401 safe/ || true
+
+# Run flake8 style checking
+flake8:
+	@echo
+	@echo "-----------"
+	@echo "Flake8 issues"
+	@echo "-----------"
+	@flake8 --version
+	@flake8 || true
 
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
@@ -334,34 +334,14 @@ build-nightlies:
 #
 ##########################################################
 
-docker-run-tests:
-    # The image is hosted in docker hub at
-    # https://registry.hub.docker.com/u/inasafe/inasafe-test-runner/
-	docker pull inasafe/inasafe-test-runner
-	#docker rm inasafe-test-runner
-	docker run -i -t --rm --name="inasafe-tests" \
-		-v /Users/timlinux/dev/python/inasafe_data/:/inasafe_data \
-		-v /Users/timlinux/dev/python/inasafe:/inasafe \
-		inasafe/inasafe-test-runner \
-		/bin/bash
-
-
-docker-test: testdata clean
+docker-test:
 	@echo
 	@echo "----------------------------------"
-	@echo "Regression Test Suite for running in docker"
-	@echo " against QGIS 2.x"
+	@echo "Run tests in docker"
+	@echo "Image: kartoza/qgis-testing:boundlessgeo-2.14.7"
+	@echo "You can change the tested package in 'test_suite.py' in the 'test_package' function."
 	@echo "----------------------------------"
-	@PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run \
-		--server-args="-screen 0, 1024x768x24" \
-		nosetests \
-		-v \
-		--with-id \
-		--with-xcoverage \
-		--with-xunit \
-		--verbose \
-		--cover-package=safe safe
-
+	@./run-docker-test.sh
 
 docker-update-translation-strings:
 	@echo "Update translation using docker"
@@ -374,80 +354,6 @@ docker-compile-translation-strings:
 docker-test-translation:
 	@echo "Update translation using docker"
 	@docker run -t -i -v $(DIR):/home kartoza/qt-translation make test-translations
-
-
-##########################################################
-#
-# Make targets specific to Jenkins go below this point
-#
-##########################################################
-
-jenkins-test: testdata clean
-	@echo
-	@echo "----------------------------------"
-	@echo "Regression Test Suite for Jenkins"
-	@echo " against QGIS 2.x"
-	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests --cover-package=safe --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe || :
-
-jenkins-qgis2-test: testdata clean
-	@echo
-	@echo "----------------------------------"
-	@echo "Regression Test Suite for Jenkins"
-	@echo " against QGIS 2.x"
-	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,realtime safe realtime || :
-
-jenkins-pyflakes:
-	@echo
-	@echo "----------------------------------"
-	@echo "PyFlakes check for Jenkins"
-	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe realtime > pyflakes.log || :
-
-jenkins-sloccount:
-	@echo "----------------------"
-	@echo " Lines of code analysis for Jenkins"
-	@echo " Generated using David A. Wheeler's 'SLOCCount'"
-	@echo "----------------------"
-	# This line is for machine readable output for use by Jenkins
-	@sloccount --duplicates --wide --details  safe_api.py safe realtime | fgrep -v .svn > sloccount.sc || :
-
-jenkins-pylint:
-	@echo
-	@echo "----------------------------------"
-	@echo "PyLint check for Jenkins"
-	@echo " *_base.py modules are ignored since they are autogenerated by Qt4"
-	@echo " we enable -i y option so that we can see message ids as in some"
-	@echo " cases we want to suppress warnings in the python code like this:"
-	@echo " from pydevd import * # pylint: disable=F0401"
-	@echo " with 'F0401' being the warning code."
-	@echo "----------------------------------"
-	rm -f pylint.log
-	@pylint --version
-	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/safe_extras; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins safe realtime> pylint.log || :
-
-jenkins-pep8:
-	@echo
-	@echo "-----------------------------"
-	@echo "PEP8 issue check for Jenkins"
-	@echo "-----------------------------"
-	@pep8 --version
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402 --exclude pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py,about_dialog_base.py,extent_selector_base.py,extent_selector_dialog_base.py,function_browser_dialog_base.py,needs_calculator_dialog_base.py,needs_manager_dialog_base.py,osm_downloader_dialog_base.py,shakemap_importer_dialog_base.py . > pep8.log || :
-
-jenkins-realtime-test:
-
-	@echo
-	@echo "---------------------------------------------------------------"
-	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
-	@echo "if you are going to run more than "
-	@echo "one InaSAFE Jenkins job, you should run each on a different"
-	@echo "display by changing the :100 option below to a different number"
-	@echo "Update: Above is taken care of by xvfb jenkins plugin now"
-	@echo "---------------------------------------------------------------"
-	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
 
 apidocs:
 	@echo

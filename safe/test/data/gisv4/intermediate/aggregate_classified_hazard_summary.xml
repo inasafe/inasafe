@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <scale>
             <gco:CharacterString/>
@@ -200,7 +199,21 @@
             <gco:CharacterString/>
           </report>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;education_exposure_count_field&quot;: &quot;education_count&quot;, &quot;health_exposure_count_field&quot;: &quot;health_count&quot;, &quot;government_exposure_count_field&quot;: &quot;government_count&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;residential_exposure_count_field&quot;: &quot;residential_count&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;commercial_exposure_count_field&quot;: &quot;commercial_count&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;, &quot;affected_field&quot;: &quot;affected&quot;}</gco:Dictionary>
+            <gco:Dictionary>
+              {
+                &quot;education_exposure_count_field&quot;: &quot;education_count&quot;, 
+                &quot;health_exposure_count_field&quot;: &quot;health_count&quot;, 
+                &quot;government_exposure_count_field&quot;: &quot;government_count&quot;, 
+                &quot;total_field&quot;: &quot;total&quot;, 
+                &quot;residential_exposure_count_field&quot;: &quot;residential_count&quot;, 
+                &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, 
+                &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, 
+                &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, 
+                &quot;commercial_exposure_count_field&quot;: &quot;commercial_count&quot;, 
+                &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;, 
+                &quot;affected_field&quot;: &quot;affected&quot;
+              }
+            </gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>

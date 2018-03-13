@@ -38,8 +38,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
     extra_args = component_metadata.extra_args
     analysis_layer = impact_report.analysis
     analysis_keywords = analysis_layer.keywords['inasafe_fields']
-    debug_mode = impact_report.impact_function.debug_mode
-    is_rounding = not debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
 
     header = resolve_from_dictionary(extra_args, 'header')
     context['header'] = header
@@ -109,9 +108,10 @@ def minimum_needs_extractor(impact_report, component_metadata):
                 continue
             value = format_number(
                 analysis_feature[field_idx],
-                enable_rounding=is_rounding,
+                use_rounding=use_rounding,
                 is_population=True)
 
+            unit_abbreviation = ''
             if field.get('need_parameter'):
                 need_parameter = field['need_parameter']
                 """:type: ResourceParameter"""

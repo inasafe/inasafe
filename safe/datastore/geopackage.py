@@ -11,16 +11,15 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from osgeo import ogr, osr, gdal
 from PyQt4.QtCore import QFileInfo
+from osgeo import ogr, osr, gdal
 from qgis.core import (
     QgsVectorLayer,
-    QgsRasterLayer,
 )
 
-from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
-from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
+from safe.datastore.datastore import DataStore
+from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
 
 
 class GeoPackage(DataStore):
@@ -62,7 +61,8 @@ class GeoPackage(DataStore):
                     raise ErrorDataStore(msg)
         else:
             path = self.uri.absoluteFilePath()
-            datasource = self.vector_driver.CreateDataSource(path)
+            # We need this variable to be created. The delete will create it.
+            datasource = self.vector_driver.CreateDataSource(path)  # NOQA
             del datasource
 
     @property

@@ -16,16 +16,17 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from exceptions import InvalidMessageItemError
+
 from PyQt4.QtCore import QPyNullVariant
-from safe.utilities.i18n import tr
 
 from message_element import MessageElement
-from exceptions import InvalidMessageItemError
+from safe.utilities.i18n import tr
 from text import PlainText
 
 
 class AbstractList(MessageElement):
-    """A class to model free text in the messaging system """
+    """A class to model free text in the messaging system."""
 
     def __init__(self, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
@@ -64,6 +65,10 @@ class AbstractList(MessageElement):
         elif isinstance(item, QPyNullVariant):
             self.items.append(PlainText(
                 tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
+        elif isinstance(item, tuple) or isinstance(item, list):
+            for i in item:
+                # Recursive call
+                self.add(i)
         else:
             raise InvalidMessageItemError(item, item.__class__)
 

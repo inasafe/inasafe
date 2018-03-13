@@ -4,19 +4,16 @@
 import logging
 
 from parameters.parameter_exceptions import InvalidValidationException
-
 from safe import messaging as m
-from safe.utilities.i18n import tr
-
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.gui.tools.help.field_mapping_help import field_mapping_help_content
+from safe.gui.tools.wizard.utilities import skip_inasafe_field
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
-from safe.gui.tools.wizard.utilities import skip_inasafe_field
-from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.gui.tools.help.field_mapping_help import field_mapping_help_content
-
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -71,14 +68,16 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         if subcategory.get('classifications'):
             if layer_purpose == layer_purpose_hazard:
                 return self.parent.step_kw_multi_classifications
-            elif layer_purpose == layer_purpose_exposure:
-                return self.parent.step_kw_classification
 
         # Check if it can go to inasafe field step
         non_compulsory_fields = get_non_compulsory_fields(
             layer_purpose['key'], subcategory['key'])
         if not skip_inasafe_field(self.parent.layer, non_compulsory_fields):
-            return self.parent.step_kw_inasafe_fields
+            # Do not go to InaSAFE Field step if we already visited it.
+            # For example in place exposure.
+            if (self.parent.step_kw_inasafe_fields not in
+                    self.parent.keyword_steps):
+                return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(

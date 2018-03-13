@@ -16,9 +16,8 @@ from PyQt4.QtCore import QSettings
 from qgis.core import QgsApplication
 
 from parameters.text_parameter import TextParameter
-
-from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 
@@ -299,7 +298,7 @@ class NeedsProfile(MinimumNeeds):
         :rtype: QString
         """
         if not QgsApplication.qgisSettingsDirPath() or (
-                    QgsApplication.qgisSettingsDirPath() == ''):
+                QgsApplication.qgisSettingsDirPath() == ''):
             self._root_directory = None
         else:
             # noinspection PyArgumentList

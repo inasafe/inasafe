@@ -6,10 +6,9 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.test.utilities import (
-    load_layer,
     get_qgis_app,
     standard_data_path,
-    clone_raster_layer)
+    clone_raster_layer, load_layer)
 from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
@@ -21,8 +20,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class KeywordIOTest(unittest.TestCase):
-    """Tests for reading and writing of raster and vector data
-    """
+    """Tests for reading and writing of raster and vector data."""
 
     def setUp(self):
         self.keyword_io = KeywordIO()
@@ -41,7 +39,7 @@ class KeywordIOTest(unittest.TestCase):
 
         # Raster Layer keywords
         hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
-        self.raster_layer, _ = load_layer(hazard_path)
+        self.raster_layer, _ = load_layer(hazard_path, provider='gdal')
         self.expected_raster_keywords = {
             'hazard_category': 'single_event',
             'title': 'Generic Continuous Flood',
@@ -55,7 +53,7 @@ class KeywordIOTest(unittest.TestCase):
 
         # Vector Layer keywords
         vector_path = standard_data_path('exposure', 'buildings_osm_4326.shp')
-        self.vector_layer, _ = load_layer(vector_path)
+        self.vector_layer, _ = load_layer(vector_path, provider='ogr')
         self.expected_vector_keywords = {
             'keyword_version': '3.5',
             'value_map': {},
@@ -67,7 +65,8 @@ class KeywordIOTest(unittest.TestCase):
         }
         # Keyword less layer
         keywordless_path = standard_data_path('other', 'keywordless_layer.shp')
-        self.keywordless_layer, _ = load_layer(keywordless_path)
+        self.keywordless_layer, _ = load_layer(
+            keywordless_path, provider='ogr')
         # Keyword file
         self.keyword_path = standard_data_path(
             'exposure', 'buildings_osm_4326.xml')
@@ -111,7 +110,7 @@ class KeywordIOTest(unittest.TestCase):
         """
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         message = self.keyword_io.to_message(keywords).to_text()
-        self.assertIn('*Exposure*, structure------', message)
+        self.assertIn('*Exposure*, Structures------', message)
 
     def test_layer_to_message(self):
         """Test to show augmented keywords if KeywordsIO ctor passed a layer.

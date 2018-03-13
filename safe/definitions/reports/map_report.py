@@ -15,7 +15,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-"""Text elements"""
+"""Text elements."""
 
 
 legend_title_header = {
@@ -109,7 +109,7 @@ text_variable_elements = [
     aggregation_not_used_text,
     crs_text]
 
-"""Image elements"""
+"""Image elements."""
 
 white_inasafe_logo_path = {
     'id': 'inasafe-logo-white',

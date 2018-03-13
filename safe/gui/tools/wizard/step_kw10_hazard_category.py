@@ -6,16 +6,15 @@ from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
-
 from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.utilities.gis import is_raster_layer
+from safe.definitions.utilities import (
+    definition, hazard_categories_for_layer)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import hazard_category_question
-from safe.definitions.utilities import (
-    definition, hazard_categories_for_layer)
+from safe.utilities.gis import is_raster_layer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

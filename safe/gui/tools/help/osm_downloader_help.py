@@ -1,9 +1,9 @@
 # coding=utf-8
 """Help text for OSM Downloader."""
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
@@ -127,7 +127,7 @@ def content():
             'country, please check on the following web page: '),
         m.Link(
             'http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative',
-        text=tr(
-            'List of OSM Admin Boundary definitions '))))
+            text=tr(
+                'List of OSM Admin Boundary definitions '))))
 
     return message

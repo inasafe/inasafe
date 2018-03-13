@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>None</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
+  </gmd:characterSet>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:organisationName>
+        <gco:CharacterString>InaSAFE.org</gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString>info@inasafe.org</gco:CharacterString>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:Date/>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115:2003</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>Analysis Summary</gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:RS_Identifier>
+              <gmd:code>
+                <gco:CharacterString>None</gco:CharacterString>
+              </gmd:code>
+            </gmd:RS_Identifier>
+          </gmd:identifier>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString/>
+      </gmd:abstract>
+      <gmd:credit>
+        <gco:CharacterString/>
+      </gmd:credit>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString/>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString/>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Human health and safety</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" codeSpace="ISOTC211/19115">theme</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2008-06-01</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>Free use with accreditation</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:extent>
+        <gmd:EX_Extent>
+                </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:supplementalInformation>
+        <inasafe>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <layer_mode>
+            <gco:CharacterString/>
+          </layer_mode>
+          <provenance_data>
+            <gco:Dictionary>{&quot;qgis_version&quot;: &quot;2.18.13&quot;, &quot;hazard_keywords&quot;: {&quot;hazard_category&quot;: &quot;single_event&quot;, &quot;title&quot;: &quot;classified_vector&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;value_maps&quot;: {&quot;structure&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;land_cover&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;road&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;population&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}}, &quot;hazard&quot;: &quot;hazard_generic&quot;, &quot;source&quot;: &quot;InaSAFE v4 GeoJSON test layer&quot;, &quot;layer_purpose&quot;: &quot;hazard&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;inasafe_fields&quot;: {&quot;hazard_value_field&quot;: &quot;hazard_value&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;}, &quot;layer_mode&quot;: &quot;classified&quot;}, &quot;aggregation_layer&quot;: &quot;/Users/etienne/dev/inasafe/inasafe/safe/test/data/gisv4/aggregation/small_grid.geojson&quot;, &quot;qt_version&quot;: &quot;4.8.6&quot;, &quot;impact_function_name&quot;: &quot;Generic Hazard Polygon On Structures Point&quot;, &quot;inasafe_version&quot;: &quot;4.3.0.dev-master&quot;, &quot;duration&quot;: 0.178121, &quot;aggregation_keywords&quot;: {&quot;keyword_version&quot;: &quot;4.3&quot;, &quot;title&quot;: &quot;small grid&quot;, &quot;source&quot;: &quot;InaSAFE v4 GeoJSON test layer&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;layer_purpose&quot;: &quot;aggregation&quot;, &quot;date&quot;: &quot;2020-01-01&quot;, &quot;inasafe_fields&quot;: {&quot;aggregation_name_field&quot;: &quot;area_name&quot;, &quot;female_ratio_field&quot;: [&quot;ratio_female&quot;], &quot;aggregation_id_field&quot;: &quot;area_id&quot;}, &quot;inasafe_default_values&quot;: {&quot;lactating_ratio_field&quot;: 0.03, &quot;pregnant_ratio_field&quot;: 0.02}}, &quot;exposure_layer&quot;: &quot;/Users/etienne/dev/inasafe/inasafe/safe/test/data/gisv4/exposure/building-points.geojson&quot;, &quot;analysis_log&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/Analysis Log.csv&quot;, &quot;requested_extent&quot;: null, &quot;map_legend_title&quot;: &quot;Number of structures&quot;, &quot;impact_function_title&quot;: &quot;be affected&quot;, &quot;map_title&quot;: &quot;Structures affected&quot;, &quot;pyqt_version&quot;: &quot;4.11.4&quot;, &quot;aggregation_layer_id&quot;: &quot;small_grid20171024133525634&quot;, &quot;end_datetime&quot;: &quot;2017-10-24T13:35:26.185655&quot;, &quot;start_datetime&quot;: &quot;2017-10-24T13:35:26.007534&quot;, &quot;analysis_summary&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/analysis_summary.geojson&quot;, &quot;hazard_aggregation_summary&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/hazard_aggregation_summary.geojson&quot;, &quot;hazard_aggregation_summary_id&quot;: &quot;hazard_aggregation_summary20171024133526239&quot;, &quot;impact_analysis&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/impact_analysis.geojson&quot;, &quot;hazard_layer_id&quot;: &quot;classified_vector20171024133525584&quot;, &quot;hazard_layer&quot;: &quot;/Users/etienne/dev/inasafe/inasafe/safe/test/data/gisv4/hazard/classified_vector.geojson&quot;, &quot;analysis_extent&quot;: &quot;Polygon ((106.9033179652593617 -6.18324454090033182, 106.90331796525939012 -6.2725478115989306, 106.72365490843547775 -6.2725478115989306, 106.72365490843547775 -6.18324645462287137, 106.72365490843547775 -6.09392810187095257, 106.81348643684744104 -6.09392810187095257, 106.9033179652593617 -6.09392810187095257, 106.9033179652593617 -6.18324454090033182))&quot;, &quot;gdal_version&quot;: &quot;2.2.2&quot;, &quot;exposure_summary_table_id&quot;: &quot;exposure_summary_table20171024133526276&quot;, &quot;user&quot;: &quot;etienne&quot;, &quot;aggregation_summary_id&quot;: &quot;aggregation_summary20171024133526311&quot;, &quot;exposure_keywords&quot;: {&quot;classification&quot;: &quot;generic_structure_classes&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;title&quot;: &quot;building-points&quot;, &quot;source&quot;: &quot;InaSAFE v4 GeoJSON test layer&quot;, &quot;value_map&quot;: {&quot;residential&quot;: [&quot;house&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;government&quot;: [&quot;ministry&quot;]}, &quot;layer_purpose&quot;: &quot;exposure&quot;, &quot;layer_geometry&quot;: &quot;point&quot;, &quot;inasafe_fields&quot;: {&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}, &quot;layer_mode&quot;: &quot;classified&quot;, &quot;exposure&quot;: &quot;structure&quot;}, &quot;crs&quot;: null, &quot;earthquake_function&quot;: null, &quot;data_store_uri&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint&quot;, &quot;aggregation_summary&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/aggregation_summary.geojson&quot;, &quot;notes&quot;: [{&quot;item_list&quot;: [&quot;The impacts on roads, people, buildings and other exposure elements may be underestimated if the exposure data are incomplete.&quot;, &quot;Structures overlapping the analysis extent may be assigned a hazard status lower than that to which they are exposed outside the analysis area.&quot;, &quot;Numbers reported for structures have been rounded to the nearest 10 if the total is less than 1,000; nearest 100 if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.&quot;, &quot;Rounding is applied to all structure counts, which may cause discrepancies between subtotals and totals.&quot;, &quot;Note that report rows containing totals are calculated from the entire analysis area totals and then rounded, whereas the subtotal rows are calculated from the aggregation areas and then rounded. Using this approach we avoid adding already rounded numbers and in so doing compounding the rounding.&quot;], &quot;item_header&quot;: &quot;structure exposure general notes&quot;, &quot;item_category&quot;: &quot;structure_general&quot;}, {&quot;item_list&quot;: [&quot;The extent and severity of the mapped scenario or hazard zones may not be consistent with future events.&quot;, &quot;The impacts on roads, people, buildings and other exposure elements may differ from the analysis results due to local conditions such as terrain and infrastructure type.&quot;, &quot;The analysis extent is limited to the extent of the aggregation layer or analysis extent. Hazard and exposure data outside the analysis extent are not included in the impact layer, impact map or impact reports.&quot;], &quot;item_header&quot;: &quot;generic hazard general notes&quot;, &quot;item_category&quot;: &quot;generic_hazard_general&quot;}], &quot;exposure_summary_table&quot;: &quot;/var/folders/f_/8xm9f84n7l56h1bnbss9pr5c0000gn/T/inasafe/2017-10-24/etienne/MultiexposureGenericHazardPolygonOnStructuresPoint,RoadsLine_24October2017_13h35-25.982337/GenericHazardPolygonOnStructuresPoint/exposure_summary_table.csv&quot;, &quot;action_checklist&quot;: [{&quot;item_list&quot;: [&quot;Which structures have warning capacity (e.g. sirens or speakers)?&quot;, &quot;Are the water and electricity services still operating?&quot;, &quot;Are the schools and hospitals still active?&quot;, &quot;Are the health centres still open?&quot;, &quot;Are the other public services accessible?&quot;, &quot;Which buildings will be evacuation centres?&quot;, &quot;Where will we locate the operations centre?&quot;, &quot;Where will we locate warehouse and/or distribution centres?&quot;], &quot;item_header&quot;: &quot;general checklist&quot;, &quot;item_category&quot;: &quot;general&quot;}], &quot;exposure_layer_id&quot;: &quot;building_points20171024133525606&quot;, &quot;analysis_question&quot;: &quot;In each of the hazard zones how many Structures might be affected?&quot;, &quot;host_name&quot;: &quot;Etiennes-MacBook-Pro.local&quot;, &quot;impact_analysis_id&quot;: &quot;impact_analysis20171024133526209&quot;, &quot;debug&quot;: false, &quot;os&quot;: &quot; 10.13&quot;, &quot;analysis_summary_id&quot;: &quot;analysis_summary20171024133526367&quot;}</gco:Dictionary>
+          </provenance_data>
+          <hazard_keywords>
+            <gco:Dictionary>{&quot;hazard_category&quot;: &quot;single_event&quot;, &quot;title&quot;: &quot;classified_vector&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;value_maps&quot;: {&quot;structure&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;land_cover&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;road&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}, &quot;population&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}}}}, &quot;hazard&quot;: &quot;hazard_generic&quot;, &quot;source&quot;: &quot;InaSAFE v4 GeoJSON test layer&quot;, &quot;layer_purpose&quot;: &quot;hazard&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;inasafe_fields&quot;: {&quot;hazard_value_field&quot;: &quot;hazard_value&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;}, &quot;layer_mode&quot;: &quot;classified&quot;}</gco:Dictionary>
+          </hazard_keywords>
+          <keyword_version>
+            <gco:CharacterString>4.3</gco:CharacterString>
+          </keyword_version>
+          <layer_geometry>
+            <gco:CharacterString/>
+          </layer_geometry>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_purpose>
+            <gco:CharacterString>analysis_summary</gco:CharacterString>
+          </layer_purpose>
+          <inasafe_fields>
+            <gco:Dictionary>{&quot;total_affected_field&quot;: &quot;total_affected&quot;, &quot;medium_hazard_count_field&quot;: &quot;medium_hazard_count&quot;, &quot;total_not_affected_field&quot;: &quot;total_not_affected&quot;, &quot;high_hazard_count_field&quot;: &quot;high_hazard_count&quot;, &quot;not exposed_hazard_count_field&quot;: &quot;not exposed_hazard_count&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;total_exposed_field&quot;: &quot;total_exposed&quot;, &quot;total_not_exposed_field&quot;: &quot;total_not_exposed&quot;, &quot;analysis_name_field&quot;: &quot;analysis_name&quot;}</gco:Dictionary>
+          </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
+          <extra_keywords>
+            <gco:Dictionary/>
+          </extra_keywords>
+          <aggregation_keywords>
+            <gco:Dictionary/>
+          </aggregation_keywords>
+          <exposure_keywords>
+            <gco:Dictionary>{&quot;classification&quot;: &quot;generic_structure_classes&quot;, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;title&quot;: &quot;building-points&quot;, &quot;source&quot;: &quot;InaSAFE v4 GeoJSON test layer&quot;, &quot;value_map&quot;: {&quot;residential&quot;: [&quot;house&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;government&quot;: [&quot;ministry&quot;]}, &quot;layer_purpose&quot;: &quot;exposure&quot;, &quot;layer_geometry&quot;: &quot;point&quot;, &quot;inasafe_fields&quot;: {&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}, &quot;inasafe_default_values&quot;: {}, &quot;layer_mode&quot;: &quot;classified&quot;, &quot;exposure&quot;: &quot;structure&quot;}</gco:Dictionary>
+          </exposure_keywords>
+        </inasafe>
+      </gmd:supplementalInformation>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:version>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://inasafe.org</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString/>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date/>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>See the referenced specification</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString/>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+      </gmd:maintenanceAndUpdateFrequency>
+      <gmd:maintenanceNote>
+        <gco:CharacterString>This record was generated by InaSAFE (http://inasafe.org)</gco:CharacterString>
+      </gmd:maintenanceNote>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
+</gmd:MD_Metadata>

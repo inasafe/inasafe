@@ -99,7 +99,8 @@ field_question_subcategory_unit = tr(
 )  # (layer purpose, subcategory, unit, subcategory-unit relation)
 field_question_subcategory_classified = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
-    'Please select the attribute in this layer that represents the classes.'
+    'Please select the attribute in this layer that represents the <b>%s</b> '
+    'classes.'
 )
 field_question_population_field = tr(
     'You have selected <b>place</b> as an exposure input for the vector '

@@ -1,35 +1,24 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **Memory Checker.**
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '22/05/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Memory checker."""
 
 import logging
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 from PyQt4.QtCore import QCoreApplication
-
 from pydispatch import dispatcher
 
-from safe.common.utilities import get_free_memory
 from safe import messaging as m
-from safe.messaging import styles
 from safe.common.signals import send_dynamic_message, send_static_message
+from safe.common.utilities import get_free_memory
+from safe.messaging import styles
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE

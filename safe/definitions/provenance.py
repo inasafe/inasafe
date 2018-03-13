@@ -12,6 +12,12 @@ from safe.definitions.layer_purposes import (
 
 from safe.utilities.i18n import tr
 
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+
 provenance_action_checklist = {
     'key': 'provenance_action_checklist',
     'name': tr('Action Checklist'),
@@ -71,6 +77,49 @@ provenance_exposure_layer_id = {
     'key': 'provenance_exposure_layer_id',
     'name': tr('Exposure Layer Id'),
     'provenance_key': 'exposure_layer_id'
+}
+provenance_multi_exposure_keywords = {
+    'key': 'provenance_multi_exposure_keywords',
+    'name': tr('Multi Exposure Keywords'),
+    'description': tr(
+        'A dictionary with each exposure keys and their keywords.'),
+    'provenance_key': 'multi_exposure_keywords'
+}
+provenance_multi_exposure_layers = {
+    'key': 'provenance_multi_exposure_layers',
+    'name': tr('Multi Exposure Layers'),
+    'description': tr('A list of exposure layers.'),
+    'provenance_key': 'multi_exposure_layers'
+}
+provenance_multi_exposure_layers_id = {
+    'key': 'provenance_multi_exposure_layers_id',
+    'name': tr('Multi Exposure Layers Id'),
+    'description': tr('A list of exposure layer IDs.'),
+    'provenance_key': 'multi_exposure_layers_id'
+}
+provenance_multi_exposure_summary_layers = {
+    'key': 'provenance_multi_exposure_summary_layers',
+    'name': tr('Multi Exposure Summary Layers'),
+    'description': tr('A dictionary of exposure summary layers.'),
+    'provenance_key': 'multi_exposure_summary_layers'
+}
+provenance_multi_exposure_summary_layers_id = {
+    'key': 'provenance_multi_exposure_summary_layers_id',
+    'name': tr('Multi Exposure Summary Layers Id'),
+    'description': tr('A dictionary of exposure summary layer IDs.'),
+    'provenance_key': 'multi_exposure_summary_layers_id'
+}
+provenance_multi_exposure_analysis_summary_layers = {
+    'key': 'provenance_multi_exposure_analysis_summary_layers',
+    'name': tr('Multi Exposure Analysis Summary Layers'),
+    'description': tr('A dictionary of exposure analysis summary layers.'),
+    'provenance_key': 'multi_exposure_analysis_summary_layers'
+}
+provenance_multi_exposure_analysis_summary_layers_id = {
+    'key': 'provenance_multi_exposure_analysis_summary_layers_id',
+    'name': tr('Multi Exposure Analysis Summary Layers Id'),
+    'description': tr('A dictionary of exposure analysis summary layer IDs.'),
+    'provenance_key': 'multi_exposure_analysis_summary_layers_id'
 }
 provenance_gdal_version = {
     'key': 'provenance_gdal_version',
@@ -157,6 +206,11 @@ provenance_start_datetime = {
     'name': tr('Start Datetime'),
     'provenance_key': 'start_datetime'
 }
+provenance_earthquake_function = {
+    'key': 'provenance_earthquake_function',
+    'name': tr('Earthquake Function'),
+    'provenance_key': 'earthquake_function'
+}
 provenance_user = {
     'key': 'provenance_user',
     'name': tr('User'),
@@ -166,6 +220,18 @@ provenance_crs = {
     'key': 'provenance_crs',
     'name': tr('CRS'),
     'provenance_key': 'crs'
+}
+
+provenance_use_rounding = {
+    'key': 'provenance_use_rounding',
+    'name': tr('Use Rounding'),
+    'provenance_key': 'use_rounding'
+}
+
+provenance_debug_mode = {
+    'key': 'provenance_debug_mode',
+    'name': tr('Debug Mode'),
+    'provenance_key': 'debug'
 }
 
 # Output layer path
@@ -241,6 +307,7 @@ provenance_list = [
     provenance_analysis_question,
     provenance_data_store_uri,
     provenance_duration,
+    provenance_earthquake_function,
     provenance_end_datetime,
     provenance_exposure_keywords,
     provenance_exposure_layer,
@@ -278,3 +345,8 @@ provenance_list = [
     provenance_layer_exposure_summary_table_id,
     provenance_layer_profiling_id,
 ]
+
+# Mapping to global variable in QGIS
+duplicated_global_variables = {
+    provenance_os['provenance_key']: 'qgis_os_name'
+}

@@ -9,12 +9,14 @@
     </div>
     {% for section in summary %}
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12" style="margin-top: 10px">
                 <table class="table table-striped condensed">
                     <thead>
                         <tr>
                             <th colspan="1">{{ section.header_label }}</th>
-                            <th class="text-right" colspan="1">{{ section.value_label }}</th>
+                            {% for label in section.value_labels %}
+                                <th class="text-right" colspan="1">{{ label }}</th>
+                            {% endfor %}
                         </tr>
                     </thead>
                     <tbody>
@@ -25,7 +27,9 @@
                             {% else %}
                                 <td colspan="1">{{ item.name }}</td>
                             {% endif %}
-                            <td class="text-right" colspan=1>{{ item.value }}</td>
+                            {% for number in item.numbers %}
+                                <td class="text-right" colspan=1>{{ number }}</td>
+                            {% endfor %}
                         </tr>
                         {% endfor %}
                     </tbody>

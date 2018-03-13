@@ -1,18 +1,19 @@
 # coding=utf-8
-"""Wizard Step Abstract Class"""
+"""Wizard Step Abstract Class."""
 
-import re
 import os
+import re
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
 
+from safe import messaging as m
 from safe.gui.tools.wizard import STEP_KW, STEP_FC
+from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
-from safe import messaging as m
-from safe.utilities.i18n import tr
-from safe.messaging import styles
+
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

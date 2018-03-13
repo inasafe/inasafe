@@ -170,38 +170,40 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <scale>
             <gco:CharacterString/>
           </scale>
-          <keyword_version>
-            <gco:CharacterString/>
-          </keyword_version>
           <layer_mode>
             <gco:CharacterString/>
           </layer_mode>
-          <source>
-            <gco:CharacterString/>
-          </source>
-          <hazard_keywords>
-            <gco:Dictionary/>
-          </hazard_keywords>
-          <inasafe_fields>
-            <gco:Dictionary/>
-          </inasafe_fields>
-          <layer_geometry>
-            <gco:CharacterString/>
-          </layer_geometry>
-          <layer_purpose>
-            <gco:CharacterString/>
-          </layer_purpose>
-          <inasafe_default_values>
-            <gco:Dictionary/>
-          </inasafe_default_values>
           <provenance_data>
             <gco:Dictionary/>
           </provenance_data>
+          <hazard_keywords>
+            <gco:Dictionary/>
+          </hazard_keywords>
+          <keyword_version>
+            <gco:CharacterString/>
+          </keyword_version>
+          <layer_geometry>
+            <gco:CharacterString/>
+          </layer_geometry>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_purpose>
+            <gco:CharacterString/>
+          </layer_purpose>
+          <inasafe_fields>
+            <gco:Dictionary/>
+          </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
+          <extra_keywords>
+            <gco:Dictionary/>
+          </extra_keywords>
           <aggregation_keywords>
             <gco:Dictionary/>
           </aggregation_keywords>
@@ -209,46 +211,6 @@
             <gco:Dictionary/>
           </exposure_keywords>
         </inasafe>
-        <inasafe_provenance>
-          <provenance_step timestamp="2015-06-25T13:07:13.100000">
-            <title>Test provenance title</title>
-            <description>Test provenance description</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:15.100000">
-            <title>Test provenance title 2</title>
-            <description>Test provenance description 2</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:17.100000">
-            <title>Test provenance title 3</title>
-            <description>Test provenance description 3</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:17.100000">
-            <title>IF Provenance</title>
-            <description>IF Provenance</description>
-            <start_time>20140714_060955</start_time>
-            <finish_time>20140714_061255</finish_time>
-            <hazard_layer>path/to/hazard/layer</hazard_layer>
-            <exposure_layer>path/to/exposure/layer</exposure_layer>
-            <impact_function_id>IF_id</impact_function_id>
-            <impact_function_version>2.1</impact_function_version>
-            <host_name>my_computer</host_name>
-            <user>my_user</user>
-            <qgis_version>2.4</qgis_version>
-            <gdal_version>1.9.1</gdal_version>
-            <qt_version>4.5</qt_version>
-            <pyqt_version>5.1</pyqt_version>
-            <os>ubuntu 12.04</os>
-            <inasafe_version>2.1</inasafe_version>
-            <exposure_pixel_size>0.1</exposure_pixel_size>
-            <hazard_pixel_size>0.2</hazard_pixel_size>
-            <impact_pixel_size>0.1</impact_pixel_size>
-            <actual_extent>None</actual_extent>
-            <requested_extent>None</requested_extent>
-            <actual_extent_crs>None</actual_extent_crs>
-            <requested_extent_crs>None</requested_extent_crs>
-            <parameter>{}</parameter>
-          </provenance_step>
-        </inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>

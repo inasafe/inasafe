@@ -98,6 +98,16 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/exposure_keywords/gco:Dictionary"
     },
+    "extra_keywords": {
+      "allowed_python_types": [
+        "dict",
+        "NoneType"
+      ],
+      "name": "extra_keywords",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/extra_keywords/gco:Dictionary"
+    },
     "hazard_keywords": {
       "allowed_python_types": [
         "dict",
@@ -265,68 +275,5 @@
       "value": "http://inasafe.org",
       "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
     }
-  },
-  "provenance": [
-    {
-      "data": null,
-      "description": "Description of step 1",
-      "time": "2015-06-25T13:14:24.508974",
-      "title": "Title 1"
-    },
-    {
-      "data": null,
-      "description": "Description of step 2",
-      "time": "2015-06-25T13:14:24.508980",
-      "title": "Title 2"
-    },
-    {
-      "data": null,
-      "description": "Description of step 3",
-      "time": "2015-06-25T13:14:24.508984",
-      "title": "Title 3"
-    },
-    {
-      "data": {
-        "actual_extent": [
-          0,
-          1,
-          2,
-          2
-        ],
-        "actual_extent_crs": "EPSG: 4326",
-        "exposure_layer": "path/to/exposure/layer",
-        "exposure_pixel_size": "0.1",
-        "finish_time": "20140714_061255",
-        "gdal_version": "1.9.1",
-        "hazard_layer": "path/to/hazard/layer",
-        "hazard_pixel_size": "0.2",
-        "host_name": "my_computer",
-        "impact_function_id": "IF_id",
-        "impact_function_version": "2.1",
-        "impact_pixel_size": "0.1",
-        "inasafe_version": "2.1",
-        "os": "ubuntu 12.04",
-        "parameter": {},
-        "pyqt_version": "5.1",
-        "qgis_version": "2.4",
-        "qt_version": "4.5",
-        "requested_extent": [
-          0,
-          1,
-          2,
-          2
-        ],
-        "requested_extent_crs": "EPSG: 4326",
-        "start_time": "20140714_060955",
-        "user": "my_user"
-      },
-      "description": "IF Provenance",
-      "time": "2015-06-25T13:14:24.510000",
-      "title": "IF Provenance"
-    }
-  ],
-  "summary_data": {
-    "res1": 1234,
-    "res2": 4321
   }
 }

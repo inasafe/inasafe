@@ -4,11 +4,11 @@
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 
+from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_hazard
-from safe.utilities.resources import resources_path
+from safe.gui.tools.wizard.utilities import get_image_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
-from safe import messaging as m
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -25,7 +25,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -61,7 +61,7 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
 
     # noinspection PyPep8Naming
     def tvBrowserHazard_selection_changed(self):
-        """Update layer description label"""
+        """Update layer description label."""
         (is_compatible, desc) = self.get_layer_description_from_browser(
             'hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
@@ -69,15 +69,13 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         self.parent.pbnNext.setEnabled(is_compatible)
 
     def set_widgets(self):
-        """Set widgets on the Hazard Layer From Browser tab"""
+        """Set widgets on the Hazard Layer From Browser tab."""
         self.tvBrowserHazard_selection_changed()
 
         # Set icon
         hazard = self.parent.step_fc_functions1.selected_value(
             layer_purpose_hazard['key'])
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg'
-                             % (hazard['key'] or 'notset'))
+        icon_path = get_image_path(hazard)
         self.lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
 
     @property

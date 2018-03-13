@@ -60,5 +60,10 @@ venv
 !.gitkeep
 # This is a temporary working file for building the windows installer that does string replacement on version name
 scripts/build.nsi
-gdalwmscache
+gdalwmscache/
 safe/metadata/test/inasafe/
+# Generated file
+*metadata.db
+htmlcov/
+dist/
+inasafe_core.egg-info/

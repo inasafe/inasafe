@@ -170,14 +170,10 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <thresholds>
             <gco:Dictionary>{&quot;road&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;place&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;land_cover&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;structure&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5, 10.0], &quot;very high&quot;: [10, 9999999999], &quot;very low&quot;: [0.01, 0.0999999999999999], &quot;medium&quot;: [2, 5.0], &quot;low&quot;: [0.1, 2.0]}}}, &quot;population&quot;: {&quot;ash_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}}}}</gco:Dictionary>
           </thresholds>
@@ -205,21 +201,18 @@
           <hazard>
             <gco:CharacterString>volcanic_ash</gco:CharacterString>
           </hazard>
-          <report>
-            <gco:CharacterString/>
-          </report>
+          <extra_keywords>
+            <gco:Dictionary>{&quot;volcano_name&quot;: &quot;Pseudo Merapi&quot;, &quot;region&quot;: &quot;Pseudo Yogya&quot;, &quot;volcano_alert_level&quot;: &quot;volcano_alert_normal&quot;, &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;, &quot;volcano_latitude&quot;: -6.0, &quot;volcano_event_id&quot;: &quot;20180109151950+0700_Pseudo Merapi&quot;, &quot;volcano_longitude&quot;: 90.6, &quot;volcano_eruption_event_time&quot;: &quot;2018-01-09T15:19:50&quot;, &quot;volcano_eruption_height&quot;: 20000.0, &quot;volcano_height&quot;: 2000.0}</gco:Dictionary>
+          </extra_keywords>
           <keyword_version>
-            <gco:CharacterString>4.0</gco:CharacterString>
+            <gco:CharacterString>4.3</gco:CharacterString>
           </keyword_version>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
+          <active_band>
+            <gco:Integer>1</gco:Integer>
+          </active_band>
           <layer_mode>
             <gco:CharacterString>continuous</gco:CharacterString>
           </layer_mode>

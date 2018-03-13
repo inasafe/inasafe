@@ -1,29 +1,30 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Choosing Layer Geometry"""
+"""InaSAFE Wizard Step for Choosing Layer Geometry."""
 
 import logging
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions.utilities import get_allowed_geometries
+from safe import messaging as m
+from safe.definitions.font import big_font
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitions.styles import (
     available_option_color, unavailable_option_color)
-from safe.definitions.font import big_font
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_strings import (
-    select_function_constraints2_question)
+from safe.definitions.utilities import get_allowed_geometries
 from safe.gui.tools.wizard.utilities import (
     RoleFunctions,
     RoleHazard,
     RoleExposure,
     RoleHazardConstraint,
     RoleExposureConstraint)
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import (
+    select_function_constraints2_question)
 from safe.utilities.i18n import tr
-from safe import messaging as m
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -174,7 +175,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                     'allowed_geometries']
                 exposure_geometry_allowed = (
                     exposure_geometry['key'] in exposure[
-                            'allowed_geometries'])
+                        'allowed_geometries'])
 
                 if hazard_geometry_allowed and exposure_geometry_allowed:
                     background_color = available_option_color

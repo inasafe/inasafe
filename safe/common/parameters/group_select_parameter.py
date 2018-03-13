@@ -2,6 +2,7 @@
 """Group Select Parameter."""
 
 from collections import OrderedDict
+
 from parameters.generic_parameter import GenericParameter
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

@@ -11,7 +11,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-"""Map elements"""
+"""Map elements."""
 
 
 map_overview = {
@@ -24,7 +24,7 @@ map_overview = {
 }
 
 
-"""HTML frame elements"""
+"""HTML frame elements."""
 
 
 people_section_notes = {
@@ -52,7 +52,7 @@ population_chart_legend = {
 html_frame_elements = [people_section_notes, population_chart_legend]
 
 
-"""Header label elements"""
+"""Header label elements."""
 
 # Note from Tim: Are these elements not redundant? They could be done
 # Equally well by using normal text elements with expressions e.g.
@@ -76,7 +76,7 @@ map_overview_header = {
 population_chart_header = {
     'id': 'population-chart-header',
     'description': tr(''),
-    'string_format': tr('Estimated number of people affected by hazard level')
+    'string_format': tr('Estimated number of people exposed by hazard level')
 }
 
 people_section_header = {
@@ -149,7 +149,7 @@ minimum_needs_section_notes = {
 }
 
 
-"""Image elements"""
+"""Image elements."""
 
 
 inasafe_logo_white = {

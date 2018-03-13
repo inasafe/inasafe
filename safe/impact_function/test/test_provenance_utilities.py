@@ -7,10 +7,11 @@ from safe.definitions import (
     exposure_population,
     hazard_category_single_event
 )
+from safe.definitions.exposure import exposure_structure, exposure_road
 from safe.impact_function.provenance_utilities import (
     get_map_title,
     get_analysis_question,
-)
+    get_multi_exposure_analysis_question)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -41,6 +42,16 @@ class TestProvenanceUtilities(unittest.TestCase):
                 exposure_measure=exposure_population['measure_question'],
                 exposure_name=exposure_population['name'])
         self.assertEqual(question, expected)
+
+    def test_get_multi_exposure_analysis_question(self):
+        """Test for get_multi_exposure_analysis_question."""
+        exposures = [exposure_population, exposure_structure, exposure_road]
+        question = get_multi_exposure_analysis_question(
+            hazard_earthquake, exposures)
+        expected_question = ('In the event of a Earthquake, '
+                             'how many Population, how many Structures, '
+                             'and what length of Roads might be affected?')
+        self.assertEqual(question, expected_question)
 
 if __name__ == '__main__':
     unittest.main()

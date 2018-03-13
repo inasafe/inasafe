@@ -1,42 +1,36 @@
 # coding=utf-8
 """OSM Downloader tool."""
 
-import zipfile
-import os
 import logging
+import os
 import tempfile
+import zipfile
 
-from PyQt4.QtNetwork import QNetworkReply
 from PyQt4.QtGui import QDialog
-from PyQt4.QtCore import QSettings
+from PyQt4.QtNetwork import QNetworkReply
 
-from safe.utilities.i18n import tr, locale
-from safe.utilities.gis import qgis_version
-from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
-from safe.definitions.versions import inasafe_release_status
 from safe.common.version import get_version
+from safe.definitions.osm_downloader import PRODUCTION_SERVER, URL_OSM_SUFFIX
+from safe.utilities.file_downloader import FileDownloader
+from safe.utilities.gis import qgis_version
+from safe.utilities.i18n import tr, locale
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# If it's not a final release and the developer mode is ON, we use the staging
-# version for OSM-Reporter.
-final_release = inasafe_release_status == 'final'
-settings = QSettings()
-developer_mode = settings.value('inasafe/developer_mode', False, type=bool)
-if not final_release and developer_mode:
-    URL_OSM_PREFIX = 'http://staging.osm.kartoza.com/'
-else:
-    URL_OSM_PREFIX = 'http://osm.inasafe.org/'
-URL_OSM_SUFFIX = '-shp'
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def download(feature_type, output_base_path, extent, progress_dialog=None):
+def download(
+        feature_type,
+        output_base_path,
+        extent,
+        progress_dialog=None,
+        server_url=None):
     """Download shapefiles from Kartoza server.
 
     .. versionadded:: 3.2
@@ -55,8 +49,14 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
     :param progress_dialog: A progress dialog.
     :type progress_dialog: QProgressDialog
 
+    :param server_url: The server URL to use.
+    :type: basestring
+
     :raises: ImportDialogError, CanceledImportDialogError
     """
+    if not server_url:
+        server_url = PRODUCTION_SERVER
+
     # preparing necessary data
     min_longitude = extent[0]
     min_latitude = extent[1]
@@ -80,7 +80,7 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
         'qgis_version={qgis}&'
         'lang={lang}&'
         'inasafe_version={inasafe_version}'.format(
-            url_osm_prefix=URL_OSM_PREFIX,
+            url_osm_prefix=server_url,
             feature_type=feature_type,
             url_osm_suffix=URL_OSM_SUFFIX,
             box=box,

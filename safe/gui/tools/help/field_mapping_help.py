@@ -1,10 +1,11 @@
 # coding=utf-8
 """Help text for the Field Mapping dialog."""
 
-from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
+
 SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE

@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>

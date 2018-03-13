@@ -1,14 +1,17 @@
 # coding=utf-8
 """Module used to generate context for action and notes sections.
 """
-from safe.common.utilities import safe_dir
+
+from copy import deepcopy
+
 from safe.definitions.exposure import exposure_population
+from safe.definitions.utilities import definition
+from safe.definitions.utilities import get_displacement_rate, is_affected
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
     resolve_from_dictionary,
-    layer_definition_type,
-    layer_hazard_classification,
     jinja2_output_as_string)
+from safe.utilities.metadata import active_classification
 from safe.utilities.resources import (
     resource_url,
     resources_path)
@@ -65,11 +68,11 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     .. versionadded:: 4.0
     """
     context = {}
-    hazard_layer = impact_report.hazard
-    exposure_layer = impact_report.exposure
     provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
-    exposure_type = layer_definition_type(exposure_layer)
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
+    exposure_type = definition(exposure_keywords['exposure'])
 
     analysis_note_dict = resolve_from_dictionary(extra_args, 'analysis_notes')
     context['items'] = [analysis_note_dict]
@@ -78,13 +81,24 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     context['items'] += provenance['notes']
 
     # Get hazard classification
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     # Check hazard affected class
     affected_classes = []
     for hazard_class in hazard_classification['classes']:
-        if hazard_class.get('affected', False):
-            affected_classes.append(hazard_class)
+        if exposure_keywords['exposure'] == exposure_population['key']:
+            # Taking from profile
+            is_affected_class = is_affected(
+                hazard=hazard_keywords['hazard'],
+                classification=hazard_classification['key'],
+                hazard_class=hazard_class['key'],
+            )
+            if is_affected_class:
+                affected_classes.append(hazard_class)
+        else:
+            if hazard_class.get('affected', False):
+                affected_classes.append(hazard_class)
 
     if affected_classes:
         affected_note_dict = resolve_from_dictionary(
@@ -121,8 +135,14 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             extra_args, 'hazard_displacement_rates_note_format')
         displacement_rates_note = []
         for hazard_class in hazard_classification['classes']:
+            the_hazard_class = deepcopy(hazard_class)
+            the_hazard_class['displacement_rate'] = get_displacement_rate(
+                hazard=hazard_keywords['hazard'],
+                classification=hazard_classification['key'],
+                hazard_class=the_hazard_class['key']
+            )
             displacement_rates_note.append(
-                displacement_rates_note_format.format(**hazard_class))
+                displacement_rates_note_format.format(**the_hazard_class))
 
         rate_description = ', '.join(displacement_rates_note)
 

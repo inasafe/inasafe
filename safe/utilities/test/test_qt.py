@@ -8,7 +8,7 @@ from safe.utilities.qt import qt_at_least
 class TestQt(unittest.TestCase):
 
     def test_qt_at_least(self):
-        """Test that we can compare the installed qt version"""
+        """Test that we can compare the installed qt version."""
         # simulate 4.7.2 installed
         test_version = 0x040702
 

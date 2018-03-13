@@ -15,7 +15,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.utilities import (
     humanise_seconds,
-    impact_attribution,
     replace_accentuated_characters,
     is_plugin_installed,
     is_keyword_version_supported
@@ -36,7 +35,7 @@ class UtilitiesTest(unittest.TestCase):
         pass
 
     def test_get_qgis_version(self):
-        """Test we can get the version of QGIS"""
+        """Test we can get the version of QGIS."""
         version = qgis_version()
         message = 'Got version %s of QGIS, but at least 214000 is needed'
         self.assertTrue(version > 21400, message)
@@ -54,42 +53,6 @@ class UtilitiesTest(unittest.TestCase):
         """Test that accentuated characters has been replaced."""
         self.assertEqual(
             replace_accentuated_characters(u'áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
-
-    def test_impact_layer_attribution(self):
-        """Test we get an attribution html snippet nicely for impact layers."""
-        keywords = {
-            'hazard_title': 'Sample Hazard Title',
-            'hazard_source': 'Sample Hazard Source',
-            'exposure_title': 'Sample Exposure Title',
-            'exposure_source': 'Sample Exposure Source'}
-        attribution = impact_attribution(keywords)
-        control_file_path = standard_data_path(
-            'control',
-            'files',
-            'impact-layer-attribution.txt')
-        expected_result = codecs.open(
-            control_file_path,
-            mode='r',
-            encoding='utf-8').readlines()
-
-        for line in expected_result:
-            line = line.replace('\n', '')
-            self.assertIn(line, attribution.to_text())
-
-    @expectedFailure
-    def test_localised_attribution(self):
-        """Test we can localise attribution."""
-        os.environ['LANG'] = 'id'
-        keywords = {
-            'hazard_title': 'Jakarta 2007 flood',
-            'hazard_source': 'Sample Hazard Source',
-            'exposure_title': 'People in Jakarta',
-            'exposure_source': 'Sample Exposure Source'}
-        html = impact_attribution(keywords, True)
-        assert html == '11'
-
-        # Set back to en
-        os.environ['LANG'] = 'en'
 
     def test_is_keyword_version_supported(self):
         """Test for is_keyword_version_supported."""

@@ -4,6 +4,8 @@ services:
 env:
   global:
     - ON_TRAVIS=true
+    - MUTE_LOGS=true
+    - WITH_PYTHON_PEP=true
     # - IMAGE=elpaso/qgis-testing-environment
     # - IMAGE=boundlessgeo/qgis-testing-environment
     - IMAGE=kartoza/qgis-testing
@@ -50,16 +52,18 @@ before_install:
 
 install:
   - pip install --upgrade pip
-  - pip install --upgrade pep8
   - pip install --upgrade pep257
-  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e ON_TRAVIS=${ON_TRAVIS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
+  - pip install --upgrade flake8
+  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e WITH_PYTHON_PEP=${WITH_PYTHON_PEP} -e ON_TRAVIS=${ON_TRAVIS} -e MUTE_LOGS=${MUTE_LOGS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
   - sleep 10
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
+  - docker exec -it qgis-testing-environment sh -c "pip install --upgrade pep257"
+  - docker exec -it qgis-testing-environment sh -c "pip install --upgrade flake8"
 
 script:
   - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
-  - make pep8
   - make pep257
+  - make flake8
 
 notifications:
   irc:

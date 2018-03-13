@@ -16,14 +16,6 @@ from qgis.core import (
 import safe.definitions.layer_geometry
 import safe.definitions.layer_modes
 import safe.definitions.layer_purposes
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
-from safe.definitions.hazard_classifications import hazard_classification
-from safe.definitions.units import exposure_unit
-from safe.definitions.hazard import continuous_hazard_unit
-from safe.definitions.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,
     InaSAFEError,
@@ -32,12 +24,20 @@ from safe.common.exceptions import (
     MissingMetadata,
     NoKeywordsFoundError,
     UnsupportedProviderError)
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.hazard_classifications import hazard_classification
+from safe.definitions.layer_geometry import layer_geometry_polygon
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
+from safe.definitions.units import exposure_unit
 from safe.gui.tools.wizard.layer_browser_proxy_model import (
     LayerBrowserProxyModel)
+from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_strings import (
     create_postGIS_connection_first)
-from safe.gui.tools.wizard.utilities import layer_description_html
 from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import is_keyword_version_supported
 
@@ -54,7 +54,7 @@ class WizardStepBrowser(WizardStep):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
         """
         WizardStep.__init__(self, parent)

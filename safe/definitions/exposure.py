@@ -1,15 +1,16 @@
 # coding=utf-8
 """Definitions relating to exposure in InaSAFE."""
 
-from safe.definitions.concepts import concepts
 from safe.definitions.caveats import caveat_incomplete_data
-from safe.definitions.units import (
-    count_exposure_unit,
-    unit_metres,
-    unit_square_metres,
-    unit_hectares,
-    unit_kilometres,
-)
+from safe.definitions.concepts import concepts
+from safe.definitions.exposure_classifications import (
+    generic_place_classes,
+    generic_road_classes,
+    generic_structure_classes,
+    generic_landcover_classes,
+    badan_geologi_landcover_classes,
+    data_driven_classes)
+from safe.definitions.field_groups import population_field_groups
 from safe.definitions.fields import (
     exposure_fields,
     exposure_name_field,
@@ -18,16 +19,15 @@ from safe.definitions.fields import (
     productivity_rate_field,
     production_cost_rate_field,
     production_value_rate_field)
-from safe.definitions.field_groups import population_field_groups
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitions.exposure_classifications import (
-    generic_place_classes,
-    generic_road_classes,
-    generic_structure_classes,
-    generic_landcover_classes,
-    badan_geologi_landcover_classes,
-    data_driven_classes)
+from safe.definitions.units import (
+    count_exposure_unit,
+    unit_metres,
+    unit_square_metres,
+    unit_hectares,
+    unit_kilometres,
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -50,14 +50,13 @@ exposure_population = {
                 caveat_incomplete_data,
                 tr('Exposed population varies by the time (day or night, '
                    'weekends, holidays etc.). Such variations are not '
-                   'included in the analysis.'
-                ),
+                   'included in the analysis.'),
                 tr('Numbers reported for population counts have been rounded '
                    'to the nearest 10 people if the total is less than 1,000; '
                    'nearest 100 people if more than 1,000 and less than '
                    '100,000; and nearest 1,000 if more than 100,000.'),
                 tr('Rounding is applied to all population values, which may '
-                   'cause discrepancies between subtotals and totals. '),
+                   'cause discrepancies between subtotals and totals.'),
                 concepts['rounding_methodology']['description'],
                 tr('If displacement counts are 0, no minimum needs and '
                    'displaced related postprocessors will be shown.')
@@ -162,6 +161,7 @@ exposure_population = {
         }
     ],
     'allowed_geometries': [
+        'point',  # See feature request #4592
         'polygon',
         'raster'
     ],
@@ -273,11 +273,11 @@ exposure_structure = {
                    'assigned a hazard status lower than that to which they '
                    'are exposed outside the analysis area.'),
                 tr('Numbers reported for structures have been rounded '
-                   'to the nearest 10 if the total is less than 1,000; '
-                   'nearest 100 if more than 1,000 and less than 100,000; '
-                   'and nearest 1000 if more than 100,000.'),
-                tr('Rounding is applied to all structure counts, which may '
-                   'cause discrepancies between subtotals and totals.'),
+                   'to the nearest 100 if more than 1,000 and less than '
+                   '100,000; and nearest 1000 if more than 100,000.'),
+                tr('Rounding is applied to all structure counts greater than '
+                   '1,000 which may cause discrepancies between subtotals '
+                   'and totals.'),
                 concepts['rounding_methodology']['description'],
             ]
         }
@@ -327,7 +327,7 @@ exposure_structure = {
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
-    'layer_legend_title': tr('Number of buildings'),
+    'layer_legend_title': tr('Number of structures'),
     'measure_question': tr('how many')
 }
 exposure_place = {
@@ -370,8 +370,8 @@ exposure_place = {
     'classifications': [generic_place_classes, data_driven_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [exposure_name_field],
-    'field_groups': population_field_groups,
+    'extra_fields': [exposure_name_field, population_count_field],
+    'field_groups': [],
     'layer_modes': [layer_mode_classified],
     'display_not_exposed': True,
     'use_population_rounding': False,
@@ -384,7 +384,7 @@ exposure_land_cover = {
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
-        'hazard. This might include crops, forest and urban areas. '),
+        'hazard. This might include crops, forest and urban areas.'),
     'notes': [
         {
             'item_category': 'land_cover_general',
@@ -443,7 +443,8 @@ exposure_land_cover = {
     'classifications': [
         generic_landcover_classes,
         badan_geologi_landcover_classes,
-        data_driven_classes],
+        data_driven_classes
+    ],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [

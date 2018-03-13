@@ -4,15 +4,14 @@
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 
-from safe.utilities.resources import resources_path
-
+from safe import messaging as m
+from safe.gui.tools.wizard.utilities import get_image_path
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     select_exposure_origin_question,
     select_explayer_from_canvas_question,
     select_explayer_from_browser_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe import messaging as m
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -67,7 +66,7 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         self.parent.pbnNext.setEnabled(True)
 
     def set_widgets(self):
-        """Set widgets on the Exposure Layer Origin Type tab"""
+        """Set widgets on the Exposure Layer Origin Type tab."""
         # First, list available layers in order to check if there are
         # any available layers. Note This will be repeated in
         # set_widgets_step_fc_explayer_from_canvas because we need
@@ -77,7 +76,6 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         lst_wdg = self.parent.step_fc_explayer_from_canvas.lstCanvasExpLayers
         if lst_wdg.count():
             self.rbExpLayerFromCanvas.setText(tr(
-
                 'I would like to use an exposure layer already loaded in QGIS'
                 '\n'
                 '(launches the %s for exposure if needed)'
@@ -114,9 +112,7 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
             setText(text)
 
         # Set icon
-        icon_path = resources_path(
-            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
-                exposure['key'] or 'notset'))
+        icon_path = get_image_path(exposure)
         self.lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))
 
     @property

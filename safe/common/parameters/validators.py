@@ -1,8 +1,10 @@
 # coding=utf-8
 """List of custom validations for parameter container."""
 
-from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
 import logging
+
+from safe.definitions.constants import STATIC, SINGLE_DYNAMIC
+
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -58,6 +60,7 @@ def validate_sum(parameter_container, validation_message, **kwargs):
         'valid': True,
         'message': ''
     }
+
 
 # Add validator here.
 validators = {

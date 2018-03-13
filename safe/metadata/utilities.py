@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Metadata utilities."""
 
 from contextlib import contextmanager

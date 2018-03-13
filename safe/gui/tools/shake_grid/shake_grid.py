@@ -1,80 +1,84 @@
-# -*- coding: utf-8 -*-
-"""**Functionality related to convert format file.**
+# coding=utf-8
+"""A converter for USGS shakemap grid.xml files."""
 
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-Initially this was adapted from shake_event.py and now realtime uses this.
-"""
-
-__author__ = 'ismail@kartoza.com'
-__version__ = '0.5.0'
-__date__ = '11/02/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-import os
-import sys
-import shutil
-import logging
 import codecs
-import pytz
-from xml.dom import minidom
+import logging
+import os
+import shutil
+import sys
 from datetime import datetime
-from pytz import timezone
 from subprocess import call, CalledProcessError
-from osgeo import gdal, ogr
-from osgeo.gdalconst import GA_ReadOnly
+from xml.dom import minidom
+
+import numpy as np
+import pytz
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-import qgis
-# pylint: enable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
+from osgeo import gdal, ogr
+from osgeo.gdalconst import GA_ReadOnly
+from pytz import timezone
 from qgis.core import (
-    QgsVectorLayer,
-    QgsFeatureRequest,
     QgsRectangle,
     QgsRasterLayer)
-from safe.common.utilities import which, romanise
+
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
     GridXmlParseError,
     ContourCreationError,
-    InvalidLayerError)
-from safe.utilities.styling import mmi_colour
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.i18n import tr
-from safe.common.exceptions import CallGDALError
+    InvalidLayerError,
+    CallGDALError)
+from safe.common.utilities import which
+from safe.definitions.constants import (
+    NONE_SMOOTHING, NUMPY_SMOOTHING, SCIPY_SMOOTHING
+)
+from safe.definitions.exposure import exposure_all
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_latitude,
+    extra_keyword_earthquake_longitude,
+    extra_keyword_earthquake_magnitude,
+    extra_keyword_earthquake_depth,
+    extra_keyword_earthquake_description,
+    extra_keyword_earthquake_location,
+    extra_keyword_time_zone,
+    extra_keyword_earthquake_x_maximum,
+    extra_keyword_earthquake_x_minimum,
+    extra_keyword_earthquake_y_maximum,
+    extra_keyword_earthquake_y_minimum,
+    extra_keyword_earthquake_event_time,
+    extra_keyword_earthquake_event_id,
+)
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_category import hazard_category_single_event
-from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.definitions.hazard_classifications import (
+    earthquake_mmi_scale, generic_hazard_classes)
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_modes import layer_mode_continuous
 from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.units import unit_mmi
+from safe.definitions.utilities import default_classification_thresholds
 from safe.definitions.versions import inasafe_keyword_version
+from safe.gis.raster.contour import (
+    gaussian_kernel, convolve, set_contour_properties)
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.resources import resources_path
+
+__copyright__ = "Copyright 2017, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
-def data_dir():
-    """Return the path to the standard data dir for e.g. geonames data
-
-    :returns: Returns the default data directory.
-    :rtype: str
-    """
-    dir_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), 'converter_data'))
-    return dir_path
+# Algorithms
+USE_ASCII = 'use_ascii'
+NEAREST_NEIGHBOUR = 'nearest'
+INVDIST = 'invdist'
 
 
 class ShakeGrid(object):
+
     """A converter for USGS shakemap grid.xml files to geotiff."""
 
     def __init__(
@@ -84,7 +88,11 @@ class ShakeGrid(object):
             grid_xml_path,
             output_dir=None,
             output_basename=None,
-            algorithm_filename_flag=True):
+            algorithm_filename_flag=True,
+            smoothing_method=NONE_SMOOTHING,
+            smooth_sigma=0.9,
+            extra_keywords=None
+    ):
         """Constructor.
 
         :param title: The title of the earthquake that will be also added to
@@ -107,6 +115,9 @@ class ShakeGrid(object):
         :param algorithm_filename_flag: Flag whether to use the algorithm in
             the output file's name.
         :type algorithm_filename_flag: bool
+
+        :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+        :type smoothing_method: basestring
 
         :returns: The instance of the class.
         :rtype: ShakeGrid
@@ -138,6 +149,7 @@ class ShakeGrid(object):
         self.rows = None
         self.columns = None
         self.mmi_data = None
+        self.event_id = None
         if output_dir is None:
             self.output_dir = os.path.dirname(grid_xml_path)
         else:
@@ -148,6 +160,10 @@ class ShakeGrid(object):
             self.output_basename = output_basename
         self.algorithm_name = algorithm_filename_flag
         self.grid_xml_path = grid_xml_path
+        self.smoothing_method = smoothing_method
+        self.smoothing_sigma = smooth_sigma
+        self.extra_keywords = extra_keywords if extra_keywords else {}
+
         self.parse_grid_xml()
 
     def extract_date_time(self, the_time_stamp):
@@ -184,6 +200,7 @@ class ShakeGrid(object):
         if self.time_zone in tz_dict:
             self.time_zone = tz_dict.get(self.time_zone, self.time_zone)
 
+        # noinspection PyBroadException
         try:
             if not self.time_zone:
                 # default to utc if empty
@@ -199,9 +216,9 @@ class ShakeGrid(object):
             self.day,
             self.hour,
             self.minute,
-            self.second,
-            # For now realtime always uses Indonesia Time
-            tzinfo=tzinfo)
+            self.second)
+        # For now realtime always uses Western Indonesia Time
+        self.time = tzinfo.localize(self.time)
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
@@ -255,6 +272,12 @@ class ShakeGrid(object):
         grid_path = self.grid_file_path()
         try:
             document = minidom.parse(grid_path)
+            shakemap_grid_element = document.getElementsByTagName(
+                'shakemap_grid')
+            shakemap_grid_element = shakemap_grid_element[0]
+            self.event_id = shakemap_grid_element.attributes[
+                'event_id'].nodeValue
+
             event_element = document.getElementsByTagName('event')
             event_element = event_element[0]
             self.magnitude = float(
@@ -288,10 +311,10 @@ class ShakeGrid(object):
                 specification_element.attributes['lat_max'].nodeValue)
             self.grid_bounding_box = QgsRectangle(
                 self.x_minimum, self.y_maximum, self.x_maximum, self.y_minimum)
-            self.rows = float(
-                specification_element.attributes['nlat'].nodeValue)
-            self.columns = float(
-                specification_element.attributes['nlon'].nodeValue)
+            self.rows = int(float(
+                specification_element.attributes['nlat'].nodeValue))
+            self.columns = int(float(
+                specification_element.attributes['nlon'].nodeValue))
             data_element = document.getElementsByTagName(
                 'grid_data')
             data_element = data_element[0]
@@ -301,7 +324,9 @@ class ShakeGrid(object):
             longitude_column = 0
             latitude_column = 1
             mmi_column = 4
-            self.mmi_data = []
+            lon_list = []
+            lat_list = []
+            mmi_list = []
             for line in data.split('\n'):
                 if not line:
                     continue
@@ -309,8 +334,42 @@ class ShakeGrid(object):
                 longitude = tokens[longitude_column]
                 latitude = tokens[latitude_column]
                 mmi = tokens[mmi_column]
-                mmi_tuple = (longitude, latitude, mmi)
-                self.mmi_data.append(mmi_tuple)
+                lon_list.append(float(longitude))
+                lat_list.append(float(latitude))
+                mmi_list.append(float(mmi))
+
+            if self.smoothing_method == NUMPY_SMOOTHING:
+                LOGGER.debug('We are using NUMPY smoothing')
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                mmi_list = convolve(Z, gaussian_kernel(self.smoothing_sigma))
+
+                # reshape array back to 1D long list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            elif self.smoothing_method == SCIPY_SMOOTHING:
+                LOGGER.debug('We are using SCIPY smoothing')
+                from scipy.ndimage.filters import gaussian_filter
+                ncols = len(np.where(np.array(lon_list) == lon_list[0])[0])
+                nrows = len(np.where(np.array(lat_list) == lat_list[0])[0])
+
+                # reshape mmi_list to 2D array to apply gaussian filter
+                Z = np.reshape(mmi_list, (nrows, ncols))
+
+                # smooth MMI matrix
+                # Help from Hadi Ghasemi
+                mmi_list = gaussian_filter(Z, self.smoothing_sigma)
+
+                # reshape array back to 1D long list of mmi
+                mmi_list = np.reshape(mmi_list, ncols * nrows)
+
+            # zip lists as list of tuples
+            self.mmi_data = zip(lon_list, lat_list, mmi_list)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
@@ -458,8 +517,7 @@ class ShakeGrid(object):
             else:
                 raise Exception(message)
 
-    def mmi_to_raster(
-            self, force_flag=False, algorithm='nearest'):
+    def mmi_to_raster(self, force_flag=False, algorithm=USE_ASCII):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
 
         A geotiff file will be created.
@@ -486,7 +544,9 @@ class ShakeGrid(object):
             (for inverse distance), 'average' (for moving average). Defaults
             to 'nearest' if not specified. Note that passing re-sampling alg
             parameters is currently not supported. If None is passed it will
-            be replaced with 'nearest'.
+            be replaced with 'use_ascii'.
+            'use_ascii' algorithm will convert the mmi grid to ascii file
+            then convert it to raster using gdal_translate.
         :type algorithm: str
 
         :returns: Path to the resulting tif file.
@@ -503,7 +563,7 @@ class ShakeGrid(object):
         LOGGER.debug('mmi_to_raster requested.')
 
         if algorithm is None:
-            algorithm = 'nearest'
+            algorithm = USE_ASCII
 
         if self.algorithm_name:
             tif_path = os.path.join(
@@ -516,44 +576,66 @@ class ShakeGrid(object):
         if os.path.exists(tif_path) and force_flag is not True:
             return tif_path
 
-        # Ensure the vrt mmi file exists (it will generate csv too if needed)
-        vrt_path = self.mmi_to_vrt(force_flag)
+        if algorithm == USE_ASCII:
+            # Convert to ascii
+            ascii_path = self.mmi_to_ascii(True)
 
-        # now generate the tif using default nearest neighbour interpolation
-        # options. This gives us the same output as the mi.grd generated by
-        # the earthquake server.
+            # Creating command to convert to tif
+            command = (
+                (
+                    '%(gdal_translate)s -a_srs EPSG:4326 '
+                    '"%(ascii)s" "%(tif)s"'
+                ) % {
+                    'gdal_translate': which('gdal_translate')[0],
+                    'ascii': ascii_path,
+                    'tif': tif_path
+                }
+            )
 
-        if 'invdist' in algorithm:
-            algorithm = 'invdist:power=2.0:smoothing=1.0'
+            LOGGER.info('Created this gdal command:\n%s' % command)
+            # Now run GDAL warp scottie...
+            self._run_command(command)
+        else:
+            # Ensure the vrt mmi file exists (it will generate csv too if
+            # needed)
+            vrt_path = self.mmi_to_vrt(force_flag)
 
-        # (Sunni): I'm not sure how this 'mmi' will work
-        # (Tim): Its the mapping to which field in the CSV contains the data
-        #    to be gridded.
-        command = ((
-            '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
-            '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-            '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-            '"%(vrt)s" "%(tif)s"') % {
-                'gdal_grid': which('gdal_grid')[0],
-                'alg': algorithm,
-                'xMin': self.x_minimum,
-                'xMax': self.x_maximum,
-                'yMin': self.y_minimum,
-                'yMax': self.y_maximum,
-                'dimX': self.columns,
-                'dimY': self.rows,
-                'vrt': vrt_path,
-                'tif': tif_path
-            })
+            # now generate the tif using default nearest neighbour
+            # interpolation options. This gives us the same output as the
+            # mmi.grd generated by the earthquake server.
 
-        LOGGER.info('Created this gdal command:\n%s' % command)
-        # Now run GDAL warp scottie...
-        self._run_command(command)
+            if INVDIST in algorithm:
+                algorithm = 'invdist:power=2.0:smoothing=1.0'
 
-        # We will use keywords file name with simple algorithm name since it
-        # will raise an error in windows related to having double colon in path
-        if 'invdist' in algorithm:
-            algorithm = 'invdist'
+            command = (
+                (
+                    '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
+                    '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
+                    '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+                    '"%(vrt)s" "%(tif)s"'
+                ) % {
+                    'gdal_grid': which('gdal_grid')[0],
+                    'alg': algorithm,
+                    'xMin': self.x_minimum,
+                    'xMax': self.x_maximum,
+                    'yMin': self.y_minimum,
+                    'yMax': self.y_maximum,
+                    'dimX': self.columns,
+                    'dimY': self.rows,
+                    'vrt': vrt_path,
+                    'tif': tif_path
+                }
+            )
+
+            LOGGER.info('Created this gdal command:\n%s' % command)
+            # Now run GDAL warp scottie...
+            self._run_command(command)
+
+            # We will use keywords file name with simple algorithm name since
+            # it will raise an error in windows related to having double
+            # colon in path
+            if INVDIST in algorithm:
+                algorithm = 'invdist'
 
         # copy the keywords file from fixtures for this layer
         self.create_keyword_file(algorithm)
@@ -566,7 +648,7 @@ class ShakeGrid(object):
         else:
             qml_path = os.path.join(
                 self.output_dir, '%s.qml' % self.output_basename)
-        qml_source_path = os.path.join(data_dir(), 'mmi.qml')
+        qml_source_path = resources_path('converter_data', 'mmi.qml')
         shutil.copyfile(qml_source_path, qml_path)
         return tif_path
 
@@ -604,7 +686,7 @@ class ShakeGrid(object):
         LOGGER.debug('Path for ogr2ogr: %s' % binary_list)
         if len(binary_list) < 1:
             raise CallGDALError(
-                    tr('ogr2ogr could not be found on your computer'))
+                tr('ogr2ogr could not be found on your computer'))
         # Use the first matching gdalwarp found
         binary = binary_list[0]
         command = (
@@ -622,11 +704,11 @@ class ShakeGrid(object):
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         qml_path = os.path.join(
             self.output_dir, '%s-points.qml' % self.output_basename)
-        source_qml = os.path.join(data_dir(), 'mmi-shape.qml')
+        source_qml = resources_path('converter_data', 'mmi-shape.qml')
         shutil.copyfile(source_qml, qml_path)
         return shp_path
 
-    def mmi_to_contours(self, force_flag=True, algorithm='nearest'):
+    def mmi_to_contours(self, force_flag=True, algorithm=USE_ASCII):
         """Extract contours from the event's tif file.
 
         Contours are extracted at a 0.5 MMI interval. The resulting file will
@@ -742,96 +824,27 @@ class ShakeGrid(object):
 
         # Copy over the standard .prj file since ContourGenerate does not
         # create a projection definition
-        qml_path = os.path.join(
+        projection_path = os.path.join(
             self.output_dir,
             '%s-contours-%s.prj' % (self.output_basename, algorithm))
-        source_qml = os.path.join(data_dir(), 'mmi-contours.prj')
-        shutil.copyfile(source_qml, qml_path)
+        source_projection_path = resources_path(
+            'converter_data', 'mmi-contours.prj')
+        shutil.copyfile(source_projection_path, projection_path)
 
         # Lastly copy over the standard qml (QGIS Style file)
         qml_path = os.path.join(
             self.output_dir,
             '%s-contours-%s.qml' % (self.output_basename, algorithm))
-        source_qml = os.path.join(data_dir(), 'mmi-contours.qml')
-        shutil.copyfile(source_qml, qml_path)
+        source_qml_path = resources_path('converter_data', 'mmi-contours.qml')
+        shutil.copyfile(source_qml_path, qml_path)
 
         # Now update the additional columns - X,Y, ROMAN and RGB
         try:
-            self.set_contour_properties(output_file)
+            set_contour_properties(output_file)
         except InvalidLayerError:
             raise
 
         return output_file
-
-    def set_contour_properties(self, input_file):
-        """Set the X, Y, RGB, ROMAN attributes of the contour layer.
-
-        :param input_file: (Required) Name of the contour layer.
-        :type input_file: str
-
-        :raise: InvalidLayerError if anything is amiss with the layer.
-        """
-        LOGGER.debug('set_contour_properties requested for %s.' % input_file)
-        layer = QgsVectorLayer(input_file, 'mmi-contours', "ogr")
-        if not layer.isValid():
-            raise InvalidLayerError(input_file)
-
-        layer.startEditing()
-        # Now loop through the db adding selected features to mem layer
-        request = QgsFeatureRequest()
-        fields = layer.dataProvider().fields()
-
-        for feature in layer.getFeatures(request):
-            if not feature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-            # Work out x and y
-            line = feature.geometry().asPolyline()
-            y = line[0].y()
-
-            x_max = line[0].x()
-            x_min = x_max
-            for point in line:
-                if point.y() < y:
-                    y = point.y()
-                x = point.x()
-                if x < x_min:
-                    x_min = x
-                if x > x_max:
-                    x_max = x
-            x = x_min + ((x_max - x_min) / 2)
-
-            # Get length
-            length = feature.geometry().length()
-
-            mmi_value = float(feature['MMI'])
-            # We only want labels on the whole number contours
-            if mmi_value != round(mmi_value):
-                roman = ''
-            else:
-                roman = romanise(mmi_value)
-
-            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            rgb = mmi_colour(mmi_value)
-
-            # Now update the feature
-            feature_id = feature.id()
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('X'), x)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('Y'), y)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('RGB'), rgb)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ROMAN'), roman)
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('ALIGN'), 'Center')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('VALIGN'), 'HALF')
-            layer.changeAttributeValue(
-                feature_id, fields.indexFromName('LEN'), length)
-
-        layer.commitChanges()
 
     def create_keyword_file(self, algorithm):
         """Create keyword file for the raster file created.
@@ -849,11 +862,61 @@ class ShakeGrid(object):
         """
         keyword_io = KeywordIO()
 
-        classes = {}
-        for item in earthquake_mmi_scale['classes']:
-            classes[item['key']] = [
-                item['numeric_default_min'], item['numeric_default_max']]
+        # Set thresholds for each exposure
+        mmi_default_classes = default_classification_thresholds(
+            earthquake_mmi_scale
+        )
+        mmi_default_threshold = {
+            earthquake_mmi_scale['key']: {
+                'active': True,
+                'classes': mmi_default_classes
+            }
+        }
+        generic_default_classes = default_classification_thresholds(
+            generic_hazard_classes
+        )
+        generic_default_threshold = {
+            generic_hazard_classes['key']: {
+                'active': True,
+                'classes': generic_default_classes
+            }
+        }
 
+        threshold_keyword = {}
+        for exposure in exposure_all:
+            # Not all exposure is supported by earthquake_mmi_scale
+            if exposure in earthquake_mmi_scale['exposures']:
+                threshold_keyword[exposure['key']] = mmi_default_threshold
+            else:
+                threshold_keyword[
+                    exposure['key']] = generic_default_threshold
+
+        extra_keywords = {
+            extra_keyword_earthquake_latitude['key']: self.latitude,
+            extra_keyword_earthquake_longitude['key']: self.longitude,
+            extra_keyword_earthquake_magnitude['key']: self.magnitude,
+            extra_keyword_earthquake_depth['key']: self.depth,
+            extra_keyword_earthquake_description['key']: self.description,
+            extra_keyword_earthquake_location['key']: self.location,
+            extra_keyword_earthquake_event_time['key']: self.time.strftime(
+                '%Y-%m-%dT%H:%M:%S'),
+            extra_keyword_time_zone['key']: self.time_zone,
+            extra_keyword_earthquake_x_minimum['key']: self.x_minimum,
+            extra_keyword_earthquake_x_maximum['key']: self.x_maximum,
+            extra_keyword_earthquake_y_minimum['key']: self.y_minimum,
+            extra_keyword_earthquake_y_maximum['key']: self.y_maximum,
+            extra_keyword_earthquake_event_id['key']: self.event_id
+        }
+        for key, value in self.extra_keywords.items():
+            extra_keywords[key] = value
+
+        # Delete empty element.
+        empty_keys = []
+        for key, value in extra_keywords.items():
+            if value is None:
+                empty_keys.append(key)
+        for empty_key in empty_keys:
+            extra_keywords.pop(empty_key)
         keywords = {
             'hazard': hazard_earthquake['key'],
             'hazard_category': hazard_category_single_event['key'],
@@ -863,13 +926,15 @@ class ShakeGrid(object):
             'layer_purpose': layer_purpose_hazard['key'],
             'continuous_hazard_unit': unit_mmi['key'],
             'classification': earthquake_mmi_scale['key'],
-            'thresholds': classes
+            'thresholds': threshold_keyword,
+            'extra_keywords': extra_keywords,
+            'active_band': 1
         }
 
         if self.algorithm_name:
             layer_path = os.path.join(
                 self.output_dir, '%s-%s.tif' % (
-                        self.output_basename, algorithm))
+                    self.output_basename, algorithm))
         else:
             layer_path = os.path.join(
                 self.output_dir, '%s.tif' % self.output_basename)
@@ -889,6 +954,37 @@ class ShakeGrid(object):
 
         keyword_io.write_keywords(hazard_layer, keywords)
 
+    def mmi_to_ascii(self, force_flag=False):
+        """Convert grid.xml mmi column to a ascii raster file."""
+        ascii_path = os.path.join(
+            self.output_dir, '%s.asc' % self.output_basename)
+        # Short circuit if the tif is already created.
+        if os.path.exists(ascii_path) and force_flag is not True:
+            return ascii_path
+
+        cell_size = (self.x_maximum - self.x_minimum) / (self.rows - 1)
+        asc_file = open(ascii_path, 'w')
+        asc_file.write('ncols %d\n' % self.columns)
+        asc_file.write('nrows %d\n' % self.rows)
+        asc_file.write('xllcorner %.3f\n' % self.x_minimum)
+        asc_file.write('yllcorner %.3f\n' % self.y_minimum)
+        asc_file.write('cellsize %.3f\n' % cell_size)
+        asc_file.write('nodata_value -9999\n')
+
+        cell_string = ''
+        cell_values = np.reshape(
+            [v[2] for v in self.mmi_data], (self.rows, self.columns))
+        for i in range(self.rows):
+            for j in range(self.columns):
+                cell_string += '%.3f ' % cell_values[i][j]
+            cell_string += '\n'
+
+        asc_file.write(cell_string)
+
+        asc_file.close()
+
+        return ascii_path
+
 
 def convert_mmi_data(
         grid_xml_path,
@@ -896,7 +992,11 @@ def convert_mmi_data(
         source,
         output_path=None,
         algorithm=None,
-        algorithm_filename_flag=True):
+        algorithm_filename_flag=True,
+        smoothing_method=NONE_SMOOTHING,
+        smooth_sigma=0.9,
+        extra_keywords=None
+):
     """Convenience function to convert a single file.
 
     :param grid_xml_path: Path to the xml shake grid file.
@@ -908,6 +1008,15 @@ def convert_mmi_data(
     :param source: The source of the shake data.
     :type source: str
 
+    :param place_layer: Nearby cities/places.
+    :type place_layer: QgsVectorLayer
+
+    :param place_name: Column name that indicates name of the cities.
+    :type place_name: str
+
+    :param place_population: Column name that indicates number of population.
+    :type place_population: str
+
     :param output_path: Specify which path to use as an alternative to the
         default.
     :type output_path: str
@@ -918,6 +1027,13 @@ def convert_mmi_data(
     :param algorithm_filename_flag: Flag whether to use the algorithm in the
         output file's name.
     :type algorithm_filename_flag: bool
+
+    :param smoothing_method: Smoothing method. One of None, Numpy, Scipy.
+    :type smoothing_method: basestring
+
+    :param smooth_sigma: parameter for gaussian filter used in smoothing
+        function.
+    :type smooth_sigma: float
 
     :returns: A path to the resulting raster file.
     :rtype: str
@@ -933,10 +1049,14 @@ def convert_mmi_data(
         output_dir = output_path
         output_basename = None
     converter = ShakeGrid(
-        title=title,
-        source=source,
-        grid_xml_path=grid_xml_path,
+        title,
+        source,
+        grid_xml_path,
         output_dir=output_dir,
         output_basename=output_basename,
-        algorithm_filename_flag=algorithm_filename_flag)
+        algorithm_filename_flag=algorithm_filename_flag,
+        smoothing_method=smoothing_method,
+        smooth_sigma=smooth_sigma,
+        extra_keywords=extra_keywords
+    )
     return converter.mmi_to_raster(force_flag=True, algorithm=algorithm)

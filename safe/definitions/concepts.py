@@ -7,6 +7,7 @@ contextual information to accompany the data shown to them.
 """
 
 from collections import OrderedDict
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -421,7 +422,7 @@ concepts['elderly'] = {
     'group': tr('Demographics'),
     'key': 'elderly',
     'description': tr(
-        'Persons aged 64 years and over.'),
+        'Persons aged 65 years and over.'),
     'citations': [
         {
             'text': tr(

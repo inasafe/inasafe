@@ -97,8 +97,8 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
             else:
                 available_options.append(list_widget.item(i).text())
         message = (
-            'There is no %s in the list widget. The available options are %'
-            's' % (option, available_options))
+            'There is no %s in the list widget. The available options are %s'
+            % (option, available_options))
 
         raise Exception(message)
 

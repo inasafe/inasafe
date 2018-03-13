@@ -26,7 +26,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class TestQGIS(unittest.TestCase):
 
     def test_is_polygonal_layer(self):
-        """Test we can get the correct attributes back"""
+        """Test we can get the correct attributes back."""
         # Polygon layer
         layer = load_test_vector_layer(
             'aggregation',

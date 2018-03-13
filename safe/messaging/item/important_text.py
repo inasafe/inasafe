@@ -22,7 +22,7 @@ from text import Text
 
 
 class ImportantText(Text):
-    """A class to model free text in the messaging system """
+    """A class to model free text in the messaging system."""
 
     def __init__(self, text, **kwargs):
         """Creates a Bold Text object

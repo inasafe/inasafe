@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # DO NOT REMOVE THIS
 # Please import module in safe from the safe root, e.g:
 # from safe.x.y import z
+# This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 import logging

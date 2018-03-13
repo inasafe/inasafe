@@ -14,6 +14,14 @@ Contact : etienne at kartoza dot com
 import sys
 import os
 import unittest
+import qgis  # NOQA  For SIP API to V2 if run outside of QGIS
+try:
+    import coverage
+except ImportError:
+    import pip
+    pip.main(['install', 'coverage'])
+    import coverage
+import tempfile
 from osgeo import gdal
 from PyQt4 import Qt
 from safe.utilities.gis import qgis_version
@@ -25,7 +33,7 @@ __copyright__ = (
     'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
-def _run_tests(test_suite, package_name):
+def _run_tests(test_suite, package_name, with_coverage=False):
     """Core function to test a test suite."""
     count = test_suite.countTestCases()
     print '########'
@@ -35,7 +43,25 @@ def _run_tests(test_suite, package_name):
     print 'QT : %s' % Qt.QT_VERSION
     print 'Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False))
     print '########'
+    if with_coverage:
+        cov = coverage.Coverage(
+            source=['safe/'],
+            omit=['*/test/*', 'safe/definitions/*'],
+        )
+        cov.start()
+
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
+
+    if with_coverage:
+        cov.stop()
+        cov.save()
+        report = tempfile.NamedTemporaryFile(delete=False)
+        cov.report(file=report)
+        # Produce HTML reports in the `htmlcov` folder and open index.html
+        # cov.html_report()
+        report.close()
+        with open(report.name, 'r') as fin:
+            print fin.read()
 
 
 def test_package(package='safe'):

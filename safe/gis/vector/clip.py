@@ -3,18 +3,18 @@
 """Clip and mask a hazard layer."""
 
 import logging
+
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    )
+)
 
-from safe.utilities.i18n import tr
 from safe.definitions.processing_steps import clip_steps
-from safe.gis.vector.tools import create_memory_layer
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_memory_layer
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -55,7 +55,7 @@ def clip(layer_to_clip, mask_layer, callback=None):
     output_layer_name = clip_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         layer_to_clip.keywords['layer_purpose'])
-    processing_step = clip_steps['step_name']
+    processing_step = clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,
@@ -100,10 +100,10 @@ def clip(layer_to_clip, mask_layer, callback=None):
         if not input_features:
             continue
 
-        if single_clip_feature:
-            total = 100.0 / len(input_features)
-        else:
-            total = 0
+        # if single_clip_feature:
+        #     total = 100.0 / len(input_features)
+        # else:
+        #     total = 0
 
         for current, in_feat in enumerate(input_features):
             if not in_feat.geometry():
@@ -123,8 +123,8 @@ def clip(layer_to_clip, mask_layer, callback=None):
                 new_geom = combined_clip_geom.intersection(cur_geom)
                 if new_geom.wkbType() == QgsWKBTypes.Unknown \
                         or QgsWKBTypes.flatType(
-                            new_geom.geometry().wkbType()) == \
-                                QgsWKBTypes.GeometryCollection:
+                        new_geom.geometry().wkbType()) == \
+                        QgsWKBTypes.GeometryCollection:
                     int_com = in_feat.geometry().combine(new_geom)
                     int_sym = in_feat.geometry().symDifference(new_geom)
                     if not int_com or not int_sym:

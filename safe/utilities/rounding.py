@@ -4,6 +4,7 @@
 
 from decimal import Decimal
 from math import ceil, log
+
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.units import unit_mapping, nominal_mapping
@@ -16,14 +17,14 @@ __revision__ = '$Format:%H$'
 
 
 def format_number(
-        x, enable_rounding=True, is_population=False, coefficient=1):
+        x, use_rounding=True, is_population=False, coefficient=1):
     """Format a number according to the standards.
 
     :param x: A number to be formatted in a locale friendly way.
     :type x: int
 
-    :param enable_rounding: Flag to enable a rounding.
-    :type enable_rounding: bool
+    :param use_rounding: Flag to enable a rounding.
+    :type use_rounding: bool
 
     :param is_population: Flag if the number is population. It needs to be
         used with enable_rounding.
@@ -37,7 +38,7 @@ def format_number(
         x is simply returned.
     :rtype: basestring
     """
-    if enable_rounding:
+    if use_rounding:
         x = rounding(x, is_population)
 
     x /= coefficient
@@ -112,7 +113,7 @@ def thousand_separator():
 
 def round_affected_number(
         number,
-        enable_rounding=False,
+        use_rounding=False,
         use_population_rounding=False):
     """Tries to convert and round the number.
 
@@ -121,8 +122,8 @@ def round_affected_number(
     :param number: number represented as string or float
     :type number: str, float
 
-    :param enable_rounding: flag to enable rounding
-    :type enable_rounding: bool
+    :param use_rounding: flag to enable rounding
+    :type use_rounding: bool
 
     :param use_population_rounding: flag to enable population rounding scheme
     :type use_population_rounding: bool
@@ -131,10 +132,10 @@ def round_affected_number(
     """
     decimal_number = float(number)
     rounded_number = int(ceil(decimal_number))
-    if enable_rounding and use_population_rounding:
+    if use_rounding and use_population_rounding:
         # if uses population rounding
         return rounding(rounded_number, use_population_rounding)
-    elif enable_rounding:
+    elif use_rounding:
         return rounded_number
 
     return decimal_number

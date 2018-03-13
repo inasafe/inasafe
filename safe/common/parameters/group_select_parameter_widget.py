@@ -3,15 +3,15 @@
 
 import logging
 
-from PyQt4.QtGui import (
-    QDoubleSpinBox, QVBoxLayout, QRadioButton, QButtonGroup,
-    QWidget, QLabel, QSizePolicy, QSpacerItem, QListWidget,
-    QGridLayout, QAbstractItemView, QListWidgetItem)
 from PyQt4.QtCore import Qt
+from PyQt4.QtGui import (
+    QVBoxLayout, QRadioButton, QButtonGroup, QWidget, QLabel, QSizePolicy,
+    QListWidget, QGridLayout, QAbstractItemView, QListWidgetItem)
 
 from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
-
+from safe.common.parameters.percentage_parameter_widget import (
+    PercentageSpinBox)
 from safe.definitions.constants import STATIC, SINGLE_DYNAMIC, MULTIPLE_DYNAMIC
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -68,38 +68,31 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             radio_button = QRadioButton(value.get('label'))
             self.radio_button_layout.addWidget(radio_button, i, 0)
             if value.get('type') == SINGLE_DYNAMIC:
-                double_spin_box = QDoubleSpinBox()
-                self.radio_button_layout.addWidget(double_spin_box, i, 1)
-                double_spin_box.setValue(value.get('value', 0))
-                double_spin_box.setMinimum(
-                    value.get('constraint', {}).get('min', 0))
-                double_spin_box.setMaximum(value.get(
-                    'constraint', {}).get('max', 1))
-                double_spin_box.setSingleStep(
-                    value.get('constraint', {}).get('step', 0.01))
-                step = double_spin_box.singleStep()
+                percentage_spin_box = PercentageSpinBox(self)
+                self.radio_button_layout.addWidget(percentage_spin_box, i, 1)
+                percentage_spin_box.setValue(value.get('value', 0))
+                step = percentage_spin_box.singleStep()
                 if step > 1:
                     precision = 0
                 else:
                     precision = len(str(step).split('.')[1])
                     if precision > 3:
                         precision = 3
-                double_spin_box.setDecimals(precision)
-                self.spin_boxes[key] = double_spin_box
+                percentage_spin_box.setDecimals(precision)
+                self.spin_boxes[key] = percentage_spin_box
 
                 # Enable spin box depends on the selected option
                 if self._parameter.selected == key:
-                    double_spin_box.setEnabled(True)
+                    percentage_spin_box.setEnabled(True)
                 else:
-                    double_spin_box.setEnabled(False)
+                    percentage_spin_box.setEnabled(False)
 
             elif value.get('type') == STATIC:
                 static_value = value.get('value', 0)
                 if static_value is not None:
                     self.radio_button_layout.addWidget(
-                        QLabel(str(static_value)), i, 1)
+                        QLabel(str(static_value * 100) + ' %'), i, 1)
             elif value.get('type') == MULTIPLE_DYNAMIC:
-                selected_fields = value.get('value', [])
                 if self._parameter.selected == key:
                     self.list_widget.setEnabled(True)
                 else:
@@ -137,6 +130,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         self.update_list_widget()
 
         # Connect signal
+        # noinspection PyUnresolvedReferences
         self.input_button_group.buttonClicked.connect(
             self.radio_buttons_clicked)
 

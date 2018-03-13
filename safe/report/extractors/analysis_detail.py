@@ -3,22 +3,28 @@
 """Module used to generate context for analysis detail section."""
 
 import logging
+from copy import deepcopy
 
-from safe.definitions.exposure import exposure_all, exposure_population
+from safe.definitions.exposure import (
+    exposure_all, exposure_population, exposure_place)
 from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
     hazard_count_field,
     total_affected_field,
     total_not_affected_field,
-    total_field, total_not_exposed_field, affected_field)
+    total_field,
+    total_not_exposed_field,
+    affected_field,
+    exposed_population_count_field,
+    population_count_field)
+from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name,
-    layer_hazard_classification,
     retrieve_exposure_classes_lists)
 from safe.utilities.i18n import tr
+from safe.utilities.metadata import active_classification
 from safe.utilities.rounding import format_number
 from safe.utilities.settings import setting
 
@@ -50,8 +56,6 @@ def analysis_detail_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
 
-    hazard_layer = impact_report.hazard
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     analysis_feature = analysis_layer.getFeatures().next()
@@ -60,19 +64,27 @@ def analysis_detail_extractor(impact_report, component_metadata):
         exposure_summary_table_fields = exposure_summary_table.keywords[
             'inasafe_fields']
     provenance = impact_report.impact_function.provenance
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
-    """Initializations"""
+    """Initializations."""
 
     # Get hazard classification
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
-    # Only round the number when it is population exposure and it is not
-    # in debug mode
-    is_rounding = not debug_mode
+    exposure_type = definition(exposure_keywords['exposure'])
+    # Only round the number when it is population exposure and we use rounding
     is_population = exposure_type is exposure_population
+
+    # action for places with poopulation exposure
+    is_place_with_population = False
+    if exposure_type is exposure_place:
+        exposure_fields = exposure_keywords['inasafe_fields']
+        if exposure_fields.get(population_count_field['key']):
+            is_place_with_population = True
 
     # Analysis detail only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -95,7 +107,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             breakdown_field = field
             break
 
-    """Create detail header"""
+    """Create detail header."""
     headers = []
 
     # breakdown header
@@ -167,25 +179,36 @@ def analysis_detail_extractor(impact_report, component_metadata):
         affected_header_index = len(hazard_classification['classes']) + 1
         not_affected_header_index = affected_header_index + 2
 
-    headers.insert(affected_header_index, total_affected_field['name'])
-    headers.insert(not_affected_header_index, total_not_affected_field['name'])
+    report_fields = []
 
+    headers.insert(affected_header_index, total_affected_field['name'])
     header_hazard_group['affected']['total'].append(
         total_affected_field['name'])
+    report_fields.append(total_affected_field)
+
+    headers.insert(not_affected_header_index, total_not_affected_field['name'])
     header_hazard_group['not_affected']['total'].append(
         total_not_affected_field['name'])
+    report_fields.append(total_not_affected_field)
 
-    # affected, not affected, not exposed, total header
-    report_fields = [
-        total_affected_field,
-        total_not_affected_field,
-        total_not_exposed_field,
-        total_field
-    ]
-    for report_field in report_fields[2:]:
+    # affected, not affected, population (if applicable), not exposed,
+    # total header
+    report_fields += [total_not_exposed_field, total_field]
+
+    place_pop_name = resolve_from_dictionary(
+        extra_args, ['place_with_population', 'header'])
+    if is_place_with_population:
+        # we want to change header name for population
+        duplicated_population_count_field = deepcopy(
+            exposed_population_count_field)
+        duplicated_population_count_field['name'] = place_pop_name
+        report_fields.append(duplicated_population_count_field)
+
+    report_fields_index = -2 + -(int(is_place_with_population))
+    for report_field in report_fields[report_fields_index:]:
         headers.append(report_field['name'])
 
-    """Create detail rows"""
+    """Create detail rows."""
     details = []
     for feat in exposure_summary_table.getFeatures():
         row = []
@@ -222,7 +245,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 count_value = int(float(feat[field_index]))
                 count_value = format_number(
                     count_value,
-                    enable_rounding=is_rounding,
+                    use_rounding=use_rounding,
                     is_population=is_population)
                 row.append({
                     'value': count_value,
@@ -250,7 +273,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             total_count = int(float(feat[field_index]))
             total_count = format_number(
                 total_count,
-                enable_rounding=is_rounding,
+                use_rounding=use_rounding,
                 is_population=is_population)
 
             # we comment below code because now we want to show all rows,
@@ -289,7 +312,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         details.append(row)
 
     # retrieve classes definitions
-    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_keywords)
 
     # sort detail rows based on class order
     # create function to sort
@@ -324,7 +347,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # replace class_key with the class name
         row[0] = breakdown_name
 
-    """create total footers"""
+    """create total footers."""
     # create total header
     footers = [total_field['name']]
     # total for hazard
@@ -351,7 +374,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(field_name)
             count_value = format_number(
                 analysis_feature[field_index],
-                enable_rounding=is_rounding,
+                use_rounding=use_rounding,
                 is_population=is_population)
         except KeyError:
             # in case the field was not found
@@ -383,17 +406,24 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # for footers
     for field in report_fields:
 
+        total_count = value_from_field_name(
+            field['field_name'], analysis_layer)
+
+        if not total_count and field['name'] == place_pop_name:
+            field = population_count_field
+            field['name'] = place_pop_name
+            total_count = value_from_field_name(
+                field['field_name'], analysis_layer)
+
         group_key = None
         for key, group in header_hazard_group.iteritems():
             if field['name'] in group['total']:
                 group_key = key
                 break
 
-        total_count = value_from_field_name(
-            field['field_name'], analysis_layer)
         total_count = format_number(
             total_count,
-            enable_rounding=is_rounding,
+            use_rounding=use_rounding,
             is_population=is_population)
         if group_key:
             if field == total_affected_field:
@@ -447,7 +477,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         group_key = None
         for key, group in header_hazard_group.iteritems():
             if hazard_class_name in group['hazards'] or (
-                        hazard_class_name in group['total']):
+                    hazard_class_name in group['total']):
                 group_key = key
                 break
 
@@ -565,7 +595,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                     continue
                 total_count = format_number(
                     total_count,
-                    enable_rounding=is_rounding,
+                    use_rounding=use_rounding,
                     is_population=is_population)
                 row.append(total_count)
 

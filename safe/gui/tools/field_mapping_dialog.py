@@ -2,32 +2,31 @@
 """Field Mapping Dialog Implementation."""
 import logging
 
-from PyQt4.QtGui import (
-    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox)
-from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
+from PyQt4.QtGui import (
+    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QIcon)
+from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 
 from parameters.parameter_exceptions import InvalidValidationException
-
-from safe.definitions.constants import RECENT
-from safe.definitions.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_hazard)
 from safe.common.exceptions import (
     NoKeywordsFoundError,
     KeywordNotFoundError,
     MetadataReadError,
     InaSAFEError)
-from safe.utilities.resources import (
-    get_ui_class, html_footer, html_header)
+from safe.definitions.constants import RECENT
+from safe.definitions.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitions.utilities import get_field_groups
+from safe.gui.tools.help.field_mapping_help import field_mapping_help
+from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
+from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.gui.widgets.field_mapping_widget import FieldMappingWidget
-from safe.gui.tools.help.field_mapping_help import field_mapping_help
-from safe.utilities.utilities import get_error_message
-from safe.utilities.default_values import set_inasafe_default_value_qsetting
 from safe.utilities.qgis_utilities import display_warning_message_box
-from safe.definitions.utilities import get_field_groups
+from safe.utilities.resources import (
+    get_ui_class, html_footer, html_header, resources_path)
 from safe.utilities.unicode import get_string
+from safe.utilities.utilities import get_error_message
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
 
@@ -44,6 +43,8 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
 
         self.setWindowTitle(self.tr('InaSAFE Field Mapping Tool'))
+        icon = resources_path('img', 'icons', 'show-mapping-tool.svg')
+        self.setWindowIcon(QIcon(icon))
         self.parent = parent
         self.iface = iface
         if setting is None:
@@ -103,6 +104,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_input_layout.addWidget(self.layer_combo_box)
 
         self.header_label = QLabel()
+        self.header_label.setWordWrap(True)
         self.main_layout.addWidget(self.header_label)
         self.main_layout.addLayout(self.layer_input_layout)
 
@@ -155,9 +157,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             try:
                 self.metadata = self.keyword_io.read_keywords(self.layer)
             except (
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                MetadataReadError) as e:
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    MetadataReadError) as e:
                 raise e
         if 'inasafe_default_values' not in self.metadata:
             self.metadata['inasafe_default_values'] = {}
@@ -170,8 +172,9 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.main_layout.addWidget(self.field_mapping_widget)
 
         # Set header label
-        group_names = [self.field_mapping_widget.tabText(i) for i in
-             range(self.field_mapping_widget.count())]
+        group_names = [
+            self.field_mapping_widget.tabText(i) for i in range(
+                self.field_mapping_widget.count())]
         if len(group_names) == 0:
             header_text = tr(
                 'There is no field group for this layer. Please select '

@@ -3,7 +3,7 @@
 """Aggregate the aggregate hazard to the aggregation layer."""
 
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
     aggregation_id_field,
@@ -17,16 +17,14 @@ from safe.definitions.fields import (
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_summary)
-from safe.definitions.processing_steps import (
-    summary_2_aggregation_steps)
-from safe.gis.vector.tools import read_dynamic_inasafe_field
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
-from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
-from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
+from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -63,9 +61,6 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_2_aggregation_steps['output_layer_name']
-    processing_step = summary_2_aggregation_steps['step_name']
-
     source_fields = aggregate_hazard.keywords['inasafe_fields']
     target_fields = aggregation.keywords['inasafe_fields']
 
@@ -119,7 +114,7 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = area[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -172,6 +167,8 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         aggregation.setLayerName(aggregation.keywords['title'])
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_summary['key'])
+    aggregation.keywords['exposure_keywords'] = (
+        aggregate_hazard.keywords['exposure_keywords'].copy())
 
     check_layer(aggregation)
     return aggregation

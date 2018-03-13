@@ -5,8 +5,8 @@ from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry)
+from safe.definitions.utilities import definition
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
     value_from_field_name)
 from safe.utilities.rounding import format_number
@@ -37,16 +37,16 @@ def mmi_detail_extractor(impact_report, component_metadata):
     .. versionadded:: 4.0
     """
     context = {}
-    exposure_layer = impact_report.exposure
-    hazard_layer = impact_report.hazard
     analysis_layer = impact_report.analysis
     analysis_layer_keywords = analysis_layer.keywords
-    hazard_keywords = hazard_layer.keywords
     extra_args = component_metadata.extra_args
-    enable_rounding = not impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
+    provenance = impact_report.impact_function.provenance
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
     # check if this is EQ raster with population
-    hazard_type = layer_definition_type(hazard_layer)
+    hazard_type = definition(hazard_keywords['hazard'])
     if not hazard_type == hazard_earthquake:
         return context
 
@@ -54,7 +54,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
     if not hazard_geometry == layer_geometry_raster['key']:
         return context
 
-    exposure_type = layer_definition_type(exposure_layer)
+    exposure_type = definition(exposure_keywords['exposure'])
     if not exposure_type == exposure_population:
         return context
 
@@ -64,7 +64,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
 
     reported_fields = resolve_from_dictionary(extra_args, 'reported_fields')
 
-    """Generate headers"""
+    """Generate headers."""
     table_header = [
         resolve_from_dictionary(extra_args, 'mmi_header')
     ] + [v['header'] for v in reported_fields]
@@ -100,13 +100,13 @@ def mmi_detail_extractor(impact_report, component_metadata):
                 count = 0
             count = format_number(
                 count,
-                enable_rounding=enable_rounding,
+                use_rounding=use_rounding,
                 is_population=True)
             columns.append(count)
 
         rows.append(columns)
 
-    """Extract total"""
+    """Extract total."""
     total_footer = [
         resolve_from_dictionary(extra_args, 'total_header')
     ]
@@ -122,7 +122,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
             total = 0
         total = format_number(
             total,
-            enable_rounding=enable_rounding,
+            use_rounding=use_rounding,
             is_population=True)
         total_footer.append(total)
 

@@ -11,20 +11,17 @@ import logging
 import os
 import shutil
 
-from qgis.core import (
-    QgsComposition,
-    QgsRectangle,
-    QgsRasterLayer)
+from qgis.core import QgsComposition, QgsRasterLayer, QgsMapSettings
 
+from safe import messaging as m
 from safe.common.exceptions import (
     KeywordNotFoundError)
-from safe.definitions.messages import disclaimer
 from safe.defaults import (
     white_inasafe_logo_path,
     black_inasafe_logo_path,
     supporters_logo_path,
     default_north_arrow_path)
-from safe import messaging as m
+from safe.definitions.messages import disclaimer
 from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -286,7 +283,10 @@ class ImpactReport(object):
             exposure_summary_table=None,
             aggregation_summary=None,
             extra_layers=None,
-            minimum_needs_profile=None):
+            ordered_layers=None,
+            legend_layers=None,
+            minimum_needs_profile=None,
+            multi_exposure_impact_function=None):
         """Constructor for the Composition Report class.
 
         :param iface: Reference to the QGIS iface object.
@@ -305,28 +305,35 @@ class ImpactReport(object):
         self._iface = iface
         self._metadata = template_metadata
         self._output_folder = None
-        self._impact_function = impact_function
+        self._impact_function = impact_function or (
+            multi_exposure_impact_function)
         self._hazard = hazard or self._impact_function.hazard
-        self._exposure = (
-            exposure or self._impact_function.exposure)
-        self._impact = (
-            impact or self._impact_function.impact)
         self._analysis = (analysis or self._impact_function.analysis_impacted)
-        self._exposure_summary_table = (
-            exposure_summary_table or
-            self._impact_function.exposure_summary_table)
-        self._aggregation_summary = (
-            aggregation_summary or
-            self._impact_function.aggregation_summary)
+        if impact_function:
+            self._exposure = (
+                exposure or self._impact_function.exposure)
+            self._impact = (
+                impact or self._impact_function.impact)
+            self._exposure_summary_table = (
+                exposure_summary_table or
+                self._impact_function.exposure_summary_table)
+            self._aggregation_summary = (
+                aggregation_summary or
+                self._impact_function.aggregation_summary)
         if extra_layers is None:
             extra_layers = []
         self._extra_layers = extra_layers
+        self._ordered_layers = ordered_layers
+        self._legend_layers = legend_layers
         self._minimum_needs = minimum_needs_profile
-        self._extent = self._iface.mapCanvas().extent()
+        self._multi_exposure_impact_function = multi_exposure_impact_function
         self._inasafe_context = InaSAFEReportContext()
 
         # QgsMapSettings is added in 2.4
-        map_settings = self._iface.mapCanvas().mapSettings()
+        if self._iface:
+            map_settings = self._iface.mapCanvas().mapSettings()
+        else:
+            map_settings = QgsMapSettings()
 
         self._qgis_composition_context = QGISCompositionContext(
             None,
@@ -442,6 +449,18 @@ class ImpactReport(object):
         :rtype: safe.impact_function.impact_function.ImpactFunction
         """
         return self._impact_function
+
+    @property
+    def multi_exposure_impact_function(self):
+        """Getter for multi impact function instance to use.
+
+        We define this property because we want to avoid the usage of
+        impact_function property when there is multi exposure impact function
+        being used.
+
+        :rtype: MultiExposureImpactFunction
+        """
+        return self._multi_exposure_impact_function
 
     def _check_layer_count(self, layer):
         """Check for the validity of the layer.
@@ -590,6 +609,48 @@ class ImpactReport(object):
         self._extra_layers = extra_layers
 
     @property
+    def ordered_layers(self):
+        """Getter to ordered layers.
+
+        Ordered layers will determine the layers order on map report.
+        :return:
+        """
+        return self._ordered_layers
+
+    @ordered_layers.setter
+    def ordered_layers(self, ordered_layers):
+        """Set ordered layers.
+
+        Ordered layers will determine the layers order on map report.
+
+        :param ordered_layers:
+        :return:
+        """
+        self._ordered_layers = ordered_layers
+
+    @property
+    def legend_layers(self):
+        """Getter to legend layers.
+
+        Legend layers will determine the legend on map report.
+
+        :return: List of legend layers.
+        :rtype: list
+        """
+        return self._legend_layers
+
+    @legend_layers.setter
+    def legend_layers(self, legend_layers):
+        """Set legend layers.
+
+        Legend layers will determine the legend on map report.
+
+        :param legend_layers: List of legend layers.
+        :type legend_layers: list
+        """
+        self._legend_layers = legend_layers
+
+    @property
     def minimum_needs(self):
         """Minimum needs.
 
@@ -699,7 +760,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_find_extractor)
@@ -719,7 +780,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_extract_context)
@@ -747,7 +808,7 @@ class ImpactReport(object):
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
-                if self.impact_function.debug_mode:
+                if not self.impact_function.use_rounding:
                     raise
                 else:
                     message.add(failed_find_renderer)
@@ -776,12 +837,14 @@ class ImpactReport(object):
                             target_dir = os.path.join(
                                 dirname, 'resources', target_resource)
                             # copy here
+                            if os.path.exists(target_dir):
+                                shutil.rmtree(target_dir)
                             shutil.copytree(resource, target_dir)
                     component.output = output
                 except Exception as e:  # pylint: disable=broad-except
                     generation_error_code = self.REPORT_GENERATION_FAILED
                     LOGGER.info(e)
-                    if self.impact_function.debug_mode:
+                    if not self.impact_function.use_rounding:
                         raise
                     else:
                         message.add(failed_render_context)

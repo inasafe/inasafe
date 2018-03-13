@@ -1,22 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk assessment tool developed by AusAid -
-  **Utilities Tests implementation.**
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-"""
-
-__author__ = 'ismail@kartoza.com'
-__version__ = '1.1.1'
-__revision__ = '$Format:%H$'
-__date__ = '05/05/2014'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""Test for Common Utilities."""
 
 import unittest
 import os
@@ -36,6 +20,11 @@ from safe.common.utilities import (
     humanize_file_size,
     add_to_list,
     color_ramp)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -208,7 +197,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_get_utm_epsg(self):
-        """Test we can get correct epsg code"""
+        """Test we can get correct epsg code."""
         # North semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, 10), 32601)
         self.assertEqual(get_utm_epsg(178, 20), 32660)

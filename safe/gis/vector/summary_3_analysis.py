@@ -3,11 +3,11 @@
 """Aggregate the aggregate hazard to the analysis layer."""
 
 from math import isnan
+
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
-    analysis_id_field,
     analysis_name_field,
     aggregation_id_field,
     aggregation_name_field,
@@ -16,20 +16,23 @@ from safe.definitions.fields import (
     total_affected_field,
     total_not_affected_field,
     total_not_exposed_field,
+    total_exposed_field,
     total_field,
     hazard_count_field,
+    summary_rules,
 )
-from safe.definitions.processing_steps import (
-    summary_3_analysis_steps)
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
-from safe.definitions.post_processors import post_processor_affected_function
+from safe.definitions.processing_steps import (
+    summary_3_analysis_steps)
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
-from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_field_from_definition
+from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -45,10 +48,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     | haz_id | haz_class | aggr_id | aggr_name | total_feature |
 
     Target layer :
-    | analysis_id |
+    | analysis_name |
 
     Output layer :
-    | analysis_id | count_hazard_class | affected_count | total |
+    | analysis_name | count_hazard_class | affected_count | total |
 
     :param aggregate_hazard: The layer to aggregate vector layer.
     :type aggregate_hazard: QgsVectorLayer
@@ -66,14 +69,13 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_3_analysis_steps['output_layer_name']
-    processing_step = summary_3_analysis_steps['step_name']
+    output_layer_name = summary_3_analysis_steps['output_layer_name']  # NOQA
+    processing_step = summary_3_analysis_steps['step_name']  # NOQA
 
     source_fields = aggregate_hazard.keywords['inasafe_fields']
     target_fields = analysis.keywords['inasafe_fields']
 
     target_compulsory_fields = [
-        analysis_id_field,
         analysis_name_field,
     ]
     check_inputs(target_compulsory_fields, target_fields)
@@ -95,7 +97,11 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
+
+    exposure_keywords = aggregate_hazard.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
 
     total = source_fields[total_field['key']]
 
@@ -109,10 +115,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         value = area[total]
-        if not value or isinstance(value, QPyNullVariant) or isnan(value):
+        if value == '' or isinstance(value, QPyNullVariant) or isnan(value):
             # For isnan, see ticket #3812
             value = 0
-        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
             hazard_value = 'NULL'
         flat_table.add_value(
             value,
@@ -122,7 +128,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = area[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -136,6 +142,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     counts = [
         total_affected_field,
         total_not_affected_field,
+        total_exposed_field,
         total_not_exposed_field,
         total_field]
 
@@ -150,17 +157,38 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     not_affected_sum = 0
     not_exposed_sum = 0
 
+    # Summarization
+    summary_values = {}
+    for key, summary_rule in summary_rules.items():
+        input_field = summary_rule['input_field']
+        case_field = summary_rule['case_field']
+        if aggregate_hazard.fieldNameIndex(input_field['field_name']) == -1:
+            continue
+        if aggregate_hazard.fieldNameIndex(case_field['field_name']) == -1:
+            continue
+
+        summary_value = 0
+        for area in aggregate_hazard.getFeatures():
+            case_value = area[case_field['field_name']]
+            if case_value in summary_rule['case_values']:
+                summary_value += area[input_field['field_name']]
+
+        summary_values[key] = summary_value
+
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
-            if not val or isinstance(val, QPyNullVariant):
+            if val == '' or isinstance(val, QPyNullVariant):
                 val = 'NULL'
             sum = flat_table.get_value(hazard_class=val)
             total += sum
             analysis.changeAttributeValue(area.id(), shift + i, sum)
 
             affected = post_processor_affected_function(
-                    classification=classification, hazard_class=val)
+                exposure=exposure,
+                hazard=hazard,
+                classification=classification,
+                hazard_class=val)
             if affected == not_exposed_class['key']:
                 not_exposed_sum += sum
             elif affected:
@@ -168,21 +196,25 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             else:
                 not_affected_sum += sum
 
-        # Affected field
+        # Total Affected field
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard), affected_sum)
 
-        # Not affected field
+        # Total Not affected field
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard) + 1, not_affected_sum)
 
-        # Not exposed field
+        # Total Exposed field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 2, not_exposed_sum)
+            area.id(), shift + len(unique_hazard) + 2, total - not_exposed_sum)
+
+        # Total Not exposed field
+        analysis.changeAttributeValue(
+            area.id(), shift + len(unique_hazard) + 3, not_exposed_sum)
 
         # Total field
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 3, total)
+            area.id(), shift + len(unique_hazard) + 4, total)
 
         # Any absolute postprocessors
         for i, field in enumerate(absolute_values.itervalues()):
@@ -190,7 +222,20 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
                 all='all'
             )
             analysis.changeAttributeValue(
-                area.id(), shift + len(unique_hazard) + 4 + i, value)
+                area.id(), shift + len(unique_hazard) + 5 + i, value)
+
+        # Summarizer of custom attributes
+        for key, summary_value in summary_values.items():
+            summary_field = summary_rules[key]['summary_field']
+            field = create_field_from_definition(summary_field)
+            analysis.addAttribute(field)
+            field_index = analysis.fieldNameIndex(field.name())
+            # noinspection PyTypeChecker
+            analysis.keywords['inasafe_fields'][summary_field['key']] = (
+                summary_field['field_name'])
+
+            analysis.changeAttributeValue(
+                area.id(), field_index, summary_value)
 
     # Sanity check ± 1 to the result. Disabled for now as it seems ± 1 is not
     # enough. ET 13/02/17

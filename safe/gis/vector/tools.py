@@ -3,15 +3,16 @@
 """Tools for vector layers."""
 
 import logging
-from uuid import uuid4
 from math import isnan
-from PyQt4.QtCore import QPyNullVariant
+from uuid import uuid4
+
+import ogr
+from PyQt4.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
-    QgsCoordinateReferenceSystem,
     QGis,
     QgsFeature,
     QgsField,
@@ -19,10 +20,13 @@ from qgis.core import (
     QgsWKBTypes
 )
 
-from safe.common.exceptions import MemoryLayerCreationError
-from safe.definitions.utilities import definition
+from safe.common.exceptions import (
+    MemoryLayerCreationError,
+    # SpatialIndexCreationError,
+)
 from safe.definitions.units import unit_metres, unit_square_metres
-from safe.gis.vector.clean_geometry import geometry_checker
+from safe.definitions.utilities import definition
+from safe.gis.vector.clean_geometry import geometry_checker, clean_layer
 from safe.utilities.profiling import profile
 from safe.utilities.rounding import convert_unit
 
@@ -78,6 +82,14 @@ area_unit = {
     7: 'Square Nautical Miles',
     8: 'Square Degrees',
     9: 'unknown Unit'
+}
+
+# Field type converter from QGIS to OGR
+# Source http://www.gdal.org/ogr__core_8h.html#a787194be
+field_type_converter = {
+    QVariant.String: ogr.OFTString,
+    QVariant.Int: ogr.OFTInteger,
+    QVariant.Double: ogr.OFTReal,
 }
 
 
@@ -179,6 +191,32 @@ def copy_layer(source, target):
 
 
 @profile
+def rename_fields(layer, fields_to_copy):
+    """Rename fields inside an attribute table.
+
+    Only since QGIS 2.16.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :param fields_to_copy: Dictionary of fields to copy.
+    :type fields_to_copy: dict
+    """
+    for field in fields_to_copy:
+        index = layer.fieldNameIndex(field)
+        if index != -1:
+            layer.startEditing()
+            layer.renameAttribute(index, fields_to_copy[field])
+            layer.commitChanges()
+            LOGGER.info(
+                'Renaming field %s to %s' % (field, fields_to_copy[field]))
+        else:
+            LOGGER.info(
+                'Field %s not present in the layer while trying to renaming '
+                'it to %s' % (field, fields_to_copy[field]))
+
+
+@profile
 def copy_fields(layer, fields_to_copy):
     """Copy fields inside an attribute table.
 
@@ -210,7 +248,7 @@ def copy_fields(layer, fields_to_copy):
                     feature.id(), new_index, source_value)
 
             layer.commitChanges()
-            layer.updateFields()
+            layer.updateFields()  # Avoid crash #4729
 
 
 @profile
@@ -247,19 +285,53 @@ def create_spatial_index(layer):
     :return: The index.
     :rtype: QgsSpatialIndex
     """
-    spatial_index = QgsSpatialIndex(layer.getFeatures())
+    try:
+        spatial_index = QgsSpatialIndex(layer.getFeatures())
+    except BaseException:
+        # Spatial index is creating an unknown exception.
+        # https://github.com/inasafe/inasafe/issues/4304
+        # or https://gitter.im/inasafe/inasafe?at=5a2903d487680e6230e0359a
+        LOGGER.warning(
+            'An Exception has been raised from the spatial index creation. '
+            'We will clean your layer and try again.')
+        new_layer = clean_layer(layer)
+        try:
+            spatial_index = QgsSpatialIndex(new_layer.getFeatures())
+        except BaseException:
+            # We got another exception.
+            # We try now to insert feature by feature.
+            # It's slower than the using the feature iterator.
+            spatial_index = QgsSpatialIndex()
+            for feature in new_layer.getFeatures():
+                try:
+                    spatial_index.insertFeature(feature)
+                except BaseException:
+                    LOGGER.critical(
+                        'A feature has been removed from the spatial index.')
+
+            # # We tried one time to clean the layer, we can't do more.
+            # LOGGER.critical(
+            #     'An Exception has been raised from the spatial index '
+            #     'creation. Unfortunately, we already try to clean your '
+            #     'layer. We will stop here the process.')
+            # raise SpatialIndexCreationError
     return spatial_index
 
 
-def create_field_from_definition(field_definition, name=None):
+def create_field_from_definition(field_definition, name=None, sub_name=None):
     """Helper to create a field from definition.
 
-    :param field_definition: The definition of the field.
-    :type field_definition: safe.definitions.fields
+    :param field_definition: The definition of the field (see:
+        safe.definitions.fields).
+    :type field_definition: dict
 
     :param name: The name is required if the field name is dynamic and need a
         string formatting.
     :type name: basestring
+
+    :param sub_name: The name is required if the field name is dynamic and need
+        a string formatting.
+    :type sub_name: basestring
 
     :return: The new field.
     :rtype: QgsField
@@ -269,8 +341,13 @@ def create_field_from_definition(field_definition, name=None):
     if isinstance(name, QPyNullVariant):
         name = 'NULL'
 
-    if name:
+    if isinstance(sub_name, QPyNullVariant):
+        sub_name = 'NULL'
+
+    if name and not sub_name:
         field.setName(field_definition['field_name'] % name)
+    elif name and sub_name:
+        field.setName(field_definition['field_name'] % (name, sub_name))
     else:
         field.setName(field_definition['field_name'])
 
@@ -284,7 +361,34 @@ def create_field_from_definition(field_definition, name=None):
     return field
 
 
-def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
+def create_ogr_field_from_definition(field_definition):
+    """Helper to create a field from definition.
+
+    :param field_definition: The definition of the field (see:
+        safe.definitions.fields).
+    :type field_definition: dict
+
+    :return: The new ogr field definition.
+    :rtype: ogr.FieldDefn
+    """
+    if isinstance(field_definition['type'], list):
+        # Use the first element in the list of type
+        field_type = field_definition['type'][0]
+    else:
+        field_type = field_definition['type']
+
+    # Conversion to OGR field
+    field_type = field_type_converter.get(field_type, ogr.OFTString)
+
+    return ogr.FieldDefn(field_definition['field_name'], field_type)
+
+
+def field_index_from_definition(layer, field_definition):
+
+    return layer.fieldNameIndex(field_definition['field_name'])
+
+
+def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
     """Helper to read inasafe_fields using a dynamic field.
 
     :param inasafe_fields: inasafe_fields keywords to use.
@@ -293,15 +397,24 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
     :param dynamic_field: The dynamic field to use.
     :type dynamic_field: safe.definitions.fields
 
+    :param black_list: A list of fields which are conflicting with the dynamic
+        field. Same field name pattern.
+
     :return: A list of unique value used in this dynamic field.
     :return: list
     """
     pattern = dynamic_field['key']
     pattern = pattern.replace('%s', '')
+
+    if black_list is None:
+        black_list = []
+
+    black_list = [field['key'] for field in black_list]
+
     unique_exposure = []
-    for key, name_field in inasafe_fields.iteritems():
-        if key.endswith(pattern):
-            unique_exposure.append(key.replace(pattern, ''))
+    for field_key, name_field in inasafe_fields.iteritems():
+        if field_key.endswith(pattern) and field_key not in black_list:
+            unique_exposure.append(field_key.replace(pattern, ''))
 
     return unique_exposure
 
@@ -339,6 +452,22 @@ class SizeCalculator(object):
         if exposure_key:
             exposure_definition = definition(exposure_key)
             self.output_unit = exposure_definition['size_unit']
+
+    def measure_distance(self, point_a, point_b):
+        """Measure the distance between two points.
+
+        This is added here since QgsDistanceArea object is already called here.
+
+        :param point_a: First Point.
+        :type point_a: QgsPoint
+
+        :param point_b: Second Point.
+        :type point_b: QgsPoint
+
+        :return: The distance between input points.
+        :rtype: float
+        """
+        return self.calculator.measureLine(point_a, point_b)
 
     def measure(self, geometry):
         """Measure the length or the area of a geometry.

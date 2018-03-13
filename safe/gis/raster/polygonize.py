@@ -4,9 +4,7 @@
 
 
 from osgeo import gdal, osr, ogr
-
 from qgis.core import (
-    QgsRasterLayer,
     QgsVectorLayer,
     QgsFeatureRequest,
 )
@@ -46,7 +44,7 @@ def polygonize(layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = polygonize_steps['output_layer_name']
-    processing_step = polygonize_steps['step_name']
+    processing_step = polygonize_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
     gdal_layer_name = polygonize_steps['gdal_layer_name']
 

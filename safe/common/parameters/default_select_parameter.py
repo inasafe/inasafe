@@ -66,7 +66,7 @@ class DefaultSelectParameter(SelectParameter):
 
     @property
     def minimum(self):
-        """Property for minimum value"""
+        """Property for minimum value."""
         return self._min_value
 
     @minimum.setter
@@ -80,7 +80,7 @@ class DefaultSelectParameter(SelectParameter):
 
     @property
     def maximum(self):
-        """Property for maximum value"""
+        """Property for maximum value."""
         return self._max_value
 
     @maximum.setter

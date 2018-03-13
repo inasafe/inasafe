@@ -170,16 +170,12 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <thresholds>
-            <gco:Dictionary>{&quot;road&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;population&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;place&quot;: {&quot;generic_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;high&quot;: [7.0, 14.0], &quot;medium&quot;: [6.0, 7.0], &quot;low&quot;: [4.0, 6.0]}}}, &quot;road&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;structure&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}, &quot;population&quot;: {&quot;earthquake_mmi_scale&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;IX&quot;: [8.5, 9.5], &quot;I&quot;: [0.5, 1.5], &quot;VI&quot;: [5.5, 6.5], &quot;VII&quot;: [6.5, 7.5], &quot;IV&quot;: [3.5, 4.5], &quot;II&quot;: [1.5, 2.5], &quot;VIII&quot;: [7.5, 8.5], &quot;V&quot;: [4.5, 5.5], &quot;X&quot;: [9.5, 10.5], &quot;III&quot;: [2.5, 3.5]}}}}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>mmi</gco:CharacterString>
@@ -205,21 +201,31 @@
           <hazard>
             <gco:CharacterString>earthquake</gco:CharacterString>
           </hazard>
-          <report>
-            <gco:CharacterString/>
-          </report>
+          <extra_keywords>
+            <gco:Dictionary>
+              {
+              &quot;earthquake_y_minimum&quot;: -11.722,
+              &quot;earthquake_x_maximum&quot;: 126.62,
+              &quot;time_zone&quot;: &quot;Asia/Jakarta&quot;,
+              &quot;earthquake_longitude&quot;: 106.7486,
+              &quot;earthquake_y_maximum&quot;: -7.778,
+              &quot;earthquake_depth&quot;: 10.0,
+              &quot;earthquake_magnitude&quot;: 5.0,
+              &quot;earthquake_x_minimum&quot;: 122.62,
+              &quot;earthquake_location&quot;: &quot;Test Region&quot;,
+              &quot;earthquake_latitude&quot;: -6.2078
+              }
+            </gco:Dictionary>
+          </extra_keywords>
           <keyword_version>
-            <gco:CharacterString>4.0</gco:CharacterString>
+            <gco:CharacterString>4.3</gco:CharacterString>
           </keyword_version>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
+          <active_band>
+            <gco:Integer>1</gco:Integer>
+          </active_band>
           <layer_mode>
             <gco:CharacterString>continuous</gco:CharacterString>
           </layer_mode>

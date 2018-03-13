@@ -170,7 +170,7 @@
                 </gmd:EX_Extent>
             </gmd:extent>
             <gmd:supplementalInformation>
-                <inasafe_keywords></inasafe_keywords>
+                <inasafe></inasafe>
             </gmd:supplementalInformation>
         </gmd:MD_DataIdentification>
     </gmd:identificationInfo>

@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Helpers to generate and display messages in the dock."""
+
 import logging
 
 from pydispatch import dispatcher
@@ -43,7 +45,6 @@ def missing_keyword_message(sender, missing_keyword_exception):
 
     :param missing_keyword_exception: A KeywordNotFoundError exception.
     :type missing_keyword_exception: KeywordNotFoundError
-
     """
     warning_heading = m.Heading(
         tr('Missing Keyword'), **WARNING_STYLE)
@@ -60,14 +61,14 @@ def missing_keyword_message(sender, missing_keyword_exception):
         )
     )
     suggestion = m.Paragraph(
-            tr('Please use the keyword wizard to update the keywords. You '
-               'can open the wizard by clicking on the '),
-            m.Image(
-                'file:///%s/img/icons/'
-                'show-keyword-wizard.svg' % resources_path(),
-                **SMALL_ICON_STYLE),
-            tr(
-                ' icon in the toolbar.'))
+        tr('Please use the keyword wizard to update the keywords. You '
+           'can open the wizard by clicking on the '),
+        m.Image(
+            'file:///%s/img/icons/'
+            'show-keyword-wizard.svg' % resources_path(),
+            **SMALL_ICON_STYLE),
+        tr(' icon in the toolbar.')
+    )
 
     message = m.Message()
     message.add(warning_heading)

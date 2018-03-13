@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Utilities for GIS package."""
+
 from osgeo import ogr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

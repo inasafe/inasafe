@@ -10,49 +10,28 @@ import os
 from setuptools import setup, find_packages
 
 
-def get_version(version=None):
-    """Returns a PEP 386-compliant version number from VERSION.
+def get_version():
+    """Obtain InaSAFE's version from version file.
 
-    :param version: A tuple that represent a version.
-    :type version: tuple
-
-    :returns: a PEP 386-compliant version number.
+    :returns: The current version number.
     :rtype: str
 
     """
-    if version is None:
-        # Get location of application wide version info
-        root_dir = os.path.abspath(os.path.join(
-            os.path.dirname(__file__)))
-        fid = open(os.path.join(root_dir, 'metadata.txt'))
-        version_list = []
-        status = ''
-        for line in fid.readlines():
-            if line.startswith('version'):
-                version_string = line.strip().split('=')[1]
-                version_list = version_string.split('.')
-
-            if line.startswith('status'):
-                status = line.strip().split('=')[1]
-        fid.close()
-        version = tuple(version_list + [status] + ['0'])
-
-    if len(version) != 5:
-        msg = 'Version must be a tuple of length 5. I got %s' % (version,)
-        raise RuntimeError(msg)
-
-    if version[3] not in ('alpha', 'beta', 'rc', 'final'):
-        msg = 'Version tuple not as expected. I got %s' % (version,)
-        raise RuntimeError(msg)
-
-    # Now build the two parts of the version number:
-    # main = X.Y[.Z]
-    # sub = .devN - for pre-alpha releases
-    #     | {a|b|c}N - for alpha, beta and rc releases
-    parts = 2 if version[2] == 0 else 3
-    main = '.'.join(str(x) for x in version[:parts])
-
-    return main
+    # Get location of application wide version info
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    version_file = os.path.join(root_dir, 'safe', 'definitions', 'versions.py')
+    fid = open(version_file)
+    version = ''
+    for line in fid.readlines():
+        if line.startswith('inasafe_version'):
+            version = line.strip().split(' = ')[1]
+            version = version.replace('\'', '')
+            break
+    fid.close()
+    if version:
+        return version
+    else:
+        raise Exception('Version is not found in %s' % version_file)
 
 
 setup(
@@ -67,7 +46,7 @@ setup(
     description=('Realistic natural hazard impact scenarios for better '
                  'planning, preparedness and response activities.'),
     install_requires=[
-        "inasafe-parameters==1.0.1",
+        "inasafe-parameters==1.0.2",
         "PyDispatcher==2.0.5",
         "raven==6.1.0",  # This Raven doesn't use simplejson anymore
     ],

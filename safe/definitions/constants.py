@@ -2,6 +2,7 @@
 """This module contains constants that are used in definitions."""
 
 from PyQt4.QtCore import QVariant
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -24,9 +25,12 @@ qvariant_whole_numbers = [
 ]
 
 # Number in QVariant
-qvariant_numbers = qvariant_whole_numbers + [
-    QVariant.Double,
-]
+qvariant_numbers = qvariant_whole_numbers + [QVariant.Double]
+
+qvariant_all = qvariant_numbers + [QVariant.String]
+
+# Dock
+entire_area_item_aggregation = tr('Entire area')
 
 qvariant_all = qvariant_numbers + [QVariant.String]
 
@@ -67,3 +71,27 @@ FIELDS = 'fields'
 STATIC = 'static'
 SINGLE_DYNAMIC = 'single dynamic'
 MULTIPLE_DYNAMIC = 'multiple dynamic'
+
+# Scope for InaSAFE in QSettings
+APPLICATION_NAME = 'inasafe'
+
+# Layer properties
+MULTI_EXPOSURE_ANALYSIS_FLAG = 'multi_exposure_analysis'
+
+# Drivers, order by frequency according to me (very subjective)
+# Order to avoid debug messages from OGR/GDAL about invalid layers
+# Missing ows driver
+VECTOR_DRIVERS = [
+    'ogr', 'memory', 'spatialite', 'delimitedtext', 'virtual', 'postgres',
+    'WFS', 'DB2', 'gpx', 'grass', 'mssql']
+RASTER_DRIVERS = ['gdal', 'wms', 'wcs', 'grassraster']
+QGIS_DRIVERS = VECTOR_DRIVERS + RASTER_DRIVERS
+
+# Small list of extensions
+OGR_EXTENSIONS = ['shp', 'geojson']
+GDAL_EXTENSIONS = ['asc', 'tif', 'tiff']
+
+# Smoothing mode
+NONE_SMOOTHING = 'none_smoothing'
+NUMPY_SMOOTHING = 'numpy_smoothing'
+SCIPY_SMOOTHING = 'scipy_smoothing'

@@ -9,13 +9,13 @@ from safe.definitions.fields import (
     total_affected_field,
     exposure_type_field,
     exposure_class_field)
+from safe.definitions.utilities import definition
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
-    layer_definition_type,
     resolve_from_dictionary,
     retrieve_exposure_classes_lists)
-from safe.utilities.rounding import format_number
 from safe.utilities.i18n import tr
+from safe.utilities.rounding import format_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -42,13 +42,13 @@ def aggregation_result_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    """Initializations"""
+    """Initializations."""
 
     extra_args = component_metadata.extra_args
     # Find out aggregation report type
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     provenance = impact_report.impact_function.provenance
+    exposure_keywords = provenance['exposure_keywords']
     exposure_summary_table = impact_report.exposure_summary_table
     if exposure_summary_table:
         exposure_summary_table_fields = exposure_summary_table.keywords[
@@ -56,16 +56,18 @@ def aggregation_result_extractor(impact_report, component_metadata):
     aggregation_summary = impact_report.aggregation_summary
     aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
-    debug_mode = impact_report.impact_function.debug_mode
+    use_rounding = impact_report.impact_function.use_rounding
+    use_aggregation = bool(
+        impact_report.impact_function.provenance['aggregation_layer'])
+    if not use_aggregation:
+        return context
 
-    """Filtering report sections"""
+    """Filtering report sections."""
 
     # Only process for applicable exposure types
     # Get exposure type definition
-    exposure_type = layer_definition_type(exposure_layer)
-    # Only round the number when it is population exposure and it is not
-    # in debug mode
-    is_rounded = not debug_mode
+    exposure_type = definition(exposure_keywords['exposure'])
+    # Only round the number when it is population exposure and we use rounding
     is_population = exposure_type is exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
@@ -75,7 +77,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     if exposure_type not in itemizable_exposures_all:
         return context
 
-    """Generating type name for columns"""
+    """Generating type name for columns."""
 
     type_fields = read_dynamic_inasafe_field(
         aggregation_summary_fields, affected_exposure_count_field)
@@ -85,7 +87,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # we need to sort the column
     # get the classes lists
     # retrieve classes definitions
-    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_layer)
+    exposure_classes_lists = retrieve_exposure_classes_lists(exposure_keywords)
 
     # sort columns based on class order
     # create function to sort
@@ -111,7 +113,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_label = tr(type_name.capitalize())
         type_header_labels.append(type_label)
 
-    """Generating values for rows"""
+    """Generating values for rows."""
 
     # generate rows of values for values of each column
     rows = []
@@ -129,7 +131,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     for feat in aggregation_summary.getFeatures():
         total_affected_value = format_number(
             feat[total_field_index],
-            enable_rounding=is_rounded,
+            use_rounding=use_rounding,
             is_population=is_population)
         if total_affected_value == '0':
             # skip aggregation type if the total affected is zero
@@ -145,12 +147,12 @@ def aggregation_result_extractor(impact_report, component_metadata):
         for idx in type_field_index:
             affected_value = format_number(
                 feat[idx],
-                enable_rounding=is_rounded)
+                use_rounding=use_rounding)
             type_values.append(affected_value)
         item['type_values'] = type_values
         rows.append(item)
 
-    """Generate total for footers"""
+    """Generate total for footers."""
 
     # calculate total values for each type. Taken from exposure summary table
     type_total_values = []
@@ -183,7 +185,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         affected_value = int(float(feat[affected_field_index]))
         affected_value = format_number(
             affected_value,
-            enable_rounding=is_rounded,
+            use_rounding=use_rounding,
             is_population=is_population)
         value_dict[feat[breakdown_field_index]] = affected_value
 
@@ -207,7 +209,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
                 continue
             type_total_values.append(affected_value_string_formatted)
 
-    """Get the super total affected"""
+    """Get the super total affected."""
 
     # total for affected (super total)
     analysis_feature = analysis_layer.getFeatures().next()
@@ -215,9 +217,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
         total_affected_field['field_name'])
     total_all = format_number(
         analysis_feature[field_index],
-        enable_rounding=is_rounded)
+        use_rounding=use_rounding)
 
-    """Generate and format the context"""
+    """Generate and format the context."""
     aggregation_area_default_header = resolve_from_dictionary(
         extra_args, 'aggregation_area_default_header')
     header_label = (

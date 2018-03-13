@@ -1,0 +1,4 @@
+exposure_type,wet_hazard_count,not exposed_hazard_count,dry_hazard_count,total_affected,total_not_affected,total_not_exposed,total,affected_production_cost,affected_production_value,affected_productivity
+wood,123.88,88.11,86.49,123.88,86.49,88.11,298.48,3.48223,5.91979,6.96446
+farm,132.91,113.20,151.83,132.91,151.83,113.20,397.94,6.96402,11.85873,13.92803
+residential,380.75,0.00,514.69,380.75,514.69,0.00,895.43,4.47717,7.61120,8.95435

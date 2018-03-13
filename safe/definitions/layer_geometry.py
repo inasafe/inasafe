@@ -52,7 +52,7 @@ layer_geometry_polygon = {
         '. Polygon layers can also be used for aggregation - where impact '
         'analysis results per boundary such as village or district '
         'boundaries.'
-        ),
+    ),
     'citations': [
         {
             'text': None,

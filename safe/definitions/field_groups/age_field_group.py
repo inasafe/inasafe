@@ -1,4 +1,7 @@
 # coding=utf-8
+
+"""Definitions about the age field group."""
+
 from safe.definitions.fields import (
     infant_ratio_field,
     child_ratio_field,

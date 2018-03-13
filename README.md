@@ -7,7 +7,7 @@ InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 
-For more information about InaSAFE and its documentation please visit [inasafe.org] (http://www.inasafe.org).
+For more information about InaSAFE and its documentation please visit [inasafe.org](http://www.inasafe.org).
 
 The latest source code is available at
 [https://github.com/inasafe/inasafe](https://github.com/inasafe/inasafe),
@@ -17,34 +17,27 @@ functions for impact modelling.
 
 Story queue on Waffle:
 
-* [![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
-* [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+* [![Stories in Ready](https://badge.waffle.io/inasafe/inasafe.svg?label=ready&title=Ready)](http://waffle.io/inasafe/inasafe)
+* [![Stories in In Progress](https://badge.waffle.io/inasafe/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/inasafe/inasafe)
 
 [![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
-* Current test status master: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe) and
-[![Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
-
-* Current test status develop: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe) and
-[![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
-
-
-PyPi Downloads for the 'safe' library (currently pip package is unmaintained):
-
-* [![PyPI version](https://badge.fury.io/py/python-safe.svg)](https://badge.fury.io/py/python-safe)
-
-
+* Current Travis test status master: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe)
+* Current Landscape code health master: [![Landscape Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
+* Current Travis test status develop: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe)
+* Current Landscape code health develop: [![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
+* PyPi Downloads for InaSAFE: [![PyPI version](https://badge.fury.io/py/inasafe-core.svg)](https://badge.fury.io/py/inasafe-core)
+* PyPi Downloads for the old 'safe' library (currently unmaintained): [![PyPI version](https://badge.fury.io/py/python-safe.svg)](https://badge.fury.io/py/python-safe)
+* Github download: [![Github All Releases](https://img.shields.io/github/downloads/inasafe/inasafe/total.svg)]()
 
 Quick Installation Guide
 ========================
 
-You first need to have [QGIS](http://qgis.org/) installed. Grab your free
-copy from [the QGIS download page](http://download.qgis.org).
+You first need to have [QGIS](http://qgis.org/) installed. Grab your free copy from [the QGIS download page](http://download.qgis.org).
 
-To install the InaSAFE plugin, use the plugin manager in
-[QGIS](http://qgis.org):
+To install the InaSAFE plugin, use the plugin manager in [QGIS](http://qgis.org):
 
-  Plugins → Manage and Install Plugins → Get more tab
+  Plugins → Manage and Install Plugins
 
 Then search for "InaSAFE", select it and click the install button.
 The plugin will now be added to your plugins menu.
@@ -74,17 +67,25 @@ System Requirements
    or newer, our supported version is the latest Long Term Release version
    of QGIS.
 
+Running tests
+-------------------
+
+ - InaSAFE is using the Unittest Python framework.
+ - Different ways that you can run tests:
+   - On Travis using a Pull Request
+   - In QGIS Desktop if you enable `developer mode` in Plugins -> InaSAFE -> Options -> Advanced, restart QGIS and then click the run tests button.
+   - Using docker `make docker-test`
+   - Using PyCharm if you set up the dev environment with the qgis_prefix_path
+
 History
 =======
 
 * In March 2011, Risk In A Box (the predecessor to InaSAFE) was built as a web 
   application running as a GeoNode Plugin.
 * InaSAFE development as a QGIS plugin started in January 2012.
-* In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](
-  http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
+* In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
   the then president of Indonesia, Susilo Bambang Yudhoyono who praised the project.
-* On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source.
-  Rookie of the Year Award] (https://www.blackducksoftware.com/open-source-rookies).
+* On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source Rookie of the Year Award](https://www.blackducksoftware.com/open-source-rookies).
 * Version 2.0 of InaSAFE was released in January, 2014.
 * Version 3.0 was released in March 2015 which added support
   for using the QGIS API within impact functions.
@@ -139,10 +140,9 @@ such damages.
 
 Thank you
 =========
-[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)]
-(https://www.jetbrains.com/pycharm) 
+[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)](https://www.jetbrains.com/pycharm) 
 
-We use [PyCharm] (https://www.jetbrains.com/pycharm) for our python development work 
+We use [PyCharm](https://www.jetbrains.com/pycharm) for our python development work 
 
 JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
 open source projects' programme. Please support them by buying a professional 

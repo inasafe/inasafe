@@ -78,6 +78,16 @@
       "value": null,
       "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString"
     },
+    "extra_keywords": {
+      "allowed_python_types": [
+        "dict",
+        "NoneType"
+      ],
+      "name": "extra_keywords",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/extra_keywords/gco:Dictionary"
+    },
     "inasafe_default_values": {
       "allowed_python_types": [
         "dict",

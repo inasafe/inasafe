@@ -3,15 +3,16 @@
 """From counts to ratio."""
 
 import logging
-from safe.definitions.utilities import definition, get_non_compulsory_fields
-from safe.definitions.fields import population_count_field
+
 from safe.definitions import count_ratio_mapping
+from safe.definitions.fields import population_count_field
+from safe.definitions.layer_purposes import layer_purpose_exposure
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
-from safe.definitions.layer_purposes import layer_purpose_exposure
-from safe.utilities.profiling import profile
-from safe.gis.vector.tools import create_field_from_definition
+from safe.definitions.utilities import definition, get_non_compulsory_fields
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import create_field_from_definition
+from safe.utilities.profiling import profile
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -41,7 +42,7 @@ def from_counts_to_ratios(layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = recompute_counts_steps['output_layer_name']
-    processing_step = recompute_counts_steps['step_name']
+    processing_step = recompute_counts_steps['step_name']  # NOQA
 
     exposure = definition(layer.keywords['exposure'])
     inasafe_fields = layer.keywords['inasafe_fields']

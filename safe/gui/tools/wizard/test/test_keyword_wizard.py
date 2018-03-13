@@ -26,7 +26,9 @@ from safe.definitions.hazard import (
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_population,
-    exposure_land_cover)
+    exposure_land_cover,
+    exposure_place,
+)
 from safe.definitions.hazard_category import hazard_category_multiple_event
 from safe.definitions.hazard_classifications import (
     flood_hazard_classes,
@@ -34,6 +36,7 @@ from safe.definitions.hazard_classifications import (
     cyclone_au_bom_hazard_classes,
     earthquake_mmi_scale)
 from safe.definitions.constants import no_field
+from safe.definitions.extra_keywords import (extra_keyword_earthquake_depth)
 from safe.definitions.fields import (
     aggregation_name_field,
     exposure_type_field,
@@ -41,11 +44,11 @@ from safe.definitions.fields import (
     hazard_value_field,
     population_count_field,
     female_count_field,
-    elderly_count_field)
+)
 from safe.definitions.layer_geometry import (
-    layer_geometry_polygon, layer_geometry_raster)
+    layer_geometry_polygon, layer_geometry_raster, layer_geometry_point)
 from safe.definitions.exposure_classifications import (
-    generic_structure_classes)
+    generic_structure_classes, generic_place_classes)
 from safe.definitions.units import (
     count_exposure_unit, unit_metres, unit_mmi, unit_kilometres_per_hour)
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
@@ -70,7 +73,7 @@ layer_title = u'Layer Title'
 # noinspection PyTypeChecker
 class TestKeywordWizard(unittest.TestCase):
 
-    """Test the InaSAFE keyword wizard GUI"""
+    """Test the InaSAFE keyword wizard GUI."""
 
     maxDiff = None
 
@@ -150,8 +153,8 @@ class TestKeywordWizard(unittest.TestCase):
             else:
                 available_options.append(list_widget.item(i).text())
         message = (
-            'There is no %s in the list widget. The available options are %'
-            's' % (option, available_options))
+            'There is no %s in the list widget. The available options are '
+            '%s' % (option, available_options))
 
         raise Exception(message)
 
@@ -251,7 +254,15 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        # Check if in extra keywords step
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        self.assertTrue(dialog.step_kw_extra_keywords.widgets_dict)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -561,7 +572,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, keywords)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -681,6 +692,8 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(
             keywords['value_maps'], dialog.get_keywords()['value_maps'])
 
+        self.assertDictEqual(keywords, dialog.get_keywords())
+
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon."""
         layer = clone_shp_layer(
@@ -763,6 +776,7 @@ class TestKeywordWizard(unittest.TestCase):
             u'commercial': [u'Commercial', u'Industrial'],
             u'recreation': [],
             u'public facility': [],
+            u'evacuation centre': [],
             u'other': []
         }
         dialog.step_kw_classify.populate_classified_values(
@@ -974,7 +988,7 @@ class TestKeywordWizard(unittest.TestCase):
             layer.keywords['value_map'], dialog.get_keywords()['value_map'])
 
     def test_aggregation_keyword(self):
-        """Test Aggregation Keywords"""
+        """Test Aggregation Keywords."""
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
         layer.keywords = {}
@@ -1131,7 +1145,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     def test_exposure_population_polygon_keyword(self):
-        """Test exposure population polygon keyword"""
+        """Test exposure population polygon keyword."""
         layer = load_test_vector_layer(
             'exposure', 'census.geojson', clone_to_memory=True)
         layer.keywords = {}
@@ -1726,16 +1740,16 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select count
         dialog.pbnNext.click()
 
-        # Check if in select unit step
+        # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
-        # Check if population is selected
+        # Check if population field is selected
         population_field = expected_keyword['inasafe_fields'][
             population_count_field['key']]
         self.check_current_text(
             population_field, dialog.step_kw_field.lstFields)
 
-        # Click next to select population
+        # Click next to select population field
         dialog.pbnNext.click()
 
         # Check field mapping steps
@@ -1763,6 +1777,143 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_source.dtSource_date.dateTime(), source_date)
         self.assertEqual(
             dialog.step_kw_source.leSource_license.text(), source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(byteify(real_keywords), byteify(expected_keyword))
+
+    def test_exposure_place_population(self):
+        """Test for place with population exposure."""
+        layer = load_test_vector_layer(
+            'gisv4',
+            'exposure',
+            'places.geojson',
+            clone_to_memory=True)
+        self.assertIsNotNone(layer)
+
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_place['key'],
+            'inasafe_fields':
+                {
+                    exposure_type_field['key']: 'Type',
+                    population_count_field['key']: 'Population',
+                },
+            'date': source_date,
+            'layer_geometry': layer_geometry_point['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_classified['key'],
+            'classification': generic_place_classes['key'],
+        }
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check if exposure is selected
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if place is selected
+        self.check_current_text(
+            exposure_place['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select place
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if classified is selected
+        self.check_current_text(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if place type field is selected
+        place_type_field = expected_keyword['inasafe_fields'][
+            exposure_type_field['key']]
+        self.check_current_text(
+            place_type_field, dialog.step_kw_field.lstFields)
+
+        # Click next to select place type field
+        dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # Check if generic structure classes is selected.
+        self.check_current_text(
+            generic_place_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select the classifications
+        dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # Click next to finish value mapping
+        dialog.pbnNext.click()
+
+        # select additional keywords / inasafe fields step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        current_inasafe_field = dialog.step_kw_inasafe_fields.\
+            get_inasafe_fields()
+
+        population_field = current_inasafe_field.get(
+            population_count_field['key'])
+
+        expected_population_field = expected_keyword['inasafe_fields'][
+            population_count_field['key']]
+
+        # Check if the population field is set.
+        self.assertEqual(population_field, expected_population_field)
+
+        # Click next to finish set the InaSAFE fields
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
 
         # Click next to finish source step and go to title step
         dialog.pbnNext.click()
@@ -1875,8 +2026,14 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
         dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
+        dialog.pbnNext.click()
+
 
         # Check if in title step
         self.check_current_step(dialog.step_kw_title)
@@ -1910,7 +2067,9 @@ class TestKeywordWizard(unittest.TestCase):
                 exposure_land_cover['key']: {
                     flood_hazard_classes['key']: {
                         'active': True,
-                        'classes': {}
+                        'classes': {
+                            'wet': [1.0, 2.0, 3.0]
+                        }
                     }
                 }
             }
@@ -2023,7 +2182,12 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEqual(
             dialog.step_kw_source.leSource_license.text(), source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2145,7 +2309,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2310,7 +2479,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2432,7 +2606,12 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2481,6 +2660,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
+    # @unittest.skip(
+    #     'This test is hanging for a unknown reason since a few times.')
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
@@ -2494,6 +2675,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEquals(
             dialog.step_kw_subcategory.lstSubcategories.currentRow(), 2)
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
+        dialog.close()
         self.assertTrue(num_item == 3)
 
     def test_earthquake_raster(self):
@@ -2589,7 +2771,15 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        # Check if in extra keywords step
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        self.assertTrue(dialog.step_kw_extra_keywords.widgets_dict)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2675,6 +2865,9 @@ class TestKeywordWizard(unittest.TestCase):
                             earthquake_mmi_scale)
                     }
                 }
+            },
+            'extra_keywords': {
+                extra_keyword_earthquake_depth['key']: 10
             }
         }
 
@@ -2682,7 +2875,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.set_keywords_creation_mode(layer)
+        dialog.set_keywords_creation_mode(layer, expected_keyword)
 
         # Check if in select purpose step
         self.check_current_step(dialog.step_kw_purpose)
@@ -2760,7 +2953,15 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        # Check if in extra keywords step
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        self.assertTrue(dialog.step_kw_extra_keywords.widgets_dict)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step
@@ -2784,6 +2985,10 @@ class TestKeywordWizard(unittest.TestCase):
             exposure_land_cover['key'],
             real_keywords['thresholds'].keys()
         )
+        # Check if the extra keywords remain
+        extra_keywords = real_keywords['extra_keywords']
+        self.assertDictEqual(
+            extra_keywords, expected_keyword['extra_keywords'])
 
     def test_cyclone_raster(self):
         """Test for cyclone raster keyword wizard when we have many units."""
@@ -3035,7 +3240,15 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
 
-        # Click next to finish source step and go to title step
+        # Click next to finish source step and go to extra keywords step
+        dialog.pbnNext.click()
+
+        # Check if in extra keywords step
+        self.check_current_step(dialog.step_kw_extra_keywords)
+
+        self.assertTrue(dialog.step_kw_extra_keywords.widgets_dict)
+
+        # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
 
         # Check if in title step

@@ -2,21 +2,23 @@
 
 """Save Scenario Dialog."""
 
-import os
 import logging
+import os
 from ConfigParser import ConfigParser
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QFileDialog
 
-from safe.utilities.i18n import tr
+from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.gis import extent_to_array, viewport_geo_array
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.resources import resources_path
 from safe.utilities.settings import setting, set_setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -43,6 +45,9 @@ class SaveScenarioDialog(QDialog):
         self.aggregation_layer = None
         self.keyword_io = KeywordIO()
 
+        icon = resources_path('img', 'icons', 'save-as-scenario.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
+
         # Calling some init methods
         self.restore_state()
 
@@ -62,9 +67,10 @@ class SaveScenarioDialog(QDialog):
         2. self.hazard_layer must be not None
         3. self.function_id is not an empty string or None
         """
-        self.exposure_layer = self.dock.get_exposure_layer()
-        self.hazard_layer = self.dock.get_hazard_layer()
-        self.aggregation_layer = self.dock.get_aggregation_layer()
+        self.exposure_layer = layer_from_combo(self.dock.exposure_layer_combo)
+        self.hazard_layer = layer_from_combo(self.dock.hazard_layer_combo)
+        self.aggregation_layer = layer_from_combo(
+            self.dock.aggregation_layer_combo)
 
         is_valid = True
         warning_message = None
@@ -111,8 +117,8 @@ class SaveScenarioDialog(QDialog):
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
 
-        exposure_path = self.exposure_layer.publicSource()
-        hazard_path = self.hazard_layer.publicSource()
+        exposure_path = self.exposure_layer.source()
+        hazard_path = self.hazard_layer.source()
         title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
         title = tr(title)
         default_filename = title.replace(
@@ -148,7 +154,7 @@ class SaveScenarioDialog(QDialog):
                 'extent_crs',
                 self.dock.extent.crs.authid())
         if self.aggregation_layer is not None:
-            aggregation_path = self.aggregation_layer.publicSource()
+            aggregation_path = self.aggregation_layer.source()
             relative_aggregation_path = self.relative_path(
                 scenario_file_path, aggregation_path)
             parser.set(title, 'aggregation', relative_aggregation_path)

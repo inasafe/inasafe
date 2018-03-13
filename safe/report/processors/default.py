@@ -10,9 +10,9 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
-from PyQt4 import QtXml
 from tempfile import mkdtemp
 
+from PyQt4 import QtXml
 from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QImage, QPainter, QPrinter
 from PyQt4.QtSvg import QSvgRenderer
@@ -31,8 +31,9 @@ from qgis.core import (
     QgsComposerLegend,
     QgsCoordinateTransform,
     QgsProject,
+    QgsMapLayerRegistry,
     PROJECT_SCALES
-    )
+)
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
@@ -184,7 +185,7 @@ def create_qgis_pdf_output(
     # process atlas generation
     print_atlas = setting('print_atlas_report', False, bool)
     if composition.atlasComposition().enabled() and (
-                print_atlas and aggregation_summary_layer):
+            print_atlas and aggregation_summary_layer):
         output_path = atlas_renderer(
             composition, aggregation_summary_layer, output_path, file_format)
     # for QGIS composer only pdf and png output are available
@@ -259,7 +260,6 @@ def qgis_composer_html_renderer(impact_report, component):
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
-    inasafe_context = impact_report.inasafe_context
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)
@@ -304,6 +304,18 @@ def qgis_composer_html_renderer(impact_report, component):
                     QgsComposerHtml.RepeatUntilFinished)
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
+
+    # Attempt on removing blank page. Notes: We assume that the blank page
+    # will always appears in the last x page(s), not in the middle.
+
+    index = composition.numPages()
+    number_of_pages_to_be_removed = 0
+    while composition.pageIsEmpty(index):
+        number_of_pages_to_be_removed += 1
+        index -= 1
+
+    composition.setNumPages(
+        composition.numPages() - number_of_pages_to_be_removed)
 
     # process to output
 
@@ -397,7 +409,6 @@ def qgis_composer_renderer(impact_report, component):
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
-    inasafe_context = impact_report.inasafe_context
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)
@@ -456,7 +467,7 @@ def qgis_composer_renderer(impact_report, component):
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
-    original_crs = impact_report.impact_function.impact.crs()
+    original_crs = impact_report.impact_function.crs
     destination_crs = qgis_composition_context.map_settings.destinationCrs()
     coord_transform = QgsCoordinateTransform(original_crs, destination_crs)
 
@@ -464,14 +475,29 @@ def qgis_composer_renderer(impact_report, component):
     for map_el in context.map_elements:
         item_id = map_el.get('id')
         split_count = map_el.get('grid_split_count')
-        layers = map_el.get('layers')
+        layers = [
+            layer for layer in map_el.get('layers') if isinstance(
+                layer, QgsMapLayer)
+        ]
         map_extent_option = map_el.get('extent')
         composer_map = composition_item(composition, item_id, QgsComposerMap)
+
+        for index, layer in enumerate(layers):
+            # we need to check whether the layer is registered or not
+            registered_layer = (
+                QgsMapLayerRegistry.instance().mapLayer(layer.id()))
+            if registered_layer:
+                if not registered_layer == layer:
+                    layers[index] = registered_layer
+            else:
+                QgsMapLayerRegistry.instance().addMapLayer(layer)
+
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
             composer_map.setKeepLayerSet(True)
             layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayerSet(layer_set)
+            map_overview_extent = None
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
@@ -485,7 +511,6 @@ def qgis_composer_renderer(impact_report, component):
                 # if map extent not provided, try to calculate extent
                 # from list of given layers. Combine it so all layers were
                 # shown properly
-                map_overview_extent = None
                 extent = QgsRectangle()
                 extent.setMinimal()
                 for l in [layer for layer in layers if
@@ -529,7 +554,10 @@ def qgis_composer_renderer(impact_report, component):
     for leg_el in context.map_legends:
         item_id = leg_el.get('id')
         title = leg_el.get('title')
-        layers = leg_el.get('layers')
+        layers = [
+            layer for layer in leg_el.get('layers') if isinstance(
+                layer, QgsMapLayer)
+        ]
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
@@ -545,16 +573,26 @@ def qgis_composer_renderer(impact_report, component):
                 legend.setColumnCount(symbol_count / 7 + 1)
 
             # set legend title
-            if title is not None:
+            if title is not None and not impact_report.legend_layers:
                 legend.setTitle(title)
 
             # set legend
             root_group = legend.modelV2().rootGroup()
-            for l in layers:
+            for layer in layers:
+                # we need to check whether the layer is registered or not
+                registered_layer = (
+                    QgsMapLayerRegistry.instance().mapLayer(layer.id()))
+                if registered_layer:
+                    if not registered_layer == layer:
+                        layer = registered_layer
+                else:
+                    QgsMapLayerRegistry.instance().addMapLayer(layer)
                 # used for customizations
-                tree_layer = root_group.addLayer(l)
-                QgsLegendRenderer.setNodeLegendStyle(
-                    tree_layer, QgsComposerLegendStyle.Hidden)
+                tree_layer = root_group.addLayer(layer)
+                if impact_report.legend_layers or (
+                        not impact_report.multi_exposure_impact_function):
+                    QgsLegendRenderer.setNodeLegendStyle(
+                        tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()
 
     # process to output

@@ -18,10 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 from collections import deque
-from item.message_element import MessageElement
-from item.exceptions import InvalidMessageItemError
-from . import Text
 
+from item.exceptions import InvalidMessageItemError
+from item.message_element import MessageElement
+from . import Text
 
 LOGGER = logging.getLogger('InaSAFE')
 # from pydev import pydevd
@@ -31,7 +31,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class Message(MessageElement):
-    """Message object to contain a list of MessageElements"""
+    """Message object to contain a list of MessageElements."""
 
     def __init__(self, *args, **kwargs):
         """Creates a message object to contain a list of MessageElements

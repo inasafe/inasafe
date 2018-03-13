@@ -1,28 +1,21 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
+# coding=utf-8
+"""Tools for metadata encoding."""
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
 import json
 from datetime import datetime, date
 
 from PyQt4.QtCore import QDate, Qt, QDateTime, QUrl
 
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'encoder.py'
-__date__ = '2/18/16'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class MetadataEncoder(json.JSONEncoder):
+
+    """Metadata Encoder."""
+
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.date().isoformat()

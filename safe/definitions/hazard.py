@@ -2,6 +2,16 @@
 
 """Definitions relating to hazards."""
 
+from safe.definitions.caveats import (
+    caveat_simulation, caveat_local_conditions, caveat_analysis_extent, )
+from safe.definitions.concepts import concepts
+from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
+from safe.definitions.exposure import (
+    exposure_place, exposure_land_cover, exposure_road)
+from safe.definitions.extra_keywords import (
+    ash_extra_keywords, earthquake_extra_keywords, flood_extra_keywords)
+from safe.definitions.fields import (
+    hazard_name_field, hazard_fields, hazard_value_field)
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
@@ -14,10 +24,10 @@ from safe.definitions.hazard_classifications import (
     tsunami_hazard_population_classes_ITB,
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
-    cyclone_sshws_hazard_classes)
-from safe.definitions.caveats import (
-    caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
-from safe.definitions.concepts import concepts
+    cyclone_sshws_hazard_classes,
+    inundation_dam_class)
+from safe.definitions.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.definitions.units import (
     unit_feet,
     unit_generic,
@@ -31,16 +41,6 @@ from safe.definitions.units import (
     unit_kilometres_per_hour,
     unit_knots,
     unit_metres_per_second)
-from safe.definitions.layer_modes import (
-    layer_mode_classified, layer_mode_continuous)
-from safe.definitions.fields import (
-    hazard_name_field, hazard_fields, hazard_value_field)
-from safe.definitions.earthquake import EARTHQUAKE_FUNCTIONS
-from safe.definitions.exposure import (
-    exposure_place,
-    exposure_land_cover,
-    exposure_road,
-    exposure_population)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -50,7 +50,7 @@ __revision__ = '$Format:%H$'
 
 continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
-    'name': tr('Units'),
+    'name': tr('Unit'),
     'description': tr(
         'Hazard units are used for continuous data. Examples of hazard units '
         'include metres and feet.'),
@@ -176,9 +176,10 @@ hazard_earthquake = {
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [
-        exposure_place,
+        # exposure_place,  We want to be able to run some EQ realtime analysis.
         exposure_land_cover,
-    ]
+    ],
+    'extra_keywords': earthquake_extra_keywords
 }
 hazard_flood = {
     'key': 'flood',
@@ -232,9 +233,64 @@ hazard_flood = {
     'extra_fields': [],
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
+    'disabled_exposures': [exposure_place],
+    'extra_keywords': flood_extra_keywords,
+}
+hazard_dam_break = {
+    'key': 'dam_break',
+    'name': tr('Dam Break'),
+    'description': tr(
+        'A <b>Dam Break</b> is a catastrophic type of failure '
+        'characterized by the sudden, rapid, and uncontrolled '
+        'release of impounded water as a result of structural '
+        'failures or deficiencies in the dam. '
+        '<b>Dam Break</b> can range from fairly minor to '
+        'catastrophic, and can possibly harm human life and property '
+        'downstream from the failure.'),
+    'notes': [
+        {
+            'item_category': 'dam_break_general',
+            'item_header': tr('dam break general notes'),
+            'item_list': [
+                # additional generic notes for flood
+                caveat_simulation,
+                caveat_local_conditions,
+                caveat_analysis_extent,
+            ]
+        }
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
+    ],
+    'actions': [  # these are additional generic actions
+
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
+    'allowed_geometries': [
+        'polygon',
+        'raster'
+    ],
+    'classifications': [
+        inundation_dam_class,
+        generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
+    'fields': hazard_fields,
+    'extra_fields': [],
+    'field_groups': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
 }
-
 hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
@@ -365,7 +421,8 @@ hazard_volcanic_ash = {
     'extra_fields': [],
     'field_groups': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [],
+    'extra_keywords': ash_extra_keywords
 }
 hazard_tsunami = {
     'key': 'tsunami',
@@ -482,7 +539,8 @@ hazard_all = [
     hazard_volcano,
     hazard_volcanic_ash,
     hazard_cyclone,
-    hazard_generic
+    hazard_generic,
+    hazard_dam_break
 ]
 hazards = {
     'key': 'hazards',

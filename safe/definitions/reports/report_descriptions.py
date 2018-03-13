@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Definitions about InaSAFE reports."""
+
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -36,6 +38,7 @@ impact_report_description = {
 }
 portrait_map_report_description = {
   'name': tr('Portrait map'),
+  'orientation': 'portrait',
   'customisable': True,
   'description': tr(
     'A standard map report is produced in a portrait layout '
@@ -55,10 +58,13 @@ portrait_map_report_description = {
     'your home directory, (hazard) by the class of hazard, and (exposure) '
     'by the class of exposure).'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'portrait-map-report-thumbnail.png'
+  'thumbnail': 'portrait-map-report-thumbnail.png',
+  'width': 210,
+  'height': 297
 }
 landscape_map_report_description = {
   'name': tr('Landscape map'),
+  'orientation': 'landscape',
   'customisable': True,
   'description': tr(
     'A standard map report is produced in a landscape layout. '
@@ -78,7 +84,9 @@ landscape_map_report_description = {
     'your home directory, (hazard) by the class of hazard, and (exposure) '
     'by the class of exposure).'),
   # place thumbs in resources/img/screenshots for them to appear in help
-  'thumbnail': 'lanscape-map-report-thumbnail.png'
+  'thumbnail': 'lanscape-map-report-thumbnail.png',
+  'width': 297,
+  'height': 210
 }
 analysis_provenance_report_description = {
   'name': tr('Analysis provenance'),

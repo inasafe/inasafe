@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Aggregation Layer Metadata"""
+"""Aggregation Layer Metadata."""
 
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 from safe.metadata.utilities import merge_dictionaries

@@ -14,8 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.utilities.unicode import get_unicode, get_string
 from safe.messaging.item.message_element import MessageElement
+from safe.utilities.unicode import get_unicode, get_string
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -26,7 +26,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 class InaSAFEError(RuntimeError):
 
-    """Base class for all user defined exceptions"""
+    """Base class for all user defined exceptions."""
 
     suggestion = 'An unspecified error occurred.'
 
@@ -65,7 +65,7 @@ class InaSAFEError(RuntimeError):
 
 class ReadLayerError(InaSAFEError):
 
-    """When a layer can't be read"""
+    """When a layer can't be read."""
 
     suggestion = (
         'Check that the file exists and you have permissions to read it')
@@ -73,14 +73,14 @@ class ReadLayerError(InaSAFEError):
 
 class WriteLayerError(InaSAFEError):
 
-    """When a layer can't be written"""
+    """When a layer can't be written."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class BoundingBoxError(InaSAFEError):
 
-    """For errors relating to bboxes"""
+    """For errors relating to bboxes."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
@@ -94,28 +94,28 @@ class VerificationError(InaSAFEError):
 
 class PolygonInputError(InaSAFEError):
 
-    """For invalid inputs to numeric polygon functions"""
+    """For invalid inputs to numeric polygon functions."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class PointsInputError(InaSAFEError):
 
-    """For invalid inputs to numeric point functions"""
+    """For invalid inputs to numeric point functions."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class BoundsError(InaSAFEError):
 
-    """For points falling outside interpolation grid"""
+    """For points falling outside interpolation grid."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class GetDataError(InaSAFEError):
 
-    """When layer data cannot be obtained"""
+    """When layer data cannot be obtained."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
@@ -143,28 +143,28 @@ class GridXmlParseError(InaSAFEError):
 
 class ContourCreationError(InaSAFEError):
 
-    """An exception for when creating contours from shakemaps goes wrong"""
+    """An exception for when creating contours from shakemaps goes wrong."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class InvalidLayerError(InaSAFEError):
 
-    """Raised when a gis layer is invalid"""
+    """Raised when a gis layer is invalid."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class ZeroImpactException(InaSAFEError):
 
-    """Raised if an impact function return zero impact"""
+    """Raised if an impact function return zero impact."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
 class WrongDataTypeException(InaSAFEError):
 
-    """Raised if expected and received data types are different"""
+    """Raised if expected and received data types are different."""
 
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
@@ -172,6 +172,13 @@ class WrongDataTypeException(InaSAFEError):
 class InvalidClipGeometryError(InaSAFEError):
 
     """Custom exception for when clip geometry is invalid."""
+
+    pass
+
+
+class SpatialIndexCreationError(InaSAFEError):
+
+    """Custom exception for when a spatial index failed to be created."""
 
     pass
 
@@ -311,7 +318,7 @@ class FileMissingError(InaSAFEError):
 
 class CanceledImportDialogError(InaSAFEError):
 
-    """Raised if import process canceled"""
+    """Raised if import process canceled."""
 
     pass
 
@@ -374,7 +381,7 @@ class InvalidExtentError(InaSAFEError):
 
 class NoAttributeInLayerError(InaSAFEError):
 
-    """Raised if the attribute not exists in the vector layer"""
+    """Raised if the attribute not exists in the vector layer."""
 
     pass
 
@@ -390,7 +397,7 @@ class MetadataLayerConstraintError(InaSAFEError):
 
 class MetadataReadError(InaSAFEError):
 
-    """When a metadata xml is not correctly formatted can't be read"""
+    """When a metadata xml is not correctly formatted can't be read."""
 
     suggestion = (
         'Check that the file is correct')
@@ -398,14 +405,14 @@ class MetadataReadError(InaSAFEError):
 
 class MetadataInvalidPathError(InaSAFEError):
 
-    """When a path for a metadata xml is not correct"""
+    """When a path for a metadata xml is not correct."""
 
     suggestion = 'Check that the XML path of the property is correct'
 
 
 class MetadataCastError(InaSAFEError):
 
-    """When a path for a metadata xml is not correct"""
+    """When a path for a metadata xml is not correct."""
 
     suggestion = 'Check that the XML value is of the correct type'
 

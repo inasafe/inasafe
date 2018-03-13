@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Plugin Initialization"""
+"""Plugin Initialization."""
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,6 +28,7 @@ from PyQt4.QtCore import (
     QTranslator,
     QCoreApplication,
     QSettings)
+from PyQt4.QtGui import QMessageBox
 
 # Setup internationalisation for the plugin.
 #
@@ -66,9 +67,25 @@ if os.path.exists(translation_path):
     QCoreApplication.installTranslator(translator)
 
 
-# noinspection PyDocstring
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
+    # Try to import submodule to check if there are present.
+    try:
+        from parameters.generic_parameter import GenericParameter
+    except ImportError:
+        # Don't use safe.utilities.i18n.tr as we need to be outside of `safe`.
+        # Some safe functions will import safe_extras.parameters
+        QMessageBox.warning(
+            None,
+            QCoreApplication.translate(
+                '@default', 'InaSAFE submodule not found'),
+            QCoreApplication.translate(
+                '@default',
+                'InaSAFE could not find the submodule "parameters". '
+                'You should do "git submodule update" or if you need a new '
+                'clone, do "git clone --recursive git@github.com:inasafe/'
+                'inasafe.git". Finally, restart QGIS.'))
+
     from safe.plugin import Plugin
     return Plugin(iface)

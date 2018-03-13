@@ -17,11 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
-from safe.utilities.i18n import tr
-
-from item.message_element import MessageElement
 from item.exceptions import InvalidMessageItemError
-
+from item.message_element import MessageElement
+from safe.utilities.i18n import tr
 from . import (
     Message,
     Text,
@@ -36,9 +34,7 @@ from .styles import (
     TRACEBACK_ITEMS_STYLE,
     ORANGE_LEVEL_4_STYLE)
 
-
 LOGGER = logging.getLogger('InaSAFE')
-# from pydev import pydevd
 
 # We defined these styles locally because we use different icons
 
@@ -48,7 +44,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ErrorMessage(MessageElement):
-    """Standard error message"""
+    """Standard error message."""
 
     def __init__(
             self,

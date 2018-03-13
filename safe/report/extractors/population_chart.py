@@ -3,11 +3,13 @@
 from safe.definitions.fields import (
     hazard_count_field, total_not_affected_field)
 from safe.definitions.styles import green
+from safe.definitions.utilities import definition
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
     value_from_field_name,
-    resolve_from_dictionary, layer_hazard_classification)
+    resolve_from_dictionary)
+from safe.utilities.metadata import active_classification
 from safe.utilities.rounding import round_affected_number
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -36,16 +38,19 @@ def population_chart_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
 
-    hazard_layer = impact_report.hazard
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
+    provenance = impact_report.impact_function.provenance
+    hazard_keywords = provenance['hazard_keywords']
+    exposure_keywords = provenance['exposure_keywords']
 
-    """Generate Donut chart for affected population"""
+    """Generate Donut chart for affected population."""
 
     # create context for the donut chart
 
     # retrieve hazard classification from hazard layer
-    hazard_classification = layer_hazard_classification(hazard_layer)
+    hazard_classification = definition(
+        active_classification(hazard_keywords, exposure_keywords['exposure']))
 
     if not hazard_classification:
         return context
@@ -75,7 +80,7 @@ def population_chart_extractor(impact_report, component_metadata):
             hazard_value = value_from_field_name(field_name, analysis_layer)
             hazard_value = round_affected_number(
                 hazard_value,
-                enable_rounding=True,
+                use_rounding=True,
                 use_population_rounding=True)
         except KeyError:
             # in case the field was not found
@@ -91,7 +96,7 @@ def population_chart_extractor(impact_report, component_metadata):
         hazard_value = value_from_field_name(field_name, analysis_layer)
         hazard_value = round_affected_number(
             hazard_value,
-            enable_rounding=True,
+            use_rounding=True,
             use_population_rounding=True)
 
         data.append(hazard_value)

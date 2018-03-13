@@ -24,7 +24,7 @@ from text import Text
 
 
 class Cell(MessageElement):
-    """A class to model table cells in the messaging system """
+    """A class to model table cells in the messaging system."""
 
     def __init__(self, *args, **kwargs):
         """Creates a cell object

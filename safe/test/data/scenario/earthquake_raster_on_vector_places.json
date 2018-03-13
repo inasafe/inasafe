@@ -1,0 +1,76 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "gisv4/hazard/earthquake.asc",
+    "exposure": "gisv4/exposure/places.geojson",
+    "aggregation": null
+  },
+
+  "expected_outputs":{
+    "count": 6
+  },
+  "expected_steps":{
+    "impact function":{
+      "info": {
+        "crs": "EPSG:4326"
+      },
+      "process":[
+        "Highest class of hazard is assigned to the exposure",
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure summary table"
+      ]
+    },
+    "pre_processor": {
+      "info": {},
+      "process": ["Earthquake Contour Pre Processor"]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Size Value Post Processor",
+        "Affected Post Processor",
+        "Distance Post Processor",
+        "Bearing Angle Post Processor",
+        "Cardinality Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
+      "process":[
+        "Clip raster by analysis bounding box",
+        "Classify continuous raster hazard",
+        "Polygonize classified raster hazard",
+        "Clip and mask hazard polygons with the analysis layer",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Make hazard layer valid"
+      ]
+    },
+    "exposure":{
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
+      "process":[
+        "Smart clip",
+        "Cleaning the vector exposure attribute table",
+        "Compute ratios from counts",
+        "Add default values",
+        "Assign classes based on value map"
+      ]
+    }
+  }
+}

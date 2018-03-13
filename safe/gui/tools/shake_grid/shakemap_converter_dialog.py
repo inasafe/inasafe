@@ -1,34 +1,44 @@
 # coding=utf-8
+"""A dialog for converting grid.xml file."""
 
 import logging
 import os
 
-from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayerRegistry
 from qgis.utils import iface
 
-from safe.common.version import get_version
 from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.styling import mmi_ramp_roman
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.common.version import get_version
+from safe.definitions.constants import (
+    NUMPY_SMOOTHING, SCIPY_SMOOTHING, NONE_SMOOTHING)
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_source, extra_keyword_earthquake_event_id)
+from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
-from safe.gis.raster.reclassify import reclassify
-from safe.utilities.keyword_io import KeywordIO
-from safe.definitions.hazard_classifications import earthquake_mmi_scale
+from safe.messaging import styles
+from safe.utilities.i18n import tr
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
+from safe.utilities.settings import setting
+from safe.utilities.styling import mmi_ramp_roman
 
+try:
+    import scipy  # NOQA
+    from scipy.ndimage.filters import gaussian_filter  # NOQA
+    HAS_SCIPY = True
+except ImportError:
+    HAS_SCIPY = False
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -60,7 +70,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.dock_widget = dock_widget
         self.setupUi(self)
         self.setWindowTitle(
-            self.tr('InaSAFE %s Shakemap Converter' % get_version()))
+            tr('InaSAFE %s Shakemap Converter' % get_version()))
+        icon = resources_path('img', 'icons', 'show-converter-tool.svg')
+        self.setWindowIcon(QtGui.QIcon(icon))
         self.warning_text = set()
         self.on_input_path_textChanged()
         self.on_output_path_textChanged()
@@ -83,13 +95,42 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
+        self.check_box_custom_shakemap_id.toggled.connect(
+            self.line_edit_shakemap_id.setEnabled)
+
+        # Set value for EQ source type combo box
+        self.combo_box_source_type.addItem(tr('N/A'), '')
+        for source_type in extra_keyword_earthquake_source['options']:
+            self.combo_box_source_type.addItem(
+                source_type['name'], source_type['key'])
+        self.combo_box_source_type.setCurrentIndex(0)
+
         self.update_warning()
+
+        if not setting('developer_mode', expected_type=bool):
+            self.smoothing_group_box.hide()
+
+        self.use_ascii_mode.setToolTip(tr(
+            'This algorithm will convert the grid xml to a ascii raster file. '
+            'If the cell width and height is different, it will use the width '
+            '(length cell in x axis).'))
+
+        if not HAS_SCIPY:
+            if self.scipy_smoothing.isChecked:
+                self.none_smoothing.setChecked(True)
+            self.scipy_smoothing.setToolTip(tr(
+                'You can not use select this option since you do not have '
+                'scipy installed in you system.'))
+            self.scipy_smoothing.setEnabled(False)
+        else:
+            self.scipy_smoothing.setEnabled(True)
+            self.scipy_smoothing.setToolTip('')
 
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
         """Action when output file name is changed."""
         output_path = self.output_path.text()
-        output_not_xml_msg = self.tr('output file is not .tif')
+        output_not_xml_msg = tr('output file is not .tif')
         if output_path and not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
         elif output_path and output_not_xml_msg in self.warning_text:
@@ -100,7 +141,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_input_path_textChanged(self):
         """Action when input file name is changed."""
         input_path = self.input_path.text()
-        input_not_grid_msg = self.tr('input file is not .xml')
+        input_not_grid_msg = tr('input file is not .xml')
 
         if input_path and not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
@@ -110,6 +151,22 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         if self.use_output_default.isChecked():
             self.get_output_from_input()
         self.update_warning()
+
+    # noinspection PyPep8Naming
+    def prepare_place_layer(self):
+        """Action when input place layer name is changed."""
+        if os.path.exists(self.input_place.text()):
+            self.place_layer = QgsVectorLayer(
+                self.input_place.text(),
+                tr('Nearby Cities'),
+                'ogr'
+            )
+            if self.place_layer.isValid():
+                LOGGER.debug('Get field information')
+                self.name_field.setLayer(self.place_layer)
+                self.population_field.setLayer(self.place_layer)
+            else:
+                LOGGER.debug('failed to set name field')
 
     def update_warning(self):
         """Update warning message and enable/disable Ok button."""
@@ -121,7 +178,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         header = html_header()
         footer = html_footer()
         string = header
-        heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
+        heading = m.Heading(tr('Shakemap Grid Importer'), **INFO_STYLE)
         tips = m.BulletedList()
         message = m.Message()
         message.add(heading)
@@ -158,22 +215,44 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE'),
-                (self.tr('Output file name must be tif file')))
+                tr('InaSAFE'),
+                tr('Output file name must be tif file'))
         if not os.path.exists(input_path):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
                 self,
-                self.tr('InaSAFE'),
-                (self.tr('Input file does not exist')))
+                tr('InaSAFE'),
+                tr('Input file does not exist'))
             return
 
+        algorithm = 'nearest'
         if self.nearest_mode.isChecked():
             algorithm = 'nearest'
-        else:
+        elif self.inverse_distance_mode.isChecked():
             algorithm = 'invdist'
+        elif self.use_ascii_mode.isChecked():
+            algorithm = 'use_ascii'
 
+        # Smoothing
+        smoothing_method = NONE_SMOOTHING
+        if self.numpy_smoothing.isChecked():
+            smoothing_method = NUMPY_SMOOTHING
+        if self.scipy_smoothing.isChecked():
+            smoothing_method = SCIPY_SMOOTHING
+
+        # noinspection PyUnresolvedReferences
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+        extra_keywords = {}
+        if self.check_box_custom_shakemap_id.isChecked():
+            event_id = self.line_edit_shakemap_id.text()
+            extra_keywords[extra_keyword_earthquake_event_id['key']] = event_id
+
+        current_index = self.combo_box_source_type.currentIndex()
+        source_type = self.combo_box_source_type.itemData(current_index)
+        if source_type:
+            extra_keywords[
+                extra_keyword_earthquake_source['key']] = source_type
 
         file_name = convert_mmi_data(
             input_path,
@@ -181,23 +260,16 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             input_source,
             output_path,
             algorithm=algorithm,
-            algorithm_filename_flag=True)
+            algorithm_filename_flag=True,
+            smoothing_method=smoothing_method,
+            extra_keywords=extra_keywords
+        )
 
-        # reclassify raster
         file_info = QFileInfo(file_name)
         base_name = file_info.baseName()
         self.output_layer = QgsRasterLayer(file_name, base_name)
-        self.output_layer.keywords = KeywordIO.read_keywords(self.output_layer)
-        self.output_layer.keywords['classification'] = (
-            earthquake_mmi_scale['key'])
-        keywords = self.output_layer.keywords
-        if self.output_layer.isValid():
-            self.output_layer = reclassify(
-                self.output_layer, overwrite_input=True)
-            KeywordIO.write_keywords(self.output_layer, keywords)
-        else:
-            LOGGER.debug("Failed to load")
 
+        # noinspection PyUnresolvedReferences
         QtGui.qApp.restoreOverrideCursor()
 
         if self.load_result.isChecked():
@@ -221,21 +293,37 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_open_input_tool_clicked(self):
         """Autoconnect slot activated when open input tool button is clicked.
         """
+        input_path = self.input_path.text()
+        if not input_path:
+            input_path = os.path.expanduser('~')
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getOpenFileName(
-            self, self.tr('Input file'), 'grid.xml',
-            self.tr('Raw grid file (*.xml)'))
-        self.input_path.setText(filename)
+            self, tr('Input file'), input_path, tr('Raw grid file (*.xml)'))
+        if filename:
+            self.input_path.setText(filename)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_open_output_tool_clicked(self):
         """Autoconnect slot activated when open output tool button is clicked.
         """
+        output_path = self.output_path.text()
+        if not output_path:
+            output_path = os.path.expanduser('~')
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getSaveFileName(
-            self, self.tr('Output file'), 'grid.tif',
-            self.tr('Raster file (*.tif)'))
-        self.output_path.setText(filename)
+            self, tr('Output file'), output_path, tr('Raster file (*.tif)'))
+        if filename:
+            self.output_path.setText(filename)
+
+    @pyqtSignature('')
+    def on_open_place_tool_clicked(self):
+        input_place = self.input_place.text()
+        if not input_place:
+            input_place = os.path.expanduser('~')
+        filename = QFileDialog.getOpenFileName(
+            self, tr('Input place layer'), input_place, tr('All Files (*.*)'))
+        if filename:
+            self.input_place.setText(filename)
 
     def load_result_toggled(self):
         """Function that perform action when load_result checkbox is clicked.
@@ -253,10 +341,10 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         :type flag: bool
         """
         if flag:
-            self.help_button.setText(self.tr('Hide Help'))
+            self.help_button.setText(tr('Hide Help'))
             self.show_help()
         else:
-            self.help_button.setText(self.tr('Show Help'))
+            self.help_button.setText(tr('Show Help'))
             self.hide_help()
 
     def hide_help(self):

@@ -7,23 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>526</width>
-    <height>637</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>InaSAFE - Shakemap Importer</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
@@ -31,7 +21,16 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_5">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -47,16 +46,49 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_6">
-       <property name="margin">
+       <property name="leftMargin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QWebView" name="info_web_view" native="true">
-         <property name="url" stdset="0">
-          <url>
-           <string>about:blank</string>
-          </url>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="smoothing_group_box">
+         <property name="title">
+          <string>Smoothing</string>
          </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="scipy_smoothing">
+            <property name="text">
+             <string>Using Scipy</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="none_smoothing">
+            <property name="text">
+             <string>None</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="numpy_smoothing">
+            <property name="text">
+             <string>Using Numpy</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="1" column="0">
@@ -65,6 +97,23 @@
           <string>Input</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Input file (grid.xml)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_source">
+            <property name="text">
+             <string>Source</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLineEdit" name="line_edit_title"/>
+          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
@@ -93,25 +142,36 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Input File (grid.xml)</string>
+          <item row="9" column="0">
+           <widget class="QComboBox" name="combo_box_source_type">
+            <property name="editable">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_source">
-            <property name="text">
-             <string>Source</string>
+          <item row="7" column="0">
+           <widget class="QLineEdit" name="line_edit_shakemap_id">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLineEdit" name="line_edit_title"/>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_source_type">
+            <property name="text">
+             <string>Source Type</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="0">
            <widget class="QLineEdit" name="line_edit_source"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="check_box_custom_shakemap_id">
+            <property name="text">
+             <string>Custom Shakemap ID</string>
+            </property>
+           </widget>
           </item>
          </layout>
          <zorder>line_edit_title</zorder>
@@ -119,6 +179,52 @@
          <zorder>line_edit_source</zorder>
          <zorder>label</zorder>
          <zorder>label_source</zorder>
+         <zorder>line_edit_shakemap_id</zorder>
+         <zorder>label_source_type</zorder>
+         <zorder>combo_box_source_type</zorder>
+         <zorder>check_box_custom_shakemap_id</zorder>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Interpolation Algorithm</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="use_ascii_mode">
+            <property name="text">
+             <string>None</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="nearest_mode">
+            <property name="text">
+             <string>Nearest neighbour</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="inverse_distance_mode">
+            <property name="text">
+             <string>Inverse Distance</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="2" column="0">
@@ -127,6 +233,43 @@
           <string>Output</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="load_result">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Add output layer to QGIS project</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="keyword_wizard_checkbox">
+            <property name="text">
+             <string>Launch keywords wizard</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>The output will be a .tif raster file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="use_output_default">
+            <property name="text">
+             <string>Same directory as input file</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
@@ -148,74 +291,51 @@
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>The output will be a .tif raster file</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="use_output_default">
-            <property name="text">
-             <string>Same directory as input file</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="load_result">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Add output layer to QGIS project</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="keyword_wizard_checkbox">
-            <property name="text">
-             <string>Launch keywords wizard</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Algorithm</string>
+       <item row="0" column="0">
+        <widget class="QWebView" name="info_web_view" native="true">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="nearest_mode">
-            <property name="text">
-             <string>Nearest neighbour</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="inverse_distance_mode">
-            <property name="text">
-             <string>Inverse Distance</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="url" stdset="0">
+          <url>
+           <string>about:blank</string>
+          </url>
+         </property>
         </widget>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -224,9 +344,26 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>PyQt4.QtWebKit</header>
+   <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>input_path</tabstop>
+  <tabstop>open_input_tool</tabstop>
+  <tabstop>line_edit_title</tabstop>
+  <tabstop>line_edit_source</tabstop>
+  <tabstop>use_output_default</tabstop>
+  <tabstop>output_path</tabstop>
+  <tabstop>open_output_tool</tabstop>
+  <tabstop>load_result</tabstop>
+  <tabstop>keyword_wizard_checkbox</tabstop>
+  <tabstop>use_ascii_mode</tabstop>
+  <tabstop>nearest_mode</tabstop>
+  <tabstop>inverse_distance_mode</tabstop>
+  <tabstop>none_smoothing</tabstop>
+  <tabstop>numpy_smoothing</tabstop>
+  <tabstop>scipy_smoothing</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -236,8 +373,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>254</x>
+     <y>766</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -252,8 +389,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>322</x>
+     <y>766</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -268,12 +405,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>140</y>
+     <x>220</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
-     <x>185</x>
-     <y>163</y>
+     <x>213</x>
+     <y>506</y>
     </hint>
    </hints>
   </connection>
@@ -284,12 +421,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>140</y>
+     <x>220</x>
+     <y>478</y>
     </hint>
     <hint type="destinationlabel">
-     <x>371</x>
-     <y>162</y>
+     <x>497</x>
+     <y>507</y>
     </hint>
    </hints>
   </connection>

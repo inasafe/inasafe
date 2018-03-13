@@ -53,6 +53,7 @@ generic_structure_classes = {
                 'house',
                 'residence',
                 'residential',
+                'apartments',
             ],
             'osm_downloader': ['Residential'],
             'citations': [
@@ -95,6 +96,7 @@ generic_structure_classes = {
                 'clinic/doctor',
                 'dentist',
                 'doctor',
+                'doctors',
                 'health',
                 'hospital',
                 'pharmacy',
@@ -184,6 +186,7 @@ generic_structure_classes = {
             'string_defaults': [
                 'accommodation',
                 'atm',
+                'bank',
                 'cafe',
                 'clothes',
                 'commercial',
@@ -272,12 +275,36 @@ generic_structure_classes = {
             ]
         },
         {
+            # IF YOU UPDATE THIS ONE, PLEASE UPDATE THE OTHER ONE TOO
+            'key': 'evacuation centre',
+            'name': tr('Evacuation Centre'),
+            'description': tr(
+                'Evacuation centres provide a place of temporary refuge for '
+                'people evacuated from homes in the vicinity of a disaster '
+                'and for people who may be travelling through the affected '
+                'area but are unable to continue.'),
+            'string_defaults': [
+                'evacuation centre',
+                'evacuation center',
+                'refuge',
+                'idp camp'
+            ],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
             'key': 'other',
             'name': tr('Other'),
             'description': tr(
                 'Any other structure frequently mapped.'),
             'string_defaults': [
                 'animal boarding',
+                'garage',
                 'lighthouse',
                 'other',
                 'utility',
@@ -519,6 +546,29 @@ generic_place_classes = {
                 'A smaller rural community typically with fewer than 100-200 '
                 'inhabitants and minimal infrastructure.'),
             'string_defaults': ['hamlet'],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            # IF YOU UPDATE THIS ONE, PLEASE UPDATE THE OTHER ONE TOO
+            'key': 'evacuation centre',
+            'name': tr('Evacuation Centre'),
+            'description': tr(
+                'Evacuation centres provide a place of temporary refuge for '
+                'people evacuated from homes in the vicinity of a disaster '
+                'and for people who may be travelling through the affected '
+                'area but are unable to continue.'),
+            'string_defaults': [
+                'evacuation centre',
+                'evacuation center',
+                'refuge',
+                'idp camp'
+            ],
             'osm_downloader': [],
             'citations': [
                 {

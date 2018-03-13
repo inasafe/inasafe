@@ -3,23 +3,23 @@
 """Clip and mask a hazard layer."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
-    QGis,
     QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
 )
 
-from safe.utilities.i18n import tr
-from safe.definitions.processing_steps import union_steps
 from safe.definitions.fields import hazard_class_field, aggregation_id_field
 from safe.definitions.hazard_classifications import not_exposed_class
+from safe.definitions.processing_steps import union_steps
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.clean_geometry import geometry_checker
 from safe.gis.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
-from safe.gis.vector.clean_geometry import geometry_checker
-from safe.gis.sanity_check import check_layer
+from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -58,7 +58,7 @@ def union(union_a, union_b, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = union_steps['output_layer_name']
-    processing_step = union_steps['step_name']
+    processing_step = union_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % (
         union_a.keywords['layer_purpose'],
         union_b.keywords['layer_purpose']
@@ -149,7 +149,7 @@ def union(union_a, union_b, callback=None):
                     if int_geom.wkbType() == QgsWKBTypes.Unknown\
                             or QgsWKBTypes.flatType(
                             int_geom.geometry().wkbType()) == \
-                                    QgsWKBTypes.GeometryCollection:
+                            QgsWKBTypes.GeometryCollection:
                         # Intersection produced different geometry types
                         temp_list = int_geom.asGeometryCollection()
                         for i in temp_list:
@@ -173,7 +173,7 @@ def union(union_a, union_b, callback=None):
                         # produced by the intersection
                         # fix #3549
                         if int_geom.wkbType() in wkb_type_groups[
-                            wkb_type_groups[int_geom.wkbType()]]:
+                                wkb_type_groups[int_geom.wkbType()]]:
                             try:
                                 _write_feature(
                                     at_map_a + at_map_b,
@@ -194,14 +194,14 @@ def union(union_a, union_b, callback=None):
                 int_b = QgsGeometry.unaryUnion(list_intersecting_b)
                 diff_geom = geometry_checker(diff_geom.difference(int_b))
                 if diff_geom is None or \
-                    diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
+                        diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                     # LOGGER.debug(
                     #     tr('GEOS geoprocessing error: One or more input '
                     #        'features have invalid geometry.'))
                     pass
 
             if diff_geom is not None and (
-                            diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
+                diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
                     diff_geom.geometry().wkbType()) ==
                     QgsWKBTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()
@@ -220,12 +220,10 @@ def union(union_a, union_b, callback=None):
                        'ignored due to invalid geometry.'))
 
     length = len(union_a.fields())
-    at_map_a = [None] * length
 
     # nFeat = len(union_b.getFeatures())
     for in_feat_a in union_b.getFeatures():
         # progress.setPercentage(nElement / float(nFeat) * 100)
-        add = False
         geom = geometry_checker(in_feat_a.geometry())
         atMap = [None] * length
         atMap.extend(in_feat_a.attributes())
@@ -235,7 +233,6 @@ def union(union_a, union_b, callback=None):
         for id in intersects:
             request = QgsFeatureRequest().setFilterFid(id)
             inFeatB = union_a.getFeatures(request).next()
-            atMapB = inFeatB.attributes()
             tmpGeom = QgsGeometry(geometry_checker(inFeatB.geometry()))
 
             if geom.intersects(tmpGeom):

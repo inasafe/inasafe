@@ -8,11 +8,13 @@
   },
 
   "expected_outputs":{
-    "count": 4
+    "count": 5
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:4326"
+      },
       "process":[
         "Make aggregate hazard layer valid",
         "Intersect divisible features with the aggregate hazard",
@@ -21,6 +23,10 @@
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
       ]
+    },
+    "pre_processor": {
+      "info": {},
+      "process": ["Earthquake Contour Pre Processor"]
     },
     "post_processor":{
       "info": {},
@@ -64,7 +70,7 @@
     },
     "hazard":{
       "info": {
-        "use_same_projection":true
+        "use_same_projection_as_aggregation":true
       },
       "process":[
         "Clip raster by analysis bounding box",
@@ -77,7 +83,9 @@
       ]
     },
     "exposure":{
-      "info": {},
+      "info": {
+        "use_same_projection_as_aggregation":true
+      },
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",

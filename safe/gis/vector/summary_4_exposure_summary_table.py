@@ -7,7 +7,6 @@ from numbers import Number
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
-from safe.definitions.utilities import definition
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -22,25 +21,25 @@ from safe.definitions.fields import (
     hazard_count_field,
     exposure_count_field,
     exposure_class_field,
-    summarizer_fields,
-    affected_summarizer_fields
+    summary_rules,
 )
-from safe.definitions.processing_steps import (
-    summary_4_exposure_summary_table_steps)
-from safe.definitions.post_processors import post_processor_affected_function
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import \
     layer_purpose_exposure_summary_table
-from safe.definitions.hazard_classifications import not_exposed_class
+from safe.definitions.processing_steps import (
+    summary_4_exposure_summary_table_steps)
+from safe.definitions.utilities import definition
+from safe.gis.sanity_check import check_layer
+from safe.gis.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure)
 from safe.gis.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
-from safe.gis.sanity_check import check_layer
-from safe.gis.vector.summary_tools import (
-    check_inputs, create_absolute_values_structure)
+from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -77,7 +76,6 @@ def exposure_summary_table(
     """
     output_layer_name = summary_4_exposure_summary_table_steps[
         'output_layer_name']
-    processing_step = summary_4_exposure_summary_table_steps['step_name']
 
     source_fields = aggregate_hazard.keywords['inasafe_fields']
 
@@ -140,11 +138,15 @@ def exposure_summary_table(
         exposure_type_field['field_name'])
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
+
+    exposure_keywords = aggregate_hazard.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
-        if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+        if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
             hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)
@@ -153,7 +155,11 @@ def exposure_summary_table(
         tabular.keywords['inasafe_fields'][key] = value
 
         hazard_affected[hazard_class] = post_processor_affected_function(
-            classification=classification, hazard_class=hazard_class)
+            exposure=exposure,
+            hazard=hazard,
+            classification=classification,
+            hazard_class=hazard_class
+        )
 
     field = create_field_from_definition(total_affected_field)
     tabular.addAttribute(field)
@@ -185,21 +191,24 @@ def exposure_summary_table(
     sorted_keys = sorted(summarization_dicts.keys())
 
     for key in sorted_keys:
-        affected_summarizer_field = affected_summarizer_fields[key]
-        field = create_field_from_definition(affected_summarizer_field)
+        summary_field = summary_rules[key]['summary_field']
+        field = create_field_from_definition(summary_field)
         tabular.addAttribute(field)
         tabular.keywords['inasafe_fields'][
-            affected_summarizer_field['key']] = (
-            affected_summarizer_field['field_name'])
+            summary_field['key']] = (
+            summary_field['field_name'])
 
-    # For each absolute values
-    for absolute_field in absolute_values.iterkeys():
-        field_definition = definition(absolute_values[absolute_field][1])
-        field = create_field_from_definition(field_definition)
-        tabular.addAttribute(field)
-        key = field_definition['key']
-        value = field_definition['field_name']
-        tabular.keywords['inasafe_fields'][key] = value
+    # Only add absolute value if there is no summarization / no exposure
+    # classification
+    if not summarization_dicts:
+        # For each absolute values
+        for absolute_field in absolute_values.iterkeys():
+            field_definition = definition(absolute_values[absolute_field][1])
+            field = create_field_from_definition(field_definition)
+            tabular.addAttribute(field)
+            key = field_definition['key']
+            value = field_definition['field_name']
+            tabular.keywords['inasafe_fields'][key] = value
 
     for exposure_type in unique_exposure:
         feature = QgsFeature()
@@ -209,7 +218,7 @@ def exposure_summary_table(
         total_not_exposed = 0
         total = 0
         for hazard_class in unique_hazard:
-            if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+            if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
                 hazard_class = 'NULL'
             value = flat_table.get_value(
                 hazard_class=hazard_class,
@@ -235,12 +244,12 @@ def exposure_summary_table(
             for key in sorted_keys:
                 attributes.append(summarization_dicts[key].get(
                     exposure_type, 0))
-
-        for i, field in enumerate(absolute_values.itervalues()):
-            value = field[0].get_value(
-                all='all'
-            )
-            attributes.append(value)
+        else:
+            for i, field in enumerate(absolute_values.itervalues()):
+                value = field[0].get_value(
+                    all='all'
+                )
+                attributes.append(value)
 
         feature.setAttributes(attributes)
         tabular.addFeature(feature)
@@ -286,29 +295,32 @@ def summarize_result(exposure_summary, callback=None):
     summarization_dicts = {}
     summarizer_flags = {}
 
-    for summarizer_field in summarizer_fields:
+    # for summarizer_field in summarizer_fields:
+    for key, summary_rule in summary_rules.items():
+        input_field = summary_rule['input_field']
         if exposure_summary.fieldNameIndex(
-                summarizer_field['field_name']) == -1:
-            summarizer_flags[summarizer_field['key']] = False
+                input_field['field_name']) == -1:
+            summarizer_flags[key] = False
         else:
-            summarizer_flags[summarizer_field['key']] = True
-            summarization_dicts[summarizer_field['key']] = {}
+            summarizer_flags[key] = True
+            summarization_dicts[key] = {}
 
     for feature in exposure_summary.getFeatures():
-        is_affected = feature[affected_field['field_name']]
         exposure_class_name = feature[exposure_class_field['field_name']]
-        for summarizer_field in summarizer_fields:
-            flag = summarizer_flags[summarizer_field['key']]
+        # for summarizer_field in summarizer_fields:
+        for key, summary_rule in summary_rules.items():
+            input_field = summary_rule['input_field']
+            case_field = summary_rule['case_field']
+            case_value = feature[case_field['field_name']]
+
+            flag = summarizer_flags[key]
             if not flag:
                 continue
-            if is_affected:
-                if exposure_class_name not in summarization_dicts[
-                    summarizer_field['key']]:
-                    summarization_dicts[summarizer_field['key']][
-                        exposure_class_name] = 0
-                value = feature[summarizer_field['field_name']]
+            if case_value in summary_rule['case_values']:
+                if exposure_class_name not in summarization_dicts[key]:
+                    summarization_dicts[key][exposure_class_name] = 0
+                value = feature[input_field['field_name']]
                 if isinstance(value, Number):
-                    summarization_dicts[summarizer_field['key']][
-                        exposure_class_name] += value
+                    summarization_dicts[key][exposure_class_name] += value
 
     return summarization_dicts

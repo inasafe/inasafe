@@ -150,4 +150,5 @@ def _declare_minimum_fields():
     for field in minimum_needs_fields:
         setattr(sys.modules[__name__], field['key'], field)
 
+
 _declare_minimum_fields()

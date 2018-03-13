@@ -22,7 +22,7 @@ from text import Text
 
 
 class Image(Text):
-    """A class to model emphasized text in the messaging system """
+    """A class to model emphasized text in the messaging system."""
 
     def __init__(self, uri, text=None, **kwargs):
         """Creates a Emphasized Text Text object

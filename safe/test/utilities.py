@@ -9,11 +9,11 @@ import os
 import re
 import shutil
 import sys
-from PyQt4 import QtGui  # pylint: disable=W0621
 from itertools import izip
 from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
+from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -22,11 +22,10 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
+from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.utilities import monkey_patch_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -38,26 +37,6 @@ GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 
-# FIXME AG: We are going to remove the usage of all the data from
-# inasafe_data and just use data in standard_data_path. But until that is done,
-# we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
-
-# Assuming test data three levels up
-pardir = os.path.abspath(os.path.join(
-    os.path.realpath(os.path.dirname(__file__)),
-    '..',
-    '..',
-    '..'))
-
-# Location of test data
-DATANAME = 'inasafe_data'
-DATADIR = os.path.join(pardir, DATANAME)
-
-# Bundled test data
-TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
-HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
-EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
-BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -460,50 +439,6 @@ def load_path_raster_layer(path, **kwargs):
     monkey_patch_keywords(layer)
 
     return layer
-
-
-def load_layer(layer_path):
-    """Helper to load and return a single QGIS layer
-
-    :param layer_path: Path name to raster or vector file.
-    :type layer_path: str
-
-    :returns: tuple containing layer and its layer_purpose.
-    :rtype: (QgsMapLayer, str)
-
-    """
-    # Extract basename and absolute path
-    file_name = os.path.split(layer_path)[-1]  # In case path was absolute
-    base_name, extension = os.path.splitext(file_name)
-
-    # Determine if layer is hazard or exposure
-    layer_purpose = 'undefined'
-    try:
-        keywords = read_iso19115_metadata(layer_path)
-        if 'layer_purpose' in keywords:
-            layer_purpose = keywords['layer_purpose']
-    except NoKeywordsFoundError:
-        pass
-
-    # Create QGis Layer Instance
-    if extension in ['.asc', '.tif', '.tiff']:
-        layer = QgsRasterLayer(layer_path, base_name)
-    elif extension in ['.shp', '.geojson', '.gpkg']:
-        layer = QgsVectorLayer(layer_path, base_name, 'ogr')
-    else:
-        message = 'File %s had illegal extension' % layer_path
-        raise Exception(message)
-
-    # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % layer.source()
-    # noinspection PyUnresolvedReferences
-    if not layer.isValid():
-        LOGGER.debug(message)
-        raise Exception(message)
-
-    monkey_patch_keywords(layer)
-
-    return layer, layer_purpose
 
 
 def set_canvas_crs(epsg_id, enable_projection=False):
@@ -941,6 +876,16 @@ def compare_wkt(a, b, tol=0.000001):
     :rtype: bool
     """
     r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+
+    # Text might upper or lower case
+    a = a.upper()
+    b = b.upper()
+
+    # Might have a space between the text and coordinates
+    geometry_type = a.split('(', 1)
+    a = geometry_type[0].replace(' ', '') + '('.join(geometry_type[1:])
+    geometry_type = b.split('(', 1)
+    b = geometry_type[0].replace(' ', '') + '('.join(geometry_type[1:])
 
     # compare the structure
     a0 = r.sub("#", a)

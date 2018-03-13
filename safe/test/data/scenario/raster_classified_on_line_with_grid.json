@@ -11,7 +11,9 @@
   },
   "expected_steps":{
     "impact function":{
-      "info": {},
+      "info": {
+        "crs": "EPSG:3857"
+      },
       "process":[
         "Make aggregate hazard layer valid",
         "Intersect divisible features with the aggregate hazard",
@@ -20,6 +22,10 @@
         "Aggregate the analysis summary",
         "Build the exposure summary table"
       ]
+    },
+    "pre_processor": {
+      "info": {},
+      "process": []
     },
     "post_processor":{
       "info": {},
@@ -34,18 +40,18 @@
       },
       "process":[
         "Cleaning the aggregation layer",
-        "Reproject aggregation layer to exposure CRS",
         "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
       "info": {
-        "use_same_projection":true
+        "use_same_projection_as_aggregation":false
       },
       "process":[
         "Clip raster by analysis bounding box",
         "Polygonize classified raster hazard",
+        "Reproject hazard layer to aggregation CRS",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
@@ -53,10 +59,13 @@
       ]
     },
     "exposure":{
-      "info": {},
+      "info": {
+        "use_same_projection_as_aggregation":false
+      },
       "process":[
         "Smart clip",
         "Cleaning the vector exposure attribute table",
+        "Reproject exposure layer to aggregation CRS",
         "Compute ratios from counts",
         "Clip the exposure layer with the analysis layer",
         "Add default values",

@@ -9,12 +9,12 @@ from safe.definitions.fields import (
     size_field,
     count_fields,
 )
-from safe.definitions.post_processors import size
 from safe.definitions.processing_steps import (
     recompute_counts_steps)
-from safe.utilities.profiling import profile
-from safe.gis.vector.tools import SizeCalculator
 from safe.gis.sanity_check import check_layer
+from safe.gis.vector.tools import SizeCalculator
+from safe.processors.post_processor_functions import size
+from safe.utilities.profiling import profile
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,7 +45,7 @@ def recompute_counts(layer, callback=None):
     .. versionadded:: 4.0
     """
     output_layer_name = recompute_counts_steps['output_layer_name']
-    processing_step = recompute_counts_steps['step_name']
+    processing_step = recompute_counts_steps['step_name']  # NOQA
 
     fields = layer.keywords['inasafe_fields']
 

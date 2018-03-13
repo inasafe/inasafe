@@ -3,25 +3,23 @@
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget, QLabel
+
+from PyQt4.QtGui import QLabel
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
-
+from safe import messaging as m
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
 from safe.common.parameters.default_select_parameter_widget import (
     DefaultSelectParameterWidget)
-from safe import messaging as m
-from safe.utilities.i18n import tr
-
+from safe.definitions.constants import no_field
+from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.layer_purposes import (layer_purpose_aggregation)
 from safe.definitions.utilities import get_fields, get_compulsory_fields
-from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.constants import no_field
 from safe.gui.tools.wizard.utilities import get_inasafe_default_value_fields
-
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -118,15 +116,13 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         if self.parameters:
             self.parameters = []
 
-        layer_data_provider = self.parent.layer.dataProvider()
-
         # Iterate through all inasafe fields
         # existing_inasafe_default_values
 
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
             option_list = [no_field]
-            for field in layer_data_provider.fields():
+            for field in self.parent.layer.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
                     if field.type() in inasafe_field['type']:

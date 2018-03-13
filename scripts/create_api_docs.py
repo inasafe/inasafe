@@ -1,18 +1,14 @@
 #!/usr/bin/env python
-"""**Generating rst file for api documentation**
-
-"""
-
-__author__ = 'Ismail Sunni <ismailsunni@yahoo.co.id>'
-__revision__ = '$Format:%H$'
-__date__ = '16/08/2012'
-__license__ = 'GPL'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""Generating rst file for api documentation."""
 
 import os
 from shutil import rmtree
 import sys
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 # Text
 INDEX_HEADER = 'API documentation\n'
@@ -311,6 +307,7 @@ def main():
             max_depth=max_depth)
 
     print 'Done.'
+
 
 if __name__ == '__main__':
     main()

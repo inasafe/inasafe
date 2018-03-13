@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "analysis_name": "Generic Hazard Polygon On Roads Line", "high_hazard_count": 9941.0, "medium_hazard_count": 15626.0, "not exposed_hazard_count": 53195.0, "total_affected": 25567.0, "total_not_affected": 0.0, "total_exposed": 25567.0, "total_not_exposed": 53195.0, "total": 78762.0 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 106.903317965259362, -6.183244540900332 ], [ 106.90331796525939, -6.272547811598931 ], [ 106.723654908435478, -6.272547811598931 ], [ 106.723654908435478, -6.183246454622871 ], [ 106.723654908435478, -6.093928101870953 ], [ 106.813486436847441, -6.093928101870953 ], [ 106.903317965259362, -6.093928101870953 ], [ 106.903317965259362, -6.183244540900332 ] ] ] ] } }
+]
+}

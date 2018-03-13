@@ -3,6 +3,7 @@
 """Aggregate the impact table to the aggregate hazard."""
 
 import logging
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
@@ -18,20 +19,18 @@ from safe.definitions.fields import (
     affected_field,
     size_field,
 )
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
-from safe.definitions.post_processors import post_processor_affected_function
-from safe.definitions.processing_steps import (
-    summary_1_aggregate_hazard_steps)
 from safe.definitions.utilities import definition
-from safe.definitions.hazard_classifications import not_exposed_class
+from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
-from safe.gis.sanity_check import check_layer
+from safe.processors import post_processor_affected_function
 from safe.utilities.gis import qgis_version
-from safe.utilities.profiling import profile
-from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
+from safe.utilities.pivot_table import FlatTable
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -72,9 +71,6 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_1_aggregate_hazard_steps['output_layer_name']
-    processing_step = summary_1_aggregate_hazard_steps['step_name']
-
     source_fields = impact.keywords['inasafe_fields']
     target_fields = aggregate_hazard.keywords['inasafe_fields']
 
@@ -137,10 +133,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = feature[aggregation_id]
         hazard_value = feature[hazard_id]
-        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
             hazard_value = not_exposed_class['key']
         exposure_value = feature[exposure_class]
-        if not exposure_value or isinstance(exposure_value, QPyNullVariant):
+        if exposure_value == '' or isinstance(exposure_value, QPyNullVariant):
             exposure_value = 'NULL'
 
         flat_table.add_value(
@@ -153,7 +149,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
             value = feature[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -162,12 +158,16 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
             )
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    hazard = hazard_keywords['hazard']
     classification = hazard_keywords['classification']
+
+    exposure_keywords = impact.keywords['exposure_keywords']
+    exposure = exposure_keywords['exposure']
 
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
-        if not feature_hazard_id or isinstance(
+        if feature_hazard_id == '' or isinstance(
                 feature_hazard_id, QPyNullVariant):
             feature_hazard_id = not_exposed_class['key']
         feature_hazard_value = area[hazard_class]
@@ -182,7 +182,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
             aggregate_hazard.changeAttributeValue(area.id(), shift + i, sum)
 
         affected = post_processor_affected_function(
-            classification=classification, hazard_class=feature_hazard_value)
+            exposure=exposure,
+            hazard=hazard,
+            classification=classification,
+            hazard_class=feature_hazard_value)
         affected = tr(unicode(affected))
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure), affected)
@@ -208,7 +211,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         aggregate_hazard.setLayerName(aggregate_hazard.keywords['title'])
     aggregate_hazard.keywords['layer_purpose'] = (
         layer_purpose_aggregate_hazard_impacted['key'])
-
+    aggregate_hazard.keywords['exposure_keywords'] = impact.keywords.copy()
     check_layer(aggregate_hazard)
     return aggregate_hazard
 

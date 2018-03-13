@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "Alubarna", "Type": "Capital City", "Population": 1000000, "Female": 270000, "Male": 730000 }, "geometry": { "type": "Point", "coordinates": [ 106.828049824144571, -6.155191046843532 ] } },
+{ "type": "Feature", "properties": { "Name": "Erumalu", "Type": "City", "Population": 750000, "Female": 225000, "Male": 525000 }, "geometry": { "type": "Point", "coordinates": [ 106.834807238229615, -6.184220572199717 ] } },
+{ "type": "Feature", "properties": { "Name": "Nanohana", "Type": "City", "Population": 800000, "Female": 664000, "Male": 136000 }, "geometry": { "type": "Point", "coordinates": [ 106.814312594884257, -6.180548717394633 ] } },
+{ "type": "Feature", "properties": { "Name": "Syrup Village", "Type": "Village", "Population": 6000, "Female": 480, "Male": 5520 }, "geometry": { "type": "Point", "coordinates": [ 106.812079363834911, -6.164284897552093 ] } },
+{ "type": "Feature", "properties": { "Name": "Midgard Bus Stop", "Type": "Bus stop", "Population": null, "Female": null, "Male": null }, "geometry": { "type": "Point", "coordinates": [ 106.815028774085064, -6.164463063619204 ] } },
+{ "type": "Feature", "properties": { "Name": "Blue Station", "Type": "Train Station", "Population": null, "Female": null, "Male": null }, "geometry": { "type": "Point", "coordinates": [ 106.804448943770012, -6.171970023846818 ] } },
+{ "type": "Feature", "properties": { "Name": "Galley La Company", "Type": "Commercial", "Population": null, "Female": null, "Male": null }, "geometry": { "type": "Point", "coordinates": [ 106.828638529328515, -6.18225150207453 ] } },
+{ "type": "Feature", "properties": { "Name": "Central City Square", "Type": "Public Area", "Population": null, "Female": null, "Male": null }, "geometry": { "type": "Point", "coordinates": [ 106.808451546373874, -6.188688189056111 ] } }
+]
+}

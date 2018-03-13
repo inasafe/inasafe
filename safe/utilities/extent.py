@@ -1,15 +1,13 @@
 # coding=utf-8
 
+"""Related to the extent (with or without an aggregation layer."""
+
+from PyQt4.QtCore import Qt
 from qgis.core import (
     QgsCoordinateTransform,
-    QgsRectangle,
     QgsGeometry,
-    QgsPoint,
-    QgsCoordinateReferenceSystem,
     QGis)
-from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, Qt
+from qgis.gui import QgsRubberBand
 
 from safe.definitions.styles import (
     user_analysis_color,
@@ -27,6 +25,22 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+def singleton(class_):
+    """Singleton definition.
+
+    Method 1 from
+    https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
+    """
+    instances = {}
+
+    def get_instance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+    return get_instance
+
+
+@singleton
 class Extent(object):
     """Extent class to handle analysis extent.
 
@@ -59,7 +73,7 @@ class Extent(object):
 
     @property
     def show_rubber_bands(self):
-        """Return if we display rubberbands
+        """Return if we display rubberbands.
 
         :return: Boolean if we display rubberbands
         :rtype: bool

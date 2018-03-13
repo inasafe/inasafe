@@ -5,9 +5,7 @@
 import logging
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
-
 from safe import messaging as m
-from safe.utilities.i18n import tr
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)
 from safe.common.parameters.default_value_parameter_widget import (
@@ -17,6 +15,7 @@ from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.gui.tools.wizard.utilities import get_inasafe_default_value_fields
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -1,25 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+# coding=utf-8
+"""This module exposure metadata implementation."""
 
 from xml.etree import ElementTree
+
 from safe.metadata import BaseMetadata
 from safe.metadata.utilities import reading_ancillary_files, prettify_xml
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class GenericLayerMetadata(BaseMetadata):
@@ -48,14 +38,13 @@ class GenericLayerMetadata(BaseMetadata):
     """
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
-        """
-        Constructor
+        """Constructor
 
-        :param layer_uri: uri of the layer for which the metadata ae
+        :param layer_uri: URI of the layer for which the metadata.
         :type layer_uri: str
-        :param xml_uri: uri of an xml file to use
+        :param xml_uri: URI of an xml file to use.
         :type xml_uri: str
-        :param json_uri: uri of a json file to use
+        :param json_uri: URI of a json file to use.
         :type json_uri: str
         """
         # initialize base class
@@ -67,37 +56,34 @@ class GenericLayerMetadata(BaseMetadata):
         """
         calls the overridden method
 
-        :return: dictionary representation of the metadata
+        :return: Dictionary representation of the metadata.
         :rtype: dict
         """
         return super(GenericLayerMetadata, self).dict
 
     @property
     def json(self):
-        """
-        calls the overridden method
+        """Calls the overridden method.
 
-        :return: json representation of the metadata
+        :returns: json representation of the metadata.
         :rtype: str
         """
         return super(GenericLayerMetadata, self).json
 
     @property
     def xml(self):
-        """
-        calls the overridden method
+        """Calls the overridden method.
 
-        :return: xml representation of the metadata
+        :returns: XML representation of the metadata.
         :rtype: str
         """
         root = super(GenericLayerMetadata, self).xml
         return prettify_xml(ElementTree.tostring(root))
 
     def read_json(self):
-        """
-        calls the overridden method
+        """Calls the overridden method.
 
-        :return: the read metadata
+        :returns: The read metadata.
         :rtype: dict
         """
         with reading_ancillary_files(self):
@@ -106,10 +92,9 @@ class GenericLayerMetadata(BaseMetadata):
         return metadata
 
     def read_xml(self):
-        """
-        calls the overridden method
+        """Calls the overridden method.
 
-        :return: the read metadata
+        :returns: The read metadata.
         :rtype: ElementTree.Element
         """
         with reading_ancillary_files(self):
@@ -118,9 +103,7 @@ class GenericLayerMetadata(BaseMetadata):
         return root
 
     def update_report(self):
-        """
-        update the report.
-        """
+        """Update the report."""
         # TODO (MB): implement this by reading the kw and definitions
         self.report = self.report
         raise NotImplementedError()

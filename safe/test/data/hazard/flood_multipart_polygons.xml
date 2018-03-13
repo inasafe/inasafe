@@ -170,14 +170,10 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <thresholds>
             <gco:Dictionary/>
           </thresholds>
@@ -200,26 +196,23 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <value_map>
-            <gco:Dictionary>{&quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}}}}</gco:Dictionary>
+            <gco:Dictionary>{&quot;road&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;YES&quot;, &quot;yes&quot;]}}}, &quot;place&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;YES&quot;, &quot;yes&quot;]}}}, &quot;land_cover&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;YES&quot;, &quot;yes&quot;]}}}, &quot;structure&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;YES&quot;, &quot;yes&quot;]}}}, &quot;population&quot;: {&quot;flood_hazard_classes&quot;: {&quot;active&quot;: true, &quot;classes&quot;: {&quot;dry&quot;: [&quot;NO&quot;, &quot;no&quot;], &quot;wet&quot;: [&quot;YES&quot;, &quot;yes&quot;]}}}}</gco:Dictionary>
           </value_map>
           <hazard>
             <gco:CharacterString>flood</gco:CharacterString>
           </hazard>
-          <report>
-            <gco:CharacterString/>
-          </report>
+          <extra_keywords>
+            <gco:Dictionary/>
+          </extra_keywords>
           <keyword_version>
-            <gco:CharacterString>4.0</gco:CharacterString>
+            <gco:CharacterString>4.3</gco:CharacterString>
           </keyword_version>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
+          <active_band>
+            <gco:Integer/>
+          </active_band>
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>

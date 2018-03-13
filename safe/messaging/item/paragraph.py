@@ -23,7 +23,7 @@ from text import Text
 
 
 class Paragraph(MessageElement):
-    """A Paragraph class for text blocks much like the p in html"""
+    """A Paragraph class for text blocks much like the p in html."""
 
     def __init__(self, *args, **kwargs):
         """Creates a Paragraph object

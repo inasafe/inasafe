@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <population_field>
             <gco:CharacterString>population</gco:CharacterString>

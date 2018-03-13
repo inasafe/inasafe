@@ -170,7 +170,6 @@
                 </gmd:EX_Extent>
       </gmd:extent>
       <gmd:supplementalInformation>
-        <inasafe_keywords/>
         <inasafe>
           <multipart_polygon>
             <gco:Boolean/>
@@ -179,7 +178,25 @@
             <gco:Dictionary>{&quot;hazard_category&quot;: &quot;single_event&quot;, &quot;classification&quot;: &quot;ash_hazard_classes&quot;, &quot;title&quot;: &quot;hazard_geometry_cleaned&quot;, &quot;thresholds&quot;: {&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}, &quot;keyword_version&quot;: &quot;4.0&quot;, &quot;hazard&quot;: &quot;volcanic_ash&quot;, &quot;continuous_hazard_unit&quot;: &quot;centimetres&quot;, &quot;value_map&quot;: {&quot;high&quot;: [4], &quot;very high&quot;: [5], &quot;very low&quot;: [1], &quot;medium&quot;: [3], &quot;low&quot;: [2]}, &quot;layer_purpose&quot;: &quot;hazard&quot;, &quot;layer_geometry&quot;: &quot;polygon&quot;, &quot;inasafe_fields&quot;: {&quot;wood_exposure_count_field&quot;: &quot;wood_exposure_count&quot;, &quot;affected_field&quot;: &quot;affected&quot;, &quot;farm_exposure_count_field&quot;: &quot;farm_exposure_count&quot;, &quot;total_field&quot;: &quot;total&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;residential_exposure_count_field&quot;: &quot;residential_exposure_count&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}, &quot;layer_mode&quot;: &quot;classified&quot;}</gco:Dictionary>
           </hazard_keywords>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;production_value_rate_field&quot;: &quot;production_value_rate&quot;, &quot;affected_field&quot;: &quot;affected&quot;, &quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;size_field&quot;: &quot;size&quot;, &quot;exposure_class_field&quot;: &quot;exposure_class&quot;, &quot;productivity_field&quot;: &quot;productivity&quot;, &quot;production_cost_rate_field&quot;: &quot;production_cost_rate&quot;, &quot;production_value_field&quot;: &quot;production_value&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;productivity_rate_field&quot;: &quot;productivity_rate&quot;, &quot;production_cost_field&quot;: &quot;production_cost&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}</gco:Dictionary>
+            <gco:Dictionary>{
+              &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, 
+              &quot;production_value_rate_field&quot;: &quot;production_value_rate&quot;, 
+              &quot;affected_field&quot;: &quot;affected&quot;, 
+              &quot;exposure_id_field&quot;: &quot;exposure_id&quot;, 
+              &quot;size_field&quot;: &quot;size&quot;, 
+              &quot;exposure_class_field&quot;: &quot;exposure_class&quot;, 
+              &quot;productivity_field&quot;: &quot;productivity&quot;, 
+              &quot;affected_productivity_field&quot;: &quot;affected_productivity&quot;, 
+              &quot;production_cost_rate_field&quot;: &quot;production_cost_rate&quot;, 
+              &quot;production_value_field&quot;: &quot;production_value&quot;, 
+              &quot;affected_production_value_field&quot;: &quot;affected_production_value&quot;, 
+              &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, 
+              &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, 
+              &quot;productivity_rate_field&quot;: &quot;productivity_rate&quot;, 
+              &quot;production_cost_field&quot;: &quot;production_cost&quot;,
+              &quot;affected_production_cost_field&quot;: &quot;affected_production_cost&quot;, 
+              &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}
+            </gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary>{}</gco:Dictionary>
@@ -221,8 +238,6 @@
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
         </inasafe>
-        <inasafe_provenance>
-</inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>

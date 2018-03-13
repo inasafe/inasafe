@@ -5,7 +5,6 @@
 from qgis.core import QGis, QgsWKBTypes
 
 from safe.common.exceptions import InvalidLayerError
-
 from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 
@@ -74,7 +73,7 @@ def check_layer(layer, has_geometry=True):
     :param has_geometry: If the layer must have a geometry. True by default.
         If it's a raster layer, we will no check this parameter. If we do not
         want to check the geometry type, we can set it to None.
-    :type has_geometry: bool
+    :type has_geometry: bool,None
 
     :raise: InvalidLayerError
 
@@ -96,15 +95,19 @@ def check_layer(layer, has_geometry=True):
                     tr('The layer should not have many sublayers : {source} : '
                        '{names}').format(source=source, names=names))
 
-            if layer.geometryType() == QGis.UnknownGeometry:
+            # We only check the geometry if we have at least one feature.
+
+            if layer.geometryType() == QGis.UnknownGeometry and (
+                    layer.featureCount() != 0):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))
 
-            if layer.wkbType() == QgsWKBTypes.Unknown:
+            if layer.wkbType() == QgsWKBTypes.Unknown and (
+                    layer.featureCount() != 0):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))
 
-            if isinstance(has_geometry, bool):
+            if isinstance(has_geometry, bool) and layer.featureCount() != 0:
                 if layer.hasGeometryType() != has_geometry:
                     raise InvalidLayerError(
                         tr('The layer has not a correct geometry type.'))

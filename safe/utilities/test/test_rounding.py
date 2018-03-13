@@ -41,7 +41,7 @@ class TestCore(unittest.TestCase):
         self.assertEqual(rounding_full(9888888, False)[0], 9889000)
 
     def test_format_int(self):
-        """Test formatting integer"""
+        """Test formatting integer."""
         lang = locale()
 
         number = 10000000

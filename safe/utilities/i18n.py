@@ -1,11 +1,15 @@
 # coding=utf-8
 
+"""Functions to translate a word or to get the locale."""
+
+import logging
+
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
-import logging
+from PyQt4.QtCore import QCoreApplication, QLocale
+from PyQt4.QtCore import QSettings  # QSettings can't be moved to our class
 
 from safe.utilities.unicode import get_unicode
 
@@ -49,12 +53,12 @@ def tr(text, context='@default'):
             'The translation: "%s".\n'
             'The number of %% character does not match (%s and %s).'
             'Please check the translation in transifex for %s.' % (
-            text,
-            translated_text,
-            text.count('%'),
-            translated_text.count('%s'),
-            locale()
-        ))
+                text,
+                translated_text,
+                text.count('%'),
+                translated_text.count('%s'),
+                locale()
+            ))
         LOGGER.warning(content)
         return text
 

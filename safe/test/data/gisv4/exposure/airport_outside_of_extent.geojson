@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 6, "type": "airport" }, "geometry": { "type": "Point", "coordinates": [ 11888828.969854669645429, -672832.253089832491241 ] } },
+{ "type": "Feature", "properties": { "id": 7, "type": "airport" }, "geometry": { "type": "Point", "coordinates": [ 11871231.909814203158021, -689879.707537800888531 ] } },
+{ "type": "Feature", "properties": { "id": 8, "type": "airport" }, "geometry": { "type": "Point", "coordinates": [ 11910879.163456384092569, -705269.970208594459109 ] } }
+]
+}

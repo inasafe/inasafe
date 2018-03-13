@@ -3,8 +3,8 @@
 """Dictionary property."""
 
 import json
-from types import NoneType
 from datetime import datetime
+from types import NoneType
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty

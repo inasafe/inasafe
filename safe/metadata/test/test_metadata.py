@@ -1,31 +1,17 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Exception Classes.**
+"""Test Metadata."""
 
-Custom exception classes for the IS application.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
 from safe.metadata.utilities import insert_xml_element
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '12/10/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
 from safe.metadata import OutputLayerMetadata
 from unittest import TestCase
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class TestMetadata(TestCase):
@@ -38,7 +24,7 @@ class TestMetadata(TestCase):
             BaseMetadata('random_layer_id')
 
     def test_metadata(self):
-        """Check we can't instantiate with unsupported xml types"""
+        """Check we can't instantiate with unsupported xml types."""
         metadata = OutputLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/gco:RandomString'
 
@@ -48,7 +34,7 @@ class TestMetadata(TestCase):
             metadata.set('ISO19115_TEST', test_value, path)
 
     def test_insert_xml_element(self):
-        """Check we can't insert custom nested elements"""
+        """Check we can't insert custom nested elements."""
         root = ElementTree.Element('root')
         b = ElementTree.SubElement(root, 'b')
         ElementTree.SubElement(b, 'c')

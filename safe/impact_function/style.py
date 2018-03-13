@@ -3,6 +3,7 @@
 """Styles."""
 
 from collections import OrderedDict
+
 from PyQt4.QtGui import QColor
 from qgis.core import (
     QgsSymbolV2,
@@ -12,23 +13,21 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
     QGis,
-    QgsRasterShader,
-    QgsColorRampShader,
 )
 
+from safe.definitions.fields import hazard_class_field, hazard_count_field
+from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.styles import (
     line_width_exposure,
     template_without_thresholds,
     template_with_minimum_thresholds,
     template_with_maximum_thresholds,
     template_with_range_thresholds,
+    transparent,
 )
-from safe.definitions.fields import hazard_class_field, hazard_count_field
-from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
 from safe.utilities.rounding import format_number, coefficient_between_units
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -70,6 +69,7 @@ def hazard_class_style(layer, classification, display_null=False):
         style = QgsConditionalStyle()
         style.setName(hazard_class)
         style.setRule("hazard_class='%s'" % hazard_class)
+        style.setBackgroundColor(transparent)
         symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
         symbol.setColor(color)
         symbol.setSize(3)
@@ -100,6 +100,7 @@ def generate_classified_legend(
         analysis,
         exposure,
         hazard,
+        use_rounding,
         debug_mode):
     """Generate an ordered python structure with the classified symbology.
 
@@ -112,7 +113,10 @@ def generate_classified_legend(
     :param hazard: The hazard layer.
     :type hazard: QgsVectorLayer
 
-    :param debug_mode: Boolean if run in debug mode.
+    :param use_rounding: Boolean if we round number in the legend.
+    :type use_rounding: bool
+
+    :param debug_mode: Boolean if run in debug mode,to display the not exposed.
     :type debug_mode: bool
 
     :return: The ordered dictionary to use to build the classified style.
@@ -165,9 +169,6 @@ def generate_classified_legend(
 
     classes = OrderedDict()
 
-    # In debug mode we don't round number.
-    enable_rounding = not debug_mode
-
     for i, hazard_class in enumerate(hazard_classification['classes']):
         # Get the hazard class name.
         field_name = hazard_count_field['field_name'] % hazard_class['key']
@@ -181,7 +182,7 @@ def generate_classified_legend(
             value = 0
         value = format_number(
             value,
-            enable_rounding,
+            use_rounding,
             exposure_definitions['use_population_rounding'],
             coefficient)
 
@@ -211,7 +212,7 @@ def generate_classified_legend(
     if exposure_definitions['display_not_exposed'] or debug_mode:
         classes[not_exposed_class['key']] = _add_not_exposed(
             analysis_row,
-            enable_rounding,
+            use_rounding,
             exposure_definitions['use_population_rounding'],
             exposure_unit['abbreviation'],
             coefficient)

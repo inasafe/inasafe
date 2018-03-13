@@ -58,7 +58,7 @@ class MockQNetworkReply(QObject):
 
     # noinspection PyDocstring,PyPep8Naming
     def isFinished(self):
-        """ simulate download progress """
+        """simulate download progress."""
         self.progress += 1
         # noinspection PyUnresolvedReferences
         self.readyRead.emit()

@@ -305,7 +305,7 @@ density_exposure_unit = {
 }
 exposure_unit = {
     'key': 'exposure_unit',
-    'name': tr('Units'),
+    'name': tr('Unit'),
     'plural_name': tr('Units'),
     'abbreviation': tr('#'),
     'description': tr(

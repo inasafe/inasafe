@@ -80,14 +80,14 @@ class TestVersion(unittest.TestCase):
         for line in fid.readlines():
             if line.startswith('version'):
                 version_metadata = line.strip().split('=')[1]
+                self.assertEqual(version_metadata, inasafe_version)
 
             if line.startswith('status'):
                 status_metadata = line.strip().split('=')[1]
+                self.assertEqual(status_metadata, inasafe_release_status)
 
             fid.close()
 
-        self.assertEqual(version_metadata, inasafe_version)
-        self.assertEqual(status_metadata, inasafe_release_status)
 
 if __name__ == '__main__':
     unittest.main()
