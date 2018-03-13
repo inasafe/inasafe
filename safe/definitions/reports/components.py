@@ -6,24 +6,10 @@ from __future__ import absolute_import
 
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import (
-    exposure_structure, exposure_road, exposure_land_cover)
-from safe.definitions.fields import (
-    affected_field,
-    total_affected_field,
-    total_not_affected_field,
-    total_not_exposed_field,
-    population_exposed_per_mmi_field,
-    population_displaced_per_mmi,
-    fatalities_per_mmi_field,
-    population_count_field,
-    displaced_field,
-    fatalities_field,
-    affected_productivity_field,
-    affected_production_cost_field,
-    affected_production_value_field,
-    exposure_total_affected_field,
-    exposure_total_not_affected_field,
-    exposure_total_not_exposed_field)
+    exposure_structure,
+    exposure_road,
+    exposure_land_cover,
+    exposure_population)
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type,
@@ -38,6 +24,27 @@ from safe.definitions.reports import (
     pdf_product_tag,
     template_product_tag,
     qpt_product_tag)
+
+from safe.utilities.resources import resources_path
+from safe.definitions.fields import (
+    affected_field,
+    total_affected_field,
+    total_not_affected_field,
+    total_not_exposed_field,
+    population_exposed_per_mmi_field,
+    population_displaced_per_mmi,
+    fatalities_per_mmi_field,
+    population_count_field,
+    displaced_field,
+    fatalities_field,
+    female_displaced_count_field,
+    youth_displaced_count_field,
+    adult_displaced_count_field,
+    elderly_displaced_count_field,
+    exposure_count_field,
+    affected_productivity_field,
+    affected_production_cost_field,
+    affected_production_value_field)
 from safe.definitions.styles import charcoal_black
 from safe.report.extractors.action_notes import (
     action_checklist_extractor,
@@ -56,10 +63,10 @@ from safe.report.extractors.analysis_provenance_details import (
     analysis_provenance_details_pdf_extractor)
 from safe.report.extractors.analysis_question import (
     analysis_question_extractor)
+from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.composer import (
     qgis_composer_extractor,
     qgis_composer_infographic_extractor)
-from safe.report.extractors.general_report import general_report_extractor
 from safe.report.extractors.impact_table import (
     impact_table_extractor,
     impact_table_pdf_extractor)
@@ -80,7 +87,6 @@ from safe.report.report_metadata import (
     Jinja2ComponentsMetadata,
     QgisComposerComponentsMetadata)
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -120,24 +126,20 @@ general_report_component = {
         'hazard_header': tr('Hazard Zone'),
         # Used to customize header.
         # See issue inasafe#3688: remove all 'total' words
-        'reported_fields_header': tr('Exposure status'),
         'reported_fields': [
             {
                 'header': affected_field['name'],
-                'field': total_affected_field,
-                'multi_exposure_field': exposure_total_affected_field
+                'field': total_affected_field
             },
             {
                 # specify it directly since there is no field for
                 # unaffected only.
                 'header': tr('Not Affected'),
-                'field': total_not_affected_field,
-                'multi_exposure_field': exposure_total_not_affected_field
+                'field': total_not_affected_field
             },
             {
                 'header': tr('Not Exposed'),
-                'field': total_not_exposed_field,
-                'multi_exposure_field': exposure_total_not_exposed_field
+                'field': total_not_exposed_field
             },
             {
                 'header': displaced_field['name'],
@@ -236,7 +238,7 @@ analysis_detail_component = {
         'breakdown_header_class_format': tr('{exposure} class'),
         'header': tr('Analysis Detail'),
         'table_header_format': tr(
-            'Estimated {title} {unit} affected by {exposure} type'),
+            'Estimated {title} {unit} by {exposure} type'),
         'notes': [],
         'extra_table_header_format': tr(
             'Estimated loss by affected {exposure} type'),
@@ -247,9 +249,6 @@ analysis_detail_component = {
                 affected_production_value_field,
             ],
         },
-        'place_with_population': {
-            'header': tr('Total exposed population')
-        }
     }
 }
 
@@ -290,7 +289,7 @@ notes_assumptions_component = {
         'affected_note_format': {
             'item_header': tr('affected notes'),
             'item_list': [
-                tr('Exposures in the following hazard classes are considered '
+                tr('Exposures in this following hazard classes are considered '
                    'affected: {hazard_classes}')
             ]
         },
@@ -352,7 +351,7 @@ aggregation_result_component = {
         'header': tr('Aggregation Result'),
         'notes': [],
         'table_header_format': tr(
-            'Estimated {title} {unit} affected by aggregation area'),
+            'Estimated {title} {unit} by aggregation area'),
         'aggregation_area_default_header': tr('Aggregation area'),
         'total_header': tr('Total'),
         'total_in_aggregation_header': tr('Total'),
@@ -384,8 +383,6 @@ aggregation_postprocessors_component = {
             'section_header_format': tr(
                 'Estimated number of people displaced by {header_name} '
                 'per aggregation area'),
-            'section_header_format_no_aggregation': tr(
-                'Estimated number of people displaced by {header_name} '),
             'group_header_format': tr('{header_name} breakdown'),
             'zero_displaced_message': tr(
                 'Analysis produced 0 displaced count. '
@@ -480,7 +477,7 @@ population_chart_svg_component = {
     'tags': [svg_product_tag],
     'extra_args': {
         'chart_title': tr('Estimated total population'),
-        'total_header': tr('Exposed')
+        'total_header': tr('Affected')
     }
 }
 
@@ -600,7 +597,8 @@ standard_impact_report_metadata_html = {
             'output_path': 'impact-report-output.html',
             'resources': [
                 resources_path('css'),
-                resources_path('js')],
+                resources_path('js'),
+                resources_path('img')],
             'template': 'standard-template/'
                         'jinja2/'
                         'impact-report-layout.html',
@@ -676,136 +674,55 @@ standard_impact_report_metadata_html = {
     ]
 }
 
-# Impact Report PDF
-impact_report_pdf_component = {
-    'key': 'impact-report-pdf',
-    'type': qgis_composer_component_type,
-    'processor': qgis_composer_html_renderer,
-    'extractor': impact_table_pdf_extractor,
-    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-    'output_path': 'impact-report-output.pdf',
-    'tags': [
-        final_product_tag,
-        table_product_tag,
-        pdf_product_tag
-    ],
-    'extra_args': {
-        'html_report_component_key': 'impact-report'
-    }
-}
-
-# Action Checklist Report PDF
-action_checklist_pdf_component = {
-    'key': 'action-checklist-pdf',
-    'type': qgis_composer_component_type,
-    'processor': qgis_composer_html_renderer,
-    'extractor': action_checklist_report_pdf_extractor,
-    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-    'output_path': 'action-checklist-output.pdf',
-    'tags': [
-        final_product_tag,
-        table_product_tag,
-        pdf_product_tag
-    ]
-}
-
-# Analysis Provenance Details Report PDF
-analysis_provenance_details_pdf_component = {
-    'key': 'analysis-provenance-details-report-pdf',
-    'type': qgis_composer_component_type,
-    'processor': qgis_composer_html_renderer,
-    'extractor': analysis_provenance_details_pdf_extractor,
-    'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-    'output_path': 'analysis-provenance-details-report-output.pdf',
-    'tags': [
-        final_product_tag,
-        table_product_tag,
-        pdf_product_tag
-    ]
-}
-
 # Standard PDF Output for impact report
 standard_impact_report_metadata_pdf = {
     'key': 'analysis-result-pdf',
     'name': 'analysis-result-pdf',
     'template_folder': resources_path('report-templates'),
     'components': standard_impact_report_metadata_html['components'] + [
-        impact_report_pdf_component,
-        action_checklist_pdf_component,
-        analysis_provenance_details_pdf_component
-    ]
-}
-
-# Default multi exposure report components
-multi_exposure_impact_report_component_metadata = [
-    analysis_question_component,
-    general_report_component
-]
-
-# Standard HTML output for multi exposure impact report
-standard_multi_exposure_impact_report_metadata_html = {
-    'key': 'multi-exposure-analysis-result-html',
-    'name': 'multi-exposure-analysis-result-html',
-    'template_folder': resources_path('report-templates'),
-    'components': multi_exposure_impact_report_component_metadata + [
+        # Impact Report PDF
         {
-            'key': 'multi-exposure-impact-report',
-            'type': jinja2_component_type,
-            'processor': jinja2_renderer,
-            'extractor': impact_table_extractor,
-            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
-            'output_path': 'multi-exposure-impact-report-output.html',
-            'resources': [
-                resources_path('css'),
-                resources_path('js')],
-            'template': 'standard-template/'
-                        'jinja2/'
-                        'multi-exposure-impact-report-layout.html',
+            'key': 'impact-report-pdf',
+            'type': qgis_composer_component_type,
+            'processor': qgis_composer_html_renderer,
+            'extractor': impact_table_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'impact-report-output.pdf',
             'tags': [
                 final_product_tag,
                 table_product_tag,
-                html_product_tag
-            ],
-            'extra_args': {
-                'components_list': {
-                    'analysis_question': analysis_question_component,
-                    'general_report': general_report_component,
-                }
-            }
+                pdf_product_tag
+            ]
+        },
+        # Action Checklist Report PDF
+        {
+            'key': 'action-checklist-pdf',
+            'type': qgis_composer_component_type,
+            'processor': qgis_composer_html_renderer,
+            'extractor': action_checklist_report_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'action-checklist-output.pdf',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                pdf_product_tag
+            ]
+        },
+        # Analysis Provenance Details Report PDF
+        {
+            'key': 'analysis-provenance-details-report-pdf',
+            'type': qgis_composer_component_type,
+            'processor': qgis_composer_html_renderer,
+            'extractor': analysis_provenance_details_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'analysis-provenance-details-report-output.pdf',
+            'tags': [
+                final_product_tag,
+                table_product_tag,
+                pdf_product_tag
+            ]
         },
     ]
-}
-
-# Standard PDF Output for impact report
-standard_multi_exposure_impact_report_metadata_pdf = {
-    'key': 'multi-exposure-analysis-result-pdf',
-    'name': 'multi-exposure-analysis-result-pdf',
-    'template_folder': resources_path('report-templates'),
-    'components': (
-        standard_multi_exposure_impact_report_metadata_html['components'] + (
-            [
-                # Impact Report PDF
-                {
-                    'key': 'multi-exposure-impact-report-pdf',
-                    'type': qgis_composer_component_type,
-                    'processor': qgis_composer_html_renderer,
-                    'extractor': impact_table_pdf_extractor,
-                    'output_format': (
-                        QgisComposerComponentsMetadata.OutputFormat.PDF),
-                    'output_path': 'multi-exposure-impact-report-output.pdf',
-                    'tags': [
-                        final_product_tag,
-                        table_product_tag,
-                        pdf_product_tag
-                    ],
-                    'extra_args': {
-                        'html_report_component_key': (
-                            'multi-exposure-impact-report')
-                    }
-                },
-            ]
-        )
-    )
 }
 
 map_report_extra_args = {
@@ -936,9 +853,3 @@ infographic_report = {
         population_infographic_component
     ]
 }
-
-all_default_report_components = [
-    standard_impact_report_metadata_pdf,
-    standard_multi_exposure_impact_report_metadata_pdf,
-    map_report,
-    infographic_report]

@@ -1,27 +1,28 @@
 # coding=utf-8
-"""InaSAFE Plugin."""
+"""InaSAFE Plugin"""
 
 import sys
 import os
-from functools import partial
-from distutils.version import StrictVersion
+import logging
 
 # noinspection PyUnresolvedReferences
-import qgis  # NOQA pylint: disable=unused-import
+import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 from qgis.core import (
+    QGis,
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
     QgsMapLayer,
     QgsExpression,
-    QgsProject,
-)
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
+    QLocale,
+    QTranslator,
     QCoreApplication,
     Qt,
-)
+    QSettings)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QAction,
@@ -30,12 +31,10 @@ from PyQt4.QtGui import (
     QToolButton,
     QMenu,
     QLineEdit,
-    QInputDialog,
-)
+    QInputDialog)
 
-from safe.common.custom_logging import LOGGER
 from safe.utilities.expressions import qgis_expressions
-from safe.definitions.versions import inasafe_release_status, inasafe_version
+from safe.definitions.versions import inasafe_release_status
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -48,10 +47,9 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard
 )
 from safe.definitions.utilities import get_field_groups
-from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import is_keyword_version_supported
-from safe.utilities.settings import setting, set_setting
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -92,7 +90,6 @@ class Plugin(object):
         self.action_dock = None
         self.action_extent_selector = None
         self.action_field_mapping = None
-        self.action_multi_exposure = None
         self.action_function_centric_wizard = None
         self.action_import_dialog = None
         self.action_keywords_wizard = None
@@ -118,11 +115,6 @@ class Plugin(object):
         # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
-
-        developer_mode = setting(
-            'developer_mode', False, expected_type=bool)
-        self.hide_developer_buttons = (
-            inasafe_release_status == 'final' and not developer_mode)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -263,9 +255,9 @@ class Plugin(object):
             'Open InaSAFE multi buffer'))
         self.action_multi_buffer.setWhatsThis(self.tr(
             'Open InaSAFE multi buffer'))
-        self.action_multi_buffer.triggered.connect(self.show_multi_buffer)
-        self.add_action(
-            self.action_multi_buffer,
+        self.action_multi_buffer.triggered.connect(
+            self.show_multi_buffer)
+        self.add_action(self.action_multi_buffer,
             add_to_toolbar=self.full_toolbar)
 
     def _create_minimum_needs_options_action(self):
@@ -339,20 +331,7 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
-        self.add_action(self.action_import_dialog, add_to_toolbar=True)
-
-    def _create_geonode_uploader_action(self):
-        """Create action for Geonode uploader dialog."""
-        if self.hide_developer_buttons:
-            return
-        icon = resources_path('img', 'icons', 'geonode.png')
-        label = tr('Geonode Uploader')
-        self.action_geonode = QAction(
-            QIcon(icon), label, self.iface.mainWindow())
-        self.action_geonode.setStatusTip(label)
-        self.action_geonode.setWhatsThis(label)
-        self.action_geonode.triggered.connect(self.show_geonode_uploader)
-        self.add_action(self.action_geonode, add_to_toolbar=False)
+        self.add_action(self.action_import_dialog)
 
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -367,7 +346,7 @@ class Plugin(object):
             'Use this to add an OSM layer to your map. '
             'It needs internet access to function.'))
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
-        self.add_action(self.action_add_osm_layer, add_to_toolbar=True)
+        self.add_action(self.action_add_osm_layer)
 
     def _create_show_definitions_action(self):
         """Create action for showing definitions / help."""
@@ -387,8 +366,8 @@ class Plugin(object):
             add_to_toolbar=True)
 
     def _create_metadata_converter_action(self):
-        """Create action for showing metadata converter dialog."""
-        icon = resources_path('img', 'icons', 'show-metadata-converter.svg')
+        """Create action for showing metadata converter qdialog."""
+        icon = resources_path('img', 'icons', 'show-inasafe-help.svg')
         self.action_metadata_converter = QAction(
             QIcon(icon),
             self.tr('InaSAFE Metadata Converter'),
@@ -400,7 +379,8 @@ class Plugin(object):
         self.action_metadata_converter.triggered.connect(
             self.show_metadata_converter)
         self.add_action(
-            self.action_metadata_converter, add_to_toolbar=self.full_toolbar)
+            self.action_metadata_converter,
+            add_to_toolbar=True)
 
     def _create_field_mapping_action(self):
         """Create action for showing field mapping dialog."""
@@ -414,24 +394,11 @@ class Plugin(object):
         self.action_field_mapping.setWhatsThis(self.tr(
             'Use this tool to assign field mapping in layer.'))
         self.action_field_mapping.setEnabled(False)
-        self.action_field_mapping.triggered.connect(self.show_field_mapping)
+        self.action_field_mapping.triggered.connect(
+            self.show_field_mapping)
         self.add_action(
-            self.action_field_mapping, add_to_toolbar=self.full_toolbar)
-
-    def _create_multi_exposure_action(self):
-        """Create action for showing the multi exposure tool."""
-        self.action_multi_exposure = QAction(
-            QIcon(resources_path('img', 'icons', 'show-multi-exposure.svg')),
-            self.tr('InaSAFE Multi Exposure Tool'),
-            self.iface.mainWindow())
-        self.action_multi_exposure.setStatusTip(self.tr(
-            'Open the multi exposure tool.'))
-        self.action_multi_exposure.setWhatsThis(self.tr(
-            'Open the multi exposure tool.'))
-        self.action_multi_exposure.setEnabled(True)
-        self.action_multi_exposure.triggered.connect(self.show_multi_exposure)
-        self.add_action(
-            self.action_multi_exposure, add_to_toolbar=self.full_toolbar)
+            self.action_field_mapping,
+            add_to_toolbar=True)
 
     def _create_add_petabencana_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -449,7 +416,7 @@ class Plugin(object):
             self.add_petabencana_layer)
         self.add_action(
             self.action_add_petabencana_layer,
-            add_to_toolbar=self.full_toolbar)
+            add_to_toolbar=False)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
@@ -462,7 +429,9 @@ class Plugin(object):
         self.action_toggle_rubberbands.setWhatsThis(message)
         # Set initial state
         self.action_toggle_rubberbands.setCheckable(True)
-        flag = setting('showRubberBands', False, expected_type=bool)
+        settings = QSettings()
+        flag = bool(settings.value(
+            'inasafe/showRubberBands', False, type=bool))
         self.action_toggle_rubberbands.setChecked(flag)
         # noinspection PyUnresolvedReferences
         self.action_toggle_rubberbands.triggered.connect(
@@ -486,59 +455,71 @@ class Plugin(object):
 
     def _create_test_layers_action(self):
         """Create action for adding layers (developer mode, non final only)."""
-        if self.hide_developer_buttons:
-            return
+        final_release = inasafe_release_status == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path('img', 'icons', 'add-test-layers.svg')
+            self.action_add_layers = QAction(
+                QIcon(icon),
+                self.tr('Add Test Layers'),
+                self.iface.mainWindow())
+            self.action_add_layers.setStatusTip(self.tr(
+                'Add test layers'))
+            self.action_add_layers.setWhatsThis(self.tr(
+                'Add test layers'))
+            self.action_add_layers.triggered.connect(
+                self.add_test_layers)
 
-        icon = resources_path('img', 'icons', 'add-test-layers.svg')
-        self.action_add_layers = QAction(
-            QIcon(icon),
-            self.tr('Add Test Layers'),
-            self.iface.mainWindow())
-        self.action_add_layers.setStatusTip(self.tr(
-            'Add test layers'))
-        self.action_add_layers.setWhatsThis(self.tr(
-            'Add test layers'))
-        self.action_add_layers.triggered.connect(
-            self.add_test_layers)
-
-        self.add_action(self.action_add_layers)
+            self.add_action(self.action_add_layers)
 
     def _create_run_test_action(self):
         """Create action for running tests (developer mode, non final only)."""
-        if self.hide_developer_buttons:
-            return
+        final_release = inasafe_release_status == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
 
-        default_package = unicode(
-            setting('testPackage', 'safe', expected_type=str))
-        msg = self.tr('Run tests in %s' % default_package)
+            default_package = unicode(settings.value(
+                'inasafe/testPackage', 'safe', type=str))
+            msg = self.tr('Run tests in %s' % default_package)
 
-        self.test_button = QToolButton()
-        self.test_button.setMenu(QMenu())
-        self.test_button.setPopupMode(QToolButton.MenuButtonPopup)
+            self.test_button = QToolButton()
+            self.test_button.setMenu(QMenu())
+            self.test_button.setPopupMode(QToolButton.MenuButtonPopup)
 
-        icon = resources_path('img', 'icons', 'run-tests.svg')
-        self.action_run_tests = QAction(
-            QIcon(icon), msg, self.iface.mainWindow())
+            icon = resources_path('img', 'icons', 'run-tests.svg')
+            self.action_run_tests = QAction(
+                QIcon(icon),
+                msg,
+                self.iface.mainWindow())
 
-        self.action_run_tests.setStatusTip(msg)
-        self.action_run_tests.setWhatsThis(msg)
-        self.action_run_tests.triggered.connect(self.run_tests)
+            self.action_run_tests.setStatusTip(msg)
+            self.action_run_tests.setWhatsThis(msg)
+            self.action_run_tests.triggered.connect(
+                self.run_tests)
 
-        self.test_button.menu().addAction(self.action_run_tests)
-        self.test_button.setDefaultAction(self.action_run_tests)
+            self.test_button.menu().addAction(self.action_run_tests)
+            self.test_button.setDefaultAction(self.action_run_tests)
 
-        self.action_select_package = QAction(
-            QIcon(icon), self.tr('Select package'), self.iface.mainWindow())
+            self.action_select_package = QAction(
+                QIcon(icon),
+                self.tr('Select package'),
+                self.iface.mainWindow())
 
-        self.action_select_package.setStatusTip(self.tr('Select Test Package'))
-        self.action_select_package.setWhatsThis(self.tr('Select Test Package'))
-        self.action_select_package.triggered.connect(
-            self.select_test_package)
-        self.test_button.menu().addAction(self.action_select_package)
-        self.toolbar.addWidget(self.test_button)
+            self.action_select_package.setStatusTip(self.tr(
+                'Select Test Package'))
+            self.action_select_package.setWhatsThis(self.tr(
+                'Select Test Package'))
+            self.action_select_package.triggered.connect(
+                self.select_test_package)
+            self.test_button.menu().addAction(self.action_select_package)
+            self.toolbar.addWidget(self.test_button)
 
-        self.add_action(self.action_run_tests, add_to_toolbar=False)
-        self.add_action(self.action_select_package, add_to_toolbar=False)
+            self.add_action(self.action_run_tests, add_to_toolbar=False)
+            self.add_action(self.action_select_package, add_to_toolbar=False)
 
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
@@ -581,12 +562,10 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_field_mapping_action()
-        self._create_multi_exposure_action()
         self._create_metadata_converter_action()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
-        self._create_geonode_uploader_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_multi_buffer_action()
@@ -605,10 +584,6 @@ class Plugin(object):
         # Also deal with the fact that on start of QGIS dock may already be
         # hidden.
         self.action_dock.setChecked(self.dock_widget.isVisible())
-
-        self.iface.initializationCompleted.connect(
-            partial(self.show_welcome_message)
-        )
 
     def _add_spacer_to_menu(self):
         """Create a spacer to the menu to separate action groups."""
@@ -707,9 +682,10 @@ class Plugin(object):
 
     def select_test_package(self):
         """Select the test package."""
+        settings = QSettings()
         default_package = 'safe'
-        user_package = unicode(
-            setting('testPackage', default_package, expected_type=str))
+        user_package = unicode(settings.value(
+            'inasafe/testPackage', default_package, type=str))
 
         test_package, _ = QInputDialog.getText(
             self.iface.mainWindow(),
@@ -721,7 +697,7 @@ class Plugin(object):
         if test_package == '':
             test_package = default_package
 
-        set_setting('testPackage', test_package)
+        settings.setValue('inasafe/testPackage', test_package)
         msg = self.tr('Run tests in %s' % test_package)
         self.action_run_tests.setWhatsThis(msg)
         self.action_run_tests.setText(msg)
@@ -732,7 +708,9 @@ class Plugin(object):
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
-        package = unicode(setting('testPackage', 'safe', expected_type=str))
+        settings = QSettings()
+        package = unicode(settings.value(
+            'inasafe/testPackage', 'safe', type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
@@ -793,43 +771,10 @@ class Plugin(object):
         dialog = OptionsDialog(
             iface=self.iface,
             parent=self.iface.mainWindow())
-        dialog.show_option_dialog()
         if dialog.exec_():  # modal
             self.dock_widget.read_settings()
             from safe.gui.widgets.message import getting_started_message
             send_static_message(self.dock_widget, getting_started_message())
-            # Issue #4734, make sure to update the combobox after update the
-            # InaSAFE option
-            self.dock_widget.get_layers()
-
-    def show_welcome_message(self):
-        """Show the welcome message."""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.options_dialog import OptionsDialog
-
-        # Do not show by default
-        show_message = False
-
-        previous_version = StrictVersion(setting('previous_version'))
-        current_version = StrictVersion(inasafe_version)
-
-        # Set previous_version to the current inasafe_version
-        set_setting('previous_version', inasafe_version)
-
-        if setting('always_show_welcome_message', expected_type=bool):
-            # Show if it the setting said so
-            show_message = True
-        elif previous_version < current_version:
-            # Always show if the user installed new version
-            show_message = True
-
-        if show_message:
-            dialog = OptionsDialog(
-                iface=self.iface,
-                parent=self.iface.mainWindow())
-            dialog.show_welcome_dialog()
-            if dialog.exec_():  # modal
-                self.dock_widget.read_settings()
 
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
@@ -897,13 +842,6 @@ class Plugin(object):
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
-    def show_geonode_uploader(self):
-        """Show the Geonode uploader dialog."""
-        from safe.gui.tools.geonode_uploader import GeonodeUploaderDialog
-
-        dialog = GeonodeUploaderDialog(self.iface.mainWindow())
-        dialog.show()  # non modal
-
     def add_osm_layer(self):
         """Add OSM tile layer to the map.
 
@@ -914,7 +852,12 @@ class Plugin(object):
         layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
         registry = QgsMapLayerRegistry.instance()
 
-        # Try to add it as the last layer in the list
+        # For older versions we just add directly to the top of legend
+        if QGis.QGIS_VERSION_INT < 20400:
+            # True flag adds layer directly to legend
+            registry.addMapLayer(layer, True)
+            return
+        # Otherwise try to add it as the last layer in the list
         # False flag prevents layer being added to legend
         registry.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
@@ -955,13 +898,6 @@ class Plugin(object):
         )
         dialog.exec_()
 
-    def show_multi_exposure(self):
-        """Show InaSAFE Multi Exposure."""
-        from safe.gui.tools.multi_exposure_dialog import MultiExposureDialog
-        dialog = MultiExposureDialog(
-            self.iface.mainWindow(), self.iface)
-        dialog.exec_()  # modal
-
     def add_petabencana_layer(self):
         """Add petabencana layer to the map.
 
@@ -983,7 +919,7 @@ class Plugin(object):
         dialog.exec_()  # modal
 
     def save_scenario(self):
-        """Save current scenario to text file."""
+        """Save current scenario to text file"""
         from safe.gui.tools.save_scenario import SaveScenarioDialog
 
         dialog = SaveScenarioDialog(
@@ -1012,12 +948,8 @@ class Plugin(object):
                     enable_field_mapping_tool = False
                 else:
                     keywords = KeywordIO().read_keywords(layer)
-                    keywords_version = keywords.get('keyword_version')
-                    if not keywords_version:
-                        supported = False
-                    else:
-                        supported = (
-                            is_keyword_version_supported(keywords_version))
+                    supported = is_keyword_version_supported(
+                        keywords.get('keyword_version'))
                     if not supported:
                         enable_field_mapping_tool = False
                     else:

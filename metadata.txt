@@ -15,8 +15,8 @@ qgisMaximumVersion=2.18.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-# If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=4.3.2
+# If you change version and status here, please also change in safe/definitions/versions.py
+version=4.2.5
 # alpha, beta, rc or final
 status=final
 
@@ -26,43 +26,47 @@ status=final
 # Optional items:
 
 changelog=
-    Version 4.3.2:
-    - Run the impact function if we have 0 feature exposed
-    - Fix multiexposure dialog when you launch it twice
-    - Add more extra keywords for flood hazard
-    Version 4.3.1:
-    - Add version number in the help doc #4872.
-    - Enable Earthquake MMI scale for place exposure #4875.
-    - Fix the behaviour of batch runner output directory.
-    - Fix missing earthquake extra keywords in wizard.
-    Version 4.3:
-    - New multi exposure tool where you can run one hazard on many exposures at the same time and get a combined report
-    - New dam break hazard
-    - Add metadata converter tool to version 3.5 to make it work with GeoSAFE
-    - Add InaSAFE Profile to set custom affected and displacement rate
-    - Add a warning if another plugin is conflicting with InaSAFE on the file system
-    - Special tool for reporting in the multi exposure dialog to set a custom layer order
-    - Add InaSAFE welcome message
-    - Add a warning if another plugin is conflicting with InaSAFE on the file system
-    - Tidy up settings dialog
-    - Support population count in place exposure
-    - Use percentage for ratio in the GUI
-    - Add total exposed field
-    - Add Evacuation centres in buildings and places classifications
-    - Add bearing, distance and cardinality postprocessors if we run an earthquake on places
-    - The impact layer from an earthquake on places is ordered by distance
-    - Add new QGIS expressions to fetch information in QGIS Impact layers or keywords
-    - HTML expressions for reporting usage.
-    - Impact Function and Multi-Exposure Impact Function serialization
-    - Add new method to generate a report in ImpactFunction object
-    - Bring back the old behaviour of generating report. (option to choose custom template)
-    - Map report and general report for Multi-Exposure Impact Function.
-    - Use aggregation CRS instead of exposure CRS or map canvas CRS if no aggregation layer is provided
-    - Add extra keywords for supporting rich reporting (e.g. earthquake's epicenter location, volcanic ash location)
-    - Tidy up metadata (remove unused properties)
-    - Creating contour for earthquake as preprocessor.
-    - Improve code layout (Flake8, PEP 257, PEP8, SideCI ...)
-    - Fix various bugs, like in summary calculation, keyword wizard, productivity post processors, dock
+    Version 4.2.6:
+    - Fix key error #4738
+    - Fix storing empty fields in Field Mapping from Keyword Wizard #4739
+    - Fix formula for productivity #4566
+    - Fix Metadata converter's window off the screen #4732
+    Version 4.2.5:
+    - Fix bug Exception reading keywords #4632
+    - Fix bug ratio = 0 when the data is integer #4669
+    - Fix using custom disclaimer, north arrow, and logo #4671
+    - Fix bug when population == 0 #4659
+    - Add metadata converter from metadata version 4.x to version 3.5
+    Version 4.2.4
+    - Move resources and translation to safe package.
+    - Fix bug Analysis Detail from Landcover Impact Report not shown in Bahasa version #4487
+    - Fix several typos and translation issue in Bahasa Indonesia
+    - Cleaning up code in the wizard #4485
+    Version 4.2.3
+    - Fix failed to assign keyword by using IFCW
+    - Fix wrong layer intersection checking in IFCW
+    - Earthquake fatality model selection
+    - Update definition for Petabencana flood class "use caution"
+    - Fix wizard layout
+    - Fix CRS helper expression
+    Version 4.2.2
+    - Fix fail to install inasafe from plugin manager
+    Version 4.2.1
+    - Fix missing CRS in map report
+    - Add some missing translations for Bahasa Indonesia and French
+    Version 4.2.0
+    - Reporting : Expose provenance; as project variables for easy reporting
+    - Reporting : Re-implemented infographics as composer templates
+    - Reporting : Enable atlas generation on reporting
+    - Reporting : Added many custom InaSAFE specific QGIS Expressions to make reporting easier.
+    - Reporting : Fixed bug where maps in report were blank when using OTFP
+    - Impact Functions : Support for Land Cover economic impact calculations
+    - Impact Functions : Added support for working with multi-band rasters
+    - Impact Functions : Removed separate workflow for Earthquake impact functions
+    - Impact Functions : Allow exposure data driven classification
+    - Tools : PR #4379 Show uniquness in the aggregation ID field in keyword wizard
+    - Documentation : Wizards now have context sensitive help
+    - Code Internals : Command line and 'headless' code moved to their own repos
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk

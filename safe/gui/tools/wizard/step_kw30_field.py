@@ -1,34 +1,30 @@
 # coding=utf-8
 """InaSAFE Wizard Step Field."""
 
-import logging
 import re
+import logging
 from copy import deepcopy
 
 from PyQt4.QtCore import QVariant, Qt
 from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
 
+from safe.utilities.i18n import tr
 from safe import messaging as m
-from safe.definitions.fields import population_count_field
-from safe.definitions.layer_modes import layer_mode_continuous
+
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
-from safe.definitions.utilities import (
-    get_fields,
-    get_non_compulsory_fields,
-    get_field_groups,
-    definition,
-    get_compulsory_fields,
-)
-from safe.gui.tools.wizard.utilities import (
-    get_question_text, skip_inasafe_field)
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.utilities.i18n import tr
+from safe.gui.tools.wizard.utilities import (
+    get_question_text, skip_inasafe_field)
+from safe.definitions.utilities import (
+    get_fields, get_non_compulsory_fields, get_field_groups, definition)
+from safe.definitions.fields import population_count_field
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -84,15 +80,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Has layer groups, go to field mapping
         field_groups = get_field_groups(
             layer_purpose['key'], subcategory['key'])
-        compulsory_field = get_compulsory_fields(
-            layer_purpose['key'], subcategory['key'])
-
-        # It's aggregation and has field_groups.
-        if field_groups and layer_purpose == layer_purpose_aggregation:
-            return self.parent.step_kw_fields_mapping
-
-        # It has field_groups and the compulsory field is population count.
-        if field_groups and compulsory_field == population_count_field:
+        if field_groups:
             return self.parent.step_kw_fields_mapping
 
         # Has classifications, go to multi classifications
@@ -142,7 +130,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         field_descriptions = ''
         feature_count = self.parent.layer.featureCount()
         for field_name in field_names:
-            layer_fields = self.parent.layer.fields()
+            layer_fields = self.parent.layer.dataProvider().fields()
             field_index = layer_fields.indexFromName(field_name)
             # Exit if the selected field_names comes from a previous wizard run
             if field_index < 0:
@@ -162,7 +150,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 '<br><b>Field type</b>: {field_type}').format(
                 field_type=field_type)
             if (feature_count != -1 and (
-                    layer_purpose == layer_purpose_aggregation)):
+                        layer_purpose == layer_purpose_aggregation)):
                 if len(unique_values) == feature_count:
                     unique = tr('Yes')
                 else:
@@ -243,7 +231,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 subcategory_unit_relation)
         else:
             question_text = field_question_subcategory_classified % (
-                subcategory['name'].lower(), subcategory['name'].lower())
+                subcategory['name'])
         if self.mode == SINGLE_MODE:
             question_text += tr('\nYou can select 1 field only.')
             self.lstFields.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -257,7 +245,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         self.lstFields.clear()
 
         default_item = None
-        for field in self.parent.layer.fields():
+        for field in self.parent.layer.dataProvider().fields():
             # Skip if it's not in the field types requirement
             if field.type() not in layer_field_types:
                 continue

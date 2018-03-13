@@ -1,28 +1,27 @@
 # coding=utf-8
-"""Wizard Utilities Functions."""
+"""Wizard Utilities Functions"""
 
 import logging
-import os
 import sys
-
 from PyQt4 import QtCore
 from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
+
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
+
 from safe.common.version import get_version
 from safe.definitions.constants import RECENT, GLOBAL
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.definitions.layer_purposes import (
-    layer_geometry_line, layer_geometry_point, layer_geometry_polygon)
-from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
-from safe.utilities.default_values import get_inasafe_default_value_qsetting
+from safe.definitions.layer_purposes import (
+    layer_geometry_line, layer_geometry_point, layer_geometry_polygon)
 from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
 from safe.utilities.utilities import is_keyword_version_supported
+from safe.utilities.default_values import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -38,10 +37,6 @@ RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-not_set_image_path = resources_path(
-    'img', 'wizard', 'keyword-subcategory-notset.svg')
 
 
 def get_question_text(constant):
@@ -254,9 +249,10 @@ def skip_inasafe_field(layer, inasafe_fields):
     :returns: True if there are no specified field type.
     :rtype: bool
     """
+    layer_data_provider = layer.dataProvider()
     # Iterate through all inasafe fields
     for inasafe_field in inasafe_fields:
-        for field in layer.fields():
+        for field in layer_data_provider.fields():
             # Check the field type
             if isinstance(inasafe_field['type'], list):
                 if field.type() in inasafe_field['type']:
@@ -265,20 +261,3 @@ def skip_inasafe_field(layer, inasafe_fields):
                 if field.type() == inasafe_field['type']:
                     return False
     return True
-
-
-def get_image_path(definition):
-    """Helper to get path of image from a definition in resource directory.
-
-    :param definition: A definition (hazard, exposure).
-    :type definition: dict
-
-    :returns: The definition's image path.
-    :rtype: str
-    """
-    path = resources_path(
-        'img', 'wizard', 'keyword-subcategory-%s.svg' % definition['key'])
-    if os.path.exists(path):
-        return path
-    else:
-        return not_set_image_path

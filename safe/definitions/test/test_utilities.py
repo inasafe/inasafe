@@ -6,10 +6,6 @@ from tempfile import mkdtemp
 from os.path import join, exists, split
 import shutil
 
-from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from PyQt4.QtCore import QSettings
-
 from safe import definitions
 
 from safe.definitions import (
@@ -20,7 +16,6 @@ from safe.definitions import (
     hazard_volcanic_ash,
     hazard_generic,
     hazard_cyclone,
-    hazard_dam_break,
     exposure_population,
     exposure_land_cover,
     exposure_road,
@@ -52,9 +47,7 @@ from safe.definitions import (
     production_cost_rate_field,
     production_value_rate_field,
     provenance_host_name,
-    provenance_user,
-    provenance_crs,
-    not_exposed_class,
+    provenance_user
 )
 from safe.definitions.reports.components import map_report
 
@@ -78,16 +71,10 @@ from safe.definitions.utilities import (
     get_field_groups,
     update_template_component,
     get_name,
-    get_class_name,
-    set_provenance,
-    get_provenance,
-    generate_default_profile,
-    get_displacement_rate,
-    is_affected,
+    set_provenance
 )
 
 from safe.utilities.resources import resources_path
-from safe.utilities.settings import set_setting
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -121,16 +108,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
         not_found_name = get_name(not_exist_key)
         self.assertEqual(not_exist_key, not_found_name)
 
-    def test_get_class_name(self):
-        """Test get_class_name method."""
-        class_name = get_class_name('high', generic_hazard_classes['key'])
-        self.assertEqual(class_name, generic_hazard_classes['classes'][0][
-            'name'])
-
-        class_name = get_class_name('not a class', generic_hazard_classes[
-            'key'])
-        self.assertEqual(class_name, 'not a class')
-
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
         expected = ['aggregation', 'exposure', 'hazard']
@@ -145,7 +122,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         self.maxDiff = None
-        hazards = hazards_for_layer('polygon')
+        hazards = hazards_for_layer(
+            'polygon', 'single_event')
         hazards = [hazard['key'] for hazard in hazards]
         expected = [
             hazard_flood['key'],
@@ -154,8 +132,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_volcano['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key'],
-            hazard_dam_break['key']
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
@@ -168,12 +145,12 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_volcano['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key'],
-            hazard_dam_break['key']
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
-        hazards = hazards_for_layer('raster')
+        hazards = hazards_for_layer(
+            'raster', 'single_event')
         hazards = [hazard['key'] for hazard in hazards]
         expected = [
             hazard_flood['key'],
@@ -181,8 +158,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_earthquake['key'],
             hazard_volcanic_ash['key'],
             hazard_cyclone['key'],
-            hazard_generic['key'],
-            hazard_dam_break['key']
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
@@ -515,121 +491,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
             provenance_user['provenance_key']: user_value,
         }
         self.assertDictEqual(provenance_collection, expected)
-
-    def test_get_provenance(self):
-        """Test for get_provenance."""
-        provenance_collection = {}
-        host_name_value = 'host_name'
-        set_provenance(
-            provenance_collection, provenance_host_name, host_name_value)
-        user_value = 'user'
-        set_provenance(
-            provenance_collection, provenance_user, user_value)
-
-        self.assertEqual(host_name_value, get_provenance(
-            provenance_collection, provenance_host_name))
-        self.assertEqual(user_value, get_provenance(
-            provenance_collection, provenance_user))
-        self.assertIsNone(
-            get_provenance(provenance_collection, provenance_crs))
-
-    def test_generate_default_profile(self):
-        """Test for generate_default_profile method."""
-        default_profile = generate_default_profile()
-        # from pprint import pprint
-        # pprint(default_profile)
-        self.assertIsInstance(default_profile, dict)
-        self.assertIsNotNone(default_profile)
-
-    def test_get_displacement_rate_and_affected(self):
-        """Test for get_displacement_rate and is_affected"""
-        # Random key
-        value = is_affected('foo', 'bar', 'boom')
-        self.assertEqual(value, not_exposed_class['key'])
-        value = get_displacement_rate('foo', 'bar', 'boom')
-        self.assertEqual(value, 0)
-
-        # From default values
-        default_profile = generate_default_profile()
-        class_key = flood_hazard_classes['classes'][0]['key']
-        value = is_affected(
-            hazard_flood['key'], flood_hazard_classes['key'], class_key)
-        expected_value = default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'affected']
-        self.assertEqual(value, expected_value)
-
-        value = get_displacement_rate(
-            hazard_flood['key'], flood_hazard_classes['key'], class_key)
-        expected_value = default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'displacement_rate']
-        self.assertEqual(value, expected_value)
-
-    def test_get_displacement_rate_and_affected_with_qsetting(self):
-        """Test for get_displacement_rate and is_affected with QSettings."""
-        # Create custom qsettings
-        qsettings = QSettings('InaSAFETest')
-        qsettings.clear()
-        # Save the default profile to qsettings
-        default_profile = generate_default_profile()
-        set_setting('population_preference', default_profile, qsettings)
-
-        # Check the default one first
-        default_profile = generate_default_profile()
-        class_key = flood_hazard_classes['classes'][0]['key']
-        value = is_affected(
-            hazard_flood['key'],
-            flood_hazard_classes['key'],
-            class_key,
-            qsettings)
-        expected_value = default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'affected']
-        self.assertEqual(value, expected_value)
-
-        value = get_displacement_rate(
-            hazard_flood['key'],
-            flood_hazard_classes['key'],
-            class_key,
-            qsettings)
-        expected_value = default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'displacement_rate']
-        self.assertEqual(value, expected_value)
-
-        # Change displacement rate
-        new_displacement_rate = 1
-        default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'displacement_rate'] = 1
-        set_setting('population_preference', default_profile, qsettings)
-        value = get_displacement_rate(
-            hazard_flood['key'],
-            flood_hazard_classes['key'],
-            class_key,
-            qsettings)
-        self.assertEqual(value, new_displacement_rate)
-
-        # Change affected value
-        new_affected = False
-        default_profile[
-            hazard_flood['key']][flood_hazard_classes['key']][class_key][
-            'affected'] = new_affected
-        set_setting('population_preference', default_profile, qsettings)
-        value = is_affected(
-            hazard_flood['key'],
-            flood_hazard_classes['key'],
-            class_key,
-            qsettings)
-        self.assertEqual(value, new_affected)
-        value = get_displacement_rate(
-            hazard_flood['key'],
-            flood_hazard_classes['key'],
-            class_key,
-            qsettings)
-        # Should be 0 since it's not affected
-        self.assertEqual(value, 0)
 
 
 if __name__ == '__main__':

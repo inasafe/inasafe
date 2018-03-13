@@ -1,7 +1,7 @@
 # coding=utf-8
 """Metadata Utilities."""
-import logging
 import os
+import logging
 from copy import deepcopy
 from datetime import datetime, date
 
@@ -13,12 +13,41 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     MetadataConversionError
 )
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.layer_purposes import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_exposure_summary,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_summary_table
+)
+from safe.definitions.layer_geometry import (
+    layer_geometry_raster, layer_geometry_polygon
+)
+from safe.definitions.hazard import hazard_volcano
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_road,
-    exposure_population,
-    exposure_land_cover
+    exposure_population
 )
+from safe.definitions.versions import inasafe_keyword_version
+from safe.metadata import (
+    ExposureLayerMetadata,
+    HazardLayerMetadata,
+    AggregationLayerMetadata,
+    OutputLayerMetadata,
+    GenericLayerMetadata
+)
+# 3.5 metadata
+from safe.metadata35 import GenericLayerMetadata as GenericLayerMetadata35
+from safe.metadata35 import ExposureLayerMetadata as ExposureLayerMetadata35
+from safe.metadata35 import HazardLayerMetadata as HazardLayerMetadata35
+from safe.metadata35 import (
+    AggregationLayerMetadata as AggregationLayerMetadata35)
+
+
 from safe.definitions.fields import (
     adult_ratio_field,
     elderly_ratio_field,
@@ -31,44 +60,12 @@ from safe.definitions.fields import (
     hazard_value_field,
     aggregation_name_field,
 )
-from safe.definitions.hazard import hazard_volcano, hazard_generic
 from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     flood_hazard_classes,
     tsunami_hazard_classes_ITB,
     volcano_hazard_classes,
 )
-from safe.definitions.layer_geometry import (
-    layer_geometry_raster, layer_geometry_polygon
-)
-from safe.definitions.layer_modes import layer_mode_continuous
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation,
-    layer_purpose_exposure_summary,
-    layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_analysis_impacted,
-    layer_purpose_exposure_summary_table,
-    layer_purpose_aggregation_summary,
-    layer_purpose_profiling,
-    layer_purpose_earthquake_contour,
-)
-from safe.definitions.versions import inasafe_keyword_version
-from safe.metadata import (
-    ExposureLayerMetadata,
-    HazardLayerMetadata,
-    AggregationLayerMetadata,
-    OutputLayerMetadata,
-    GenericLayerMetadata
-)
-from safe.metadata35 import (
-    AggregationLayerMetadata as AggregationLayerMetadata35)
-from safe.metadata35 import ExposureLayerMetadata as ExposureLayerMetadata35
-# 3.5 metadata
-from safe.metadata35 import GenericLayerMetadata as GenericLayerMetadata35
-from safe.metadata35 import HazardLayerMetadata as HazardLayerMetadata35
-from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -84,10 +81,7 @@ METADATA_CLASSES = {
     layer_purpose_exposure_summary['key']: OutputLayerMetadata,
     layer_purpose_exposure_summary_table['key']: OutputLayerMetadata,
     layer_purpose_analysis_impacted['key']: OutputLayerMetadata,
-    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata,
-    layer_purpose_aggregation_summary['key']: OutputLayerMetadata,
-    layer_purpose_profiling['key']: OutputLayerMetadata,
-    layer_purpose_earthquake_contour['key']: OutputLayerMetadata
+    layer_purpose_aggregate_hazard_impacted['key']: OutputLayerMetadata
 }
 
 METADATA_CLASSES35 = {
@@ -108,34 +102,8 @@ raster_classification_conversion = {
 }
 
 
-# noinspection PyPep8Naming
-def append_ISO19115_keywords(keywords):
-    """Append ISO19115 from setting to keywords.
-
-    :param keywords: The keywords destination.
-    :type keywords: dict
-    """
-    # Map setting's key and metadata key
-    ISO19115_mapping = {
-        'ISO19115_ORGANIZATION': 'organisation',
-        'ISO19115_URL': 'url',
-        'ISO19115_EMAIL': 'email',
-        'ISO19115_LICENSE': 'license'
-    }
-    ISO19115_keywords = {}
-    # Getting value from setting.
-    for key, value in ISO19115_mapping.items():
-        ISO19115_keywords[value] = setting(key, expected_type=str)
-    keywords.update(ISO19115_keywords)
-
-
 def write_iso19115_metadata(layer_uri, keywords, version_35=False):
     """Create metadata  object from a layer path and keywords dictionary.
-
-    This function will save these keywords to the file system or the database.
-
-    :param version_35: If we write keywords version 3.5. Default to False.
-    :type version_35: bool
 
     :param layer_uri: Uri to layer.
     :type layer_uri: basestring
@@ -188,16 +156,11 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
 
     :param keyword: The key of keyword that want to be read. If None, return
         all keywords in dictionary.
-    :type keyword: basestring
 
     :returns: Dictionary of keywords or value of key as string.
     :rtype: dict, basestring
     """
     xml_uri = os.path.splitext(layer_uri)[0] + '.xml'
-    # Remove the prefix for local file. For example csv.
-    file_prefix = 'file:'
-    if xml_uri.startswith(file_prefix):
-        xml_uri = xml_uri[len(file_prefix):]
     if not os.path.exists(xml_uri):
         xml_uri = None
     if not xml_uri and os.path.exists(layer_uri):
@@ -245,6 +208,8 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
+    if isinstance(metadata, OutputLayerMetadata):
+        keywords['if_provenance'] = metadata.provenance
     return keywords
 
 
@@ -401,10 +366,6 @@ def convert_metadata(keywords, **converter_parameters):
     for same_property in same_properties:
         if keywords.get(same_property):
             new_keywords[same_property] = keywords.get(same_property)
-            if same_property == layer_purpose_hazard['key']:
-                if keywords.get(same_property) == hazard_generic['key']:
-                    # We use hazard_generic as key for generic hazard
-                    new_keywords[same_property] = 'hazard_generic'
 
     # Mandatory keywords
     try:
@@ -428,11 +389,7 @@ def convert_metadata(keywords, **converter_parameters):
             elif exposure == exposure_road['key']:
                 new_keywords['road_class_field'] = exposure_class_field
             else:
-                if exposure == exposure_land_cover['key']:
-                    new_keywords['field'] = exposure_class_field
-                else:
-                    new_keywords['structure_class_field'] = (
-                        exposure_class_field)
+                new_keywords['field'] = exposure_class_field
         # Data type is only used in population exposure and in v4.x it is
         # always count
         if (exposure == exposure_population['key'] and layer_geometry ==

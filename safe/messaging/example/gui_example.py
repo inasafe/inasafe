@@ -1,13 +1,29 @@
 # coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid - **Dispatcher gui example.**
 
-"""WebView."""
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '27/05/2013'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 import sys
+import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # NOQA pylint: disable=unused-import
+import qgis  # pylint: disable=unused-import
 from PyQt4 import Qt, QtWebKit
+
 from pydispatch import dispatcher
 
 from safe.messaging import (
@@ -19,11 +35,6 @@ from safe.messaging import (
     ImportantText,
     EmphasizedText)
 from safe.utilities.resources import resources_path
-
-__copyright__ = "Copyright 2016, The InaSAFE Project"
-__license__ = "GPL version 3"
-__email__ = "info@inasafe.org"
-__revision__ = '$Format:%H$'
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
@@ -60,7 +71,7 @@ class WebView(QtWebKit.QWebView):
         :param message:
         :param sender:
         """
-        _ = sender  # NOQA
+        _ = sender  # we arent using it
         self.dynamic_messages = []
         self.static_message = message
         self.show_messages()
@@ -70,7 +81,7 @@ class WebView(QtWebKit.QWebView):
         :param message:
         :param sender:
         """
-        _ = sender  # NOQA
+        _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.show_messages()
 
@@ -88,9 +99,9 @@ class WebView(QtWebKit.QWebView):
         self.setHtml(string)
 
 
-class ImpactFunction1(object):
-
-    """Fake impact function 1."""
+class ImpactFunction1():
+    """Fake impact function 1
+    """
 
     def __init__(self):
         message = Message(SuccessParagraph('IF1 was initialised'))
@@ -101,7 +112,8 @@ class ImpactFunction1(object):
         self.count = 0
 
     def run(self):
-        """Run."""
+        """Run
+        """
         self.count += 1
         message = Paragraph('IF1 run %i - running' % self.count)
         dispatcher.send(
@@ -110,9 +122,9 @@ class ImpactFunction1(object):
             message=message)
 
 
-class ImpactFunction2(object):
-
-    """Fake impact function 2."""
+class ImpactFunction2():
+    """Fake impact function 2.
+    """
 
     def __init__(self):
         message = Message(SuccessParagraph('IF2 was initialised'))
@@ -123,7 +135,8 @@ class ImpactFunction2(object):
         self.count = 0
 
     def run(self):
-        """Run."""
+        """Run.
+        """
         self.count += 1
         message = Paragraph('IF2 run %i - running' % self.count)
         dispatcher.send(
@@ -132,9 +145,9 @@ class ImpactFunction2(object):
             message=message)
 
 
-class Dock(object):
-
-    """Dock."""
+class Dock():
+    """Dock.
+    """
 
     def __init__(self):
         self.message_queue = WebView()
@@ -153,7 +166,8 @@ class Dock(object):
             sender=dispatcher.Any)
 
     def run(self):
-        """Run."""
+        """Run.
+        """
         message = Message()
         message.add(Heading('Processing starting'))
         text = Text('This is an example application showing how the ')
@@ -195,10 +209,9 @@ class Dock(object):
         impact_function2 = ImpactFunction2()
         # Run some tasks that will spawn dynamic messages
         for i in range(1, 10):
-            _ = i  # NOQA
+            _ = i
             impact_function1.run()
             impact_function2.run()
-
 
 if __name__ == '__main__':
     app = Qt.QApplication(sys.argv)

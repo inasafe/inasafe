@@ -4,8 +4,10 @@
 
 from inspect import getmembers
 
+
 from safe.gis import generic_expressions
-from safe.report.expressions import infographic, map_report, html_report
+from safe.report.expressions import infographic, map_report
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -27,8 +29,5 @@ def qgis_expressions():
         if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
     all_expressions.update({
         fct[0]: fct[1] for fct in getmembers(map_report)
-        if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
-    all_expressions.update({
-        fct[0]: fct[1] for fct in getmembers(html_report)
         if fct[1].__class__.__name__ == 'QgsExpressionFunction'})
     return all_expressions

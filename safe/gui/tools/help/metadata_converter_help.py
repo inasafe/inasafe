@@ -72,19 +72,6 @@ def metadata_converter_help_content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
-    paragraph = m.Paragraph(tr(
-        'This tool will convert InaSAFE 4.x keyword metadata into the '
-        'metadata format used by InaSAFE 3.5. The primary reason for doing '
-        'this is to prepare data for use in GeoSAFE - the online version of '
-        'InaSAFE.'
-    ))
-    message.add(paragraph)
-    paragraph = m.Paragraph(tr(
-        'You should note that this tool will not touch the original data or '
-        'metadata associated with a layer. Instead it will make a copy of the '
-        'original layer to the place that you nominate, and create a new '
-        'keywords XML file to accompany that data. This new keywords file '
-        'will contain InaSAFE keywords in the 3.5 format.'
-    ))
+    paragraph = m.Paragraph(tr('Lorem ipsum dolot'))
     message.add(paragraph)
     return message

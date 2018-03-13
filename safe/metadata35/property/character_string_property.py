@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 class CharacterStringProperty(BaseProperty):
 
     """A property that accepts any type of input and stores it as string."""
-    
+
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [str, unicode, int, float, NoneType]
 

@@ -1,7 +1,5 @@
 # coding=utf-8
 
-"""QGIS Expressions which are available in the QGIS GUI interface."""
-
 from qgis.core import qgsfunction
 
 from safe.common.parameters.resource_parameter import ResourceParameter
@@ -42,16 +40,15 @@ group = tr('InaSAFE - Infographic Elements')
 # helpText is used for QGIS 3 : https://github.com/qgis/QGIS/pull/5059
 ##
 
-description = tr('Retrieve a header name of the field name from definitions.')
+description = tr('Retrieve the full path of inasafe-logo-white.svg.')
 examples = {
-    'inasafe_field_header(\'minimum_needs__clean_water\')': tr('Clean water')
+    'inasafe_logo_white_path()': None
 }
 help_message = generate_expression_help(description, examples)
 
 
 @qgsfunction(
-    args='auto', group=group, usesGeometry=False, referencedColumns=[],
-    help_text=help_message.to_html(), helpText=help_message.to_html())
+    args='auto', group=group, usesGeometry=False, referencedColumns=[])
 def inasafe_field_header(field, feature, parent):
     """Retrieve a header name of the field name from definitions.
 
@@ -128,7 +125,7 @@ def minimum_needs_unit(field, feature, parent):
             'minimum_needs__toilets_count_field'
         ]
         if not frequency or (
-                field_definition['key'] in once_frequency_field_keys):
+                    field_definition['key'] in once_frequency_field_keys):
             return unit_abbreviation.lower()
 
         unit_format = u'{unit_abbreviation}/{frequency}'

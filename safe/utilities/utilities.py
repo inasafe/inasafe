@@ -2,31 +2,33 @@
 
 """Utilities module."""
 
+import re
 import codecs
 import json
 import logging
 import platform
-import re
 import sys
 import traceback
 import unicodedata
 import webbrowser
-from os.path import join, isdir
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsApplication
+from os.path import join, isdir
 
-from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
-from safe.common.utilities import unique_filename
 from safe.definitions.versions import (
     inasafe_keyword_version,
     keyword_version_compatibilities)
+from safe.definitions.messages import disclaimer
+from safe import messaging as m
+from safe.common.utilities import unique_filename
+from safe.common.version import get_version
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.unicode import get_unicode
+from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,31 +38,6 @@ __revision__ = '$Format:%H$'
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def basestring_to_message(text):
-    """Convert a basestring to a Message object if needed.
-
-    Avoid using this function, better to create the Message object yourself.
-    This one is very generic.
-
-    This function exists ust in case we get a basestring and we really need a
-    Message object.
-
-    :param text: The text.
-    :type text: basestring, Message
-
-    :return: The message object.
-    :rtype: message
-    """
-    if isinstance(text, Message):
-        return text
-    elif text is None:
-        return ''
-    else:
-        report = m.Message()
-        report.add(text)
-        return report
 
 
 def get_error_message(exception, context=None, suggestion=None):
@@ -163,7 +140,7 @@ def humanise_seconds(seconds):
             days, hours, minutes))
 
 
-def generate_expression_help(description, examples, extra_information=None):
+def generate_expression_help(description, examples):
     """Generate the help message for QGIS Expressions.
 
     It will format nicely the help string with some examples.
@@ -171,47 +148,125 @@ def generate_expression_help(description, examples, extra_information=None):
     :param description: A description of the expression.
     :type description: basestring
 
-    :param examples: A dictionary of examples
+    :param examples: A dictionnary of examples
     :type examples: dict
-
-    :param extra_information: A dictionary of extra information.
-    :type extra_information: dict
 
     :return: A message object.
     :rtype: message
     """
-    def populate_bullet_list(message, information):
-        """Populate a message object with bullet list.
-
-        :param message: The message object.
-        :type message: Message
-
-        :param information: A dictionary of information.
-        :type information: dict
-
-        :return: A message object that has been updated.
-        :rtype: Message
-        """
-        bullets = m.BulletedList()
-        for key, item in information.iteritems():
-            if item:
-                bullets.add(
-                    m.Text(m.ImportantText(key), m.Text('→'), m.Text(item)))
-            else:
-                bullets.add(m.Text(m.ImportantText(key)))
-        message.add(bullets)
-        return message
-
     help = m.Message()
     help.add(m.Paragraph(description))
     help.add(m.Paragraph(tr('Examples:')))
-    help = populate_bullet_list(help, examples)
-
-    if extra_information:
-        help.add(m.Paragraph(extra_information['title']))
-        help = populate_bullet_list(help, extra_information['detail'])
-
+    bullets = m.BulletedList()
+    for expression, result in examples.iteritems():
+        if result:
+            bullets.add(
+                m.Text(
+                    m.ImportantText(expression), m.Text('→'), m.Text(result)))
+        else:
+            bullets.add(m.Text(m.ImportantText(expression)))
+    help.add(bullets)
     return help
+
+
+def impact_attribution(keywords, inasafe_flag=False):
+    """Make a little table for attribution of data sources used in impact.
+
+    :param keywords: A keywords dict for an impact layer.
+    :type keywords: dict
+
+    :param inasafe_flag: bool - whether to show a little InaSAFE promotional
+        text in the attribution output. Defaults to False.
+
+    :returns: An html snippet containing attribution information for the impact
+        layer. If no keywords are present or no appropriate keywords are
+        present, None is returned.
+    :rtype: safe.messaging.Message
+    """
+    if keywords is None:
+        return None
+
+    join_words = ' - %s ' % tr('sourced from')
+    analysis_details = tr('Analysis details')
+    hazard_details = tr('Hazard details')
+    hazard_title_keywords = 'hazard_title'
+    hazard_source_keywords = 'hazard_source'
+    exposure_details = tr('Exposure details')
+    exposure_title_keywords = 'exposure_title'
+    exposure_source_keyword = 'exposure_source'
+
+    if hazard_title_keywords in keywords:
+        hazard_title = tr(keywords[hazard_title_keywords])
+    else:
+        hazard_title = tr('Hazard layer')
+
+    if hazard_source_keywords in keywords:
+        hazard_source = tr(keywords[hazard_source_keywords])
+    else:
+        hazard_source = tr('an unknown source')
+
+    if exposure_title_keywords in keywords:
+        exposure_title = keywords[exposure_title_keywords]
+    else:
+        exposure_title = tr('Exposure layer')
+
+    if exposure_source_keyword in keywords:
+        exposure_source = keywords[exposure_source_keyword]
+    else:
+        exposure_source = tr('an unknown source')
+
+    report = m.Message()
+    report.add(m.Heading(analysis_details, **INFO_STYLE))
+    report.add(hazard_details)
+    report.add(m.Paragraph(
+        hazard_title,
+        join_words,
+        hazard_source))
+
+    report.add(exposure_details)
+    report.add(m.Paragraph(
+        exposure_title,
+        join_words,
+        exposure_source))
+
+    if inasafe_flag:
+        report.add(m.Heading(tr('Software notes'), **INFO_STYLE))
+        # noinspection PyUnresolvedReferences
+        inasafe_phrase = tr(
+            'This report was created using InaSAFE version %s. Visit '
+            'http://inasafe.org to get your free copy of this software! %s'
+            ) % (get_version(), disclaimer())
+
+        report.add(m.Paragraph(m.Text(inasafe_phrase)))
+    return report
+
+
+def add_ordered_combo_item(combo, text, data=None):
+    """Add a combo item ensuring that all items are listed alphabetically.
+
+    Although QComboBox allows you to set an InsertAlphabetically enum
+    this only has effect when a user interactively adds combo items to
+    an editable combo. This we have this little function to ensure that
+    combos are always sorted alphabetically.
+
+    :param combo: Combo box receiving the new item.
+    :type combo: QComboBox
+
+    :param text: Display text for the combo.
+    :type text: str
+
+    :param data: Optional UserRole data to be associated with the item.
+    :type data: QVariant, str
+    """
+    size = combo.count()
+    for combo_index in range(0, size):
+        item_text = combo.itemText(combo_index)
+        # see if text alphabetically precedes item_text
+        if cmp(text.lower(), item_text.lower()) < 0:
+            combo.insertItem(combo_index, text, data)
+            return
+        # otherwise just add it to the end
+    combo.insertItem(size, text, data)
 
 
 def open_in_browser(file_path):
@@ -322,7 +377,7 @@ def write_json(data, filename):
 
     def custom_default(obj):
         if isinstance(obj, QPyNullVariant):
-            return ''
+            return 'Null'
         raise TypeError
 
     with open(filename, 'w') as json_file:
@@ -369,7 +424,9 @@ def monkey_patch_keywords(layer):
     except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
-    if not layer.keywords.get('inasafe_fields'):
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
         layer.keywords['inasafe_fields'] = {}
 
 

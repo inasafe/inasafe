@@ -267,29 +267,6 @@ class TestMetadataUtilities(unittest.TestCase):
         self.assertEqual(
             keywords['date'].date().isoformat(), copy_keywords['date'])
 
-        # We change only the copy.
-        copy_keywords['url'] = 'my.website.org'
-        self.assertEqual(copy_keywords['url'], 'my.website.org')
-        self.assertEqual(keywords['url'].toString(), 'inasafe.org')
-
-        # We make keywords using a variable as a key
-        key = 'url'
-        keywords = {
-            key: QUrl('inasafe.org'),
-            'date': datetime(1990, 7, 13)
-        }
-        copy_keywords = copy_layer_keywords(keywords)
-
-        self.assertEqual(keywords[key].toString(), copy_keywords[key])
-        self.assertEqual(
-            keywords['date'].date().isoformat(), copy_keywords['date'])
-
-        # Using the key, we change the value only in the copy
-        copy_keywords[key] = 'my.website.org'
-
-        self.assertEqual(copy_keywords[key], 'my.website.org')
-        self.assertEqual(keywords[key].toString(), 'inasafe.org')
-
     def test_convert_metadata(self):
         """Test convert_metadata method."""
         # Not convertible hazard
@@ -595,7 +572,7 @@ class TestMetadataUtilities(unittest.TestCase):
         }
         expected_keyword = {
             'exposure': u'place',
-            'structure_class_field': u'Type',
+            'field': u'Type',
             'keyword_version': '3.5',
             'layer_geometry': u'point',
             'layer_mode': u'classified',
