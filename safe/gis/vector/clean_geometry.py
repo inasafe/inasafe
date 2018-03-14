@@ -51,7 +51,8 @@ def clean_layer(layer, callback=None):
             '%s features have been removed from %s because of invalid '
             'geometries.' % (count, layer.name()))
     else:
-        LOGGER.info('0 feature has been removed from the layer: %s')
+        LOGGER.info(
+            '0 feature has been removed from the layer: %s' % layer.name())
 
     # save changes
     layer.commitChanges()
