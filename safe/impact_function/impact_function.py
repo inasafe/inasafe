@@ -356,12 +356,17 @@ class ImpactFunction(object):
             'hazard',
             'exposure',
             'aggregation',
-            'impact',
-            'exposure_summary',
-            'aggregate_hazard_impacted',
-            'aggregation_summary',
-            'analysis_impacted',
-            'exposure_summary_table',
+
+            # Output layers on new IF object will have a different provenance
+            # data with the one from original IF.
+
+            # 'impact',
+            # 'exposure_summary',
+            # 'aggregate_hazard_impacted',
+            # 'aggregation_summary',
+            # 'analysis_impacted',
+            # 'exposure_summary_table',
+
             'profiling',
         ]
         for if_property in properties:

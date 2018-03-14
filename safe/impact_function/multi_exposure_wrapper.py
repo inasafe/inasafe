@@ -644,8 +644,12 @@ class MultiExposureImpactFunction(object):
             'hazard',
             'aggregation',
             'exposures',
-            'aggregation_summary',
-            'analysis_impacted',
+
+            # Output layers on new IF object will have a different provenance
+            # data with the one from original IF.
+
+            # 'aggregation_summary',
+            # 'analysis_impacted',
             # 'impact_functions'
         ]
         for if_property in properties:
@@ -1444,7 +1448,6 @@ class MultiExposureImpactFunction(object):
             provenance,
             provenance_multi_exposure_summary_layers_id,
             dict_of_exposure_summary_id)
-
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
