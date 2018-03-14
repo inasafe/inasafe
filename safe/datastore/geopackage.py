@@ -100,6 +100,20 @@ class GeoPackage(DataStore):
         else:
             return True
 
+    def ogr_vector_layer_name_by_id(self, index):
+        vector_datasource = self.vector_driver.Open(
+            self.uri.absoluteFilePath())
+        if vector_datasource:
+            return vector_datasource.GetLayerByIndex(index)
+        return None
+
+    def ogr_vector_layer_name_by_name(self, name):
+        vector_datasource = self.vector_driver.Open(
+            self.uri.absoluteFilePath())
+        if vector_datasource:
+            return vector_datasource.GetLayerByName(name)
+        return None
+
     def _vector_layers(self):
         """Return a list of vector layers available.
 
@@ -219,6 +233,64 @@ class GeoPackage(DataStore):
 
         return True, layer_name
 
+    def add_metadata(self, layer_name, layer_id, domain, xml):
+        """Add metadata value to a layer in a specifif domain.
+
+        :param layer_name: The name or the ID of the layer.
+        :type layer_name:
+        :param domain:
+        :type domain:
+        :param xml:
+        :type xml:
+        :return:
+        :rtype:
+        """
+        print 'adding metadata to geopackage'
+        print layer_name
+        print layer_id
+        print domain
+        # print xml
+
+        if layer_name is None and layer_id:
+            layer = self.ogr_vector_layer_name_by_id(layer_id)
+        elif layer_name and layer_id is None:
+            layer = self.ogr_vector_layer_name_by_id(layer_id)
+        else:
+            layer = None  # Still TODO
+            return
+
+        # print layer
+        # import pydevd
+        # pydevd.settrace('localhost', port=51234, stdoutToServer=True,
+        #                 stderrToServer=True)
+        layer.SetMetadataItem("metadata", "toto", "myDomain")
+
+    def metadata(self, layer_name, domain):
+
+        raster_datasource = gdal.Open(self.uri.absoluteFilePath())
+        if raster_datasource:
+            subdatasets = raster_datasource.GetSubDatasets()
+            metadata = raster_datasource.GetMetadata()
+            print metadata
+            print subdatasets
+
+            for subdataset in subdatasets:
+                print subdataset[0]
+
+        print self.raster_driver.GetMetadataDomainList()
+        print self.vector_driver.GetMetadataDomainList()
+
+        uri = self.layer_uri(layer_name)
+        if not uri:
+            return None
+
+        if uri.startswith('GPKG'):
+            # It's a raster
+            pass
+        else:
+            # It's a vector
+            pass
+
     def _add_raster_layer(self, raster_layer, layer_name):
         """Add a raster layer to the folder.
 
@@ -250,6 +322,10 @@ class GeoPackage(DataStore):
             gdal.GDT_Byte,
             ['APPEND_SUBDATASET=YES', 'RASTER_TABLE=%s' % layer_name]
         )
+        output.SetMetadataItem('nameInaSAFE', layer_name, 'domaine')
+        print output.GetMetadataDomainList()
+        for domain in output.GetMetadataDomainList():
+            print output.GetMetadata(domain)
 
         output.SetGeoTransform(source.GetGeoTransform())
         output.SetProjection(source.GetProjection())
