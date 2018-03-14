@@ -23,7 +23,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def add_default_values(layer, callback=None):
+def add_default_values(layer):
     """Add or fill default values to the layer, see #3325.
 
     1. It doesn't have inasafe_field and it doesn't have inasafe_default_value
@@ -38,11 +38,6 @@ def add_default_values(layer, callback=None):
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The vector layer with the default values.
     :rtype: QgsVectorLayer
 
@@ -50,7 +45,6 @@ def add_default_values(layer, callback=None):
     """
     output_layer_name = assign_default_values_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
-    processing_step = assign_default_values_steps['step_name']  # NOQA
 
     fields = layer.keywords.get('inasafe_fields')
     if not isinstance(fields, dict):
