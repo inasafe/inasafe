@@ -29,7 +29,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def intersection(source, mask, callback=None):
+def intersection(source, mask):
     """Intersect two layers.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
@@ -44,11 +44,6 @@ def intersection(source, mask, callback=None):
     :param mask: The vector layer to use for clipping.
     :type mask: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
 
@@ -57,7 +52,6 @@ def intersection(source, mask, callback=None):
     output_layer_name = intersection_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         source.keywords['layer_purpose'])
-    processing_step = intersection_steps['step_name']  # NOQA
 
     fields = source.fields()
     fields.extend(mask.fields())

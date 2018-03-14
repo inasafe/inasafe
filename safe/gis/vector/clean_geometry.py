@@ -14,22 +14,16 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def clean_layer(layer, callback=None):
+def clean_layer(layer):
     """Clean a vector layer.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        editing should accept params 'current' (int), 'maximum' (int) and
-        'step' (str). Defaults to None.
-    :type callback: function
-
     :return: The buffered vector layer.
     :rtype: QgsVectorLayer
     """
     output_layer_name = clean_geometry_steps['output_layer_name']
-    processing_step = clean_geometry_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     # start editing

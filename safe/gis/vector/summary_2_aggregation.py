@@ -33,7 +33,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def aggregation_summary(aggregate_hazard, aggregation, callback=None):
+def aggregation_summary(aggregate_hazard, aggregation):
     """Compute the summary from the aggregate hazard to the analysis layer.
 
     Source layer :
@@ -50,11 +50,6 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
     :param aggregation: The aggregation vector layer where to write statistics.
     :type aggregation: QgsVectorLayer
-
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
 
     :return: The new aggregation layer with summary.
     :rtype: QgsVectorLayer

@@ -26,7 +26,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
+def reclassify(layer, exposure_key=None, overwrite_input=False):
     """Reclassify a continuous raster layer.
 
     Issue https://github.com/inasafe/inasafe/issues/3182
@@ -59,18 +59,12 @@ def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
     :param exposure_key: The exposure key.
     :type exposure_key: str
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The classified raster layer.
     :rtype: QgsRasterLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = reclassify_raster_steps['output_layer_name']
-    processing_step = reclassify_raster_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     if exposure_key:

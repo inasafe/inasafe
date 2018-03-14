@@ -186,7 +186,7 @@ def exposure_summary_table(
 
     summarization_dicts = {}
     if exposure_summary:
-        summarization_dicts = summarize_result(exposure_summary, callback)
+        summarization_dicts = summarize_result(exposure_summary)
 
     sorted_keys = sorted(summarization_dicts.keys())
 
@@ -276,16 +276,11 @@ def exposure_summary_table(
 
 
 @profile
-def summarize_result(exposure_summary, callback=None):
+def summarize_result(exposure_summary):
     """Extract result based on summarizer field value and sum by exposure type.
 
     :param exposure_summary: The layer impact layer.
     :type exposure_summary: QgsVectorLayer
-
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
 
     :return: Dictionary of attributes per exposure per summarizer field.
     :rtype: dict

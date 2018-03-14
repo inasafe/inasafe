@@ -25,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def polygonize(layer, callback=None):
+def polygonize(layer):
     """Polygonize a raster layer into a vector layer using GDAL.
 
     Issue https://github.com/inasafe/inasafe/issues/3183
@@ -33,18 +33,12 @@ def polygonize(layer, callback=None):
     :param layer: The layer to reproject.
     :type layer: QgsRasterLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int) and 'maximum' (int). Defaults to
-        None.
-    :type callback: function
-
     :return: Reprojected memory layer.
     :rtype: QgsRasterLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = polygonize_steps['output_layer_name']
-    processing_step = polygonize_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
     gdal_layer_name = polygonize_steps['gdal_layer_name']
 

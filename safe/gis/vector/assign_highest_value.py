@@ -29,7 +29,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def assign_highest_value(exposure, hazard, callback=None):
+def assign_highest_value(exposure, hazard):
     """Assign the highest hazard value to an indivisible feature.
 
     For indivisible polygon exposure layers such as buildings, we need to
@@ -48,18 +48,12 @@ def assign_highest_value(exposure, hazard, callback=None):
     :param hazard: The vector layer to use for hazard.
     :type hazard: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The new impact layer.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = assign_highest_value_steps['output_layer_name']
-    processing_step = assign_highest_value_steps['step_name']  # NOQA
 
     hazard_inasafe_fields = hazard.keywords['inasafe_fields']
 

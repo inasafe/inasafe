@@ -23,7 +23,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def from_counts_to_ratios(layer, callback=None):
+def from_counts_to_ratios(layer):
     """Transform counts to ratios.
 
     Formula: ratio = subset count / total count
@@ -31,18 +31,12 @@ def from_counts_to_ratios(layer, callback=None):
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The layer with new ratios.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = recompute_counts_steps['output_layer_name']
-    processing_step = recompute_counts_steps['step_name']  # NOQA
 
     exposure = definition(layer.keywords['exposure'])
     inasafe_fields = layer.keywords['inasafe_fields']

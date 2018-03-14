@@ -7,6 +7,7 @@ import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
+from safe.definitions.exposure import exposure_structure
 from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -41,7 +42,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
+def aggregate_hazard_summary(impact, aggregate_hazard):
     """Compute the summary from the source layer to the aggregate_hazard layer.
 
     Source layer :
@@ -60,11 +61,6 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     :param aggregate_hazard: The aggregate_hazard vector layer where to write
         statistics.
     :type aggregate_hazard: QgsVectorLayer
-
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
 
     :return: The new aggregate_hazard layer with summary.
     :rtype: QgsVectorLayer
@@ -240,7 +236,7 @@ def report_on_field(layer):
     exposure = layer.keywords.get('exposure')
     if geometry == QGis.Point:
         field_index = None
-    if geometry == QGis.Polygon and exposure == 'structure':
+    if geometry == QGis.Polygon and exposure == exposure_structure['key']:
         field_index = None
 
     # Special case if it's an exposure without classification. It means it's

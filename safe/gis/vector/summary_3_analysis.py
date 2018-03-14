@@ -23,8 +23,6 @@ from safe.definitions.fields import (
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
-from safe.definitions.processing_steps import (
-    summary_3_analysis_steps)
 from safe.gis.sanity_check import check_layer
 from safe.gis.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
@@ -41,7 +39,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def analysis_summary(aggregate_hazard, analysis, callback=None):
+def analysis_summary(aggregate_hazard, analysis):
     """Compute the summary from the aggregate hazard to analysis.
 
     Source layer :
@@ -59,19 +57,11 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     :param analysis: The target vector layer where to write statistics.
     :type analysis: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The new target layer with summary.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_3_analysis_steps['output_layer_name']  # NOQA
-    processing_step = summary_3_analysis_steps['step_name']  # NOQA
-
     source_fields = aggregate_hazard.keywords['inasafe_fields']
     target_fields = analysis.keywords['inasafe_fields']
 

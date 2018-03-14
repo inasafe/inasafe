@@ -27,7 +27,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def clip(layer_to_clip, mask_layer, callback=None):
+def clip(layer_to_clip, mask_layer):
     """Clip a vector layer with another.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
@@ -42,11 +42,6 @@ def clip(layer_to_clip, mask_layer, callback=None):
     :param mask_layer: The vector layer to use for clipping.
     :type mask_layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
 
@@ -55,7 +50,6 @@ def clip(layer_to_clip, mask_layer, callback=None):
     output_layer_name = clip_steps['output_layer_name']
     output_layer_name = output_layer_name % (
         layer_to_clip.keywords['layer_purpose'])
-    processing_step = clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,

@@ -27,7 +27,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def update_value_map(layer, exposure_key=None, callback=None):
+def update_value_map(layer, exposure_key=None):
     """Assign inasafe values according to definitions for a vector layer.
 
     :param layer: The vector layer.
@@ -36,18 +36,12 @@ def update_value_map(layer, exposure_key=None, callback=None):
     :param exposure_key: The exposure key.
     :type exposure_key: str
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The classified vector layer.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = assign_inasafe_values_steps['output_layer_name']
-    processing_step = assign_inasafe_values_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     keywords = layer.keywords

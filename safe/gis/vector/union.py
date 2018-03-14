@@ -32,7 +32,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def union(union_a, union_b, callback=None):
+def union(union_a, union_b):
     """Union of two vector layers.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
@@ -47,18 +47,12 @@ def union(union_a, union_b, callback=None):
     :param union_b: The vector layer for the union.
     :type union_b: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = union_steps['output_layer_name']
-    processing_step = union_steps['step_name']  # NOQA
     output_layer_name = output_layer_name % (
         union_a.keywords['layer_purpose'],
         union_b.keywords['layer_purpose']

@@ -33,7 +33,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def zonal_stats(raster, vector, callback=None):
+def zonal_stats(raster, vector):
     """Reclassify a continuous raster layer.
 
     Issue https://github.com/inasafe/inasafe/issues/3190
@@ -49,18 +49,12 @@ def zonal_stats(raster, vector, callback=None):
     :param vector: The vector layer.
     :type vector: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The output of the zonal stats.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = zonal_stats_steps['output_layer_name']
-    processing_step = zonal_stats_steps['step_name']  # NOQA
 
     exposure = raster.keywords['exposure']
     if raster.crs().authid() != vector.crs().authid():
@@ -122,7 +116,7 @@ def zonal_stats(raster, vector, callback=None):
     # The zonal stats is producing some None values. We need to fill these
     # with 0. See issue : #3778
     # We should start a new editing session as previous fields need to be
-    # commited first.
+    # committed first.
     layer.startEditing()
     request = QgsFeatureRequest()
     expression = '\"%s\" is None' % output_field

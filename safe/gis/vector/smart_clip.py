@@ -25,7 +25,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def smart_clip(layer_to_clip, mask_layer, callback=None):
+def smart_clip(layer_to_clip, mask_layer):
     """Smart clip a vector layer with another.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
@@ -36,18 +36,12 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
     :param mask_layer: The vector layer to use for clipping.
     :type mask_layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = smart_clip_steps['output_layer_name']
-    processing_step = smart_clip_steps['step_name']  # NOQA
 
     writer = create_memory_layer(
         output_layer_name,

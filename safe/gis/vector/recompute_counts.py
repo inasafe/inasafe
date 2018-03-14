@@ -25,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def recompute_counts(layer, callback=None):
+def recompute_counts(layer):
     """Recompute counts according to the size field and the new size.
 
     This function will also take care of updating the size field. The size
@@ -34,18 +34,12 @@ def recompute_counts(layer, callback=None):
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: The layer with updated counts.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
     """
     output_layer_name = recompute_counts_steps['output_layer_name']
-    processing_step = recompute_counts_steps['step_name']  # NOQA
 
     fields = layer.keywords['inasafe_fields']
 

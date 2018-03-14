@@ -61,7 +61,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def prepare_vector_layer(layer, callback=None):
+def prepare_vector_layer(layer):
     """This function will prepare the layer to be used in InaSAFE :
      * Make a local copy of the layer.
      * Make sure that we have an InaSAFE ID column.
@@ -71,11 +71,6 @@ def prepare_vector_layer(layer, callback=None):
     :param layer: The layer to prepare.
     :type layer: QgsVectorLayer
 
-    :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
-    :type callback: function
-
     :return: Cleaned memory layer.
     :rtype: QgsVectorLayer
 
@@ -83,7 +78,6 @@ def prepare_vector_layer(layer, callback=None):
     """
     output_layer_name = prepare_vector_steps['output_layer_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
-    processing_step = prepare_vector_steps['step_name']  # NOQA
 
     if not layer.keywords.get('inasafe_fields'):
         msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
