@@ -16,19 +16,19 @@ from safe.processors.pre_processors import *
 # # Root : impact layer
 # |--- size
 # |   |--- size rate  disabled in V4.0, ET 13/02/17
-# |   `--- productivity
-# |   `--- production cost
+# |   |--- productivity
+# |   |--- production cost
 # |   `--- production value
 # |--- distance
 # |--- bearing angle
-# |   |--- cardinality
+# |   `--- cardinality
 # |--- affected
 # |--- displaced ratio
 # |--- fatality ratio
 # |   `--- fatality count
 # |       `--- displaced count (from fatality count or 0 if no fatalities)
 # |          |--- gender
-# |          |   |--- hygiene packs
+# |          |   `--- hygiene packs
 # |          |--- additional rice
 # |          |--- youth
 # |          |--- adult
