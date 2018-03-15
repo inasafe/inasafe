@@ -119,13 +119,14 @@ def aggregation_summary(aggregate_hazard, aggregation):
     shift = aggregation.fields().count()
 
     aggregation.startEditing()
-
+    dynamic_structure = [
+        [affected_exposure_count_field, unique_exposure],
+    ]
     add_fields(
         aggregation,
         absolute_values,
         [total_affected_field],
-        unique_exposure,
-        affected_exposure_count_field)
+        dynamic_structure)
 
     aggregation_index = target_fields[aggregation_id_field['key']]
 

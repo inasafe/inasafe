@@ -107,12 +107,14 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
     aggregate_hazard.startEditing()
 
     shift = aggregate_hazard.fields().count()
+    dynamic_structure = [
+        [exposure_count_field, unique_exposure],
+    ]
     add_fields(
         aggregate_hazard,
         absolute_values,
         [affected_field, total_field],
-        unique_exposure,
-        exposure_count_field
+        dynamic_structure,
     )
 
     flat_table = FlatTable('aggregation_id', 'hazard_id', 'exposure_class')
