@@ -62,7 +62,7 @@ def create_absolute_values_structure(layer, fields):
 
 
 def add_fields(
-        layer, absolute_values, static_fields, dynamic_values, dynamic_field):
+        layer, absolute_values, static_fields, dynamic_structure):
     """Function to add fields needed in the output layer.
 
     :param layer: The vector layer.
@@ -74,22 +74,28 @@ def add_fields(
     :param static_fields: The list of static fields to add.
     :type static_fields: list
 
-    :param dynamic_values: The list of unique field to create.
-    :type dynamic_values: list
-
-    :param dynamic_field: The dynamic field to add.
-    :type dynamic_field: safe.definitions.fields
-
-    :param static_fields
+    :param dynamic_structure: The list of dynamic fields to add to the layer.
+    The list must be structured like this:
+    dynamic_structure = [
+        [exposure_count_field, unique_exposure]
+    ]
+    where "exposure_count_field" is the dynamic to field to add and
+    "unique_exposure" is the list of unique values to associate with this
+    dynamic field. Because dynamic_structure is a ordered list, you can add
+    many dynamic fields.
+    :type dynamic_structure: list
     """
-    for column in dynamic_values:
-        if column == '' or isinstance(column, QPyNullVariant):
-            column = 'NULL'
-        field = create_field_from_definition(dynamic_field, column)
-        layer.addAttribute(field)
-        key = dynamic_field['key'] % column
-        value = dynamic_field['field_name'] % column
-        layer.keywords['inasafe_fields'][key] = value
+    for new_dynamic_field in dynamic_structure:
+        field_definition = new_dynamic_field[0]
+        unique_values = new_dynamic_field[1]
+        for column in unique_values:
+            if column == '' or isinstance(column, QPyNullVariant):
+                column = 'NULL'
+            field = create_field_from_definition(field_definition, column)
+            layer.addAttribute(field)
+            key = field_definition['key'] % column
+            value = field_definition['field_name'] % column
+            layer.keywords['inasafe_fields'][key] = value
 
     for static_field in static_fields:
         field = create_field_from_definition(static_field)

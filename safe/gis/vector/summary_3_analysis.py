@@ -136,12 +136,14 @@ def analysis_summary(aggregate_hazard, analysis):
         total_not_exposed_field,
         total_field]
 
+    dynamic_structure = [
+        [hazard_count_field, unique_hazard],
+    ]
     add_fields(
         analysis,
         absolute_values,
         counts,
-        unique_hazard,
-        hazard_count_field)
+        dynamic_structure)
 
     affected_sum = 0
     not_affected_sum = 0
