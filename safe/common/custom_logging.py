@@ -41,7 +41,7 @@ from safe.definitions.provenance import (
 )  # NOQA
 from safe.definitions.sentry import PRODUCTION_SERVER  # NOQA
 from safe.utilities.i18n import tr  # NOQA
-from safe.utilities.gis import qgis_version  # NOQA
+from safe.utilities.gis import qgis_version_detailed  # NOQA
 from safe.utilities.utilities import readable_os_version  # NOQA
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -172,7 +172,11 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
         tags = dict()
         tags[provenance_gdal_version['provenance_key']] = gdal.__version__
         tags[provenance_os['provenance_key']] = readable_os_version()
-        tags[provenance_qgis_version['provenance_key']] = qgis_version()
+        qgis_short_version = provenance_qgis_version['provenance_key']
+        qgis_full_version = qgis_short_version + '_full'
+        versions = [unicode(v) for v in qgis_version_detailed()]
+        tags[qgis_short_version] = '.'.join(versions[0:2])
+        tags[qgis_full_version] = '.'.join(versions[0:3])
         tags[provenance_qt_version['provenance_key']] = QT_VERSION_STR
 
         hostname = os.environ.get('HOSTNAME_SENTRY', socket.gethostname())

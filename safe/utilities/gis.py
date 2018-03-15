@@ -349,6 +349,16 @@ def wkt_to_rectangle(extent):
     return rectangle
 
 
+def qgis_version_detailed():
+    """Get the detailed version of QGIS.
+
+    :returns: List containing major, minor and patch.
+    :rtype: list
+    """
+    version = unicode(QGis.QGIS_VERSION_INT)
+    return [int(version[0]), int(version[1:3]), int(version[3:])]
+
+
 def qgis_version():
     """Get the version of QGIS.
 
