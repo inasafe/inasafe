@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import logging
 import os
+import socket
 import sys
 
 from osgeo import gdal
@@ -161,22 +162,26 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     # We will log exceptions only there. You need to either:
     #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
     # before this will be enabled or sentry is enabled in QSettings
-    flag = QSettings().value('inasafe/useSentry', False, type=bool)
-    env_inasafe_sentry = 'INASAFE_SENTRY' in os.environ
+    qsettings_flag = QSettings().value('inasafe/useSentry', False, type=bool)
+    environment_flag = 'INASAFE_SENTRY' in os.environ
 
-    if env_inasafe_sentry or flag:
+    if environment_flag or qsettings_flag:
         if sentry_url is None:
             sentry_url = PRODUCTION_SERVER
 
+        tags = dict()
+        tags[provenance_gdal_version['provenance_key']] = gdal.__version__
+        tags[provenance_os['provenance_key']] = readable_os_version()
+        tags[provenance_qgis_version['provenance_key']] = qgis_version()
+        tags[provenance_qt_version['provenance_key']] = QT_VERSION_STR
+
+        hostname = os.environ.get('HOSTNAME_SENTRY', socket.gethostname())
+
         sentry_handler = SentryHandler(
             dsn=sentry_url,
+            name=hostname,
             release=get_version(),
-            tags={
-                provenance_gdal_version['provenance_key']: gdal.__version__,
-                provenance_os['provenance_key']: readable_os_version(),
-                provenance_qgis_version['provenance_key']: qgis_version(),
-                provenance_qt_version['provenance_key']: QT_VERSION_STR,
-            }
+            tags=tags,
         )
         sentry_handler.setFormatter(formatter)
         sentry_handler.setLevel(logging.ERROR)
