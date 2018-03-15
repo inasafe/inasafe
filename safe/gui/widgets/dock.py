@@ -815,13 +815,21 @@ class Dock(QDockWidget, FORM_CLASS):
                     extra_keywords.get(extra_keyword_analysis_type['key']) == (
                         MULTI_EXPOSURE_ANALYSIS_FLAG))
 
+                # The user might have moved the analysis folder.
+                # We will send the current path of the layer to the impact
+                # function as well. We will be used as a fallback to check in
+                # the layer.
+                parent_directory = os.path.dirname(
+                    layer.source().split('|')[0])
+
                 if provenances and is_multi_exposure:
                     self.impact_function = (
                         MultiExposureImpactFunction.load_from_output_metadata(
-                            keywords))
+                            keywords, parent_directory))
                 else:
                     self.impact_function = (
-                        ImpactFunction.load_from_output_metadata(keywords))
+                        ImpactFunction.load_from_output_metadata(
+                            keywords, parent_directory))
 
             except (KeywordNotFoundError,
                     HashNotFoundError,
@@ -979,20 +987,25 @@ class Dock(QDockWidget, FORM_CLASS):
                 extra_keywords.get(extra_keyword_analysis_type['key']) == (
                     MULTI_EXPOSURE_ANALYSIS_FLAG))
 
+            # The user might have moved the analysis folder.
+            # We will send the current path of the layer to the impact function
+            #  as well. We will be used as a fallback to check in the layer.
+            parent_directory = os.path.dirname(layer.source().split('|')[0])
+
             if provenances:
                 set_provenance_to_project_variables(provenances)
             try:
                 if is_multi_exposure:
                     self.impact_function = (
                         MultiExposureImpactFunction.load_from_output_metadata(
-                            keywords))
+                            keywords, parent_directory))
                 elif provenances:
                     self.impact_function = (
                         ImpactFunction.load_from_output_metadata(
-                            keywords))
+                            keywords, parent_directory))
             except InvalidLayerError as e:
                 display_critical_message_bar(
-                    tr("Invalid Layer"), get_string(e.message))
+                    tr('Invalid Layer'), get_string(e))
                 self.impact_function = None
 
             show_keywords = True
