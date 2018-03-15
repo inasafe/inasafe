@@ -555,16 +555,16 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             code, message, exposure = self._multi_exposure_if.run()
             message = basestring_to_message(message)
             if code == ANALYSIS_FAILED_BAD_INPUT:
-                LOGGER.info(tr(
+                LOGGER.warning(tr(
                     'The impact function could not run because of the inputs.'
                 ))
                 send_error_message(self, message)
-                LOGGER.info(message.to_text())
+                LOGGER.warning(message.to_text())
                 disable_busy_cursor()
                 self.set_enabled_buttons(True)
                 return code, message
             elif code == ANALYSIS_FAILED_BAD_CODE:
-                LOGGER.exception(tr(
+                LOGGER.warning(tr(
                     'The impact function could not run because of a bug.'))
                 LOGGER.exception(message.to_text())
                 send_error_message(self, message)
@@ -581,15 +581,15 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     report))
                 message = basestring_to_message(message)
                 if error_code == ImpactReport.REPORT_GENERATION_FAILED:
-                    LOGGER.info(
+                    LOGGER.warning(
                         'The impact report could not be generated.')
                     send_error_message(self, message)
-                    LOGGER.info(message.to_text())
+                    LOGGER.exception(message.to_text())
                     disable_busy_cursor()
                     self.set_enabled_buttons(True)
                     return error_code, message
             else:
-                LOGGER.info(
+                LOGGER.warning(
                     'Reports are not generated because of your settings.')
                 display_warning_message_bar(
                     tr('Reports'),

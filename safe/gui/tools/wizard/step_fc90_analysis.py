@@ -138,18 +138,18 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Check status
         if status == PREPARE_FAILED_BAD_INPUT:
             self.hide_busy()
-            LOGGER.info(tr(
+            LOGGER.warning(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
-            LOGGER.info(message.to_text())
+            LOGGER.warning(message.to_text())
             send_error_message(self, message)
             return status, message
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
-            LOGGER.exception(tr(
+            LOGGER.warning(tr(
                 'The impact function was not able to be prepared because of a '
                 'bug.'))
-            LOGGER.info(message.to_text())
+            LOGGER.exception(message.to_text())
             send_error_message(self, message)
             return status, message
 
@@ -159,14 +159,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Check status
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
-            LOGGER.info(tr(
+            LOGGER.warning(tr(
                 'The impact function could not run because of the inputs.'))
-            LOGGER.info(message.to_text())
+            LOGGER.warning(message.to_text())
             send_error_message(self, message)
             return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
-            LOGGER.exception(tr(
+            LOGGER.warning(tr(
                 'The impact function could not run because of a bug.'))
             LOGGER.exception(message.to_text())
             send_error_message(self, message)
@@ -199,7 +199,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             LOGGER.info(tr(
                 'The impact report could not be generated.'))
             send_error_message(self, message)
-            LOGGER.info(message.to_text())
+            LOGGER.exception(message.to_text())
             return ANALYSIS_FAILED_BAD_CODE, message
 
         self.extent.set_last_analysis_extent(

@@ -1332,14 +1332,14 @@ class Dock(QDockWidget, FORM_CLASS):
             raise
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
-            LOGGER.info(tr(
+            LOGGER.warning(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
-            LOGGER.info(message.to_text())
+            LOGGER.warning(message.to_text())
             return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
-            LOGGER.exception(tr(
+            LOGGER.warning(tr(
                 'The impact function could not run because of a bug.'))
             LOGGER.exception(message.to_text())
             send_error_message(self, message)
@@ -1368,13 +1368,13 @@ class Dock(QDockWidget, FORM_CLASS):
 
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
                 self.hide_busy()
-                LOGGER.info(tr(
+                LOGGER.warning(tr(
                     'The impact report could not be generated.'))
                 send_error_message(self, message)
-                LOGGER.info(message.to_text())
+                LOGGER.exception(message.to_text())
                 return ANALYSIS_FAILED_BAD_CODE, message
         else:
-            LOGGER.info(
+            LOGGER.warning(
                 'Reports are not generated because of your settings.')
             display_warning_message_bar(
                 tr('Reports'),
