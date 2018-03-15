@@ -1449,7 +1449,7 @@ class MultiExposureImpactFunction(object):
             exposure_key = (
                 analysis.provenance['exposure_keywords']['exposure'])
             analysis_summary = analysis.analysis_impacted
-            dict_of_exposure_summary_id[exposure_key] = analysis_summary.id()
+            dict_of_analysis_summary_id[exposure_key] = analysis_summary.id()
 
         # update the provenance for exposure summary layers
         set_provenance(
