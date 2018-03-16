@@ -1884,7 +1884,8 @@ class ImpactFunction(object):
         for pre_processor in self._preprocessors:
             layer = pre_processor['process']['function'](self)
             purpose = pre_processor['output'].get('value')['key']
-            result, name = self.datastore.add_layer(layer, purpose)
+            save_style = pre_processor['output'].get('save_style', False)
+            result, name = self.datastore.add_layer(layer, purpose, save_style)
             if not result:
                 raise Exception(
                     tr('Something went wrong with the datastore : '

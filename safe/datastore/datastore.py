@@ -89,7 +89,7 @@ class DataStore(object):
         """
         raise NotImplementedError
 
-    def add_layer(self, layer, layer_name):
+    def add_layer(self, layer, layer_name, save_style=False):
         """Add a layer to the datastore.
 
         :param layer: The layer to add.
@@ -97,6 +97,9 @@ class DataStore(object):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -113,12 +116,12 @@ class DataStore(object):
             return False, tr('The layer already exists in the datastore.')
 
         if isinstance(layer, QgsRasterLayer):
-            result = self._add_raster_layer(layer, layer_name)
+            result = self._add_raster_layer(layer, layer_name, save_style)
         else:
             if layer.wkbType() == QGis.WKBNoGeometry:
-                result = self._add_tabular_layer(layer, layer_name)
+                result = self._add_tabular_layer(layer, layer_name, save_style)
             else:
-                result = self._add_vector_layer(layer, layer_name)
+                result = self._add_vector_layer(layer, layer_name, save_style)
 
         if result[0]:
             LOGGER.info(
@@ -228,7 +231,7 @@ class DataStore(object):
         return None
 
     @abstractmethod
-    def _add_raster_layer(self, raster_layer, layer_name):
+    def _add_raster_layer(self, raster_layer, layer_name, save_style=False):
         """Add a raster layer to the database.
 
         :param raster_layer: The layer to add.
@@ -237,6 +240,9 @@ class DataStore(object):
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
 
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
+
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
             name which has been used or the error message.
@@ -247,7 +253,7 @@ class DataStore(object):
         raise NotImplementedError
 
     @abstractmethod
-    def _add_vector_layer(self, vector_layer, layer_name):
+    def _add_vector_layer(self, vector_layer, layer_name, save_style=False):
         """Add a vector layer to the database.
 
         :param vector_layer: The layer to add.
@@ -256,6 +262,9 @@ class DataStore(object):
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
 
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
+
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
             name which has been used or the error message.
@@ -266,7 +275,7 @@ class DataStore(object):
         raise NotImplementedError
 
     @abstractmethod
-    def _add_tabular_layer(self, tabular_layer, layer_name):
+    def _add_tabular_layer(self, tabular_layer, layer_name, save_style=False):
         """Add a vector layer to the database.
 
         :param tabular_layer: The layer to add.
@@ -274,6 +283,9 @@ class DataStore(object):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer

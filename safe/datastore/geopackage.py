@@ -179,7 +179,7 @@ class GeoPackage(DataStore):
             else:
                 return None
 
-    def _add_vector_layer(self, vector_layer, layer_name):
+    def _add_vector_layer(self, vector_layer, layer_name, save_style=False):
         """Add a vector layer to the geopackage.
 
         :param vector_layer: The layer to add.
@@ -187,6 +187,10 @@ class GeoPackage(DataStore):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        Not implemented in geopackage !
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -219,7 +223,7 @@ class GeoPackage(DataStore):
 
         return True, layer_name
 
-    def _add_raster_layer(self, raster_layer, layer_name):
+    def _add_raster_layer(self, raster_layer, layer_name, save_style=False):
         """Add a raster layer to the folder.
 
         :param raster_layer: The layer to add.
@@ -227,6 +231,10 @@ class GeoPackage(DataStore):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        Not implemented in geopackage !
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -260,7 +268,7 @@ class GeoPackage(DataStore):
         source = None
         return True, layer_name
 
-    def _add_tabular_layer(self, tabular_layer, layer_name):
+    def _add_tabular_layer(self, tabular_layer, layer_name, save_style=False):
         """Add a tabular layer to the geopackage.
 
         :param tabular_layer: The layer to add.
@@ -269,6 +277,10 @@ class GeoPackage(DataStore):
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
 
+        :param save_style: If we have to save a QML too. Default to False.
+        Not implemented in geopackage !
+        :type save_style: bool
+
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
             name which has been used or the error message.
@@ -276,4 +288,4 @@ class GeoPackage(DataStore):
 
         .. versionadded:: 4.0
         """
-        return self._add_vector_layer(tabular_layer, layer_name)
+        return self._add_vector_layer(tabular_layer, layer_name, save_style)

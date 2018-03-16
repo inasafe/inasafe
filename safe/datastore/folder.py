@@ -142,7 +142,7 @@ class Folder(DataStore):
         else:
             return None
 
-    def _add_tabular_layer(self, tabular_layer, layer_name):
+    def _add_tabular_layer(self, tabular_layer, layer_name, save_style=False):
         """Add a tabular layer to the folder.
 
         :param tabular_layer: The layer to add.
@@ -150,6 +150,9 @@ class Folder(DataStore):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -168,10 +171,14 @@ class Folder(DataStore):
             None,
             'CSV')
 
+        if save_style:
+            style_path = QFileInfo(self.uri.filePath(layer_name + '.qml'))
+            tabular_layer.saveNamedStyle(style_path.absoluteFilePath())
+
         assert output.exists()
         return True, output.baseName()
 
-    def _add_vector_layer(self, vector_layer, layer_name):
+    def _add_vector_layer(self, vector_layer, layer_name, save_style=False):
         """Add a vector layer to the folder.
 
         :param vector_layer: The layer to add.
@@ -179,6 +186,9 @@ class Folder(DataStore):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -207,10 +217,14 @@ class Folder(DataStore):
             vector_layer.crs(),
             driver_mapping[self._default_vector_format])
 
+        if save_style:
+            style_path = QFileInfo(self.uri.filePath(layer_name + '.qml'))
+            vector_layer.saveNamedStyle(style_path.absoluteFilePath())
+
         assert output.exists()
         return True, output.baseName()
 
-    def _add_raster_layer(self, raster_layer, layer_name):
+    def _add_raster_layer(self, raster_layer, layer_name, save_style=False):
         """Add a raster layer to the folder.
 
         :param raster_layer: The layer to add.
@@ -218,6 +232,9 @@ class Folder(DataStore):
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str
+
+        :param save_style: If we have to save a QML too. Default to False.
+        :type save_style: bool
 
         :returns: A two-tuple. The first element will be True if we could add
             the layer to the datastore. The second element will be the layer
@@ -257,6 +274,10 @@ class Folder(DataStore):
                 crs)
 
             del file_writer
+
+        if save_style:
+            style_path = QFileInfo(self.uri.filePath(layer_name + '.qml'))
+            raster_layer.saveNamedStyle(style_path.absoluteFilePath())
 
         assert output.exists()
         return True, output.baseName()

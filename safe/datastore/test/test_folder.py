@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 
 from tempfile import mkdtemp
-from os.path import join, normpath, normcase
+from os.path import join, normpath, normcase, exists, isfile
 
 from safe.test.utilities import qgis_iface
 from PyQt4.QtCore import QDir, QVariant
@@ -57,7 +57,7 @@ class TestFolder(unittest.TestCase):
             'hazard', 'flood_multipart_polygons.shp')
         vector_layer_name = 'flood_test'
 
-        result = data_store.add_layer(layer, vector_layer_name)
+        result = data_store.add_layer(layer, vector_layer_name, True)
         self.assertTrue(result[0])
         self.assertEqual(result[1], vector_layer_name)
 
@@ -76,6 +76,12 @@ class TestFolder(unittest.TestCase):
             normcase(normpath(
                 data_store.layer_uri(vector_layer_name))), expected)
 
+        # The style must be there
+        expected = unicode(
+            normcase(normpath(join(path, vector_layer_name + '.qml'))))
+        self.assertTrue(exists(expected))
+        self.assertTrue(isfile(expected))
+
         # This layer do not exist
         self.assertIsNone(data_store.layer_uri('fake_layer'))
 
@@ -85,8 +91,14 @@ class TestFolder(unittest.TestCase):
         self.assertFalse(result[0])
 
         raster_layer_name = 'flood_raster'
-        result = data_store.add_layer(layer, raster_layer_name)
+        result = data_store.add_layer(layer, raster_layer_name, False)
         self.assertTrue(result[0])
+
+        # The style must not be there
+        expected = unicode(
+            normcase(normpath(join(path, raster_layer_name + '.qml'))))
+        self.assertFalse(exists(expected))
+        self.assertFalse(isfile(expected))
 
         # The datastore should have two layers.
         self.assertEqual(len(data_store.layers()), 2)
