@@ -133,5 +133,6 @@ pre_processor_earthquake_contour = {
         'type': 'layer',
         'key': layer_purpose,
         'value': layer_purpose_earthquake_contour,
+        'save_style': True,
     }
 }
