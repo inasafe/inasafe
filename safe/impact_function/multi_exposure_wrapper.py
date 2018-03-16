@@ -1426,8 +1426,6 @@ class MultiExposureImpactFunction(object):
 
         dict_of_exposure_summary = get_provenance(
             provenance, provenance_multi_exposure_summary_layers)
-        dict_of_analysis_summary = get_provenance(
-            provenance, provenance_multi_exposure_analysis_summary_layers)
         dict_of_exposure_summary_id = {}
         dict_of_analysis_summary_id = {}
 
