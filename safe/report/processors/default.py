@@ -431,6 +431,28 @@ def qgis_composer_renderer(impact_report, component):
     load_status = composition.loadFromTemplate(
         document, context.substitution_map)
 
+    # Search for specified map extent in the template.
+    min_x = None
+    min_y = None
+    max_x = None
+    max_y = None
+    try:
+        root_element = document.namedItem('Composer')
+        composition_element = root_element.namedItem('Composition')
+        composer_map_element = composition_element.namedItem('ComposerMap')
+        extent_element = composer_map_element.namedItem('Extent')
+        if isinstance(extent_element, QtXml.QDomNode):
+            min_x = float(
+                extent_element.attributes().namedItem('xmin').nodeValue())
+            min_y = float(
+                extent_element.attributes().namedItem('ymin').nodeValue())
+            max_x = float(
+                extent_element.attributes().namedItem('xmax').nodeValue())
+            max_y = float(
+                extent_element.attributes().namedItem('ymax').nodeValue())
+    except AttributeError:
+        pass  # use default extent
+
     if not load_status:
         raise TemplateLoadingError(
             tr('Error loading template: %s') % template_path)
