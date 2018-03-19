@@ -239,9 +239,10 @@ def get_analysis_dir(exposure_key=None):
                 extra_keywords_found = keywords.get('extra_keywords')
                 provenance = keywords.get('provenance_data')
                 if provenance:
-                    exposure_key_found = (
-                        provenance['exposure_keywords']['exposure'])
-                    if exposure_key == exposure_key_found:
+                    exposure_keywords = provenance.get('exposure_keywords', {})
+                    exposure_key_found = exposure_keywords.get('exposure')
+                    if exposure_key_found and (
+                            exposure_key == exposure_key_found):
                         return layer
                 if not exposure_key and extra_keywords_found and (
                         extra_keywords_found[

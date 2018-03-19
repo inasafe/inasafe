@@ -1427,6 +1427,8 @@ class MultiExposureImpactFunction(object):
         dict_of_exposure_summary = get_provenance(
             provenance, provenance_multi_exposure_summary_layers)
         dict_of_exposure_summary_id = {}
+        dict_of_analysis_summary_id = {}
+
         for exposure_key, exposure_summary in (
                 dict_of_exposure_summary.iteritems()):
             layer = load_layer_from_registry(exposure_summary)
@@ -1443,11 +1445,23 @@ class MultiExposureImpactFunction(object):
                 serialized_impact_function.aggregate_hazard_impacted)
             dict_of_exposure_summary_id[exposure_key] = impact_layer.id()
 
+        for analysis in impact_function._impact_functions:
+            exposure_key = (
+                analysis.provenance['exposure_keywords']['exposure'])
+            analysis_summary = analysis.analysis_impacted
+            dict_of_exposure_summary_id[exposure_key] = analysis_summary.id()
+
         # update the provenance for exposure summary layers
         set_provenance(
             provenance,
             provenance_multi_exposure_summary_layers_id,
             dict_of_exposure_summary_id)
+
+        # update the provenance for analysis summary layers
+        set_provenance(
+            provenance,
+            provenance_multi_exposure_analysis_summary_layers_id,
+            dict_of_analysis_summary_id)
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
