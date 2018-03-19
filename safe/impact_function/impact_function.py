@@ -356,12 +356,17 @@ class ImpactFunction(object):
             'hazard',
             'exposure',
             'aggregation',
-            'impact',
-            'exposure_summary',
-            'aggregate_hazard_impacted',
-            'aggregation_summary',
-            'analysis_impacted',
-            'exposure_summary_table',
+
+            # Output layers on new IF object will have a different provenance
+            # data with the one from original IF.
+
+            # 'impact',
+            # 'exposure_summary',
+            # 'aggregate_hazard_impacted',
+            # 'aggregation_summary',
+            # 'analysis_impacted',
+            # 'exposure_summary_table',
+
             'profiling',
         ]
         for if_property in properties:
@@ -2704,18 +2709,24 @@ class ImpactFunction(object):
         """
         impact_function = ImpactFunction()
         provenance = output_metadata['provenance_data']
-        # Set provenance data
-        impact_function._provenance = provenance
 
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
             impact_function.exposure = load_layer_from_registry(exposure_path)
+            set_provenance(
+                provenance,
+                provenance_exposure_layer_id,
+                impact_function.exposure.id())
 
         # Set hazard layer
         hazard_path = get_provenance(provenance, provenance_hazard_layer)
         if hazard_path:
             impact_function.hazard = load_layer_from_registry(hazard_path)
+            set_provenance(
+                provenance,
+                provenance_hazard_layer_id,
+                impact_function.hazard.id())
 
         # Set aggregation layer
         aggregation_path = get_provenance(
@@ -2723,6 +2734,10 @@ class ImpactFunction(object):
         if aggregation_path:
             impact_function.aggregation = (
                 load_layer_from_registry(aggregation_path))
+            set_provenance(
+                provenance,
+                provenance_aggregation_layer_id,
+                impact_function.aggregation.id())
 
         # Requested extent
         requested_extent = get_provenance(
@@ -2785,6 +2800,10 @@ class ImpactFunction(object):
         if exposure_summary_path:
             impact_function._exposure_summary = load_layer_from_registry(
                 exposure_summary_path)
+            set_provenance(
+                provenance,
+                provenance_layer_exposure_summary_id,
+                impact_function._exposure_summary.id())
 
         # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
@@ -2792,6 +2811,10 @@ class ImpactFunction(object):
         if aggregate_hazard_impacted_path:
             impact_function._aggregate_hazard_impacted = (
                 load_layer_from_registry(aggregate_hazard_impacted_path))
+            set_provenance(
+                provenance,
+                provenance_layer_aggregate_hazard_impacted_id,
+                impact_function._aggregate_hazard_impacted.id())
 
         # aggregation_summary
         aggregation_summary_path = get_provenance(
@@ -2799,6 +2822,10 @@ class ImpactFunction(object):
         if aggregation_summary_path:
             impact_function._aggregation_summary = load_layer_from_registry(
                 aggregation_summary_path)
+            set_provenance(
+                provenance,
+                provenance_layer_aggregation_summary_id,
+                impact_function._aggregation_summary.id())
 
         # analysis_impacted
         analysis_impacted_path = get_provenance(
@@ -2806,6 +2833,10 @@ class ImpactFunction(object):
         if analysis_impacted_path:
             impact_function._analysis_impacted = load_layer_from_registry(
                 analysis_impacted_path)
+            set_provenance(
+                provenance,
+                provenance_layer_analysis_impacted_id,
+                impact_function._analysis_impacted.id())
 
         # exposure_summary_table
         exposure_summary_table_path = get_provenance(
@@ -2813,6 +2844,10 @@ class ImpactFunction(object):
         if exposure_summary_table_path:
             impact_function._exposure_summary_table = load_layer_from_registry(
                 exposure_summary_table_path)
+            set_provenance(
+                provenance,
+                provenance_layer_exposure_summary_table_id,
+                impact_function._exposure_summary_table.id())
 
         # profiling
         # Skip if it's debug mode
@@ -2833,6 +2868,8 @@ class ImpactFunction(object):
         if aggregation_path:
             impact_function._crs = impact_function.aggregation.crs()
 
+        # Set provenance data
+        impact_function._provenance = provenance
         impact_function._provenance_ready = True
 
         return impact_function

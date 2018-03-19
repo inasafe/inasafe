@@ -644,8 +644,12 @@ class MultiExposureImpactFunction(object):
             'hazard',
             'aggregation',
             'exposures',
-            'aggregation_summary',
-            'analysis_impacted',
+
+            # Output layers on new IF object will have a different provenance
+            # data with the one from original IF.
+
+            # 'aggregation_summary',
+            # 'analysis_impacted',
             # 'impact_functions'
         ]
         for if_property in properties:
@@ -1349,8 +1353,6 @@ class MultiExposureImpactFunction(object):
         """
         impact_function = MultiExposureImpactFunction()
         provenance = output_metadata['provenance_data']
-        # Set provenance data
-        impact_function._provenance = provenance
 
         # Set exposure layer
         paths = get_provenance(provenance, provenance_multi_exposure_layers)
@@ -1405,20 +1407,61 @@ class MultiExposureImpactFunction(object):
             impact_function._aggregation_summary = load_layer_from_registry(
                 path)
 
+            # make sure the layer id is equal with the one loaded in the IF
+            set_provenance(
+                provenance,
+                provenance_layer_aggregation_summary_id,
+                impact_function._aggregation_summary.id())
+
         # analysis_impacted
         path = get_provenance(provenance, provenance_layer_analysis_impacted)
         if path:
             impact_function._analysis_summary = load_layer_from_registry(path)
 
+            # make sure the layer id is equal with the one loaded in the IF
+            set_provenance(
+                provenance,
+                provenance_layer_analysis_impacted_id,
+                impact_function._analysis_summary.id())
+
         dict_of_exposure_summary = get_provenance(
             provenance, provenance_multi_exposure_summary_layers)
-        for exposure_summary in dict_of_exposure_summary.values():
+        dict_of_exposure_summary_id = {}
+        dict_of_analysis_summary_id = {}
+
+        for exposure_key, exposure_summary in (
+                dict_of_exposure_summary.iteritems()):
             layer = load_layer_from_registry(exposure_summary)
             keywords = KeywordIO.read_keywords(layer)
+
+            # append single IF for each exposure
             serialized_impact_function = (
                 ImpactFunction.load_from_output_metadata(keywords))
             impact_function._impact_functions.append(
                 serialized_impact_function)
+
+            # make sure the layer id is equal with the one loaded in the IF
+            impact_layer = serialized_impact_function.exposure_summary or (
+                serialized_impact_function.aggregate_hazard_impacted)
+            dict_of_exposure_summary_id[exposure_key] = impact_layer.id()
+
+        for analysis in impact_function._impact_functions:
+            exposure_key = (
+                analysis.provenance['exposure_keywords']['exposure'])
+            analysis_summary = analysis.analysis_impacted
+            dict_of_exposure_summary_id[exposure_key] = analysis_summary.id()
+
+        # update the provenance for exposure summary layers
+        set_provenance(
+            provenance,
+            provenance_multi_exposure_summary_layers_id,
+            dict_of_exposure_summary_id)
+
+        # update the provenance for analysis summary layers
+        set_provenance(
+            provenance,
+            provenance_multi_exposure_analysis_summary_layers_id,
+            dict_of_analysis_summary_id)
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
@@ -1428,6 +1471,8 @@ class MultiExposureImpactFunction(object):
         if crs:
             impact_function._crs = QgsCoordinateReferenceSystem(crs)
 
+        # Set provenance data
+        impact_function._provenance = provenance
         impact_function._provenance_ready = True
 
         return impact_function

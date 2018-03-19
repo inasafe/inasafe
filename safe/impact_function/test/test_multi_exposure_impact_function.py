@@ -257,3 +257,10 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
             load_from_output_metadata(output_metadata)
         self.assertEqualImpactFunction(
             impact_function, new_impact_function)
+
+        # Check the analysis layer id equal with the actual layer
+        old_analysis_layer_id = impact_function.provenance[
+            provenance_layer_analysis_impacted['provenance_key']]
+        new_analysis_layer_id = new_impact_function.provenance[
+            provenance_layer_analysis_impacted['provenance_key']]
+        self.assertEqual(old_analysis_layer_id, new_analysis_layer_id)
