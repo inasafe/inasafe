@@ -1291,6 +1291,21 @@ class MultiExposureImpactFunction(object):
                     add_layer_to_canvas(
                         map_overview_layer, map_overview['id'])
 
+                    # We need to check if the population analysis summary
+                    # layer is on the layer registry and selected or not.
+                    population_analysis_summary = None
+                    layer_registry = QgsMapLayerRegistry.instance()
+                    for layer_id, layer in (
+                            layer_registry.mapLayers().iteritems()):
+                        if layer_id == impact_function.analysis_impacted.id():
+                            population_analysis_summary = layer
+                    if not population_analysis_summary:
+                        population_analysis_summary = (
+                            impact_function.analysis_impacted)
+                        add_layer_to_canvas(population_analysis_summary)
+
+                    iface.setActiveLayer(population_analysis_summary)
+
                     self._impact_report = ImpactReport(
                         iface,
                         report_metadata,
@@ -1299,6 +1314,7 @@ class MultiExposureImpactFunction(object):
                 else:
                     break
             else:
+                iface.setActiveLayer(self.analysis_impacted)
                 self._impact_report = ImpactReport(
                     iface,
                     report_metadata,
