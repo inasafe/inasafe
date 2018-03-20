@@ -28,6 +28,7 @@ status=final
 changelog=
     Version 4.3.4:
     - Add template extent setting as a property of Impact Report.
+    - Fix no expressions on infographic on multi-exposure analysis.
     Version 4.3.3:
     - Fix expression error on every html report expressions.
     - Fix layer id information on Impact Function serialization.
