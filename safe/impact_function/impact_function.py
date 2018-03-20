@@ -2880,7 +2880,8 @@ class ImpactFunction(object):
             output_folder=None,
             iface=None,
             ordered_layers_uri=None,
-            legend_layers_uri=None):
+            legend_layers_uri=None,
+            use_template_extent=False):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -2897,6 +2898,9 @@ class ImpactFunction(object):
 
         :param legend_layers_uri: A list of layers uri for map legend.
         :type legend_layers_uri: list
+
+        :param use_template_extent: A condition for using template extent.
+        :type use_template_extent: bool
 
         :returns: Tuple of error code and message
         :type: tuple
@@ -2970,7 +2974,8 @@ class ImpactFunction(object):
                 impact_function=self,
                 extra_layers=extra_layers,
                 ordered_layers=ordered_layers,
-                legend_layers=legend_layers)
+                legend_layers=legend_layers,
+                use_template_extent=use_template_extent)
 
             # Get other setting
             logo_path = setting('organisation_logo_path', None, str)
