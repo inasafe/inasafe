@@ -2903,6 +2903,9 @@ class ImpactFunction(object):
         :param use_template_extent: A condition for using template extent.
         :type use_template_extent: bool
 
+        :returns: Tuple of error code and message
+        :type: tuple
+
         .. versionadded:: 4.3
         """
         # iface set up, in case IF run from test
