@@ -132,11 +132,10 @@ age_gender_section_notes = {
     'id': 'age-gender-section-notes',
     'description': tr(''),
     'string_format': tr(
-        'The total number of displaced people presented is the result of the '
-        'InaSAFE population analysis. The total results has been rounded to '
-        'the nearest thousand. The size of the icon does not represent the '
-        'number.If there is a value of 0, then corresponding object will not '
-        'be displayed on this page.')
+        'The total number of displaced people presented (expressed in '
+        'thousands) is the result of the InaSAFE population analysis. '
+        'The size of the icon does not reflect the number of people. If there '
+        'is a value of 0, the corresponding object is not displayed.')
 }
 
 minimum_needs_section_notes = {
