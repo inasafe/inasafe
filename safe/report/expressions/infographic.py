@@ -246,7 +246,7 @@ def age_gender_section_notes_element(feature, parent):
     """Retrieve age gender section notes string from definitions."""
     _ = feature, parent  # NOQA
     notes = age_gender_section_notes['string_format']
-    return notes.capitalize()
+    return notes
 
 
 description = tr(
@@ -338,4 +338,4 @@ def minimum_needs_section_notes_element(feature, parent):
     """Retrieve minimum needs section notes string from definitions."""
     _ = feature, parent  # NOQA
     notes = minimum_needs_section_notes['string_format']
-    return notes.capitalize()
+    return notes
