@@ -286,7 +286,8 @@ class ImpactReport(object):
             ordered_layers=None,
             legend_layers=None,
             minimum_needs_profile=None,
-            multi_exposure_impact_function=None):
+            multi_exposure_impact_function=None,
+            use_template_extent=False):
         """Constructor for the Composition Report class.
 
         :param iface: Reference to the QGIS iface object.
@@ -327,6 +328,7 @@ class ImpactReport(object):
         self._legend_layers = legend_layers
         self._minimum_needs = minimum_needs_profile
         self._multi_exposure_impact_function = multi_exposure_impact_function
+        self._use_template_extent = use_template_extent
         self._inasafe_context = InaSAFEReportContext()
 
         # QgsMapSettings is added in 2.4
@@ -649,6 +651,18 @@ class ImpactReport(object):
         :type legend_layers: list
         """
         self._legend_layers = legend_layers
+
+    @property
+    def use_template_extent(self):
+        """Getter to the flag for using template extent.
+
+        If True, map report will use extent defined in the template. If False,
+        map report will use analysis extent.
+
+        :return: The flag for using template extent or not.
+        :rtype: bool
+        """
+        return self._use_template_extent
 
     @property
     def minimum_needs(self):
