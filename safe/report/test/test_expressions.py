@@ -243,7 +243,7 @@ class TestExpressions(unittest.TestCase):
 
         # age_gender_section_notes_element
         expected_result = (
-            age_gender_section_notes['string_format'].capitalize())
+            age_gender_section_notes['string_format'])
         self.evaluate(age_gender_section_notes_element, expected_result)
 
         # vulnerability_section_header_element
@@ -253,7 +253,7 @@ class TestExpressions(unittest.TestCase):
 
         # female_vulnerability_section_header_element
         expected_result = (
-            female_vulnerability_section_header['string_format'].capitalize())
+            female_vulnerability_section_header['string_format'])
         self.evaluate(
             female_vulnerability_section_header_element, expected_result)
 
