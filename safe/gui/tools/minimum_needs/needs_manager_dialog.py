@@ -456,7 +456,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         minimum_parameter = FloatParameter('UUID-6')
         minimum_parameter.name = self.resource_parameters['Minimum allowed']
         minimum_parameter.is_required = True
-        minimum_parameter.precision = 2
+        minimum_parameter.precision = 6
         minimum_parameter.minimum_allowed_value = -99999.0
         minimum_parameter.maximum_allowed_value = 99999.0
         minimum_parameter.help_text = tr(
@@ -472,7 +472,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         maximum_parameter = FloatParameter('UUID-7')
         maximum_parameter.name = self.resource_parameters['Maximum allowed']
         maximum_parameter.is_required = True
-        maximum_parameter.precision = 2
+        maximum_parameter.precision = 6
         maximum_parameter.minimum_allowed_value = -99999.0
         maximum_parameter.maximum_allowed_value = 99999.0
         maximum_parameter.help_text = tr(
@@ -488,7 +488,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         default_parameter = FloatParameter('UUID-8')
         default_parameter.name = self.resource_parameters['Default']
         default_parameter.is_required = True
-        default_parameter.precision = 2
+        default_parameter.precision = 6
         default_parameter.minimum_allowed_value = -99999.0
         default_parameter.maximum_allowed_value = 99999.0
         default_parameter.help_text = tr(
