@@ -314,7 +314,9 @@ def smooth_shakemap(
         output_file_path,
         shakemap_file.RasterXSize,
         shakemap_file.RasterYSize,
-        1)
+        1,
+        gdal.GDT_Float32  # Important, since the default is integer
+    )
     smoothed_shakemap_file.GetRasterBand(1).WriteArray(smoothed_array)
 
     # CRS
