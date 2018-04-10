@@ -270,6 +270,5 @@ class TestExpressions(unittest.TestCase):
             additional_minimum_needs_section_header_element, expected_result)
 
         # minimum_needs_section_notes_element
-        expected_result = (
-            minimum_needs_section_notes['string_format'].capitalize())
+        expected_result = minimum_needs_section_notes['string_format']
         self.evaluate(minimum_needs_section_notes_element, expected_result)
