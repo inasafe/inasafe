@@ -37,8 +37,6 @@ def smart_clip(
     :param mask_layer: The vector layer to use for clipping.
     :type mask_layer: QgsVectorLayer
 
-<<<<<<< HEAD
-=======
     :param check_selected_flag: If the algorithm must check the selection flag.
     Default to False.
     :type check_selected_flag: bool
@@ -48,7 +46,6 @@ def smart_clip(
         Defaults to None.
     :type callback: function
 
->>>>>>> allow a selection on the exposure layer too
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
 
