@@ -59,11 +59,15 @@ def qgis_iface():
         return get_iface()
 
 
-def get_qgis_app(requested_locale='en_US'):
+def get_qgis_app(requested_locale='en_US', qsetting=''):
     """ Start one QGIS application to test against.
 
     :param locale: The locale we want the qgis to launch with.
     :type locale: str
+
+    :param qsetting: String to specify the QSettings. By default,
+            use empty string.
+    :type qsetting: str
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
@@ -74,7 +78,7 @@ def get_qgis_app(requested_locale='en_US'):
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
     from PyQt4.QtCore import QSettings
-    settings = QSettings()
+    settings = QSettings(qsetting)
 
     current_locale = settings.value('locale/userLocale', 'en_US')
     locale_match = current_locale == requested_locale
@@ -111,7 +115,7 @@ def get_qgis_app(requested_locale='en_US'):
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
         # Save some settings
-        settings = QSettings()
+        settings = QSettings(qsetting)
         settings.setValue('locale/overrideFlag', True)
         settings.setValue('locale/userLocale', requested_locale)
         # We disabled message bars for now for extent selector as

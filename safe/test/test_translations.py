@@ -21,7 +21,7 @@ from safe.common.utilities import safe_dir
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QTranslator
+from PyQt4.QtCore import QCoreApplication, QTranslator, QSettings
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -135,6 +135,23 @@ class SafeTranslationsTest(unittest.TestCase):
             '@default', 'No styleInfo was found for layer %s')
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
+
+    def test_qgis_app_locale(self):
+        """Test for qgis app locale."""
+
+        user_locale = QSettings().value('locale/userLocale')
+        expected_locale = 'en_US'
+        self.assertEqual(user_locale, expected_locale)
+
+        from safe.test.utilities import get_qgis_app
+        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app('id', 'InaSAFETest')
+
+        user_locale = QSettings().value('locale/userLocale')
+        expected_locale = 'id'
+        self.assertEqual(user_locale, expected_locale)
+
+        # Set back to en
+        os.environ['LANG'] = 'en'
 
 
 if __name__ == "__main__":
