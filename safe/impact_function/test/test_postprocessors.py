@@ -5,7 +5,7 @@ import unittest
 
 from safe.test.utilities import get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard import hazard_generic

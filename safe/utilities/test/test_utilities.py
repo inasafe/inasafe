@@ -11,7 +11,7 @@ from safe.test.utilities import (
     get_qgis_app,
 )
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.utilities.utilities import (
     humanise_seconds,

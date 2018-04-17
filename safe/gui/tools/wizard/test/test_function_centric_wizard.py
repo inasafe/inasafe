@@ -40,7 +40,7 @@ from safe.definitions.utilities import get_allowed_geometries
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 

@@ -22,7 +22,7 @@ from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer,
     standard_data_path)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.datastore.geopackage import GeoPackage
 

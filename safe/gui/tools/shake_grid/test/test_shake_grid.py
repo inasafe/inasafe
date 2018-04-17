@@ -18,7 +18,7 @@ from safe.gui.tools.shake_grid.shake_grid import (
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.definitions.constants import NUMPY_SMOOTHING
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

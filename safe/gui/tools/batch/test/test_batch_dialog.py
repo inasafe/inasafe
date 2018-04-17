@@ -24,7 +24,7 @@ import unittest
 from safe.test.utilities import standard_data_path, get_qgis_app, get_dock
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 import logging
 

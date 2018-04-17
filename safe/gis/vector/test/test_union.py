@@ -6,7 +6,7 @@ from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
 from safe.gis.vector.clean_geometry import clean_layer
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gis.vector.union import union
 from safe.definitions.fields import hazard_class_field, hazard_value_field

@@ -30,7 +30,7 @@ from safe.test.utilities import (
     get_qgis_app)
 from safe.gis.tools import load_layer
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

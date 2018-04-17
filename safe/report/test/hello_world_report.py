@@ -71,7 +71,7 @@ class TestHelloWorldReport(unittest.TestCase):
 
         .. versionadded:: 4.1
         """
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
         output_folder = self.fixtures_dir('../output/hello_world_report')
 
         # sneaky monkey patch

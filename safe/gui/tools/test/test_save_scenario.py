@@ -23,7 +23,7 @@ import unittest
 from qgis.core import QgsMapLayerRegistry
 
 from safe.test.utilities import get_qgis_app, get_dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gui.gui_utilities import layer_from_combo
 from safe.gui.tools.save_scenario import SaveScenarioDialog

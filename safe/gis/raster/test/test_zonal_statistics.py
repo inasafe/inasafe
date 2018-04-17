@@ -6,7 +6,7 @@ from safe.test.utilities import (
     load_test_raster_layer,
     load_test_vector_layer
 )
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from qgis.core import QGis, QgsCoordinateReferenceSystem
 from safe.gis.vector.reproject import reproject

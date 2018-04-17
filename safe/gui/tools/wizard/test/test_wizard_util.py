@@ -3,7 +3,7 @@
 
 import unittest
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gui.tools.wizard.utilities import (
     get_question_text, get_image_path, not_set_image_path)

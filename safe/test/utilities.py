@@ -27,6 +27,8 @@ from safe.common.utilities import unique_filename, temp_dir, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
+from safe.utilities.settings import general_setting, set_general_setting, \
+    set_setting
 from safe.utilities.utilities import monkey_patch_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -66,7 +68,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     :type locale: str
 
     :param qsetting: String to specify the QSettings. By default,
-            use empty string.
+        use empty string.
     :type qsetting: str
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
@@ -78,9 +80,13 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
     from PyQt4.QtCore import QSettings
-    settings = QSettings(qsetting)
+    if qsetting:
+        settings = QSettings(qsetting)
+    else:
+        settings = QSettings()
 
-    current_locale = settings.value('locale/userLocale', 'en_US')
+    current_locale = general_setting(
+        'locale/userLocale', default='en_US', qsettings=settings)
     locale_match = current_locale == requested_locale
 
     if iface and locale_match:
@@ -114,16 +120,21 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
+        if qsetting:
+            settings = QSettings(qsetting)
+        else:
+            settings = QSettings()
+
         # Save some settings
-        settings = QSettings(qsetting)
-        settings.setValue('locale/overrideFlag', True)
-        settings.setValue('locale/userLocale', requested_locale)
+        set_general_setting('locale/overrideFlag', True, settings)
+        set_general_setting(
+            'locale/userLocale', requested_locale, settings)
         # We disabled message bars for now for extent selector as
         # we don't have a main window to show them in TS - version 3.2
-        settings.setValue('inasafe/show_extent_confirmations', False)
-        settings.setValue('inasafe/show_extent_warnings', False)
-        settings.setValue('inasafe/showRubberBands', True)
-        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
+        set_setting('show_extent_warnings', False, settings)
+        set_setting('showRubberBands', True, settings)
+        set_setting('show_extent_confirmations', False, settings)
+        set_setting('analysis_extents_mode', HAZARD_EXPOSURE, settings)
 
         """Setup internationalisation for the plugin."""
 

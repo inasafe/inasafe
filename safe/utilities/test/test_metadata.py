@@ -10,7 +10,7 @@ from PyQt4.QtCore import QUrl
 from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import (
     standard_data_path, clone_shp_layer, get_qgis_app)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,

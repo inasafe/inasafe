@@ -11,7 +11,7 @@ from safe.common.parameters.resource_parameter_widget import (
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.test.utilities import get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

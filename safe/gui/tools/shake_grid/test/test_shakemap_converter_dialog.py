@@ -16,7 +16,7 @@ from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import standard_data_path, get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

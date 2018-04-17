@@ -34,7 +34,7 @@ from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.common.version import get_version
 from safe.utilities.gis import qgis_version
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 LOGGER = logging.getLogger('InaSAFE')
 
 

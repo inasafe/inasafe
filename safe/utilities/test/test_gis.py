@@ -20,7 +20,7 @@ from safe.test.utilities import (
     standard_data_path,
     get_qgis_app)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 class TestQGIS(unittest.TestCase):

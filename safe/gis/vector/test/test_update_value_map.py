@@ -5,7 +5,7 @@ import unittest
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gis.vector.update_value_map import update_value_map
 from safe.definitions.fields import (

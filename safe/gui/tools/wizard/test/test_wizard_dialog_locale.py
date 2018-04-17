@@ -118,7 +118,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        _, _, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
         from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
@@ -151,7 +151,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        _, _, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
         from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 

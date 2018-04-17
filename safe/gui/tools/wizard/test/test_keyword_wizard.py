@@ -14,7 +14,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 from datetime import datetime
 from safe.definitions.constants import big_number
 from safe.definitions.layer_modes import (

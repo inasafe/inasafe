@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 import os
 import re
-from safe.utilities.i18n import tr
+from safe.utilities.i18n import tr, locale
 from safe.common.utilities import safe_dir
 
 # noinspection PyUnresolvedReferences
@@ -29,7 +29,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -124,6 +124,9 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def test_qgis_translations(self):
         """Test for qgis translations."""
+
+        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+
         file_path = safe_dir('i18n/inasafe_id.qm')
         translator = QTranslator()
         translator.load(file_path)
@@ -139,16 +142,15 @@ class SafeTranslationsTest(unittest.TestCase):
     def test_qgis_app_locale(self):
         """Test for qgis app locale."""
 
-        user_locale = QSettings().value('locale/userLocale')
-        expected_locale = 'en_US'
-        self.assertEqual(user_locale, expected_locale)
-
-        from safe.test.utilities import get_qgis_app
         QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app('id', 'InaSAFETest')
 
-        user_locale = QSettings().value('locale/userLocale')
         expected_locale = 'id'
-        self.assertEqual(user_locale, expected_locale)
+        self.assertEqual(locale('InaSAFETest'), expected_locale)
+
+        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+
+        expected_locale = 'en'
+        self.assertEqual(locale('InaSAFETest'), expected_locale)
 
         # Set back to en
         os.environ['LANG'] = 'en'

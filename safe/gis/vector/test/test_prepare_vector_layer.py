@@ -7,7 +7,7 @@ from osgeo import gdal
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 from safe.gis.vector.tools import create_memory_layer

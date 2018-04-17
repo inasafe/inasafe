@@ -11,7 +11,7 @@ from safe.test.utilities import (
 
 from PyQt4 import QtGui
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)

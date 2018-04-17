@@ -28,7 +28,7 @@ from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError
 from safe.test.utilities import assert_hash_for_file, get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 class FileDownloaderTest(unittest.TestCase):

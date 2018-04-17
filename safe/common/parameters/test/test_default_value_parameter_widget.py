@@ -10,7 +10,7 @@ from safe.common.parameters.default_value_parameter_widget import (
     DefaultValueParameterWidget)
 
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

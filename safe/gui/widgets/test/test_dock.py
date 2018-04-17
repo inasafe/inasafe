@@ -10,7 +10,7 @@ import qgis  # pylint: disable=unused-import
 from qgis.core import QgsMapLayerRegistry
 from PyQt4 import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 from safe.definitions.constants import (
     HAZARD_EXPOSURE_VIEW, HAZARD_EXPOSURE)
 from safe.common.utilities import unique_filename

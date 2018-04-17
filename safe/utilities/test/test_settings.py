@@ -4,7 +4,7 @@
 import unittest
 import os
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 from PyQt4.QtCore import QSettings
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.settings import (

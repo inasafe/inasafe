@@ -61,7 +61,7 @@ from safe.definitions.utilities import (
     get_displacement_rate, generate_default_profile, is_affected)
 from safe.utilities.settings import setting, set_setting, delete_setting
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 from qgis.core import QgsMapLayerRegistry, QgsCoordinateReferenceSystem
 

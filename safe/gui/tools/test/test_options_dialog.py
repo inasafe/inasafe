@@ -12,7 +12,7 @@ from safe.common.utilities import temp_dir
 from safe.defaults import default_north_arrow_path, supporters_logo_path
 from PyQt4.QtCore import QSettings
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 LOGGER = logging.getLogger('InaSAFE')
 

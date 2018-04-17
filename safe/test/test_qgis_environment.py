@@ -25,7 +25,7 @@ from qgis.core import (
 
 from safe.test.utilities import get_qgis_app, standard_data_path
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 class QGISTest(unittest.TestCase):
