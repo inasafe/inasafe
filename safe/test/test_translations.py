@@ -21,7 +21,7 @@ from safe.common.utilities import safe_dir
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QTranslator, QSettings
+from PyQt4.QtCore import QCoreApplication, QTranslator
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -122,15 +122,16 @@ class SafeTranslationsTest(unittest.TestCase):
         # Set back to en
         os.environ['LANG'] = 'en'
 
-    # skip to check the travis status
-    @unittest.skip
-    def test_qgis_translations(self):
-        """Test for qgis translations."""
-        file_path = safe_dir('i18n/inasafe_id.qm')
-        translator = QTranslator()
-        translator.load(file_path)
-        QCoreApplication.installTranslator(translator)
+    def test_qgis_app_locale(self):
+        """Test for qgis app locale."""
 
+        # run qgis on bahasa
+        _ = get_qgis_app('id', 'InaSAFETest')
+
+        expected_locale = 'id'
+        self.assertEqual(locale('InaSAFETest'), expected_locale)
+
+        # check for bahasa translation
         expected_message = (
             'Tidak ada informasi gaya yang ditemukan pada lapisan %s')
         real_message = QCoreApplication.translate(
@@ -138,18 +139,19 @@ class SafeTranslationsTest(unittest.TestCase):
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 
-    def test_qgis_app_locale(self):
-        """Test for qgis app locale."""
-
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app('id', 'InaSAFETest')
-
-        expected_locale = 'id'
-        self.assertEqual(locale('InaSAFETest'), expected_locale)
-
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+        # run qgis on english
+        _ = get_qgis_app(qsetting='InaSAFETest')
 
         expected_locale = 'en'
         self.assertEqual(locale('InaSAFETest'), expected_locale)
+
+        # check for english translation
+        expected_message = (
+            'No styleInfo was found for layer %s')
+        real_message = QCoreApplication.translate(
+            '@default', 'No styleInfo was found for layer %s')
+        message = 'expected %s but got %s' % (expected_message, real_message)
+        self.assertEqual(expected_message, real_message, message)
 
         # Set back to en
         os.environ['LANG'] = 'en'
