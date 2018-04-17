@@ -14,6 +14,7 @@ from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
 from PyQt4 import QtGui  # pylint: disable=W0621
+from PyQt4.QtCore import QTranslator
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -22,7 +23,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.common.utilities import unique_filename, temp_dir
+from safe.common.utilities import unique_filename, temp_dir, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
@@ -58,8 +59,11 @@ def qgis_iface():
         return get_iface()
 
 
-def get_qgis_app():
+def get_qgis_app(requested_locale='en_US'):
     """ Start one QGIS application to test against.
+
+    :param locale: The locale we want the qgis to launch with.
+    :type locale: str
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
@@ -69,7 +73,13 @@ def get_qgis_app():
     """
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
-    if iface:
+    from PyQt4.QtCore import QSettings
+    settings = QSettings()
+
+    current_locale = settings.value('locale/userLocale', 'en_US')
+    locale_match = current_locale == requested_locale
+
+    if iface and locale_match:
         from qgis.core import QgsApplication
         QGIS_APP = QgsApplication
         CANVAS = iface.mapCanvas()
@@ -88,7 +98,7 @@ def get_qgis_app():
     except ImportError:
         return None, None, None, None
 
-    if QGIS_APP is None:
+    if QGIS_APP is None or not locale_match:
         gui_flag = True  # All test will run qgis in gui mode
 
         # AG: For testing purposes, we use our own configuration file instead
@@ -99,6 +109,25 @@ def get_qgis_app():
         QCoreApplication.setOrganizationDomain('qgis.org')
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
+        # Save some settings
+        settings = QSettings()
+        settings.setValue('locale/overrideFlag', True)
+        settings.setValue('locale/userLocale', requested_locale)
+        # We disabled message bars for now for extent selector as
+        # we don't have a main window to show them in TS - version 3.2
+        settings.setValue('inasafe/show_extent_confirmations', False)
+        settings.setValue('inasafe/show_extent_warnings', False)
+        settings.setValue('inasafe/showRubberBands', True)
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
+
+        """Setup internationalisation for the plugin."""
+
+        locale_name = str(requested_locale).split('_')[0]
+        # Also set the system locale to the user overridden local
+        # so that the inasafe library functions gettext will work
+        # .. see:: :py:func:`common.utilities`
+        os.environ['LANG'] = str(locale_name)
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
@@ -111,16 +140,17 @@ def get_qgis_app():
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
-        # Save some settings
-        settings = QSettings()
-        settings.setValue('locale/overrideFlag', True)
-        settings.setValue('locale/userLocale', 'en_US')
-        # We disabled message bars for now for extent selector as
-        # we don't have a main window to show them in TS - version 3.2
-        settings.setValue('inasafe/show_extent_confirmations', False)
-        settings.setValue('inasafe/show_extent_warnings', False)
-        settings.setValue('inasafe/showRubberBands', True)
-        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
+        inasafe_translation_path = os.path.join(
+            safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
+
+        if os.path.exists(inasafe_translation_path):
+            translator = QTranslator(QGIS_APP)
+            result = translator.load(inasafe_translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                raise Exception(message)
+            # noinspection PyTypeChecker,PyCallByClass
+            QCoreApplication.installTranslator(translator)
 
     if PARENT is None:
         # noinspection PyPep8Naming
