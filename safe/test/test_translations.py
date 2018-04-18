@@ -136,6 +136,9 @@ class SafeTranslationsTest(unittest.TestCase):
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'Travis recognize QgsApplication as a pyqtWrapperType object.')
     def test_qgis_app_locale(self):
         """Test for qgis app locale."""
 
