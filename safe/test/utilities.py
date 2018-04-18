@@ -88,6 +88,8 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     current_locale = general_setting(
         'locale/userLocale', default='en_US', qsettings=settings)
     locale_match = current_locale == requested_locale
+    init_new_app = not QGIS_APP or (
+        not locale_match and current_locale != 'en_US')
 
     if iface and locale_match:
         from qgis.core import QgsApplication
@@ -108,11 +110,16 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     except ImportError:
         return None, None, None, None
 
-    if QGIS_APP is None or not locale_match:
+    if qsetting:
+        settings = QSettings(qsetting)
+    else:
+        settings = QSettings()
+
+    if init_new_app:
         gui_flag = True  # All test will run qgis in gui mode
 
-        # AG: For testing purposes, we use our own configuration file instead
-        # of using the QGIS apps conf of the host
+        # AG: For testing purposes, we use our own configuration file
+        # instead of using the QGIS apps conf of the host
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setOrganizationName('QGIS')
         # noinspection PyCallByClass,PyArgumentList
@@ -120,29 +127,12 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
-        if qsetting:
-            settings = QSettings(qsetting)
-        else:
-            settings = QSettings()
-
-        # Save some settings
-        set_general_setting('locale/overrideFlag', True, settings)
-        set_general_setting(
-            'locale/userLocale', requested_locale, settings)
         # We disabled message bars for now for extent selector as
         # we don't have a main window to show them in TS - version 3.2
         set_setting('show_extent_warnings', False, settings)
         set_setting('showRubberBands', True, settings)
         set_setting('show_extent_confirmations', False, settings)
         set_setting('analysis_extents_mode', HAZARD_EXPOSURE, settings)
-
-        """Setup internationalisation for the plugin."""
-
-        locale_name = str(requested_locale).split('_')[0]
-        # Also set the system locale to the user overridden local
-        # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(locale_name)
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
@@ -154,6 +144,19 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         QGIS_APP.initQgis()
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
+
+    # Save some settings
+    set_general_setting('locale/overrideFlag', True, settings)
+    set_general_setting('locale/userLocale', requested_locale, settings)
+
+    if requested_locale != 'en_US':
+        """Setup internationalisation for the plugin."""
+
+        locale_name = str(requested_locale).split('_')[0]
+        # Also set the system locale to the user overridden local
+        # so that the inasafe library functions gettext will work
+        # .. see:: :py:func:`common.utilities`
+        os.environ['LANG'] = str(locale_name)
 
         inasafe_translation_path = os.path.join(
             safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')

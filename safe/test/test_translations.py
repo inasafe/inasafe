@@ -122,6 +122,20 @@ class SafeTranslationsTest(unittest.TestCase):
         # Set back to en
         os.environ['LANG'] = 'en'
 
+    def test_qgis_translations(self):
+        """Test for qgis translations."""
+        file_path = safe_dir('i18n/inasafe_id.qm')
+        translator = QTranslator()
+        translator.load(file_path)
+        QCoreApplication.installTranslator(translator)
+
+        expected_message = (
+            'Tidak ada informasi gaya yang ditemukan pada lapisan %s')
+        real_message = QCoreApplication.translate(
+            '@default', 'No styleInfo was found for layer %s')
+        message = 'expected %s but got %s' % (expected_message, real_message)
+        self.assertEqual(expected_message, real_message, message)
+
     def test_qgis_app_locale(self):
         """Test for qgis app locale."""
 
