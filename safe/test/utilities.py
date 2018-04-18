@@ -14,7 +14,7 @@ from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
 from PyQt4 import QtGui  # pylint: disable=W0621
-from PyQt4.QtCore import QTranslator
+from PyQt4.QtCore import QTranslator, pyqtWrapperType
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -88,8 +88,6 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     current_locale = general_setting(
         'locale/userLocale', default='en_US', qsettings=settings)
     locale_match = current_locale == requested_locale
-    init_new_app = not QGIS_APP or (
-        not locale_match and current_locale != 'en_US')
 
     if iface and locale_match:
         from qgis.core import QgsApplication
@@ -97,7 +95,6 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         CANVAS = iface.mapCanvas()
         PARENT = iface.mainWindow()
         IFACE = iface
-        return QGIS_APP, CANVAS, IFACE, PARENT
 
     try:
         from qgis.core import QgsApplication
@@ -115,7 +112,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     else:
         settings = QSettings()
 
-    if init_new_app:
+    if not QGIS_APP:
         gui_flag = True  # All test will run qgis in gui mode
 
         # AG: For testing purposes, we use our own configuration file
@@ -145,30 +142,29 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
+    """Setup internationalisation for the plugin."""
+
     # Save some settings
     set_general_setting('locale/overrideFlag', True, settings)
     set_general_setting('locale/userLocale', requested_locale, settings)
 
-    if requested_locale != 'en_US':
-        """Setup internationalisation for the plugin."""
+    locale_name = str(requested_locale).split('_')[0]
+    # Also set the system locale to the user overridden local
+    # so that the inasafe library functions gettext will work
+    # .. see:: :py:func:`common.utilities`
+    os.environ['LANG'] = str(locale_name)
 
-        locale_name = str(requested_locale).split('_')[0]
-        # Also set the system locale to the user overridden local
-        # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`common.utilities`
-        os.environ['LANG'] = str(locale_name)
+    inasafe_translation_path = os.path.join(
+        safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
 
-        inasafe_translation_path = os.path.join(
-            safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
-
-        if os.path.exists(inasafe_translation_path):
-            translator = QTranslator(QGIS_APP)
-            result = translator.load(inasafe_translation_path)
-            if not result:
-                message = 'Failed to load translation for %s' % locale_name
-                raise Exception(message)
-            # noinspection PyTypeChecker,PyCallByClass
-            QCoreApplication.installTranslator(translator)
+    if os.path.exists(inasafe_translation_path):
+        translator = QTranslator(QGIS_APP)
+        result = translator.load(inasafe_translation_path)
+        if not result:
+            message = 'Failed to load translation for %s' % locale_name
+            raise Exception(message)
+        # noinspection PyTypeChecker,PyCallByClass
+        QCoreApplication.installTranslator(translator)
 
     if PARENT is None:
         # noinspection PyPep8Naming
