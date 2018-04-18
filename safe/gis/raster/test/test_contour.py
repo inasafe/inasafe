@@ -4,13 +4,13 @@
 import os
 from safe.test.utilities import (
     load_test_raster_layer, standard_data_path)
-from safe.test.qgis_app import qgis_app
 import unittest
 from safe.gis.raster.contour import (
     create_smooth_contour, smooth_shakemap, shakemap_contour)
 from safe.common.utilities import unique_filename
 
-APP, IFACE = qgis_app()
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

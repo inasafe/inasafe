@@ -158,7 +158,10 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
 
     if os.path.exists(inasafe_translation_path):
-        translator = QTranslator(QGIS_APP)
+        if isinstance(QGIS_APP, pyqtWrapperType):
+            translator = QTranslator()
+        else:
+            translator = QTranslator(QGIS_APP)
         result = translator.load(inasafe_translation_path)
         if not result:
             message = 'Failed to load translation for %s' % locale_name

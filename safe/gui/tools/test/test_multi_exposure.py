@@ -9,7 +9,6 @@ from safe.definitions.exposure import exposure_road, exposure_population
 from safe.gui.tools.multi_exposure_dialog import (
     MultiExposureDialog)
 from safe.test.utilities import load_test_vector_layer
-from safe.test.qgis_app import qgis_app
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,7 +19,9 @@ __revision__ = '$Format:%H$'
 class MultiExposureDialogTest(unittest.TestCase):
 
     def setUp(self):
-        _, self.iface = qgis_app()
+        from safe.test.utilities import get_qgis_app
+        QGIS_APP, CANVAS, self.iface, PARENT = get_qgis_app(
+            qsetting='InaSAFETest')
 
     def test_custom_order(self):
         """Test we can set a custom order after the analysis."""

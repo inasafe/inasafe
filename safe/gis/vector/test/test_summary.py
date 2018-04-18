@@ -4,7 +4,6 @@ import unittest
 
 from safe.test.utilities import (
     load_test_vector_layer)
-from safe.test.qgis_app import qgis_app
 
 from safe.definitions.fields import (
     total_field,
@@ -31,7 +30,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-qgis_app()
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
 
 
 class TestSummary(unittest.TestCase):
