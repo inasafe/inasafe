@@ -6,12 +6,13 @@ import unittest
 import os
 from qgis.core import QgsMapLayerRegistry
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     standard_data_path, get_qgis_app, load_test_vector_layer)
 
 from PyQt4 import QtGui
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)

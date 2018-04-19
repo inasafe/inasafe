@@ -2,10 +2,11 @@
 
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
     load_local_vector_layer)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gis.vector.default_values import add_default_values
 from safe.definitions.fields import (

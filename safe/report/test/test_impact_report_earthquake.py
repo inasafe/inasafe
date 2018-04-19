@@ -12,7 +12,7 @@ import unittest
 from jinja2.environment import Template
 from qgis.core import QgsCoordinateReferenceSystem
 
-from safe.definitions.constants import ANALYSIS_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS, INASAFE_TEST
 from safe.definitions.reports.components import (
     standard_impact_report_metadata_html,
     general_report_component,
@@ -25,7 +25,7 @@ from safe.test.utilities import (
     load_test_raster_layer)
 from safe.utilities.resources import resources_path
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -2,6 +2,8 @@
 """Test Contour."""
 
 import os
+
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     load_test_raster_layer, standard_data_path)
 import unittest
@@ -10,7 +12,7 @@ from safe.gis.raster.contour import (
 from safe.common.utilities import unique_filename
 
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"

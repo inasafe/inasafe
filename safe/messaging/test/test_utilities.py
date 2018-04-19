@@ -16,11 +16,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import FakeLayer, get_qgis_app
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.utilities.analysis
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.messaging.utilities import generate_insufficient_overlap_message
 

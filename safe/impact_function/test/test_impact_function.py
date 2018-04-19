@@ -15,6 +15,7 @@ from socket import gethostname
 
 from safe.common.version import get_version
 from safe.datastore.datastore import DataStore
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.default_values import female_ratio_default_value
 from safe.definitions.fields import (
     exposure_type_field,
@@ -88,7 +89,7 @@ from safe.test.utilities import (
     compare_wkt
 )
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from qgis.core import (
     QgsVectorLayer,

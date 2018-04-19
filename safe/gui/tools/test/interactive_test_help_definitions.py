@@ -1,10 +1,9 @@
 # coding=utf-8
 
 """Interactive test for definitions help."""
-
-
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 from safe.gui.tools.help_dialog import HelpDialog  # NOQA
 from safe.gui.tools.help import definitions_help  # NOQA
 

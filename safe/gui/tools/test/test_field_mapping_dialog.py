@@ -5,10 +5,11 @@
 import unittest
 import logging
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app, load_test_vector_layer
 from safe.common.exceptions import KeywordNotFoundError
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.fields import female_ratio_field

@@ -6,12 +6,13 @@ import os
 import codecs
 from unittest import expectedFailure
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     standard_data_path,
     get_qgis_app,
 )
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.utilities.utilities import (
     humanise_seconds,

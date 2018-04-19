@@ -2,6 +2,7 @@
 
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     load_test_vector_layer)
 
@@ -31,7 +32,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class TestSummary(unittest.TestCase):

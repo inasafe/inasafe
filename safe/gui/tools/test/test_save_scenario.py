@@ -22,8 +22,9 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app, get_dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.gui_utilities import layer_from_combo
 from safe.gui.tools.save_scenario import SaveScenarioDialog

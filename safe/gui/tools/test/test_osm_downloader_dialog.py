@@ -13,6 +13,7 @@ import shutil
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 from safe.test.utilities import get_qgis_app
 
@@ -21,7 +22,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 LOGGER = logging.getLogger('InaSAFE')
 
 

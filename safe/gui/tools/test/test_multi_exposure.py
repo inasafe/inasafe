@@ -5,6 +5,7 @@ import unittest
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.gui import QgsMapCanvasLayer
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.exposure import exposure_road, exposure_population
 from safe.gui.tools.multi_exposure_dialog import (
     MultiExposureDialog)
@@ -21,7 +22,7 @@ class MultiExposureDialogTest(unittest.TestCase):
     def setUp(self):
         from safe.test.utilities import get_qgis_app
         QGIS_APP, CANVAS, self.iface, PARENT = get_qgis_app(
-            qsetting='InaSAFETest')
+            qsetting=INASAFE_TEST)
 
     def test_custom_order(self):
         """Test we can set a custom order after the analysis."""

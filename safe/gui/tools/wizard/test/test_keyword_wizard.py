@@ -5,6 +5,7 @@
 import shutil
 import unittest
 import os
+from datetime import datetime
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -14,9 +15,8 @@ from safe.test.utilities import (
     load_test_vector_layer)
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
-from datetime import datetime
-from safe.definitions.constants import big_number
+from safe.definitions.constants import big_number, INASAFE_TEST
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.layer_purposes import (

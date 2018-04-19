@@ -3,6 +3,7 @@
 import logging
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.exposure import (
     exposure_structure,
     exposure_population,
@@ -30,7 +31,7 @@ from safe.test.utilities import (
     get_qgis_app)
 from safe.gis.tools import load_layer
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

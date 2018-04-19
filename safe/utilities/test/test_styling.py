@@ -5,6 +5,7 @@
 import unittest
 import os
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.styling import mmi_colour
 from safe.test.utilities import get_qgis_app
 
@@ -13,7 +14,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class StylingTest(unittest.TestCase):

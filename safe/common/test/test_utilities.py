@@ -7,6 +7,7 @@ import os
 
 from qgis.core import QgsCoordinateReferenceSystem
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
 from safe.common.utilities import (
     get_significant_decimal,
@@ -26,7 +27,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 def print_class(array, result_class, expected_result):

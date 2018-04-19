@@ -21,10 +21,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import standard_data_path, get_qgis_app, get_dock
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 import logging
 

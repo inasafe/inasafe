@@ -5,6 +5,7 @@ import os
 import unittest
 
 from safe.common.utilities import safe_dir
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.reports import (
     jinja2_component_type,
     final_product_tag,
@@ -71,7 +72,7 @@ class TestHelloWorldReport(unittest.TestCase):
 
         .. versionadded:: 4.1
         """
-        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+        QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
         output_folder = self.fixtures_dir('../output/hello_world_report')
 
         # sneaky monkey patch

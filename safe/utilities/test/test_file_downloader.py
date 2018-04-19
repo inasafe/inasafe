@@ -24,11 +24,12 @@ import tempfile
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError
 from safe.test.utilities import assert_hash_for_file, get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class FileDownloaderTest(unittest.TestCase):

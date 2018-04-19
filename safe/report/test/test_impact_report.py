@@ -17,7 +17,8 @@ from PyQt4.Qt import PYQT_VERSION_STR
 from PyQt4.QtCore import QT_VERSION_STR
 
 from safe.common.version import get_version
-from safe.definitions.constants import ANALYSIS_SUCCESS, PREPARE_SUCCESS
+from safe.definitions.constants import (
+    ANALYSIS_SUCCESS, PREPARE_SUCCESS, INASAFE_TEST)
 from safe.definitions.fields import (
     total_not_affected_field,
     total_affected_field,
@@ -61,7 +62,7 @@ from safe.definitions.utilities import (
     get_displacement_rate, generate_default_profile, is_affected)
 from safe.utilities.settings import setting, set_setting, delete_setting
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from qgis.core import QgsMapLayerRegistry, QgsCoordinateReferenceSystem
 

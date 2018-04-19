@@ -21,7 +21,7 @@ from safe.definitions.constants import (
     FIELDS,
     STATIC,
     SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC)
+    MULTIPLE_DYNAMIC, INASAFE_TEST)
 
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -33,7 +33,7 @@ __revision__ = '$Format:%H$'
 def main():
     """Main function to run the example."""
     from safe.test.utilities import get_qgis_app
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
     options = OrderedDict([
         (DO_NOT_REPORT,

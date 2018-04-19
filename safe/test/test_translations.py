@@ -15,6 +15,8 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 import os
 import re
+
+from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.i18n import tr, locale
 from safe.common.utilities import safe_dir
 
@@ -29,7 +31,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -143,10 +145,10 @@ class SafeTranslationsTest(unittest.TestCase):
         """Test for qgis app locale."""
 
         # run qgis on bahasa
-        _ = get_qgis_app('id', 'InaSAFETest')
+        _ = get_qgis_app('id', INASAFE_TEST)
 
         expected_locale = 'id'
-        self.assertEqual(locale('InaSAFETest'), expected_locale)
+        self.assertEqual(locale(INASAFE_TEST), expected_locale)
 
         # check for bahasa translation
         expected_message = (
@@ -157,10 +159,10 @@ class SafeTranslationsTest(unittest.TestCase):
         self.assertEqual(expected_message, real_message, message)
 
         # run qgis on english
-        _ = get_qgis_app(qsetting='InaSAFETest')
+        _ = get_qgis_app(qsetting=INASAFE_TEST)
 
         expected_locale = 'en'
-        self.assertEqual(locale('InaSAFETest'), expected_locale)
+        self.assertEqual(locale(INASAFE_TEST), expected_locale)
 
         # check for english translation
         expected_message = (

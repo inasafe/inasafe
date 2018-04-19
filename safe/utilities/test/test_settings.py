@@ -3,8 +3,10 @@
 
 import unittest
 import os
+
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 from PyQt4.QtCore import QSettings
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.settings import (
@@ -31,7 +33,7 @@ class TestSettings(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests."""
-        self.qsettings = QSettings('InaSAFETest')
+        self.qsettings = QSettings(INASAFE_TEST)
         self.qsettings.clear()
 
     def tearDown(self):

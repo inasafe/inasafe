@@ -8,6 +8,7 @@ import unittest
 import qgis  # pylint: disable=unused-import
 from qgis.core import QgsRectangle
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.gis import (
     is_polygon_layer,
     is_raster_y_inverted,
@@ -20,7 +21,7 @@ from safe.test.utilities import (
     standard_data_path,
     get_qgis_app)
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class TestQGIS(unittest.TestCase):

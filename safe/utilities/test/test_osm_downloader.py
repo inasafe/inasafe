@@ -29,12 +29,13 @@ import os
 from PyQt4.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
 from PyQt4.QtNetwork import QNetworkReply
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.osm_downloader import fetch_zip, extract_zip
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.common.version import get_version
 from safe.utilities.gis import qgis_version
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting='InaSAFETest')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 LOGGER = logging.getLogger('InaSAFE')
 
 
