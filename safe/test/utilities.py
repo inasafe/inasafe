@@ -27,9 +27,10 @@ from safe.common.utilities import unique_filename, temp_dir, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.settings import general_setting, set_general_setting, \
-    set_setting
-from safe.utilities.utilities import monkey_patch_keywords
+from safe.utilities.settings import (
+    general_setting, set_general_setting, set_setting)
+from safe.utilities.utilities import (
+    monkey_patch_keywords, reload_inasafe_modules)
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -142,32 +143,36 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
-    """Setup internationalisation for the plugin."""
+    if not locale_match:
+        """Setup internationalisation for the plugin."""
 
-    # Save some settings
-    set_general_setting('locale/overrideFlag', True, settings)
-    set_general_setting('locale/userLocale', requested_locale, settings)
+        # Save some settings
+        set_general_setting('locale/overrideFlag', True, settings)
+        set_general_setting('locale/userLocale', requested_locale, settings)
 
-    locale_name = str(requested_locale).split('_')[0]
-    # Also set the system locale to the user overridden local
-    # so that the inasafe library functions gettext will work
-    # .. see:: :py:func:`common.utilities`
-    os.environ['LANG'] = str(locale_name)
+        locale_name = str(requested_locale).split('_')[0]
+        # Also set the system locale to the user overridden local
+        # so that the inasafe library functions gettext will work
+        # .. see:: :py:func:`common.utilities`
+        os.environ['LANG'] = str(locale_name)
 
-    inasafe_translation_path = os.path.join(
-        safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
+        inasafe_translation_path = os.path.join(
+            safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
 
-    if os.path.exists(inasafe_translation_path):
-        if isinstance(QGIS_APP, pyqtWrapperType):
-            translator = QTranslator()
-        else:
-            translator = QTranslator(QGIS_APP)
-        result = translator.load(inasafe_translation_path)
-        if not result:
-            message = 'Failed to load translation for %s' % locale_name
-            raise Exception(message)
-        # noinspection PyTypeChecker,PyCallByClass
-        QCoreApplication.installTranslator(translator)
+        if os.path.exists(inasafe_translation_path):
+            if isinstance(QGIS_APP, pyqtWrapperType):
+                translator = QTranslator()
+            else:
+                translator = QTranslator(QGIS_APP)
+            result = translator.load(inasafe_translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                raise Exception(message)
+            # noinspection PyTypeChecker,PyCallByClass
+            QCoreApplication.installTranslator(translator)
+
+        # at the end, reload InaSAFE modules so it will get translated too
+        reload_inasafe_modules()
 
     if PARENT is None:
         # noinspection PyPep8Naming

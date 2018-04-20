@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 import unittest
 import os
-import re
 
 from safe.definitions.constants import INASAFE_TEST
 from safe.utilities.i18n import tr, locale
@@ -47,27 +46,6 @@ class SafeTranslationsTest(unittest.TestCase):
         if 'LANG' in os.environ.iterkeys():
             os.environ.__delitem__('LANG')
 
-    # Skipped because it's not easy to unload qt translation
-    def Xtest_dynamic_translation(self):
-        """Test for dynamic translations for a string."""
-
-        # English
-        function_title = 'Be affected'
-        expected_title = tr('Be affected')
-        message = 'Expected %s but got %s' % (expected_title, function_title)
-        self.assertEqual(function_title, expected_title, message)
-
-        # Indonesia
-        os.environ['LANG'] = 'id'
-        function_title = 'Be affected'
-        real_title = tr(function_title)
-        expected_title = 'Terkena dampak'
-        message = 'expected %s but got %s' % (expected_title, real_title)
-        self.assertEqual(expected_title, real_title, message)
-
-        # Set back to en
-        os.environ['LANG'] = 'en'
-
     def test_impact_summary_words(self):
         """Test specific words from impact summary info shown in doc see #348.
         """
@@ -80,46 +58,6 @@ class SafeTranslationsTest(unittest.TestCase):
             else:
                 message += 'PASS: %s' % phrase
         self.assertNotIn('FAIL', message, message)
-
-        # Set back to en
-        os.environ['LANG'] = 'en'
-
-    # Skipped because it's not easy to unload qt translation
-    def Xtest_all_dynamic_translations(self):
-        """Test all the phrases defined in dynamic_translations translate."""
-        parent_path = os.path.join(__file__, os.path.pardir, os.path.pardir)
-        dir_path = os.path.abspath(parent_path)
-        file_path = os.path.abspath(os.path.join(
-            dir_path, os.pardir, 'safe', 'common', 'dynamic_translations.py'))
-        translations_file = file(file_path)
-        failure_list = []
-        os.environ['LANG'] = 'id'
-        line_count = 0
-        # exception_words is a list of words that has the same form in both
-        # English and Indonesian. For example hotel, bank
-        exception_words = ['hotel', 'bank', 'Area']
-        for line in translations_file.readlines():
-            line_count += 1
-            if 'tr(' in line:
-                match = re.search(r'\(\'(.*)\'\)', line, re.M | re.I)
-                if match:
-                    group = match.group()
-                    cleaned_line = group[2:-2]
-                    if cleaned_line in exception_words:
-                        continue
-                    translation = tr(cleaned_line)
-                    if cleaned_line == translation:
-                        failure_list.append(cleaned_line)
-
-        message = (
-            'Translations not found for:\n %s\n%i of %i untranslated\n' % (
-                str(failure_list).replace(',', '\n'), len(failure_list),
-                line_count))
-        message += (
-            'If you think the Indonesian word for the failed translations is '
-            'the same form in English, i.e. "hotel", you can add it in '
-            'exception_words in safe_qgis/test_safe_translations.py')
-        self.assertEqual(len(failure_list), 0, message)
 
         # Set back to en
         os.environ['LANG'] = 'en'
@@ -144,8 +82,15 @@ class SafeTranslationsTest(unittest.TestCase):
     def test_qgis_app_locale(self):
         """Test for qgis app locale."""
 
+        from safe.definitions.constants import no_field
+        self.assertEqual(no_field, u'No Field')
+
         # run qgis on bahasa
         _ = get_qgis_app('id', INASAFE_TEST)
+
+        # test if string from inasafe module are translated
+        from safe.definitions.constants import no_field
+        self.assertNotEqual(no_field, u'No Field')
 
         expected_locale = 'id'
         self.assertEqual(locale(INASAFE_TEST), expected_locale)
