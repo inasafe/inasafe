@@ -23,6 +23,7 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer,
     Qgis,
+    QgsWkbTypes,
     QgsMapLayer,
     QgsRasterLayer,
 )
@@ -2281,7 +2282,7 @@ class ImpactFunction():
         exposure = self.exposure.keywords.get('exposure')
         geometry = self.exposure.geometryType()
         indivisible_keys = [f['key'] for f in indivisible_exposure]
-        if exposure not in indivisible_keys and geometry != Qgis.Point:
+        if exposure not in indivisible_keys and geometry != QgsWkbTypes.Point:
             # We can now split features because the `prepare_vector_layer`
             # might have added the size field.
             self.set_state_process(
@@ -2338,7 +2339,7 @@ class ImpactFunction():
             exposure = self.exposure.keywords.get('exposure')
             is_divisible = exposure not in indivisible_keys
 
-            if geometry in [Qgis.Line, Qgis.Polygon] and is_divisible:
+            if geometry in [QgsWkbTypes.Line, QgsWkbTypes.Polygon] and is_divisible:
 
                 self.set_state_process(
                     'exposure', 'Make exposure layer valid')
@@ -2477,7 +2478,7 @@ class ImpactFunction():
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self._outputs():
-            without_geometries = [Qgis.NoGeometry, Qgis.UnknownGeometry]
+            without_geometries = [QgsWkbTypes.NoGeometry, QgsWkbTypes.UnknownGeometry]
             if layer.geometryType() not in without_geometries:
                 display_not_exposed = False
                 if layer == self.impact or self.debug_mode:

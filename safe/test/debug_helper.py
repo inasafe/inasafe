@@ -19,6 +19,7 @@ from tempfile import mkdtemp
 from qgis.PyQt.QtCore import QVariant, Qt
 from qgis.core import (
     Qgis,
+    QgsWkbTypes,
     QgsFeature,
     QgsField,
     QgsFeatureRequest,
@@ -138,7 +139,7 @@ def print_attribute_table(layer, limit=-1):
     :param limit: The limit in the query.
     :type limit: integer
     """
-    if layer.wkbType() == Qgis.WKBNoGeometry:
+    if layer.wkbType() == QgsWkbTypes.WkbNoGeometry:
         geometry = False
     else:
         geometry = True
