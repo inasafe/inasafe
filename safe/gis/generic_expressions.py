@@ -5,7 +5,6 @@
 from dateutil.parser import parse
 from qgis.core import (
     qgsfunction,
-    QgsMapLayerRegistry,
     QgsExpressionContextUtils
 )
 

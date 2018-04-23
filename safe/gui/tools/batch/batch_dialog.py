@@ -35,7 +35,6 @@ from qgis.PyQt.QtWidgets import QAbstractItemView, QDialog, QFileDialog, QTableW
 from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry,
     QgsProject,
     QgsVectorLayer,
     QgsRasterLayer)
@@ -82,7 +81,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param parent: Widget to use as parent.
         :type parent: PyQt5.QtWidgets.QWidget
 
-        :param iface: A QGisAppInterface instance we use to access QGIS via.
+        :param iface: A QgisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
 
         :param dock: A Dock widget needed to run the scenarios with. On

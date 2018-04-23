@@ -2,7 +2,7 @@
 """Date Property."""
 
 from datetime import datetime, date
-from types import NoneType
+NoneType = type(None)
 
 from qgis.PyQt.QtCore import QDate, Qt, QDateTime
 

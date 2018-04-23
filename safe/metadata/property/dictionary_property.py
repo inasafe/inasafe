@@ -4,7 +4,7 @@
 
 import json
 from datetime import datetime
-from types import NoneType
+NoneType = type(None)
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty

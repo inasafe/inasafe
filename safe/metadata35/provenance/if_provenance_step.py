@@ -94,7 +94,7 @@ class IFProvenanceStep(ProvenanceStep):
         for key in self.impact_functions_fields:
             value = self.data(key)
             element = Element(key)
-            element.text = get_unicode(value)
+            element.text = value
 
             xml += tostring(element)
 

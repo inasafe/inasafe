@@ -119,7 +119,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.test.utilities import BOUNDDATA
 
         from safe.test.utilities import get_qgis_app
-        # Get QGis app handle
+        # Get Qgis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
@@ -152,7 +152,7 @@ class TestWizardDialogLocale(unittest.TestCase):
             name='tsunami_polygon', include_keywords=True, source_directory='')
 
         from safe.test.utilities import get_qgis_app
-        # Get QGis app handle
+        # Get Qgis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 

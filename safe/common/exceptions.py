@@ -15,7 +15,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe.messaging.item.message_element import MessageElement
-from safe.utilities.str import get_unicode, get_string
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -37,9 +36,6 @@ class InaSAFEError(RuntimeError):
         :type message: str, unicode, MessageElement
         """
         if isinstance(message, str):
-            super(InaSAFEError, self).__init__(get_string(message))
-
-        elif isinstance(message, str):
             super(InaSAFEError, self).__init__(message)
 
         elif isinstance(message, MessageElement):

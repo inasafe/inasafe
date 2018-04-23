@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from types import NoneType
+NoneType = type(None)
 
 from qgis.PyQt.QtCore import QUrl
 

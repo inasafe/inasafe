@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-from types import NoneType
 from safe.metadata35.property import BaseProperty
 
 __author__ = 'marco@opengis.ch'
@@ -20,13 +19,14 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+NoneType = type(None)
 
 class CharacterStringProperty(BaseProperty):
 
     """A property that accepts any type of input and stores it as string."""
     
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [str, str, int, float, NoneType]
+    _allowed_python_types = [str, int, float, NoneType]
 
     def __init__(self, name, value, xml_path):
         if isinstance(value, str):

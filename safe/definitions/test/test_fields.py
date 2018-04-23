@@ -35,14 +35,14 @@ def generate_field_table():
     """Generating all field table in markdown."""
     for key, fields in list(all_fields.items()):
         # fix_print_with_import
-        print('### %s' % key)
+        print(('### %s' % key))
         # fix_print_with_import
         print('| Key | Name | Field Name |')
         # fix_print_with_import
         print('| --- | ---- | ---------- |')
         for i in fields:
             # fix_print_with_import
-            print('| %s | %s | %s |' % (i['key'], i['name'], i['field_name']))
+            print(('| %s | %s | %s |' % (i['key'], i['name'], i['field_name'])))
 
 
 def check_format(field):

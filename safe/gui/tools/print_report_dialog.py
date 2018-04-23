@@ -55,8 +55,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, impact_function, iface, dock=None, parent=None):
         """Constructor for the dialog.
 
-        :param iface: A Quantum GIS QGisAppInterface instance.
-        :type iface: QGisAppInterface
+        :param iface: A Quantum GIS QgisAppInterface instance.
+        :type iface: QgisAppInterface
 
         :param parent: Parent widget of this dialog
         :type parent: QWidget

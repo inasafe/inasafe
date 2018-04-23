@@ -18,8 +18,7 @@ from tempfile import mkdtemp
 
 from qgis.PyQt.QtCore import QVariant, Qt
 from qgis.core import (
-    QgsMapLayerRegistry,
-    QGis,
+    Qgis,
     QgsFeature,
     QgsField,
     QgsFeatureRequest,
@@ -139,7 +138,7 @@ def print_attribute_table(layer, limit=-1):
     :param limit: The limit in the query.
     :type limit: integer
     """
-    if layer.wkbType() == QGis.WKBNoGeometry:
+    if layer.wkbType() == Qgis.WKBNoGeometry:
         geometry = False
     else:
         geometry = True
@@ -161,7 +160,7 @@ def print_attribute_table(layer, limit=-1):
         data.append(attributes)
 
     # fix_print_with_import
-    print(pretty_table(data, headers))
+    print((pretty_table(data, headers)))
 
 
 def print_combobox(combo, role=Qt.UserRole):
@@ -187,4 +186,4 @@ def print_combobox(combo, role=Qt.UserRole):
         attributes.extend([str(combo.itemData(i, j)) for j in role])
         data.append(attributes)
     # fix_print_with_import
-    print(pretty_table(data, headers))
+    print((pretty_table(data, headers)))

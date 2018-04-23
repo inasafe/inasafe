@@ -2,7 +2,7 @@
 """Tests for keyword io class."""
 import unittest
 
-from qgis.core import QgsDataSourceURI, QgsVectorLayer
+from qgis.core import QgsDataSourceUri, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.definitions.constants import INASAFE_TEST
@@ -27,7 +27,7 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io = KeywordIO()
 
         # SQLite Layer
-        uri = QgsDataSourceURI()
+        uri = QgsDataSourceUri()
         sqlite_building_path = standard_data_path(
             'exposure', 'exposure.sqlite')
         uri.setDatabase(sqlite_building_path)

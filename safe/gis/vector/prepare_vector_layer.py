@@ -9,7 +9,7 @@ import logging
 from qgis.core import (
     QgsField,
     QgsFeatureRequest,
-    QGis,
+    Qgis,
     QgsExpressionContext,
     QgsExpression
 )
@@ -263,7 +263,7 @@ def _size_is_needed(layer):
         # The exposure is not divisible, We don't need to compute the size.
         return False
 
-    if layer.geometryType() == QGis.Point:
+    if layer.geometryType() == Qgis.Point:
         # The exposure is a point layer. We don't need to compute the size.
         return False
 

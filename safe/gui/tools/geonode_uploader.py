@@ -7,7 +7,6 @@ from requests.compat import urljoin
 
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsMapLayerRegistry
 
 from safe.common.exceptions import GeoNodeLayerUploadError
 from safe.gui.gui_utilities import layer_from_combo

@@ -14,7 +14,7 @@ from qgis.PyQt.QtGui import QIcon
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 # force sip2 api
-from qgis.core import QGis  # NOQA
+from qgis.core import Qgis  # NOQA
 from qgis.core import (
     QgsPoint,
     QgsRectangle,
@@ -59,8 +59,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def __init__(self, iface, parent=None, extent=None, crs=None):
         """Constructor for the dialog.
 
-        :param iface: A Quantum GIS QGisAppInterface instance.
-        :type iface: QGisAppInterface
+        :param iface: A Quantum GIS QgisAppInterface instance.
+        :type iface: QgisAppInterface
 
         :param parent: Parent widget of this dialog.
         :type parent: QWidget

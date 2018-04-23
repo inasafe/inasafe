@@ -8,8 +8,6 @@ from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app, load_test_vector_layer
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
-from qgis.core import QgsMapLayerRegistry
-
 from safe.gui.tools.metadata_converter_dialog import MetadataConverterDialog
 from safe.test.utilities import load_standard_layers
 

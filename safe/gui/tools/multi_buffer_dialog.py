@@ -10,7 +10,6 @@ from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel
 
 from safe.common.utilities import unique_filename, temp_dir

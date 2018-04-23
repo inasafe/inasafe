@@ -9,7 +9,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# From https://qgis.org/api/classQGis.html#a8da456870e1caec209d8ba7502cceff7
+# From https://qgis.org/api/classQgis.html#a8da456870e1caec209d8ba7502cceff7
 QGIS_OGR_GEOMETRY_MAP = {
     0: ogr.wkbUnknown,
     1: ogr.wkbPoint,

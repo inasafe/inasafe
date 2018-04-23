@@ -12,7 +12,7 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsSymbolLayerV2Registry,
     QgsConditionalStyle,
-    QGis,
+    Qgis,
 )
 
 from safe.definitions.fields import hazard_class_field, hazard_count_field
@@ -70,7 +70,7 @@ def hazard_class_style(layer, classification, display_null=False):
         style.setName(hazard_class)
         style.setRule("hazard_class='%s'" % hazard_class)
         style.setBackgroundColor(transparent)
-        symbol = QgsSymbolV2.defaultSymbol(QGis.Point)
+        symbol = QgsSymbolV2.defaultSymbol(Qgis.Point)
         symbol.setColor(color)
         symbol.setSize(3)
         style.setSymbol(symbol)

@@ -11,7 +11,7 @@ from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QGridLayout, QPushButton, 
 from qgis.PyQt.QtGui import QIcon
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
-from qgis.core import QGis  # NOQA pylint: disable=unused-import
+from qgis.core import Qgis  # NOQA pylint: disable=unused-import
 
 from parameters.float_parameter import FloatParameter
 from parameters.parameter_exceptions import (
