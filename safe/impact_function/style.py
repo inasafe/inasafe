@@ -53,7 +53,7 @@ def hazard_class_style(layer, classification, display_null=False):
     # Conditional styling
     attribute_table_styles = []
 
-    for hazard_class, (color, label) in classification.items():
+    for hazard_class, (color, label) in list(classification.items()):
         if hazard_class == not_exposed_class['key'] and not display_null:
             # We don't want to display the null value (not exposed).
             # We skip it.

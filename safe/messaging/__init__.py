@@ -1,6 +1,6 @@
 # coding=utf-8
 """Messaging init file."""
-from __future__ import absolute_import
+
 
 # pylint: disable=unused-import
 from .item.brand import Brand

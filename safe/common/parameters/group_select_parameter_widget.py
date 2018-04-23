@@ -1,7 +1,5 @@
 # coding=utf-8
 """Group Select Parameter Widget."""
-from builtins import str
-from builtins import range
 
 import logging
 

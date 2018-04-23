@@ -43,7 +43,7 @@ feature_rate_default_value = {
     'min_value': 0,
     'max_value': 1000000000,
     'increment': 1000000,
-    'description': tr(u'Default value for feature rate per m²')
+    'description': tr('Default value for feature rate per m²')
 }
 
 # Note(IS): I copy here to preserve the history

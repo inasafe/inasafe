@@ -1,6 +1,6 @@
 # coding=utf-8
 """Test Dock."""
-from builtins import str
+
 
 import logging
 import os
@@ -235,7 +235,7 @@ class TestDock(unittest.TestCase):
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
-            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
+            aggregation_layer='D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
         self.dock.extent.show_rubber_bands = True

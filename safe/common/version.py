@@ -11,8 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from __future__ import absolute_import
-from builtins import str
+
 import os
 import subprocess
 import sys

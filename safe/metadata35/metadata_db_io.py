@@ -2,7 +2,7 @@
 """**metadata DB IO implementation.**
 
 """
-from builtins import str
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '29/06/2015'

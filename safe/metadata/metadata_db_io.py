@@ -1,6 +1,6 @@
 # coding=utf-8
 """Metadata DB IO implementation."""
-from builtins import str
+
 
 import logging
 import os

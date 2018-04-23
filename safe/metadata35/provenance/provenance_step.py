@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from builtins import object
+
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -23,7 +23,7 @@ from datetime import datetime
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 
-class ProvenanceStep(object):
+class ProvenanceStep():
     """
     Class to store a provenance step.
 

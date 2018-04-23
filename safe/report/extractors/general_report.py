@@ -66,9 +66,9 @@ def general_report_extractor(impact_report, component_metadata):
     exposure_unit = exposure_type['units'][0]
     hazard_header = resolve_from_dictionary(extra_args, 'hazard_header')
     if exposure_unit['abbreviation']:
-        value_header = u'{measure} ({abbreviation})'.format(**exposure_unit)
+        value_header = '{measure} ({abbreviation})'.format(**exposure_unit)
     else:
-        value_header = u'{name}'.format(**exposure_unit)
+        value_header = '{name}'.format(**exposure_unit)
 
     # Get hazard classification
     hazard_classification = definition(
@@ -263,11 +263,11 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
 
         exposure_unit = exposure_type['units'][0]
         if exposure_unit['abbreviation']:
-            value_header = u'{measure} ({abbreviation})'.format(
+            value_header = '{measure} ({abbreviation})'.format(
                 measure=map_legend_title,
                 abbreviation=exposure_unit['abbreviation'])
         else:
-            value_header = u'{name}'.format(name=map_legend_title)
+            value_header = '{name}'.format(name=map_legend_title)
 
         exposure_stats['value_header'] = value_header
 
@@ -405,7 +405,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
     else:
         hazard_classification_groups = {}
         for exposure_key, hazard_classification in (
-                iter(hazard_classifications.items())):
+                iter(list(hazard_classifications.items()))):
             exposure_type = definition(exposure_key)
             if hazard_classification['key'] not in (
                     hazard_classification_groups):
@@ -416,7 +416,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                     hazard_classification['key']].append(exposure_type)
 
         for hazard_classification_key, exposures in (
-                iter(hazard_classification_groups.items())):
+                iter(list(hazard_classification_groups.items()))):
             custom_headers = []
             custom_total_values = []
             # find total value and labels for each exposure

@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import object
+
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -35,7 +35,7 @@ from safe.utilities.i18n import tr
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FileDownloader(object):
+class FileDownloader():
 
     """The blueprint for downloading file from url."""
 

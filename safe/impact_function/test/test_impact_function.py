@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Test for Impact Function."""
-from __future__ import print_function
+
 
 import getpass
 import json
@@ -1132,19 +1132,19 @@ class TestImpactFunction(unittest.TestCase):
         self._check_minimum_fields_exists(impact_function)
 
         expected_value = {
-            u'population': 69,
-            u'total': 9.0,
-            u'minimum_needs__rice': 491,
-            u'minimum_needs__clean_water': 11763,
-            u'minimum_needs__toilets': 8,
-            u'minimum_needs__drinking_water': 3072,
-            u'minimum_needs__family_kits': 35,
-            u'male': 34,
-            u'female': 34,
-            u'youth': 17,
-            u'adult': 45,
-            u'elderly': 6,
-            u'total_affected': 6.0,
+            'population': 69,
+            'total': 9.0,
+            'minimum_needs__rice': 491,
+            'minimum_needs__clean_water': 11763,
+            'minimum_needs__toilets': 8,
+            'minimum_needs__drinking_water': 3072,
+            'minimum_needs__family_kits': 35,
+            'male': 34,
+            'female': 34,
+            'youth': 17,
+            'adult': 45,
+            'elderly': 6,
+            'total_affected': 6.0,
         }
 
         self._check_minimum_fields_value(expected_value, impact_function)
@@ -1186,19 +1186,19 @@ class TestImpactFunction(unittest.TestCase):
 
         # TODO: should include demographic postprocessor value too
         expected_value = {
-            u'total_affected': 9.208200000039128,
-            u'minimum_needs__rice': 25,
-            u'minimum_needs__toilets': 0,
-            u'minimum_needs__drinking_water': 161,
-            u'minimum_needs__clean_water': 616,
-            u'male': 4,
-            u'female': 4,
-            u'youth': 2,
-            u'adult': 6,
-            u'elderly': 0,
-            u'total': 162.7667000000474,
-            u'minimum_needs__family_kits': 1,
-            u'total_not_affected': 153.55850000000828,
+            'total_affected': 9.208200000039128,
+            'minimum_needs__rice': 25,
+            'minimum_needs__toilets': 0,
+            'minimum_needs__drinking_water': 161,
+            'minimum_needs__clean_water': 616,
+            'male': 4,
+            'female': 4,
+            'youth': 2,
+            'adult': 6,
+            'elderly': 0,
+            'total': 162.7667000000474,
+            'minimum_needs__family_kits': 1,
+            'total_not_affected': 153.55850000000828,
         }
 
         self._check_minimum_fields_value(expected_value, impact_function)
@@ -1274,7 +1274,7 @@ class TestImpactFunction(unittest.TestCase):
             impact_function.exposure_summary_table, QgsVectorLayer)
         self.assertIsInstance(impact_function.profiling, QgsVectorLayer)
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
-        self.assertEquals(len(impact_function.outputs), 6)
+        self.assertEqual(len(impact_function.outputs), 6)
 
 
 

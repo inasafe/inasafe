@@ -3,7 +3,7 @@
 
 This is useful to do layouting.
 """
-from __future__ import absolute_import
+
 
 from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.util import (
@@ -49,7 +49,7 @@ def impact_table_extractor(impact_report, component_metadata):
 
     context['brand_logo'] = resource_url(
         resources_path('img', 'logos', 'inasafe-logo-white.png'))
-    for key, component in components_list.items():
+    for key, component in list(components_list.items()):
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 

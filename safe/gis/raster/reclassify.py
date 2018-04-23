@@ -106,7 +106,7 @@ def reclassify(layer, exposure_key=None, overwrite_input=False):
     source = band.ReadAsArray()
     destination = source.copy()
 
-    for value, interval in ranges.items():
+    for value, interval in list(ranges.items()):
         v_min = interval[0]
         v_max = interval[1]
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step InaSAFE Raster Default Fields."""
-from builtins import range
+
 
 # noinspection PyPackageRequirements
 import logging

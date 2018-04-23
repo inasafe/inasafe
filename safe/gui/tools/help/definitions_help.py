@@ -1,6 +1,6 @@
 # coding=utf-8
 """Help text for the dock widget."""
-from builtins import str
+
 
 import copy
 import logging
@@ -171,7 +171,7 @@ def content():
 
     last_group = None
     table = None
-    for key, value in definitions.concepts.items():
+    for key, value in list(definitions.concepts.items()):
         current_group = value['group']
         if current_group != last_group:
             if last_group is not None:
@@ -1077,7 +1077,7 @@ def definition_to_message(
     for exposure in exposure_all:
         extra_exposure_notes = specific_notes(definition, exposure)
         if extra_exposure_notes:
-            title = tr(u'Notes for exposure : {exposure_name}').format(
+            title = tr('Notes for exposure : {exposure_name}').format(
                 exposure_name=exposure['name'])
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
@@ -1143,7 +1143,7 @@ def definition_to_message(
     for exposure in exposure_all:
         extra_exposure_actions = specific_actions(definition, exposure)
         if extra_exposure_actions:
-            title = tr(u'Actions for exposure : {exposure_name}').format(
+            title = tr('Actions for exposure : {exposure_name}').format(
                 exposure_name=exposure['name'])
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
@@ -1213,9 +1213,9 @@ def definition_to_message(
                 if 'color' in inasafe_class:
                     colour = inasafe_class['color'].name()
                     row.add(m.Cell(
-                        u'', attributes='style="background: %s;"' % colour))
+                        '', attributes='style="background: %s;"' % colour))
                 else:
-                    row.add(m.Cell(u' '))
+                    row.add(m.Cell(' '))
 
             row.add(m.Cell(inasafe_class['name']))
 
@@ -1230,7 +1230,7 @@ def definition_to_message(
                     # we want to show the rate as a scientific notation
                     rate = html_scientific_notation_rate(
                         inasafe_class['fatality_rate'])
-                    rate = u'%s%%' % rate
+                    rate = '%s%%' % rate
                     row.add(m.Cell(rate))
                 elif inasafe_class.get('fatality_rate') == 0:
                     row.add(m.Cell('0%'))
@@ -1240,7 +1240,7 @@ def definition_to_message(
             if is_hazard:
                 if 'displacement_rate' in inasafe_class:
                     rate = inasafe_class['displacement_rate'] * 100
-                    rate = u'%.0f%%' % rate
+                    rate = '%.0f%%' % rate
                     row.add(m.Cell(rate))
                 else:
                     row.add(m.Cell(tr('unspecified')))
@@ -1264,7 +1264,7 @@ def definition_to_message(
                         bullets = m.BulletedList()
                         minima = inasafe_class['numeric_default_min']
                         for key, value in sorted(minima.items()):
-                            bullets.add(u'%s : %s' % (key, value))
+                            bullets.add('%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
                         row.add(m.Cell(inasafe_class['numeric_default_min']))
@@ -1279,7 +1279,7 @@ def definition_to_message(
                         bullets = m.BulletedList()
                         maxima = inasafe_class['numeric_default_max']
                         for key, value in sorted(maxima.items()):
-                            bullets.add(u'%s : %s' % (key, value))
+                            bullets.add('%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
                         row.add(m.Cell(inasafe_class['numeric_default_max']))
@@ -1298,7 +1298,7 @@ def definition_to_message(
             row = m.Row()
             colour = definitions.not_exposed_class['color'].name()
             row.add(m.Cell(
-                u'', attributes='style="background: %s;"' % colour))
+                '', attributes='style="background: %s;"' % colour))
             description = definitions.not_exposed_class['description']
             row.add(m.Cell(description, span=7))
             table.add(row)

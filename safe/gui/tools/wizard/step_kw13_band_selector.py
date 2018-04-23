@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Band Selector."""
-from builtins import range
+
 
 import logging
 

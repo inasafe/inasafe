@@ -43,13 +43,13 @@ charcoal_black = QColor('#36454F')
 # https://github.com/inasafe/inasafe/issues/3653#issuecomment-275011957
 # The space between count and exposure_unit will be automatically added if
 # the unit is not empty.
-template_without_thresholds = u'{name} ({count}{exposure_unit})'
+template_without_thresholds = '{name} ({count}{exposure_unit})'
 template_with_maximum_thresholds = (
-    u'{name} <= {max} {hazard_unit} ({count}{exposure_unit})')
+    '{name} <= {max} {hazard_unit} ({count}{exposure_unit})')
 template_with_minimum_thresholds = (
-    u'{name} > {min} {hazard_unit} ({count}{exposure_unit})')
+    '{name} > {min} {hazard_unit} ({count}{exposure_unit})')
 template_with_range_thresholds = (
-    u'{name} > {min} - {max} {hazard_unit} ({count}{exposure_unit})')
+    '{name} > {min} - {max} {hazard_unit} ({count}{exposure_unit})')
 
 # Default line width for exposure
 line_width_exposure = 0.66

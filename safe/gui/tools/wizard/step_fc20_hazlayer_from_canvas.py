@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Hazard Layer Canvas."""
-from builtins import range
+
 
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import Qt

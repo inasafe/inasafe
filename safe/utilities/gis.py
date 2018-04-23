@@ -1,6 +1,6 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
-from builtins import str
+
 
 from osgeo import gdal
 from qgis.core import (

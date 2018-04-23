@@ -53,7 +53,7 @@ class UtilitiesTest(unittest.TestCase):
     def test_accentuated_characters(self):
         """Test that accentuated characters has been replaced."""
         self.assertEqual(
-            replace_accentuated_characters(u'áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
+            replace_accentuated_characters('áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
 
     def test_is_keyword_version_supported(self):
         """Test for is_keyword_version_supported."""

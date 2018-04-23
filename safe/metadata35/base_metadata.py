@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from builtins import object
+
 from safe.metadata35.encoder import MetadataEncoder
 from future.utils import with_metaclass
 
@@ -252,7 +252,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         self._properties = {}
 
         # initialise the properties
-        for name, path in self._standard_properties.items():
+        for name, path in list(self._standard_properties.items()):
             self.set(name, None, path)
 
         self._last_update = datetime.now()
@@ -272,7 +272,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         """
         metadata = {}
         properties = {}
-        for name, prop in self.properties.items():
+        for name, prop in list(self.properties.items()):
             properties[name] = prop.dict
         metadata['properties'] = properties
         return metadata
@@ -288,7 +288,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         tree = ElementTree.parse(METADATA_XML_TEMPLATE)
         root = tree.getroot()
 
-        for name, prop in self.properties.items():
+        for name, prop in list(self.properties.items()):
             path = prop.xml_path
             elem = root.find(path, XML_NS)
             if elem is None:
@@ -333,7 +333,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
             else:
                 metadata = self._read_json_file()
             if 'properties' in metadata:
-                for name, prop in metadata['properties'].items():
+                for name, prop in list(metadata['properties'].items()):
                     try:
                         self.set(prop['name'], prop['value'], prop['xml_path'])
                     except KeyError:
@@ -392,7 +392,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         else:
             root = self._read_xml_file()
         if root is not None:
-            for name, path in self._standard_properties.items():
+            for name, path in list(self._standard_properties.items()):
                 value = read_property_from_xml(root, path)
                 if value is not None:
                     # this calls the default setters
@@ -690,5 +690,5 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         :type keywords: dict
 
         """
-        for key, value in keywords.items():
+        for key, value in list(keywords.items()):
             setattr(self, key, value)

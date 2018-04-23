@@ -302,7 +302,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 for p in path:
                     paths.append(p)
             elif isinstance(path, dict):
-                for p in path.values():
+                for p in list(path.values()):
                     paths.append(p)
             else:
                 paths.append(path)
@@ -321,7 +321,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         report_urls_dict = report_urls(self.impact_function)
 
         # get report urls for each product tag as list
-        for key, value in report_urls_dict.items():
+        for key, value in list(report_urls_dict.items()):
             report_urls_dict[key] = list(value.values())
 
         if self.dock:
@@ -420,7 +420,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             infographic_report['key']: infographic_report
         }
         duplicated_report_metadata = None
-        for key, checkbox in self.all_checkboxes.items():
+        for key, checkbox in list(self.all_checkboxes.items()):
             if not checkbox.isChecked():
                 component = component_definitions[key]
                 if component in generated_components:

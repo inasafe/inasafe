@@ -1,7 +1,7 @@
 # coding=utf-8
 """InaSAFE Dock."""
-from builtins import str
-from builtins import range
+
+
 
 import codecs
 import logging
@@ -1142,7 +1142,7 @@ class Dock(QDockWidget, FORM_CLASS):
                     for p in path:
                         paths.append(p)
                 elif isinstance(path, dict):
-                    for p in path.values():
+                    for p in list(path.values()):
                         paths.append(p)
                 else:
                     paths.append(path)

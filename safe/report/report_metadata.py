@@ -1,13 +1,14 @@
 # coding=utf-8
 """Module for class container of Report and ReportComponent Metadata.
 """
-from builtins import object
+
 from copy import deepcopy
 from importlib import import_module
 
 from safe.definitions.reports import (
     jinja2_component_type,
     qgis_composer_component_type)
+import collections
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -15,7 +16,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class ReportComponentsMetadata(object):
+class ReportComponentsMetadata():
 
     """ReportComponentsMetadata.
 
@@ -67,7 +68,7 @@ class ReportComponentsMetadata(object):
         .. versionadded:: 4.0
         """
         self._key = key
-        if callable(processor):
+        if isinstance(processor, collections.Callable):
             self._processor = processor
         elif isinstance(processor, str):
             _package, _method = processor.rsplit('.', 1)
@@ -241,7 +242,7 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
     .. versionadded:: 4.0
     """
 
-    class OutputFormat(object):
+    class OutputFormat():
 
         """Class to hold this available output format."""
 
@@ -266,7 +267,7 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
     .. versionadded:: 4.0
     """
 
-    class OutputFormat(object):
+    class OutputFormat():
 
         """Class to hold this available output format."""
 
@@ -361,7 +362,7 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         })
 
 
-class ReportMetadata(object):
+class ReportMetadata():
 
     """Class to hold report metadata.
 

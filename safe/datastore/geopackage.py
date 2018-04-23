@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import range
 
 from qgis.PyQt.QtCore import QFileInfo
 from osgeo import ogr, osr, gdal
@@ -168,13 +167,13 @@ class GeoPackage(DataStore):
         """
         for layer in self._vector_layers():
             if layer == layer_name:
-                uri = u'{}|layername={}'.format(
+                uri = '{}|layername={}'.format(
                     self.uri.absoluteFilePath(), layer_name)
                 return uri
         else:
             for layer in self._raster_layers():
                 if layer == layer_name:
-                    uri = u'GPKG:{}:{}'.format(
+                    uri = 'GPKG:{}:{}'.format(
                         self.uri.absoluteFilePath(), layer_name)
                     return uri
             else:
@@ -215,8 +214,8 @@ class GeoPackage(DataStore):
         vector_datasource = self.vector_driver.Open(
             self.uri.absoluteFilePath(), True)
         vector_datasource.CreateLayer(layer_name, spatial_reference, geometry)
-        uri = u'{}|layerid=0'.format(self.uri.absoluteFilePath())
-        vector_layer = QgsVectorLayer(uri, layer_name, u'ogr')
+        uri = '{}|layerid=0'.format(self.uri.absoluteFilePath())
+        vector_layer = QgsVectorLayer(uri, layer_name, 'ogr')
 
         data_provider = vector_layer.dataProvider()
         for feature in vector_layer.getFeatures():

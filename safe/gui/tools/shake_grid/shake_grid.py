@@ -1,9 +1,9 @@
 # coding=utf-8
 """A converter for USGS shakemap grid.xml files."""
-from builtins import zip
-from builtins import str
-from builtins import range
-from builtins import object
+
+
+
+
 
 import codecs
 import logging
@@ -81,7 +81,7 @@ NEAREST_NEIGHBOUR = 'nearest'
 INVDIST = 'invdist'
 
 
-class ShakeGrid(object):
+class ShakeGrid():
 
     """A converter for USGS shakemap grid.xml files to geotiff."""
 

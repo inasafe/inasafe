@@ -181,8 +181,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -205,8 +205,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -230,8 +230,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -254,8 +254,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -276,8 +276,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -299,8 +299,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -324,8 +324,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -349,8 +349,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -371,8 +371,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         },
@@ -393,8 +393,8 @@ earthquake_mmi_scale = {
             'citations': [
                 {
                     'text': None,
-                    'link': u'https://earthquake.usgs.gov/learn/topics/'
-                            u'mercalli.php'
+                    'link': 'https://earthquake.usgs.gov/learn/topics/'
+                            'mercalli.php'
                 }
             ]
         }
@@ -563,7 +563,7 @@ flood_petabencana_hazard_classes = {
     'citations': [
         {
             'text': tr('PetaBencana.id'),
-            'link': u'https://petabencana.id'
+            'link': 'https://petabencana.id'
         }
     ],
     'classes': [
@@ -897,8 +897,8 @@ tsunami_hazard_classes = {
     'citations': [
         {
             'text': tr('BNPB Perka 2/2012'),
-            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
-                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
+            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -1030,8 +1030,8 @@ tsunami_hazard_population_classes = {
     'citations': [
         {
             'text': tr('BNPB Perka 2/2012'),
-            'link': u'http://bpbd.kendalkab.go.id/docs/publikasi/'
-                    u'perka_bnpb_no_2_tahun_2012_0.pdf'
+            'link': 'http://bpbd.kendalkab.go.id/docs/publikasi/'
+                    'perka_bnpb_no_2_tahun_2012_0.pdf'
         }
     ],
     'classes': [
@@ -1138,8 +1138,8 @@ tsunami_hazard_classes_ITB = {
     'citations': [
         {
             'text': 'Papadopoulos and Imamura, 2001',
-            'link': u'http://geology.about.com/od/tsunamis/a/'
-                    u'Tsunami-Intensity-Scale-2001.htm'
+            'link': 'http://geology.about.com/od/tsunamis/a/'
+                    'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
@@ -1289,8 +1289,8 @@ tsunami_hazard_population_classes_ITB = {
     'citations': [
         {
             'text': 'Papadopoulos and Imamura, 2001',
-            'link': u'http://geology.about.com/od/tsunamis/a/'
-                    u'Tsunami-Intensity-Scale-2001.htm'
+            'link': 'http://geology.about.com/od/tsunamis/a/'
+                    'Tsunami-Intensity-Scale-2001.htm'
         }
     ],
     'classes': [
@@ -1421,12 +1421,12 @@ cyclone_au_bom_hazard_classes = {
                 'Australian Bureau of Meteorology - Tropical Cyclone '
                 'Intensity and Impacts'),
             'link':
-                u'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
+                'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
         },
         {
             'text': tr('Tropical cyclone scales - wikpedia'),
-            'link': u'https://en.wikipedia.org/wiki/Tropical_cyclone_scales'
-                    u'#Australia_and_Fiji'
+            'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales'
+                    '#Australia_and_Fiji'
         }
     ],
     'multiple_units': [
@@ -1461,8 +1461,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1499,8 +1499,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1536,8 +1536,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1574,8 +1574,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1611,8 +1611,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1641,8 +1641,8 @@ cyclone_au_bom_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1674,12 +1674,12 @@ cyclone_sshws_hazard_classes = {
     'citations': [
         {
             'text': tr('NOAA - NHC'),
-            'link': u'http://www.nhc.noaa.gov/aboutsshws.php'
+            'link': 'http://www.nhc.noaa.gov/aboutsshws.php'
         },
         {
             'text': tr('Saffir-Simpson scale - wikipedia'),
             'link':
-                u'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
+                'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
         }
     ],
     'multiple_units': [
@@ -1714,8 +1714,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1754,8 +1754,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1792,8 +1792,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1830,8 +1830,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1868,8 +1868,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },
@@ -1895,8 +1895,8 @@ cyclone_sshws_hazard_classes = {
                     'text': tr(
                         'Displacement rate is a generalized estimate ('
                         'personal communication Craig Arthur)'),
-                    'link': u'https://github.com/inasafe/inasafe/issues/3762'
-                            u'#issuecomment-283839365'
+                    'link': 'https://github.com/inasafe/inasafe/issues/3762'
+                            '#issuecomment-283839365'
                 }
             ]
         },

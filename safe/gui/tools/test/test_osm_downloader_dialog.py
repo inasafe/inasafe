@@ -123,7 +123,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
         index = self.dialog.country_comboBox.findText(country)
         self.dialog.country_comboBox.setCurrentIndex(index)
-        self.assertEquals(expected, self.dialog.boundary_helper.text())
+        self.assertEqual(expected, self.dialog.boundary_helper.text())
 
         admin_level = 6
         country = 'Madagascar'
@@ -132,7 +132,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
         index = self.dialog.country_comboBox.findText(country)
         self.dialog.country_comboBox.setCurrentIndex(index)
-        self.assertEquals(expected, self.dialog.boundary_helper.text())
+        self.assertEqual(expected, self.dialog.boundary_helper.text())
 
     def test_suffix_extracting_shapefile(self):
         """Test existing files method."""

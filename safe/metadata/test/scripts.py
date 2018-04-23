@@ -1,6 +1,6 @@
 # coding=utf-8
 """Scripts for metadata."""
-from __future__ import print_function
+
 
 from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata

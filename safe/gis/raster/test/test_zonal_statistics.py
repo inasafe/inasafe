@@ -1,4 +1,3 @@
-from builtins import zip
 # coding=utf-8
 import unittest
 

@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Zonal statistics on a raster layer."""
-from builtins import zip
+
 
 import logging
 

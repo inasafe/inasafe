@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Test Styling."""
-from builtins import range
+
 
 import unittest
 import os

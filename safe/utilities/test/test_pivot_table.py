@@ -1,6 +1,6 @@
 # coding=utf-8
 """Tests for pivot table implementation."""
-from builtins import range
+
 import unittest
 import json
 
@@ -117,17 +117,17 @@ class PivotTableTest(unittest.TestCase):
     def test_to_dict(self):
         """Test for to_dict the FlatTable"""
         flat_table_dict = self.flat_table.to_dict()
-        self.assertEquals(flat_table_dict['groups'], self.flat_table.groups)
-        self.assertEquals(
+        self.assertEqual(flat_table_dict['groups'], self.flat_table.groups)
+        self.assertEqual(
             len(flat_table_dict['data']), len(self.flat_table.data))
 
     def test_to_json(self):
         """Test for JSON-fy the FlatTable"""
         json_string = self.flat_table.to_json()
         flat_table_dict = json.loads(json_string)
-        self.assertEquals(
+        self.assertEqual(
             tuple(flat_table_dict['groups']), self.flat_table.groups)
-        self.assertEquals(
+        self.assertEqual(
             len(flat_table_dict['data']), len(self.flat_table.data))
 
     def test_from_json(self):
@@ -141,12 +141,12 @@ class PivotTableTest(unittest.TestCase):
         flat_table.from_json(json_string)
         expected_groups = ["road_type", "hazard"]
         for i in range(len(flat_table.groups)):
-            self.assertEquals(expected_groups[i], flat_table.groups[i])
-        self.assertEquals(flat_table.data[('residential', 'low')], 50)
-        self.assertEquals(flat_table.data[('residential', 'medium')], 30)
-        self.assertEquals(flat_table.data[('secondary', 'low')], 40)
-        self.assertEquals(flat_table.data[('primary', 'high')], 10)
-        self.assertEquals(flat_table.data[('primary', 'medium')], 20)
+            self.assertEqual(expected_groups[i], flat_table.groups[i])
+        self.assertEqual(flat_table.data[('residential', 'low')], 50)
+        self.assertEqual(flat_table.data[('residential', 'medium')], 30)
+        self.assertEqual(flat_table.data[('secondary', 'low')], 40)
+        self.assertEqual(flat_table.data[('primary', 'high')], 10)
+        self.assertEqual(flat_table.data[('primary', 'medium')], 20)
 
     def test_from_dict(self):
         """Test FlatTable from_dict method"""
@@ -162,31 +162,31 @@ class PivotTableTest(unittest.TestCase):
         flat_table.from_dict(groups, data)
 
         for i in range(len(flat_table.groups)):
-            self.assertEquals(groups[i], flat_table.groups[i])
-        self.assertEquals(flat_table.data[('residential', 'low')], 50)
-        self.assertEquals(flat_table.data[('residential', 'medium')], 30)
-        self.assertEquals(flat_table.data[('secondary', 'low')], 40)
-        self.assertEquals(flat_table.data[('primary', 'high')], 10)
-        self.assertEquals(flat_table.data[('primary', 'medium')], 20)
+            self.assertEqual(groups[i], flat_table.groups[i])
+        self.assertEqual(flat_table.data[('residential', 'low')], 50)
+        self.assertEqual(flat_table.data[('residential', 'medium')], 30)
+        self.assertEqual(flat_table.data[('secondary', 'low')], 40)
+        self.assertEqual(flat_table.data[('primary', 'high')], 10)
+        self.assertEqual(flat_table.data[('primary', 'medium')], 20)
 
-        groups = [u'landcover', u'hazard', u'zone']
+        groups = ['landcover', 'hazard', 'zone']
         data = [
-            [u'Forest', u'high', None, 5172.100048073517],
-            [u'Population', u'high', None, 20689.8283632199],
-            [u'Forest', u'low', None, 5171.381989317935],
-            [u'Population', u'medium', None, 10347.048486941067],
-            [u'Meadow', u'high', None, 5172.81413353821],
-            [u'Population', u'low', None, 10342.763978632318],
-            [u'Meadow', u'medium', None, 5173.5242434723095]
+            ['Forest', 'high', None, 5172.100048073517],
+            ['Population', 'high', None, 20689.8283632199],
+            ['Forest', 'low', None, 5171.381989317935],
+            ['Population', 'medium', None, 10347.048486941067],
+            ['Meadow', 'high', None, 5172.81413353821],
+            ['Population', 'low', None, 10342.763978632318],
+            ['Meadow', 'medium', None, 5173.5242434723095]
         ]
 
         flat_table = FlatTable()
         flat_table.from_dict(groups, data)
 
         for i in range(len(flat_table.groups)):
-            self.assertEquals(groups[i], flat_table.groups[i])
+            self.assertEqual(groups[i], flat_table.groups[i])
 
-        self.assertEquals(flat_table.data[
+        self.assertEqual(flat_table.data[
             ('Forest', 'high', None)], 5172.100048073517)
 
     def test_to_from_json(self):
@@ -195,11 +195,11 @@ class PivotTableTest(unittest.TestCase):
         flat_table = FlatTable()
         flat_table.from_json(json_string)
 
-        self.assertEquals(flat_table.data[('residential', 'low')], 50)
-        self.assertEquals(flat_table.data[('residential', 'medium')], 30)
-        self.assertEquals(flat_table.data[('secondary', 'low')], 40)
-        self.assertEquals(flat_table.data[('primary', 'high')], 10)
-        self.assertEquals(flat_table.data[('primary', 'medium')], 20)
+        self.assertEqual(flat_table.data[('residential', 'low')], 50)
+        self.assertEqual(flat_table.data[('residential', 'medium')], 30)
+        self.assertEqual(flat_table.data[('secondary', 'low')], 40)
+        self.assertEqual(flat_table.data[('primary', 'high')], 10)
+        self.assertEqual(flat_table.data[('primary', 'medium')], 20)
 
 
 if __name__ == '__main__':

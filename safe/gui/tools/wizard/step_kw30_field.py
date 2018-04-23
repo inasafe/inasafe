@@ -1,7 +1,7 @@
 # coding=utf-8
 """InaSAFE Wizard Step Field."""
-from builtins import str
-from builtins import range
+
+
 
 import logging
 import re

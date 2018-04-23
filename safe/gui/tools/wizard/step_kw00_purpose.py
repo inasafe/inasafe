@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Purpose."""
-from builtins import range
+
 
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore

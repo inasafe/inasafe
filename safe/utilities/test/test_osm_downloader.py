@@ -11,8 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
-from builtins import object
+
+
 __author__ = 'bungcip@gmail.com'
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
@@ -110,7 +110,7 @@ class MockQNetworkReply(QObject):
 
 
 # noinspection PyClassHasNoInit
-class FakeQNetworkAccessManager(object):
+class FakeQNetworkAccessManager():
     """Mock network manager for testing.
 
     .. versionadded:: 3.2

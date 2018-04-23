@@ -11,8 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
-from builtins import range
+
+
 
 import json
 import logging

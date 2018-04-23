@@ -3,7 +3,6 @@
 This module contains the abstract class of the MinimumNeeds. The storage
 logic is omitted here.
 """
-from builtins import object
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -18,7 +17,7 @@ from os.path import exists, dirname
 from safe.utilities.i18n import tr
 
 
-class MinimumNeeds(object):
+class MinimumNeeds():
 
     """A abstract class for handling the minimum needs.
 

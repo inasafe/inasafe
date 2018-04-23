@@ -1,6 +1,6 @@
 # coding=utf-8
 """Metadata utilities."""
-from builtins import range
+
 
 from contextlib import contextmanager
 from datetime import datetime, date

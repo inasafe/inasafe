@@ -85,7 +85,7 @@ def py_encode_basestring_ascii(s, _PY3=PY3):
 encode_basestring_ascii = (
     c_encode_basestring_ascii or py_encode_basestring_ascii)
 
-class JSONEncoder(object):
+class JSONEncoder():
     """Extensible JSON <http://json.org> encoder for Python data structures.
 
     Supports the following objects and types by default:

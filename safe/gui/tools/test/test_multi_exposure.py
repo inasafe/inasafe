@@ -1,4 +1,4 @@
-from builtins import range
+
 # coding=utf-8
 
 import unittest
@@ -93,8 +93,8 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(1, dialog.list_layers_in_map_report.count())
         self.assertEqual(
             dialog.ordered_expected_layers(),
-            [('FromAnalysis', u'impact_analysis',
-              u'Generic Hazard Polygon On Population Polygon', None)])
+            [('FromAnalysis', 'impact_analysis',
+              'Generic Hazard Polygon On Population Polygon', None)])
         self.assertFalse(dialog.move_down.isEnabled())
         self.assertFalse(dialog.move_up.isEnabled())
         self.assertFalse(dialog.add_layer.isEnabled())
@@ -105,10 +105,10 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(
             dialog.ordered_expected_layers(),
             [
-                ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Population Polygon', None),
-                ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Roads Line', None)
+                ('FromAnalysis', 'impact_analysis',
+                 'Generic Hazard Polygon On Population Polygon', None),
+                ('FromAnalysis', 'impact_analysis',
+                 'Generic Hazard Polygon On Roads Line', None)
             ])
 
         # Test move up/down
@@ -122,10 +122,10 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(
             dialog.ordered_expected_layers(),
             [
-                ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Roads Line', None),
-                ('FromAnalysis', u'impact_analysis',
-                 u'Generic Hazard Polygon On Population Polygon', None),
+                ('FromAnalysis', 'impact_analysis',
+                 'Generic Hazard Polygon On Roads Line', None),
+                ('FromAnalysis', 'impact_analysis',
+                 'Generic Hazard Polygon On Population Polygon', None),
             ])
 
         # Let's add a layer from canvas
@@ -156,11 +156,11 @@ class MultiExposureDialogTest(unittest.TestCase):
 
         self.assertEqual(
             custom_order[1],
-            ('FromAnalysis', u'impact_analysis',
-             u'Generic Hazard Polygon On Population Polygon', None),
+            ('FromAnalysis', 'impact_analysis',
+             'Generic Hazard Polygon On Population Polygon', None),
         )
         self.assertEqual(
             custom_order[0],
-            ('FromAnalysis', u'impact_analysis',
-             u'Generic Hazard Polygon On Roads Line', None),
+            ('FromAnalysis', 'impact_analysis',
+             'Generic Hazard Polygon On Roads Line', None),
         )

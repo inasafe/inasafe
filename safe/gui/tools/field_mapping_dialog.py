@@ -1,6 +1,6 @@
 # coding=utf-8
 """Field Mapping Dialog Implementation."""
-from builtins import range
+
 import logging
 
 from qgis.PyQt.QtCore import pyqtSlot, QSettings

@@ -1,7 +1,7 @@
 # coding=utf-8
 """This module contains utilities for locating application resources (img etc).
 """
-from builtins import str
+
 import codecs
 import os
 

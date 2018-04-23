@@ -3,8 +3,8 @@
 
 This context then used for SVG Jinja2 generation.
 """
-from builtins import range
-from builtins import object
+
+
 import math
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -13,7 +13,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class SVGChartContext(object):
+class SVGChartContext():
 
     """Context to hold information to generate SVG.
 

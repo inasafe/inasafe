@@ -9,10 +9,10 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
-from __future__ import print_function
-from builtins import zip
-from builtins import str
-from builtins import range
+
+
+
+
 
 from tempfile import mkdtemp
 

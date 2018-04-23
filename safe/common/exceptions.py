@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
 
 from safe.messaging.item.message_element import MessageElement
 from safe.utilities.str import get_unicode, get_string

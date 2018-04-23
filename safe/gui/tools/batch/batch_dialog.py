@@ -13,8 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
-from builtins import range
+
+
 
 __author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -232,7 +232,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 try:
                     scenarios = read_scenarios(absolute_path)
                     validate_scenario(scenarios, scenario_directory)
-                    for key, value in scenarios.items():
+                    for key, value in list(scenarios.items()):
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
                 except ParsingError:
@@ -894,7 +894,7 @@ def validate_scenario(blocks, scenario_directory):
     """
     # dictionary to temporary contain status message
     blocks_update = {}
-    for section, section_item in blocks.items():
+    for section, section_item in list(blocks.items()):
         ready = True
         for item in section_item:
             if item in ['hazard', 'exposure', 'aggregation']:
@@ -911,7 +911,7 @@ def validate_scenario(blocks, scenario_directory):
         if ready:
             blocks_update[section] = {'status': 'Scenario ready'}
             # LOGGER.info(section + " scenario is ready")
-    for section, section_item in blocks_update.items():
+    for section, section_item in list(blocks_update.items()):
         blocks[section]['status'] = blocks_update[section]['status']
 
 

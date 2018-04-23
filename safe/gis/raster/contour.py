@@ -1,8 +1,5 @@
 # coding=utf-8
 """Create contour from shakemap raster layer."""
-from builtins import zip
-from builtins import str
-from builtins import range
 
 import logging
 import os

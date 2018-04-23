@@ -1,6 +1,6 @@
 # coding=utf-8
 """Metadata Converter Dialog Implementation."""
-from builtins import range
+
 import logging
 import os
 

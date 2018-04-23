@@ -156,7 +156,7 @@ class TestImpactMetadata(TestCase):
             EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML)
 
         # TODO (MB): add more checks
-        self.assertEquals(generated_metadata.get_xml_value('license'), 'GPLv2')
+        self.assertEqual(generated_metadata.get_xml_value('license'), 'GPLv2')
 
     def test_xml_to_json_to_xml(self):
         generated_metadata = OutputLayerMetadata(

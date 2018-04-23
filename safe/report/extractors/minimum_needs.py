@@ -94,7 +94,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
     need_header_format = resolve_from_dictionary(
         extra_args, 'need_header_format')
     # group the needs by frequency
-    for key, frequency in frequencies.items():
+    for key, frequency in list(frequencies.items()):
         group = {
             'header': header_frequency_format.format(frequency=tr(key)),
             'total_header': total_header,
