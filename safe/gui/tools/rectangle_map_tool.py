@@ -38,7 +38,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
-        self.rubber_band = QgsRubberBand(self.canvas, geometryType=QgsWkbTypes.Line)
+        self.rubber_band = QgsRubberBand(self.canvas, geometryType=QgsWkbTypes.LineString)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
         # Needs QGIS 2.6
         # self.rubber_band.setFillColor(QColor(0, 0, 240, 0))

@@ -62,4 +62,4 @@ if __name__ == '__main__':
             status += ' - please edit %s' % relative_path
 
         message += status
-        print message
+        print(message)
