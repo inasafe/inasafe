@@ -5,7 +5,7 @@
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
@@ -306,7 +306,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         )
     else:
         sections_not_empty = True
-        for _, values in context['sections'].iteritems():
+        for _, values in context['sections'].items():
             for value in values:
                 if value.get('rows'):
                     break

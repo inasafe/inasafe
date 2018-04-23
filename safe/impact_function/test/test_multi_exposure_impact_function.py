@@ -249,7 +249,7 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
         ]
 
         for key in output_layer_provenance_keys:
-            self.assertIn(key, impact_function.provenance.keys())
+            self.assertIn(key, list(impact_function.provenance.keys()))
 
         # Test serialization/deserialization
         output_metadata = impact_function.aggregation_summary.keywords

@@ -18,20 +18,10 @@ from qgis.core import (
     QgsProject,
 )
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    QCoreApplication,
-    Qt,
-)
+from qgis.PyQt.QtCore import QCoreApplication, Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QAction,
-    QIcon,
-    QApplication,
-    QToolButton,
-    QMenu,
-    QLineEdit,
-    QInputDialog,
-)
+from qgis.PyQt.QtWidgets import QAction, QApplication, QToolButton, QMenu, QLineEdit, QInputDialog
+from qgis.PyQt.QtGui import QIcon
 
 from safe.common.custom_logging import LOGGER
 from safe.utilities.expressions import qgis_expressions
@@ -59,7 +49,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class Plugin(object):
+class Plugin():
 
     """The QGIS interface implementation for the InaSAFE plugin.
 
@@ -506,7 +496,7 @@ class Plugin(object):
         if self.hide_developer_buttons:
             return
 
-        default_package = unicode(
+        default_package = str(
             setting('testPackage', 'safe', expected_type=str))
         msg = self.tr('Run tests in %s' % default_package)
 
@@ -640,7 +630,8 @@ class Plugin(object):
             del (sys.modules[module])
         for module in sys.modules:
             if 'inasafe' in module:
-                print module
+                # fix_print_with_import
+                print(module)
 
         # Lets also clean up all the path additions that were made
         package_path = os.path.abspath(os.path.join(
@@ -673,7 +664,7 @@ class Plugin(object):
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
         # Unload QGIS expressions loaded by the plugin.
-        for qgis_expression in qgis_expressions().keys():
+        for qgis_expression in list(qgis_expressions().keys()):
             QgsExpression.unregisterFunction(qgis_expression)
 
     def toggle_inasafe_action(self, checked):
@@ -706,7 +697,7 @@ class Plugin(object):
     def select_test_package(self):
         """Select the test package."""
         default_package = 'safe'
-        user_package = unicode(
+        user_package = str(
             setting('testPackage', default_package, expected_type=str))
 
         test_package, _ = QInputDialog.getText(
@@ -726,11 +717,11 @@ class Plugin(object):
 
     def run_tests(self):
         """Run unit tests in the python console."""
-        from PyQt4.QtGui import QDockWidget
+        from qgis.PyQt.QtWidgets import QDockWidget
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
-        package = unicode(setting('testPackage', 'safe', expected_type=str))
+        package = str(setting('testPackage', 'safe', expected_type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
@@ -910,17 +901,17 @@ class Plugin(object):
         """
         path = resources_path('osm', 'WorldOSM.gdal')
         layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
-        registry = QgsMapLayerRegistry.instance()
+        project = QgsProject.instance()
 
         # Try to add it as the last layer in the list
         # False flag prevents layer being added to legend
-        registry.addMapLayer(layer, False)
+        project.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
         index = len(root.findLayers()) + 1
         # LOGGER.info('Inserting layer %s at position %s' % (
         #    layer.source(), index))
         root.insertLayer(index, layer)
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        project.addMapLayer(layer)
 
     def show_definitions(self):
         """Show InaSAFE Definitions (a report showing all key metadata)."""

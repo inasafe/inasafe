@@ -26,23 +26,23 @@ class TestMetadataConverterDialog(unittest.TestCase):
     def test_init(self):
         """Test initialization with different layers.."""
         # No layer
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         dialog = MetadataConverterDialog(PARENT, IFACE)
         self.assertEqual(dialog.input_layer_combo_box.count(), 0)
         dialog.close()
 
         # Load many layers
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         load_standard_layers()
         dialog = MetadataConverterDialog(PARENT, IFACE)
         self.assertGreater(dialog.input_layer_combo_box.count(), 0)
         dialog.close()
 
         # Load aggregation layer
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid_complex.geojson', clone=True)
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsProject.instance().addMapLayer(layer)
         dialog = MetadataConverterDialog(PARENT, IFACE)
         dialog.input_layer_combo_box.setLayer(layer)
         self.assertEqual(dialog.input_layer_combo_box.count(), 1)
@@ -50,10 +50,10 @@ class TestMetadataConverterDialog(unittest.TestCase):
         dialog.close()
 
         # Load hazard layer, must have the target exposure
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         layer = load_test_vector_layer(
             'gisv4', 'hazard', 'tsunami_vector.geojson', clone=True)
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
+        QgsProject.instance().addMapLayer(layer)
         dialog = MetadataConverterDialog(PARENT, IFACE)
         dialog.input_layer_combo_box.setLayer(layer)
         self.assertEqual(dialog.input_layer_combo_box.count(), 1)

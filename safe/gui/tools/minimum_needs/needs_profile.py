@@ -3,6 +3,7 @@
 This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings.
 """
+from builtins import str
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -12,7 +13,7 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 import os
 from shutil import copy, rmtree
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from qgis.core import QgsApplication
 
 from parameters.text_parameter import TextParameter

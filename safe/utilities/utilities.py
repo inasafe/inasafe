@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Utilities module."""
+from builtins import str
 
 import codecs
 import json
@@ -13,7 +14,7 @@ import unicodedata
 import webbrowser
 from os.path import join, isdir
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsApplication
 
 import safe  # noqa
@@ -27,7 +28,7 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -194,7 +195,7 @@ def generate_expression_help(description, examples, extra_information=None):
         :rtype: Message
         """
         bullets = m.BulletedList()
-        for key, item in information.iteritems():
+        for key, item in information.items():
             if item:
                 bullets.add(
                     m.Text(m.ImportantText(key), m.Text('→'), m.Text(item)))
@@ -298,7 +299,7 @@ def is_keyword_version_supported(
     if inasafe_version == keyword_version:
         return True
 
-    if inasafe_version in keyword_version_compatibilities.keys():
+    if inasafe_version in list(keyword_version_compatibilities.keys()):
         if keyword_version in keyword_version_compatibilities[inasafe_version]:
             return True
         else:

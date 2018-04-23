@@ -1,5 +1,9 @@
 # coding=utf-8
 """A converter for USGS shakemap grid.xml files."""
+from builtins import zip
+from builtins import str
+from builtins import range
+from builtins import object
 
 import codecs
 import logging
@@ -369,9 +373,9 @@ class ShakeGrid(object):
                 mmi_list = np.reshape(mmi_list, ncols * nrows)
 
             # zip lists as list of tuples
-            self.mmi_data = zip(lon_list, lat_list, mmi_list)
+            self.mmi_data = list(zip(lon_list, lat_list, mmi_list))
 
-        except Exception, e:
+        except Exception as e:
             LOGGER.exception('Event parse failed')
             raise GridXmlParseError(
                 'Failed to parse grid file.\n%s\n%s' % (e.__class__, str(e)))
@@ -502,7 +506,7 @@ class ShakeGrid(object):
         try:
             my_result = call(command, shell=True)
             del my_result
-        except CalledProcessError, e:
+        except CalledProcessError as e:
             LOGGER.exception('Running command failed %s' % command)
             message = (
                 'Error while executing the following shell '
@@ -815,7 +819,7 @@ class ShakeGrid(object):
                 layer,
                 id_field,
                 elevation_field)
-        except Exception, e:
+        except Exception as e:
             LOGGER.exception('Contour creation failed')
             raise ContourCreationError(str(e))
         finally:
@@ -907,12 +911,12 @@ class ShakeGrid(object):
             extra_keyword_earthquake_y_maximum['key']: self.y_maximum,
             extra_keyword_earthquake_event_id['key']: self.event_id
         }
-        for key, value in self.extra_keywords.items():
+        for key, value in list(self.extra_keywords.items()):
             extra_keywords[key] = value
 
         # Delete empty element.
         empty_keys = []
-        for key, value in extra_keywords.items():
+        for key, value in list(extra_keywords.items()):
             if value is None:
                 empty_keys.append(key)
         for empty_key in empty_keys:

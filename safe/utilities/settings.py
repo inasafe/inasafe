@@ -4,7 +4,7 @@
 import json
 import logging
 
-from PyQt4.QtCore import QSettings, QPyNullVariant
+from qgis.PyQt.QtCore import QSettings, QPyNullVariant
 
 from safe.definitions import APPLICATION_NAME
 from safe.definitions.default_settings import inasafe_default_settings
@@ -208,7 +208,7 @@ def import_setting(file_path, qsettings=None):
     qsettings.remove('')
     qsettings.endGroup()
 
-    for key, value in inasafe_settings.items():
+    for key, value in list(inasafe_settings.items()):
         set_setting(key, value, qsettings=qsettings)
 
     return inasafe_settings

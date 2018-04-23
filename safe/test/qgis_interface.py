@@ -4,7 +4,7 @@
 
 import logging
 
-from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
 from qgis.core import QgsMapLayerRegistry, QgsMapLayer, QgsProject
 from qgis.gui import QgsLayerTreeMapCanvasBridge
 # pylint: disable=no-name-in-module
@@ -51,11 +51,11 @@ class QgisInterface(QObject):
         # are added.
         LOGGER.debug('Initialising canvas...')
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().layersAdded.connect(self.addLayers)
+        QgsProject.instance().layersAdded.connect(self.addLayers)
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(self.addLayer)
+        QgsProject.instance().layerWasAdded.connect(self.addLayer)
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAll.connect(self.removeAllLayers)
+        QgsProject.instance().removeAll.connect(self.removeAllLayers)
 
         # For processing module
         self.destCrs = None
@@ -95,9 +95,9 @@ class QgisInterface(QObject):
             Processing.initialize()
             # FIXME: Had some weird bug in QGIS 2.18 MacOSX (KyngChaos)
             try:
-                providers = Processing.algs.values()
+                providers = list(Processing.algs.values())
             except:
-                providers = Processing.algs().values()
+                providers = list(Processing.algs().values())
 
             for provider in providers:
                 if name in provider:
@@ -135,7 +135,7 @@ class QgisInterface(QObject):
     def layers(self):
         # It's for processing module
         # simulate iface.legendInterface().layers()
-        return QgsMapLayerRegistry.instance().mapLayers().values()
+        return list(QgsProject.instance().mapLayers().values())
 
     @pyqtSlot('QStringList')
     def addLayers(self, layers):
@@ -191,7 +191,7 @@ class QgisInterface(QObject):
     def newProject(self):
         """Create new project."""
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
 
     # ---------------- API Mock for QgsInterface follows -------------------
 

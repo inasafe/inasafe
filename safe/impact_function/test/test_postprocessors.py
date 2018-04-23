@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test for Post Processors."""
+from builtins import object
 
 import unittest
 
@@ -94,7 +95,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new fields were added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(
             female_displaced_count_field['field_name'], impact_fields)
         self.assertIn(
@@ -114,7 +115,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(youth_displaced_count_field['field_name'], impact_fields)
 
     def test_adult_post_processor(self):
@@ -131,7 +132,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(adult_displaced_count_field['field_name'], impact_fields)
 
     def test_elderly_post_processor(self):
@@ -148,7 +149,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(
             elderly_displaced_count_field['field_name'], impact_fields)
 
@@ -173,7 +174,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(hygiene_packs_count_field['field_name'], impact_fields)
 
     def test_additional_rice_post_processor(self):
@@ -197,7 +198,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(
             additional_rice_count_field['field_name'], impact_fields)
 
@@ -219,7 +220,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(size_field['field_name'], impact_fields)
 
         # Test the size rate post processor.
@@ -229,7 +230,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(feature_value_field['field_name'], impact_fields)
 
     def test_productivity_post_processors(self):
@@ -250,7 +251,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(size_field['field_name'], impact_fields)
 
         # Test for productivity rate
@@ -260,7 +261,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(productivity_field['field_name'], impact_fields)
 
         # Test for production cost rate
@@ -270,7 +271,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(production_cost_field['field_name'], impact_fields)
 
         # Test for production value rate
@@ -280,7 +281,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(production_value_field['field_name'], impact_fields)
 
         # Checking the values.
@@ -334,7 +335,7 @@ class TestPostProcessors(unittest.TestCase):
         self.assertTrue(result, message)
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(affected_field['field_name'], impact_fields)
 
     def test_enough_input(self):

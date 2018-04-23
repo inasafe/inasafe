@@ -2,7 +2,7 @@
 
 """Aggregate the aggregate hazard to the aggregation layer."""
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
@@ -95,7 +95,7 @@ def aggregation_summary(aggregate_hazard, aggregation):
     request.setFilterExpression(expression)
     for area in aggregate_hazard.getFeatures(request):
 
-        for key, name_field in source_fields.iteritems():
+        for key, name_field in source_fields.items():
             if key.endswith(pattern):
                 aggregation_id = area[aggregation_index]
                 exposure_class = key.replace(pattern, '')
@@ -107,7 +107,7 @@ def aggregation_summary(aggregate_hazard, aggregation):
                 )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = area[field]
             if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
@@ -146,7 +146,7 @@ def aggregation_summary(aggregate_hazard, aggregation):
         aggregation.changeAttributeValue(
             area.id(), shift + len(unique_exposure), total)
 
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 aggregation_id=aggregation_value,
             )

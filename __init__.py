@@ -1,5 +1,7 @@
 # coding=utf-8
 """Plugin Initialization."""
+from __future__ import absolute_import
+from builtins import str
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -23,12 +25,8 @@ sys.path.extend([os.path.abspath(os.path.join(
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 
-from PyQt4.QtCore import (
-    QLocale,
-    QTranslator,
-    QCoreApplication,
-    QSettings)
-from PyQt4.QtGui import QMessageBox
+from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, QSettings
+from qgis.PyQt.QtWidgets import QMessageBox
 
 # Setup internationalisation for the plugin.
 #
@@ -87,5 +85,5 @@ def classFactory(iface):
                 'clone, do "git clone --recursive git@github.com:inasafe/'
                 'inasafe.git". Finally, restart QGIS.'))
 
-    from safe.plugin import Plugin
+    from .safe.plugin import Plugin
     return Plugin(iface)

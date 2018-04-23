@@ -1,5 +1,6 @@
 # coding=utf-8
 """Module used to generate context for MMI detail section."""
+from builtins import range
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.layer_geometry import (
@@ -71,7 +72,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
 
     """Extract MMI-related data"""
     # mmi is ranged from 1 to 10, which means: [1, 11)
-    mmi_range = range(1, 11)
+    mmi_range = list(range(1, 11))
     rows = []
     roman_numeral = [
         'I',

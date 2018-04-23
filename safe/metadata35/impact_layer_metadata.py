@@ -397,7 +397,7 @@ class ImpactLayerMetadata(BaseMetadata):
         """
         super(ImpactLayerMetadata, self).update_from_dict(keywords)
 
-        if 'if_provenance' in keywords.keys():
+        if 'if_provenance' in list(keywords.keys()):
             if_provenance = keywords['if_provenance']
             for provenance_step in if_provenance:
                 self.provenance.append_provenance_step(provenance_step)

@@ -1,12 +1,12 @@
 # coding=utf-8
 """Group Select Parameter Widget."""
+from builtins import str
+from builtins import range
 
 import logging
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (
-    QVBoxLayout, QRadioButton, QButtonGroup, QWidget, QLabel, QSizePolicy,
-    QListWidget, QGridLayout, QAbstractItemView, QListWidgetItem)
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QVBoxLayout, QRadioButton, QButtonGroup, QWidget, QLabel, QSizePolicy, QListWidget, QGridLayout, QAbstractItemView, QListWidgetItem
 
 from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
@@ -141,7 +141,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         :rtype: DefaultValueParameter
         """
         # Set value for each key
-        for key, value in self._parameter.options.items():
+        for key, value in list(self._parameter.options.items()):
             if value.get('type') == STATIC:
                 continue
             elif value.get('type') == SINGLE_DYNAMIC:
@@ -150,7 +150,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
             elif value.get('type') == MULTIPLE_DYNAMIC:
                 # Need to iterate through all items
                 items = []
-                for index in xrange(self.list_widget.count()):
+                for index in range(self.list_widget.count()):
                     items.append(self.list_widget.item(index))
                 new_value = [i.text() for i in items]
                 self._parameter.set_value_for_key(key, new_value)
@@ -161,7 +161,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         if radio_button_checked_id == -1:
             self._parameter.selected = None
         else:
-            self._parameter.selected = self._parameter.options.keys()[
+            self._parameter.selected = list(self._parameter.options.keys())[
                 radio_button_checked_id]
 
         return self._parameter
@@ -172,7 +172,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         radio_button_checked_id = self.input_button_group.checkedId()
         # No radio button checked, then default value = None
         if radio_button_checked_id > -1:
-            selected_dict = self._parameter.options.values()[
+            selected_dict = list(self._parameter.options.values())[
                 radio_button_checked_id]
             if selected_dict.get('type') == MULTIPLE_DYNAMIC:
                 for field in selected_dict.get('value'):
@@ -189,7 +189,7 @@ class GroupSelectParameterWidget(GenericParameterWidget):
     def radio_buttons_clicked(self):
         """Handler when selected radio button changed."""
         # Disable all spin boxes
-        for spin_box in self.spin_boxes.values():
+        for spin_box in list(self.spin_boxes.values()):
             spin_box.setEnabled(False)
         # Disable list widget
         self.list_widget.setEnabled(False)
@@ -198,13 +198,13 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         radio_button_checked_id = self.input_button_group.checkedId()
 
         if radio_button_checked_id > -1:
-            selected_value = self._parameter.options.values()[
+            selected_value = list(self._parameter.options.values())[
                 radio_button_checked_id]
             if selected_value.get('type') == MULTIPLE_DYNAMIC:
                 # Enable list widget
                 self.list_widget.setEnabled(True)
             elif selected_value.get('type') == SINGLE_DYNAMIC:
-                selected_key = self._parameter.options.keys()[
+                selected_key = list(self._parameter.options.keys())[
                     radio_button_checked_id]
                 self.spin_boxes[selected_key].setEnabled(True)
 
@@ -214,6 +214,6 @@ class GroupSelectParameterWidget(GenericParameterWidget):
         :param key: The key of the radio button.
         :type key: str
         """
-        key_index = self._parameter.options.keys().index(key)
+        key_index = list(self._parameter.options.keys()).index(key)
         radio_button = self.input_button_group.button(key_index)
         radio_button.click()

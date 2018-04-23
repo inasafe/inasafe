@@ -78,7 +78,7 @@ def update_value_map(layer, exposure_key=None):
     unclassified_index = layer.fieldNameIndex(unclassified_column)
 
     reversed_value_map = {}
-    for inasafe_class, values in value_map.iteritems():
+    for inasafe_class, values in value_map.items():
         for val in values:
             reversed_value_map[val] = inasafe_class
 
@@ -121,7 +121,7 @@ def update_value_map(layer, exposure_key=None):
         value_map_key = 'value_maps'
     else:
         value_map_key = 'value_map'
-    if value_map_key in layer.keywords.keys():
+    if value_map_key in list(layer.keywords.keys()):
         layer.keywords.pop(value_map_key)
     layer.keywords['title'] = output_layer_name
     if classification:

@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 __author__ = 'ismail@kartoza.com'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -24,7 +25,7 @@ import sys
 # pylint: disable=unused-import
 import qgis
 # pylint: enable=unused-import
-from PyQt4.QtCore import QDateTime
+from qgis.PyQt.QtCore import QDateTime
 
 from safe.definitions.constants import INASAFE_TEST
 
@@ -37,9 +38,9 @@ skipped_reason = (
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
     def setUp(self):
-        if 'safe.metadata' in sys.modules.keys():
+        if 'safe.metadata' in list(sys.modules.keys()):
             del sys.modules['safe.metadata']
-        self.assertFalse('safe.metadata' in sys.modules.keys())
+        self.assertFalse('safe.metadata' in list(sys.modules.keys()))
         os.environ['LANG'] = 'id'
 
     def tearDown(self):

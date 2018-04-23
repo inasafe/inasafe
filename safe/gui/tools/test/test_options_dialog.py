@@ -11,7 +11,7 @@ from safe.gui.tools.options_dialog import OptionsDialog
 from safe.test.utilities import get_qgis_app
 from safe.common.utilities import temp_dir
 from safe.defaults import default_north_arrow_path, supporters_logo_path
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 

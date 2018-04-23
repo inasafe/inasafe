@@ -1,20 +1,14 @@
 # coding=utf-8
 """Need Manager Dialog."""
+from builtins import range
 
 import os
 from os.path import expanduser, basename
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
-from PyQt4.QtGui import (
-    QDialog,
-    QFileDialog,
-    QGridLayout,
-    QPushButton,
-    QDialogButtonBox,
-    QMessageBox,
-    QIcon
-)
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtCore import pyqtSlot
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QGridLayout, QPushButton, QDialogButtonBox, QMessageBox
+from qgis.PyQt.QtGui import QIcon
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
 from qgis.core import QGis  # NOQA pylint: disable=unused-import
@@ -584,7 +578,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
 
         # To store parameters, we need the english version.
         translated_to_english = dict(
-            (y, x) for x, y in self.resource_parameters.iteritems())
+            (y, x) for x, y in self.resource_parameters.items())
         resource = {}
         for parameter in parameters:
             resource[translated_to_english[parameter.name]] = parameter.value
@@ -608,19 +602,19 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             parameter.unit.plural = resource['Units']
             parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
-        except ValueOutOfBounds, e:
+        except ValueOutOfBounds as e:
             warning = self.tr(
                 'Problem - default value is invalid') + '\n' + e.message
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
-        except InvalidMaximumError, e:
+        except InvalidMaximumError as e:
             warning = self.tr(
                 'Problem - maximum value is invalid') + '\n' + e.message
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
-        except InvalidMinimumError, e:
+        except InvalidMinimumError as e:
             warning = self.tr(
                 'Problem - minimum value is invalid') + '\n' + e.message
             # noinspection PyTypeChecker,PyArgumentList
@@ -681,7 +675,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         the appropriate QMinimumNeeds class' method.
         """
         minimum_needs = {'resources': []}
-        for index in xrange(self.resources_list.count()):
+        for index in range(self.resources_list.count()):
             item = self.resources_list.item(index)
             minimum_needs['resources'].append(item.resource_full)
         minimum_needs['provenance'] = self.provenance.text()
@@ -710,7 +704,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file_name = file_name.replace('.json', '')
         minimum_needs = {'resources': []}
         self.mark_current_profile_as_saved()
-        for index in xrange(self.resources_list.count()):
+        for index in range(self.resources_list.count()):
             item = self.resources_list.item(index)
             minimum_needs['resources'].append(item.resource_full)
         minimum_needs['provenance'] = self.provenance.text()
@@ -727,7 +721,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Create a new profile by name.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QFileDialog.getSaveFileName(
+        file_name, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Create a minimum needs profile'),
             expanduser('~/.qgis2/minimum_needs'),

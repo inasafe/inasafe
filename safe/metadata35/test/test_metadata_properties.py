@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from unittest import TestCase, expectedFailure
 
-from PyQt4.QtCore import QDate, QUrl
+from qgis.PyQt.QtCore import QDate, QUrl
 
 from safe.common.exceptions import MetadataInvalidPathError
 from safe.metadata35.property import (

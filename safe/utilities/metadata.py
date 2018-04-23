@@ -5,7 +5,7 @@ import os
 from copy import deepcopy
 from datetime import datetime, date
 
-from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
+from qgis.PyQt.QtCore import QUrl, QDate, QDateTime, Qt
 
 from safe.common.exceptions import (
     MetadataReadError,
@@ -124,7 +124,7 @@ def append_ISO19115_keywords(keywords):
     }
     ISO19115_keywords = {}
     # Getting value from setting.
-    for key, value in ISO19115_mapping.items():
+    for key, value in list(ISO19115_mapping.items()):
         ISO19115_keywords[value] = setting(key, expected_type=str)
     keywords.update(ISO19115_keywords)
 
@@ -219,21 +219,21 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
 
     # dictionary comprehension
     keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()
         if x[1]['value'] is not None}
-    if 'keyword_version' not in keywords.keys() and xml_uri:
+    if 'keyword_version' not in list(keywords.keys()) and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
         message += 'Layer uri: %s\n' % layer_uri
         message += 'Keywords file: %s\n' % os.path.exists(
             os.path.splitext(layer_uri)[0] + '.xml')
         message += 'keywords:\n'
-        for k, v in keywords.iteritems():
+        for k, v in keywords.items():
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
 
     # Get dictionary keywords that has value != None
     keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()
         if x[1]['value'] is not None}
 
     if keyword:
@@ -267,7 +267,7 @@ def active_classification(keywords, exposure_key):
         classifications = keywords['value_maps'].get(exposure_key)
     if classifications is None:
         return None
-    for classification, value in classifications.items():
+    for classification, value in list(classifications.items()):
         if value['active']:
             return classification
     return None
@@ -296,7 +296,7 @@ def active_thresholds_value_maps(keywords, exposure_key):
         classifications = keywords['value_maps'].get(exposure_key)
     if classifications is None:
         return None
-    for value in classifications.values():
+    for value in list(classifications.values()):
         if value['active']:
             return value['classes']
     return None
@@ -312,7 +312,7 @@ def copy_layer_keywords(layer_keywords):
     :rtype: dict
     """
     copy_keywords = {}
-    for key, value in layer_keywords.items():
+    for key, value in list(layer_keywords.items()):
         if isinstance(value, QUrl):
             copy_keywords[key] = value.toString()
         elif isinstance(value, datetime):

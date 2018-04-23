@@ -1,11 +1,13 @@
 # coding=utf-8
 
 """Rounding and number formatting."""
+from builtins import zip
+from builtins import str
 
 from decimal import Decimal
 from math import ceil, log
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.definitions.units import unit_mapping, nominal_mapping
 from safe.utilities.i18n import locale
@@ -308,8 +310,8 @@ def denomination(value, min_nominal=None):
     if not value:
         return value, None
 
-    if abs(value) == nominal_mapping.keys()[0] and not min_nominal:
-        return 1 * value, nominal_mapping[nominal_mapping.keys()[0]]
+    if abs(value) == list(nominal_mapping.keys())[0] and not min_nominal:
+        return 1 * value, nominal_mapping[list(nominal_mapping.keys())[0]]
 
     # we need minimum value of denomination because we don't want to show
     # '2 ones', '3 tens', etc.
@@ -317,8 +319,8 @@ def denomination(value, min_nominal=None):
     if min_nominal:
         index = int(ceil(log(min_nominal, 10)))
 
-    iterator = zip(
-        nominal_mapping.keys()[index:], nominal_mapping.keys()[index + 1:])
+    iterator = list(zip(
+        list(nominal_mapping.keys())[index:], list(nominal_mapping.keys())[index + 1:]))
     for min_value, max_value in iterator:
 
         if min_value <= abs(value) < max_value:
@@ -326,7 +328,7 @@ def denomination(value, min_nominal=None):
         elif abs(value) < min_value:
             return float(value), None
 
-    max_value = nominal_mapping.keys()[-1]
+    max_value = list(nominal_mapping.keys())[-1]
     new_value = float(value) / max_value
-    new_unit = nominal_mapping[nominal_mapping.keys()[-1]]
+    new_unit = nominal_mapping[list(nominal_mapping.keys())[-1]]
     return new_value, new_unit

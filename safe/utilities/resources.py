@@ -1,13 +1,14 @@
 # coding=utf-8
 """This module contains utilities for locating application resources (img etc).
 """
+from builtins import str
 import codecs
 import os
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4 import QtCore, uic
+from qgis.PyQt import QtCore, uic
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

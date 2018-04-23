@@ -10,6 +10,8 @@ Contact : etienne at kartoza dot com
      (at your option) any later version.
 
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
 import sys
 import os
@@ -24,7 +26,7 @@ except ImportError:
 import tempfile
 from osgeo import gdal
 from PyQt4 import Qt
-from safe.utilities.gis import qgis_version
+from .safe.utilities.gis import qgis_version
 
 __author__ = 'etiennetrimaille'
 __revision__ = '$Format:%H$'
@@ -36,13 +38,20 @@ __copyright__ = (
 def _run_tests(test_suite, package_name, with_coverage=False):
     """Core function to test a test suite."""
     count = test_suite.countTestCases()
-    print '########'
-    print '%s tests has been discovered in %s' % (count, package_name)
-    print 'QGIS : %s' % qgis_version()
-    print 'Python GDAL : %s' % gdal.VersionInfo('VERSION_NUM')
-    print 'QT : %s' % Qt.QT_VERSION
-    print 'Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False))
-    print '########'
+    # fix_print_with_import
+    print('########')
+    # fix_print_with_import
+    print('%s tests has been discovered in %s' % (count, package_name))
+    # fix_print_with_import
+    print('QGIS : %s' % qgis_version())
+    # fix_print_with_import
+    print('Python GDAL : %s' % gdal.VersionInfo('VERSION_NUM'))
+    # fix_print_with_import
+    print('QT : %s' % Qt.QT_VERSION)
+    # fix_print_with_import
+    print('Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False)))
+    # fix_print_with_import
+    print('########')
     if with_coverage:
         cov = coverage.Coverage(
             source=['safe/'],
@@ -61,7 +70,8 @@ def _run_tests(test_suite, package_name, with_coverage=False):
         # cov.html_report()
         report.close()
         with open(report.name, 'r') as fin:
-            print fin.read()
+            # fix_print_with_import
+            print(fin.read())
 
 
 def test_package(package='safe'):
@@ -92,7 +102,7 @@ def test_manually():
 
     You can change this function as much as you want.
     """
-    from safe.gis.vector.test.test_assign_highest_value import \
+    from .safe.gis.vector.test.test_assign_highest_value import \
         TestAssignHighestValueVector
     test_suite = unittest.makeSuite(TestAssignHighestValueVector, 'test')
     _run_tests(test_suite, 'custom test class')

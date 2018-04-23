@@ -35,8 +35,8 @@ class DictionaryProperty(BaseProperty):
         try:
             value = json.loads(value)
             # Checking if the v is basestring, try to decode if it's json
-            for k, v in value.items():
-                if isinstance(v, basestring):
+            for k, v in list(value.items()):
+                if isinstance(v, str):
                     try:
                         # Try to get dictionary, if possible.
                         dictionary_value = json.loads(v)

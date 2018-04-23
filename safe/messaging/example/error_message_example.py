@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -50,7 +51,7 @@ def error_creator2():
     """Simple function that will extend an error and its traceback."""
     try:
         error_creator1()
-    except IOError, e1:
+    except IOError as e1:
         e1.args = (e1.args[0] + '\nCreator 2 error',)  # Tuple dont remove ,
         raise
 
@@ -59,7 +60,7 @@ def error_creator3():
     """Raise a safe style error."""
     try:
         error_creator2()
-    except IOError, e2:
+    except IOError as e2:
         # e2.args = (e2.args[0] + '\nCreator 3 error',)  # Tuple dont remove ,
         raise SafeError(e2)
 
@@ -68,7 +69,7 @@ def error_creator4():
     """Raise a safe style error."""
     try:
         error_creator3()
-    except SafeError, e3:
+    except SafeError as e3:
         e3.error_message.problems.append('Creator 4 error')
         raise
 
@@ -77,7 +78,7 @@ def error_creator5():
     """Raise a safe style error and append a full message."""
     try:
         error_creator4()
-    except SafeError, e4:
+    except SafeError as e4:
         message = ErrorMessage(
             'Creator 5 problem',
             detail=Message(
@@ -100,8 +101,9 @@ if __name__ == '__main__':
     # Safe style errors
     try:
         error_creator5()
-    except SafeError, e:
+    except SafeError as e:
         # print e
         # tb = traceback.format_exc()
         # print tb
-        print e.error_message.to_text()
+        # fix_print_with_import
+        print(e.error_message.to_text())

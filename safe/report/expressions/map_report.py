@@ -96,10 +96,10 @@ def exposure_summary_layer():
     summary layer from place exposure analysis.
     """
     project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
+    project = QgsProject.instance()
 
     key = provenance_layer_analysis_impacted_id['provenance_key']
-    analysis_summary_layer = registry.mapLayer(
+    analysis_summary_layer = project.mapLayer(
         project_context_scope.variable(key))
     if not analysis_summary_layer:
         key = provenance_layer_analysis_impacted['provenance_key']
@@ -123,7 +123,7 @@ def exposure_summary_layer():
     if not project_context_scope.hasVariable(key):
         return None
 
-    exposure_summary_layer = registry.mapLayer(
+    exposure_summary_layer = project.mapLayer(
         project_context_scope.variable(key))
     if not exposure_summary_layer:
         key = provenance_layer_exposure_summary['provenance_key']
@@ -170,7 +170,7 @@ def distance_to_nearest_place(feature, parent):
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = next(layer.getFeatures())
     return feature[index]
 
 
@@ -203,7 +203,7 @@ def direction_to_nearest_place(feature, parent):
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = next(layer.getFeatures())
     return feature[index]
 
 
@@ -236,7 +236,7 @@ def bearing_to_nearest_place(feature, parent):
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = next(layer.getFeatures())
     return feature[index]
 
 
@@ -269,7 +269,7 @@ def name_of_the_nearest_place(feature, parent):
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = next(layer.getFeatures())
     return feature[index]
 
 

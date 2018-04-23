@@ -4,7 +4,7 @@
 import logging
 import os
 
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from qgis.core import (
     QgsGeometry,
@@ -183,7 +183,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         qgis_exposure = (
-            QgsMapLayerRegistry.instance().mapLayer(
+            QgsProject.instance().mapLayer(
                 self.parent.exposure_layer.id()))
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()

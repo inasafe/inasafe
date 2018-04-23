@@ -8,8 +8,8 @@
 import logging
 import os
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtCore import pyqtSlot, QSettings
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 
@@ -237,7 +237,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.result_layer = data_store.layer(output_layer_name)
 
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers(
+        QgsProject.instance().addMapLayers(
             [data_store.layer(self.result_layer.name())])
         self.done(QtGui.QDialog.Accepted)
 

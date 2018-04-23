@@ -1,11 +1,12 @@
 # coding=utf-8
 """Example usage of group select parameter."""
+from __future__ import print_function
 
 import sys
 from collections import OrderedDict
 from functools import partial
 
-from PyQt4.QtGui import QWidget, QGridLayout, QPushButton, QMessageBox
+from qgis.PyQt.QtWidgets import QWidget, QGridLayout, QPushButton, QMessageBox
 
 from parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -115,7 +116,8 @@ def main():
                 for param in a_parameter.value:
                     show_parameter_value(param)
             else:
-                print a_parameter.guid, a_parameter.name, a_parameter.value
+                # fix_print_with_import
+                print(a_parameter.guid, a_parameter.name, a_parameter.value)
 
         try:
             the_parameters = the_parameter_container.get_parameters()

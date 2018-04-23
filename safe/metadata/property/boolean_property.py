@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Boolean property."""
+from builtins import str
 
 from types import NoneType
 

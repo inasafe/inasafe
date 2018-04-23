@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import object
+from future.utils import with_metaclass
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -21,7 +23,7 @@ import abc
 from safe.common.exceptions import MetadataInvalidPathError, MetadataCastError
 
 
-class BaseProperty(object):
+class BaseProperty(with_metaclass(abc.ABCMeta, object)):
     """
     Abstract Metadata Property class, this has to be subclassed.
 
@@ -38,9 +40,6 @@ class BaseProperty(object):
 
     .. versionadded:: 3.2
     """
-
-    # define as Abstract base class
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, name, value, xml_path, allowed_python_types):
 
@@ -85,7 +84,7 @@ class BaseProperty(object):
             self._value = value
             return True
         # pylint: disable=unidiomatic-typecheck
-        elif type(value) in [str, unicode]:
+        elif type(value) in [str, str]:
             try:
                 casted_value = self.cast_from_str(value)
                 self.is_allowed_type(casted_value)
@@ -142,7 +141,7 @@ class BaseProperty(object):
     @staticmethod
     def _is_valid_xml_path(xml_path):
         # TODO (MB): maybe implement stronger check
-        if isinstance(xml_path, basestring):
+        if isinstance(xml_path, str):
             return True
         else:
             raise MetadataInvalidPathError(

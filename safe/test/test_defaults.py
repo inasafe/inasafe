@@ -8,7 +8,7 @@ import unittest
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QFile
+from qgis.PyQt.QtCore import QFile
 
 from safe.defaults import (
     black_inasafe_logo_path,

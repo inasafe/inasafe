@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Zonal statistics on a raster layer."""
+from builtins import zip
 
 import logging
 
@@ -110,7 +111,7 @@ def zonal_stats(raster, vector):
             rename_fields(layer, fields_to_rename)
         else:
             copy_fields(layer, fields_to_rename)
-            remove_fields(layer, fields_to_rename.keys())
+            remove_fields(layer, list(fields_to_rename.keys()))
         layer.commitChanges()
 
     # The zonal stats is producing some None values. We need to fill these

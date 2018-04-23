@@ -1,18 +1,21 @@
 # coding=utf-8
 
 """Save Scenario Dialog."""
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 
 import logging
 import os
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QFileDialog
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog
 
 from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.gis import extent_to_array, viewport_geo_array
@@ -128,7 +131,7 @@ class SaveScenarioDialog(QDialog):
         dialog_title = tr('Save Scenario')
         if scenario_file_path is None:
             # noinspection PyCallByClass,PyTypeChecker
-            scenario_file_path = QFileDialog.getSaveFileName(
+            scenario_file_path, __ = QFileDialog.getSaveFileName(
                 self,
                 dialog_title,
                 os.path.join(self.output_directory, default_filename + '.txt'),

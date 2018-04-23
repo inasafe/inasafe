@@ -1,10 +1,11 @@
 # coding=utf-8
 """Wizard Step Browser."""
+from builtins import str
 
 import os
 from sqlite3 import OperationalError
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 from qgis.core import (
     QgsDataItem,

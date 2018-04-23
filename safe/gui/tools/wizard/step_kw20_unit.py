@@ -1,9 +1,10 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Unit."""
+from builtins import range
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe import messaging as m
 from safe.definitions.hazard import continuous_hazard_unit
@@ -122,7 +123,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         unit_id = self.parent.get_existing_keyword(key)
         if unit_id:
             units = []
-            for index in xrange(self.lstUnits.count()):
+            for index in range(self.lstUnits.count()):
                 item = self.lstUnits.item(index)
                 units.append(item.data(QtCore.Qt.UserRole))
             if unit_id in units:

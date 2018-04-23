@@ -1,10 +1,11 @@
 # coding=utf-8
 """InaSAFE Wizard Step for Choosing Layer Geometry."""
+from builtins import range
 
 import logging
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from qgis.PyQt import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
 from safe import messaging as m

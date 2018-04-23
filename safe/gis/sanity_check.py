@@ -34,7 +34,7 @@ def check_inasafe_fields(layer, keywords_only=False):
     real_fields = [field.name() for field in layer.fields().toList()]
 
     inasafe_fields_flat = []
-    for value in inasafe_fields.values():
+    for value in list(inasafe_fields.values()):
         if isinstance(value, list):
             inasafe_fields_flat.extend(value)
         else:

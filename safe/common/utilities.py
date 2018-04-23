@@ -1,6 +1,8 @@
 # coding=utf-8
 
 """Utilities for InaSAFE."""
+from builtins import str
+from builtins import range
 
 import colorsys
 import ctypes
@@ -125,7 +127,7 @@ def temp_dir(sub_dir='work'):
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
         old_mask = os.umask(0000)
-        os.makedirs(path, 0777)
+        os.makedirs(path, 0o777)
         # Reinstate the old mask for tmp
         os.umask(old_mask)
     return path
@@ -168,7 +170,7 @@ def unique_filename(**kwargs):
         # Umask sets the new mask and returns the old
         umask = os.umask(0000)
         # Ensure that the dir is world writable by explicitly setting mode
-        os.makedirs(kwargs['dir'], 0777)
+        os.makedirs(kwargs['dir'], 0o777)
         # Reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
@@ -340,7 +342,7 @@ def get_significant_decimal(my_decimal):
     my_int_part = str(my_decimal).split('.')[0]
     my_decimal_part = str(my_decimal).split('.')[1]
     first_not_zero = 0
-    for i in xrange(len(my_decimal_part)):
+    for i in range(len(my_decimal_part)):
         if my_decimal_part[i] == '0':
             continue
         else:
@@ -522,7 +524,7 @@ def which(name, flags=os.X_OK):
     """
     result = []
     # pylint: disable=W0141
-    extensions = filter(None, os.environ.get('PATHEXT', '').split(os.pathsep))
+    extensions = [_f for _f in os.environ.get('PATHEXT', '').split(os.pathsep) if _f]
     # pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am

@@ -5,11 +5,12 @@ import logging
 import sqlite3
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature
+from qgis.PyQt.QtCore import pyqtSignal, pyqtSlot
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QIcon
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtGui import QIcon
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 # force sip2 api

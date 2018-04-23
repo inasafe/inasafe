@@ -3,6 +3,7 @@
 This module contains the abstract class of the MinimumNeeds. The storage
 logic is omitted here.
 """
+from builtins import object
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'

@@ -1,10 +1,11 @@
 # coding=utf-8
 """InaSAFE Wizard Step Hazard Category."""
+from builtins import range
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_hazard
@@ -125,7 +126,7 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         category_keyword = self.parent.get_existing_keyword('hazard_category')
         if category_keyword:
             categories = []
-            for index in xrange(self.lstHazardCategories.count()):
+            for index in range(self.lstHazardCategories.count()):
                 item = self.lstHazardCategories.item(index)
                 categories.append(item.data(QtCore.Qt.UserRole))
             if category_keyword in categories:

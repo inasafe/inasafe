@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Tests for the keyword wizard."""
+from builtins import range
 
 import shutil
 import unittest
@@ -54,7 +55,7 @@ from safe.definitions.units import (
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.definitions.utilities import (
     get_compulsory_fields, default_classification_thresholds)
-from safe.utilities.unicode import byteify
+from safe.utilities.str import byteify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -122,7 +123,7 @@ class TestKeywordWizard(unittest.TestCase):
         try:
             selected_items = list_widget.selectedItems()
             selected_texts = [item.text() for item in selected_items]
-            if isinstance(expected_text, basestring):
+            if isinstance(expected_text, str):
                 expected_text = [expected_text]
                 self.assertListEqual(expected_text, selected_texts)
         except AttributeError:
@@ -642,7 +643,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Get layer's inasafe_fields
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
-        for key, value in inasafe_fields.items():
+        for key, value in list(inasafe_fields.items()):
             # Not check if it's hazard_class_field
             if key == get_compulsory_fields(
                     layer_purpose_hazard['key'])['key']:
@@ -659,10 +660,10 @@ class TestKeywordWizard(unittest.TestCase):
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
             if parameter.value == no_field:
-                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+                self.assertNotIn(parameter.guid, list(inasafe_fields.keys()))
             # If not available is not chosen, inasafe_fields should have it
             else:
-                self.assertIn(parameter.guid, inasafe_fields.keys())
+                self.assertIn(parameter.guid, list(inasafe_fields.keys()))
 
         # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
@@ -838,7 +839,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     exposure_type_field['key']: u'TYPE',
                 },
-            'value_map': dict((k, v) for k, v in assigned_values.items() if v),
+            'value_map': dict((k, v) for k, v in list(assigned_values.items()) if v),
             'date': source_date,
             'classification': generic_structure_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
@@ -927,7 +928,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Get layer's inasafe_fields
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
-        for key, value in inasafe_fields.items():
+        for key, value in list(inasafe_fields.items()):
             # Not check if it's hazard_value_field
             if key == get_compulsory_fields(
                     layer_purpose_exposure['key'])['key']:
@@ -944,10 +945,10 @@ class TestKeywordWizard(unittest.TestCase):
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
             if parameter.value == no_field:
-                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+                self.assertNotIn(parameter.guid, list(inasafe_fields.keys()))
             # If not available is not chosen, inasafe_fields should have it
             else:
-                self.assertIn(parameter.guid, inasafe_fields.keys())
+                self.assertIn(parameter.guid, list(inasafe_fields.keys()))
 
         # Click next to finish inasafe fields step and go to inasafe default
         # field step
@@ -2390,7 +2391,7 @@ class TestKeywordWizard(unittest.TestCase):
                     flood_hazard_classes['key']: {
                         'classes': {
                             'dry': [0, 1],
-                            'wet': [1, 9999999999L]
+                            'wet': [1, 9999999999]
                         },
                         'active': True
                     }
@@ -2983,7 +2984,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if classification for land cover is not exist anymore #4214
         self.assertNotIn(
             exposure_land_cover['key'],
-            real_keywords['thresholds'].keys()
+            list(real_keywords['thresholds'].keys())
         )
         # Check if the extra keywords remain
         extra_keywords = real_keywords['extra_keywords']

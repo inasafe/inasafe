@@ -1,5 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step InaSAFE Fields."""
+from builtins import range
 
 # noinspection PyPackageRequirements
 import logging
@@ -152,7 +153,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
             select_parameter.is_required = False
             select_parameter.description = inasafe_field['description']
             select_parameter.help_text = inasafe_field['help_text']
-            select_parameter.element_type = unicode
+            select_parameter.element_type = str
             select_parameter.options_list = option_list
             select_parameter.value = no_field
             # Check if there is already value in the metadata.
@@ -193,7 +194,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
     def clear(self):
         """Clear current state."""
         # Adapted from http://stackoverflow.com/a/13103617/1198772
-        for i in reversed(range(self.kwExtraKeywordsGridLayout.count())):
+        for i in reversed(list(range(self.kwExtraKeywordsGridLayout.count()))):
             self.kwExtraKeywordsGridLayout.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()

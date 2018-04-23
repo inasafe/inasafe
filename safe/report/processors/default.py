@@ -6,16 +6,19 @@ Module for basic renderer we support. Currently we have:
 - Jinja2 Templating renderer
 - QGIS Composition templating renderer
 """
+from builtins import str
+from builtins import range
 
 import io
 import logging
 import os
 from tempfile import mkdtemp
 
-from PyQt4 import QtXml
-from PyQt4.QtCore import QUrl
-from PyQt4.QtGui import QImage, QPainter, QPrinter
-from PyQt4.QtSvg import QSvgRenderer
+from qgis.PyQt import QtXml
+from qgis.PyQt.QtCore import QUrl
+from qgis.PyQt.QtGui import QImage, QPainter
+from qgis.PyQt.QtPrintSupport import QPrinter
+from qgis.PyQt.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
@@ -76,7 +79,7 @@ def composition_item(composer, item_id, item_class):
             return item
 
     # Normal behaviour
-    for item in composer.items():
+    for item in list(composer.items()):
         if isinstance(item, item_class):
             if item.id() == item_id:
                 return item
@@ -350,7 +353,7 @@ def qgis_composer_html_renderer(impact_report, component):
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
-        for key, each_format in output_format.iteritems():
+        for key, each_format in output_format.items():
             each_path = component_output_path[key]
 
             if each_format in doc_format:
@@ -485,12 +488,12 @@ def qgis_composer_renderer(impact_report, component):
         for index, layer in enumerate(layers):
             # we need to check whether the layer is registered or not
             registered_layer = (
-                QgsMapLayerRegistry.instance().mapLayer(layer.id()))
+                QgsProject.instance().mapLayer(layer.id()))
             if registered_layer:
                 if not registered_layer == layer:
                     layers[index] = registered_layer
             else:
-                QgsMapLayerRegistry.instance().addMapLayer(layer)
+                QgsProject.instance().addMapLayer(layer)
 
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
@@ -592,12 +595,12 @@ def qgis_composer_renderer(impact_report, component):
             for layer in layers:
                 # we need to check whether the layer is registered or not
                 registered_layer = (
-                    QgsMapLayerRegistry.instance().mapLayer(layer.id()))
+                    QgsProject.instance().mapLayer(layer.id()))
                 if registered_layer:
                     if not registered_layer == layer:
                         layer = registered_layer
                 else:
-                    QgsMapLayerRegistry.instance().addMapLayer(layer)
+                    QgsProject.instance().addMapLayer(layer)
                 # used for customizations
                 tree_layer = root_group.addLayer(layer)
                 if impact_report.legend_layers or (
@@ -639,7 +642,7 @@ def qgis_composer_renderer(impact_report, component):
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
-        for key, each_format in output_format.iteritems():
+        for key, each_format in output_format.items():
             each_path = component_output_path[key]
 
             if each_format in doc_format:

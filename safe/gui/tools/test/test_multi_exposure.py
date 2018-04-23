@@ -1,3 +1,4 @@
+from builtins import range
 # coding=utf-8
 
 import unittest
@@ -37,7 +38,7 @@ class MultiExposureDialogTest(unittest.TestCase):
 
         test_layers = [
             hazard_layer, population_layer, roads_layer, aggregation_layer]
-        QgsMapLayerRegistry.instance().addMapLayers(test_layers)
+        QgsProject.instance().addMapLayers(test_layers)
 
         qgs_map_canvas_layers = [QgsMapCanvasLayer(x) for x in test_layers]
         self.iface.mapCanvas().setLayerSet(qgs_map_canvas_layers)

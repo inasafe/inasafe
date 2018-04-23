@@ -4,7 +4,7 @@
 from datetime import datetime, date
 from types import NoneType
 
-from PyQt4.QtCore import QDate, Qt, QDateTime
+from qgis.PyQt.QtCore import QDate, Qt, QDateTime
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty

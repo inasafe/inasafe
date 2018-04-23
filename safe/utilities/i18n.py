@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Functions to translate a word or to get the locale."""
+from builtins import str
 
 import logging
 
@@ -8,10 +9,10 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QLocale
-from PyQt4.QtCore import QSettings  # QSettings can't be moved to our class
+from qgis.PyQt.QtCore import QCoreApplication, QLocale
+from qgis.PyQt.QtCore import QSettings  # QSettings can't be moved to our class
 
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -5,7 +5,7 @@ import os
 import re
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe import messaging as m
 from safe.gui.tools.wizard import STEP_KW, STEP_FC

@@ -1,5 +1,7 @@
 # coding=utf-8
 """Tests for map creation in QGIS plugin."""
+from future import standard_library
+standard_library.install_aliases()
 
 __author__ = 'Tim Sutton <tim@kartoza.com>'
 __revision__ = '$Format:%H$'
@@ -11,7 +13,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import unittest
 import logging
-import ConfigParser
+import configparser
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -49,7 +51,7 @@ class TestInit(unittest.TestCase):
                 '../metadata.txt'))
         LOGGER.info(file_path)
         metadata = []
-        parser = ConfigParser.ConfigParser()
+        parser = configparser.ConfigParser()
         parser.optionxform = str
         parser.read(file_path)
         message = 'Cannot find a section named "general" in %s' % file_path

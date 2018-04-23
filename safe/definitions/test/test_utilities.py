@@ -9,7 +9,7 @@ import shutil
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 
 from safe import definitions
 
@@ -440,7 +440,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
                         keys[var.get('key')] = [var]
                     else:
                         keys[var.get('key')].append(var)
-        duplicate_keys = [k for k, v in keys.items() if len(v) > 1]
+        duplicate_keys = [k for k, v in list(keys.items()) if len(v) > 1]
         message = 'There are duplicate keys: %s\n' % ', '.join(duplicate_keys)
         for duplicate_key in duplicate_keys:
             message += 'Duplicate key: %s\n' % duplicate_key

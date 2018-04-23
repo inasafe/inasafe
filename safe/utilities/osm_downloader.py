@@ -6,8 +6,8 @@ import os
 import tempfile
 import zipfile
 
-from PyQt4.QtGui import QDialog
-from PyQt4.QtNetwork import QNetworkReply
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtNetwork import QNetworkReply
 
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version

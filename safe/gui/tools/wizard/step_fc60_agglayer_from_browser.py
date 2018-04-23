@@ -2,7 +2,7 @@
 """InaSAFE Wizard Step Aggregation Layer Browser."""
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QPixmap
+from qgis.PyQt.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.gui.tools.wizard.utilities import layers_intersect

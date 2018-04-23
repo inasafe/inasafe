@@ -1,12 +1,14 @@
 # coding=utf-8
 """Wizard Utilities Functions."""
+from builtins import str
+from builtins import range
 
 import logging
 import os
 import sys
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayout
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QWidgetItem, QSpacerItem, QLayout
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
@@ -223,7 +225,7 @@ def clear_layout(layout):
     # If InaSAFE running on anything else than Windows or Linux
     else:
         # Adapted from http://stackoverflow.com/a/9375273/1198772
-        for i in reversed(range(layout.count())):
+        for i in reversed(list(range(layout.count()))):
             item = layout.itemAt(i)
 
             if isinstance(item, QWidgetItem):

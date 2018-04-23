@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
 import unittest
 from collections import OrderedDict
 from safe.definitions.fields import (
@@ -18,7 +19,7 @@ from safe.definitions.fields import (
     aggregation_fields,
     impact_fields
 )
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 qvariant_type = type(QVariant.Int)
 
@@ -32,12 +33,16 @@ all_fields = OrderedDict([
 
 def generate_field_table():
     """Generating all field table in markdown."""
-    for key, fields in all_fields.items():
-        print '### %s' % key
-        print '| Key | Name | Field Name |'
-        print '| --- | ---- | ---------- |'
+    for key, fields in list(all_fields.items()):
+        # fix_print_with_import
+        print('### %s' % key)
+        # fix_print_with_import
+        print('| Key | Name | Field Name |')
+        # fix_print_with_import
+        print('| --- | ---- | ---------- |')
         for i in fields:
-            print '| %s | %s | %s |' % (i['key'], i['name'], i['field_name'])
+            # fix_print_with_import
+            print('| %s | %s | %s |' % (i['key'], i['name'], i['field_name']))
 
 
 def check_format(field):
@@ -49,18 +54,18 @@ def check_format(field):
     :rtype: bool, str
     """
     mandatory_format = {
-        'key': basestring,
-        'name': basestring,
-        'field_name': basestring,
+        'key': str,
+        'name': str,
+        'field_name': str,
         'precision': int,
         'length': int,
         'type': qvariant_type,
-        'description': basestring,
+        'description': str,
         'citations': list,
         'replace_null': bool
     }
-    for key, value in mandatory_format.items():
-        if key in field.keys():
+    for key, value in list(mandatory_format.items()):
+        if key in list(field.keys()):
             if isinstance(field[key], value):
                 continue
             elif isinstance(field[key], list) and key == 'type':
@@ -85,7 +90,7 @@ class TestFieldDefinitions(unittest.TestCase):
     """Test for Field definitions."""
     def test_field_format(self):
         """Test to check all field is valid."""
-        for layer, fields in all_fields.items():
+        for layer, fields in list(all_fields.items()):
             for field in fields:
                 check = check_format(field)
                 self.assertTrue(check[0], check[1])

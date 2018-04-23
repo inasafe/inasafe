@@ -1,13 +1,13 @@
 # coding=utf-8
 """InaSAFE Wizard Step Value Mapping."""
+from builtins import str
 
 import json
 from copy import deepcopy
 
 import numpy
-from PyQt4.QtCore import QPyNullVariant, Qt
-from PyQt4.QtGui import (
-    QListWidgetItem, QAbstractItemView, QTreeWidgetItem)
+from qgis.PyQt.QtCore import QPyNullVariant, Qt
+from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView, QTreeWidgetItem
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
@@ -184,7 +184,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         default_classes = deepcopy(classification['classes'])
         if classification['key'] == data_driven_classes['key']:
             for unique_value in clean_unique_values:
-                name = unicode(unique_value).upper().replace('_', ' ')
+                name = str(unique_value).upper().replace('_', ' ')
                 default_class = {'key': unique_value,
                                  'name': name,
                                  # 'description': tr('Settlement'),
@@ -200,7 +200,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             assigned_values[default_class['key']] = list()
         for unique_value in clean_unique_values:
             # Capitalization of the value and removing '_' (raw OSM data).
-            value_as_string = unicode(unique_value).upper().replace('_', ' ')
+            value_as_string = str(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
                 if 'string_defaults' in default_class:
@@ -261,7 +261,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         for unique_value in clean_unique_values:
             # check in value map
             assigned = False
-            for key, value_list in value_map.iteritems():
+            for key, value_list in list(value_map.items()):
                 if unique_value in value_list and key in assigned_values:
                     assigned_values[key] += [unique_value]
                     assigned = True
@@ -291,7 +291,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         self.lstUniqueValues.setSelectionMode(
             QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
-            value_as_string = value is not None and unicode(value) or 'NULL'
+            value_as_string = value is not None and str(value) or 'NULL'
             list_item = QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(
                 Qt.ItemIsEnabled |
@@ -319,7 +319,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['key']]:
-                string_value = value is not None and unicode(value) or 'NULL'
+                string_value = value is not None and str(value) or 'NULL'
                 tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
                     Qt.ItemIsEnabled |

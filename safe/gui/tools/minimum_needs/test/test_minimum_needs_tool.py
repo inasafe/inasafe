@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Test Minimum Needs Tools."""
+from builtins import zip
 
 import unittest
 import os
@@ -10,13 +11,13 @@ from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     standard_data_path, get_qgis_app, load_test_vector_layer)
 
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-from safe.utilities.unicode import byteify
+from safe.utilities.str import byteify
 
 
 class MinimumNeedsTest(unittest.TestCase):
@@ -27,7 +28,7 @@ class MinimumNeedsTest(unittest.TestCase):
         """Run after each test."""
         result_path_base = standard_data_path('other', 'minimum_needs_perka7')
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         for extension in ['shp', 'shx', 'dbf', 'prj', 'keywords']:
             path = result_path_base + '.' + extension
             if os.path.exists(path):
@@ -37,7 +38,7 @@ class MinimumNeedsTest(unittest.TestCase):
         """Test behaviour of the minimum needs function."""
         dialog = NeedsCalculatorDialog(PARENT)
         layer = load_test_vector_layer('other', 'minimum_needs.shp')
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
+        QgsProject.instance().addMapLayers([layer])
 
         # Set selected layer and displaced field
         dialog.layer.setLayer(layer)
@@ -54,7 +55,7 @@ class MinimumNeedsTest(unittest.TestCase):
         for feature in layer.getFeatures():
             value = [attribute for attribute in feature.attributes()]
 
-        actual_attributes = dict(zip(field_names, value))
+        actual_attributes = dict(list(zip(field_names, value)))
 
         expected_attributes = {
             'displaced': 1000,
@@ -78,7 +79,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
         input_layer = load_test_vector_layer('other', 'minimum_needs.shp')
 
-        QgsMapLayerRegistry.instance().addMapLayers([input_layer])
+        QgsProject.instance().addMapLayers([input_layer])
 
         # Test Ok button with layer and displaced field
         # selected in the combo box

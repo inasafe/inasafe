@@ -311,7 +311,7 @@ Entrez le nom de la fonction dans le champ
 "Fonction d'initialisation Python"
 Voici un exemple à suivre:
 """
-from PyQt4.QtGui import QWidget
+from PyQt5.QtWidgets import QWidget
 
 def my_form_open(dialog, layer, feature):
 ⇥geom = feature.geometry()

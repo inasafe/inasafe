@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Test Styling."""
+from builtins import range
 
 import unittest
 import os
@@ -29,7 +30,7 @@ class StylingTest(unittest.TestCase):
 
     def test_mmi_colour(self):
         """Test that we can get a colour given an mmi number."""
-        values = range(0, 12)
+        values = list(range(0, 12))
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
                             '#55ffff', '#aaffff', '#fff000', '#ffa800',
                             '#ff7000', '#ff0000', '#D00', '#800']

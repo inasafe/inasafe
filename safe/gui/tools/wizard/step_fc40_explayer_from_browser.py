@@ -2,7 +2,7 @@
 """InaSAFE Wizard Step Exposure Layer Browser."""
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QPixmap
+from qgis.PyQt.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_exposure

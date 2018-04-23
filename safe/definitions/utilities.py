@@ -6,7 +6,7 @@ from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, split
 
-from PyQt4.QtXml import QDomNode, QDomDocument
+from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import QgsApplication
 
 from safe import definitions
@@ -402,7 +402,7 @@ def postprocessor_output_field(postprocessor_definition):
     :return: Field definition of postprocessor output
     :rtype: dict
     """
-    return postprocessor_definition['output'].items()[0][1]['value']
+    return list(postprocessor_definition['output'].items())[0][1]['value']
 
 
 def default_classification_thresholds(classification, unit=None):

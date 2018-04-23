@@ -12,6 +12,7 @@ Contact : christian@kartoza.com
      (at your option) any later version.
 
 """
+from past.builtins import cmp
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '14/09/2012'
@@ -23,7 +24,7 @@ import unittest
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 import json
 
 from parameters.parameter_exceptions import (

@@ -3,7 +3,7 @@
 
 import logging
 
-from PyQt4.QtGui import QTabWidget
+from qgis.PyQt.QtWidgets import QTabWidget
 
 from safe.common.exceptions import KeywordNotFoundError
 from safe.definitions.layer_purposes import (

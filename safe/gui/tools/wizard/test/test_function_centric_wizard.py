@@ -1,5 +1,6 @@
 # coding=utf-8
 """Tests for the Impact Function Centric Wizard."""
+from builtins import range
 
 import unittest
 import sys
@@ -12,7 +13,7 @@ import qgis
 # pylint: enable=unused-import
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 # noinspection PyPackageRequirements
 # Add PARENT directory to path to make test aware of other modules
@@ -108,7 +109,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
         dialog = WizardDialog(iface=IFACE)
         dialog.dock = self.dock
         dialog.set_function_centric_mode()
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         number_of_column = len(hazard_all)
 
         volcano_layer = load_test_vector_layer(
@@ -123,7 +124,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
 
         test_layers = [volcano_layer, structure_layer]
 
-        QgsMapLayerRegistry.instance().addMapLayers(test_layers)
+        QgsProject.instance().addMapLayers(test_layers)
         # Need to set the layers manually to map canvas. See:
         # https://gist.github.com/ismailsunni/dd2c30a38cef0147bd0dc8d6ba1aeac6
         qgs_map_canvas_layers = [QgsMapCanvasLayer(x) for x in test_layers]

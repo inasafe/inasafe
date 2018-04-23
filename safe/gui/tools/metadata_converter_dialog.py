@@ -1,11 +1,12 @@
 # coding=utf-8
 """Metadata Converter Dialog Implementation."""
+from builtins import range
 import logging
 import os
 
-from PyQt4.QtCore import Qt, QFile, pyqtSignal, QT_VERSION
-from PyQt4.QtGui import (
-    QDialog, QDialogButtonBox, QFileDialog, QIcon, )
+from qgis.PyQt.QtCore import Qt, QFile, pyqtSignal
+from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
+from qgis.PyQt.QtGui import QIcon
 
 from safe.common.exceptions import (
     NoKeywordsFoundError,
@@ -307,7 +308,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             '.asc': tr('Raster ASCII File (*.asc);;'),
         }
         # Open File Dialog
-        file_path = QFileDialog.getSaveFileName(
+        file_path, __ = QFileDialog.getSaveFileName(
             self,
             tr('Output File'),
             current_file_path,

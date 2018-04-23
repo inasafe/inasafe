@@ -1,10 +1,11 @@
 # coding=utf-8
 
 """Aggregate the impact table to the aggregate hazard."""
+from builtins import str
 
 import logging
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
 from safe.definitions.exposure import exposure_structure
@@ -145,7 +146,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = feature[field]
             if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
@@ -184,14 +185,14 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
             hazard=hazard,
             classification=classification,
             hazard_class=feature_hazard_value)
-        affected = tr(unicode(affected))
+        affected = tr(str(affected))
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure), affected)
 
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure) + 1, total)
 
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 aggregation_id=aggregation_value,
                 hazard_id=feature_hazard_id

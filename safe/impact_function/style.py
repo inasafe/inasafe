@@ -4,7 +4,7 @@
 
 from collections import OrderedDict
 
-from PyQt4.QtGui import QColor
+from qgis.PyQt.QtGui import QColor
 from qgis.core import (
     QgsSymbolV2,
     QgsRendererCategoryV2,
@@ -53,7 +53,7 @@ def hazard_class_style(layer, classification, display_null=False):
     # Conditional styling
     attribute_table_styles = []
 
-    for hazard_class, (color, label) in classification.iteritems():
+    for hazard_class, (color, label) in classification.items():
         if hazard_class == not_exposed_class['key'] and not display_null:
             # We don't want to display the null value (not exposed).
             # We skip it.
@@ -123,7 +123,7 @@ def generate_classified_legend(
     :rtype: OrderedDict
     """
     # We need to read the analysis layer to get the number of features.
-    analysis_row = analysis.getFeatures().next()
+    analysis_row = next(analysis.getFeatures())
 
     # Let's style the hazard class in each layers.
     hazard_classification = hazard.keywords['classification']
