@@ -14,7 +14,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
-    QGis,
+    Qgis,
     QgsFeature,
     QgsField,
     QgsDistanceArea,
@@ -103,7 +103,7 @@ def create_memory_layer(
     :type layer_name: str
 
     :param geometry: The geometry of the layer.
-    :rtype geometry: QGis.WkbType
+    :rtype geometry: Qgis.WkbType
 
     :param coordinate_reference_system: The CRS of the memory layer.
     :type coordinate_reference_system: QgsCoordinateReferenceSystem
@@ -115,13 +115,13 @@ def create_memory_layer(
     :rtype: QgsVectorLayer
     """
 
-    if geometry == QGis.Point:
+    if geometry == Qgis.Point:
         type_string = 'MultiPoint'
-    elif geometry == QGis.Line:
+    elif geometry == Qgis.Line:
         type_string = 'MultiLineString'
-    elif geometry == QGis.Polygon:
+    elif geometry == Qgis.Polygon:
         type_string = 'MultiPolygon'
-    elif geometry == QGis.NoGeometry:
+    elif geometry == Qgis.NoGeometry:
         type_string = 'none'
     else:
         raise MemoryLayerCreationError(

@@ -63,16 +63,16 @@ def generate_insufficient_overlap_message(
     analysis_inputs.add(tr('Exposure: %s') % (exposure_layer.source()))
     analysis_inputs.add(
         tr('Viewable area Geo Extent: %s') % (
-            get_unicode(viewport_geoextent)))
+            viewport_geoextent))
     analysis_inputs.add(
         tr('Hazard Geo Extent: %s') % (
-            get_unicode(hazard_geoextent)))
+            hazard_geoextent))
     analysis_inputs.add(
         tr('Exposure Geo Extent: %s') % (
-            get_unicode(exposure_geoextent)))
+            exposure_geoextent))
     analysis_inputs.add(
         tr('Details: %s') % (
-            get_unicode(e)))
+            e))
     message.add(analysis_inputs)
 
     return message

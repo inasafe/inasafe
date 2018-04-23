@@ -5,7 +5,7 @@
 import logging
 
 from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
-from qgis.core import QgsMapLayerRegistry, QgsMapLayer, QgsProject
+from qgis.core import QgsMapLayer, QgsProject
 from qgis.gui import QgsLayerTreeMapCanvasBridge
 # pylint: disable=no-name-in-module
 from qgis.gui import (
@@ -181,8 +181,8 @@ class QgisInterface(QObject):
     def removeAllLayers(self, ):
         """Remove layers from the canvas before they get deleted.
 
-        .. note:: This is NOT part of the QGisInterface API but is needed
-            to support QgsMapLayerRegistry.removeAllLayers().
+        .. note:: This is NOT part of the QgisInterface API but is needed
+            to support QgsProject.instance().removeAllLayers().
 
         """
         self.canvas.setLayerSet([])

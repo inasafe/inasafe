@@ -12,7 +12,6 @@ import qgis  # NOQA pylint: disable=unused-import
 from qgis.core import (
     QgsRectangle,
     QgsRasterLayer,
-    QgsMapLayerRegistry,
     QgsMapLayer,
     QgsExpression,
     QgsProject,
@@ -68,7 +67,7 @@ class Plugin():
         :param iface:Quantum GIS iface instance. This instance is
             automatically passed to the plugin by QGIS when it loads the
             plugin.
-        :type iface: QGisAppInterface
+        :type iface: QgisAppInterface
         """
         # Save reference to the QGIS interface
         self.iface = iface

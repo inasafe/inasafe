@@ -11,7 +11,6 @@ import shutil
 # pylint: disable=unused-import
 import qgis
 # pylint: enable=unused-import
-from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
 from qgis.PyQt import QtCore
 

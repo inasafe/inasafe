@@ -11,8 +11,6 @@ Particular example are:
 import datetime
 from copy import deepcopy
 
-from qgis.core import QgsMapLayerRegistry
-
 from safe.common.version import get_version
 from safe.definitions.fields import analysis_name_field
 from safe.definitions.provenance import (

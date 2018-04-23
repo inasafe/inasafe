@@ -34,7 +34,6 @@ from qgis.core import (
     QgsComposerLegend,
     QgsCoordinateTransform,
     QgsProject,
-    QgsMapLayerRegistry,
     PROJECT_SCALES
 )
 

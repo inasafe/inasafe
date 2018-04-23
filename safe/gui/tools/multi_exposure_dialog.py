@@ -10,7 +10,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QComboBox, QLabel, QApplication, QSizePolicy, QTreeWidgetItem, QListWidgetItem
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtXml import QDomDocument
-from qgis.core import QgsMapLayerRegistry, QgsProject
+from qgis.core import QgsProject
 from qgis.utils import iface as iface_object
 
 from safe import messaging as m
@@ -94,8 +94,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
 
-        :param iface: An instance of QGisInterface
-        :type iface: QGisInterface
+        :param iface: An instance of QgisInterface
+        :type iface: QgisInterface
         """
         QDialog.__init__(self, parent)
         self.use_selected_only = setting(

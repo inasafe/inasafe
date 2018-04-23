@@ -5,7 +5,6 @@ from safe import messaging as m
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.utilities.i18n import tr
-from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -85,13 +84,13 @@ class StepKwSource(WizardStep, FORM_CLASS):
         # Just set values based on existing keywords
         source = self.parent.get_existing_keyword('source')
         if source or source == 0:
-            self.leSource.setText(get_unicode(source))
+            self.leSource.setText(source)
         else:
             self.leSource.clear()
 
         source_scale = self.parent.get_existing_keyword('scale')
         if source_scale or source_scale == 0:
-            self.leSource_scale.setText(get_unicode(source_scale))
+            self.leSource_scale.setText(source_scale)
         else:
             self.leSource_scale.clear()
 
@@ -110,13 +109,13 @@ class StepKwSource(WizardStep, FORM_CLASS):
             pass
 
         if source_url or source_url == 0:
-            self.leSource_url.setText(get_unicode(source_url))
+            self.leSource_url.setText(source_url)
         else:
             self.leSource_url.clear()
 
         source_license = self.parent.get_existing_keyword('license')
         if source_license or source_license == 0:
-            self.leSource_license.setText(get_unicode(source_license))
+            self.leSource_license.setText(source_license)
         else:
             self.leSource_license.clear()
 

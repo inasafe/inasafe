@@ -3,9 +3,6 @@
 """Mock like implementation for the QgsLegendInterface - used for testing."""
 
 
-from qgis.core import QgsMapLayerRegistry
-
-
 class QgisLegend():
 
     """A fake QgsLegendInterface with minimal implementation."""

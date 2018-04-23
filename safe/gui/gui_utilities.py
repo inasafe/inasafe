@@ -5,7 +5,6 @@ from past.builtins import cmp
 
 
 from qgis.PyQt.QtCore import Qt
-from qgis.core import QgsMapLayerRegistry
 
 from safe.utilities.i18n import tr
 

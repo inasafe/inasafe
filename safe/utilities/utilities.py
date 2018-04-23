@@ -27,7 +27,6 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -243,7 +242,7 @@ def html_to_file(html, file_path=None, open_browser=False):
         file_path = unique_filename(suffix='.html')
 
     # Ensure html is in unicode for codecs module
-    html = get_unicode(html)
+    html = html
     with codecs.open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
 

@@ -11,7 +11,7 @@ from qgis.core import (
     QgsDataItem,
     QgsVectorLayer,
     QgsRasterLayer,
-    QgsDataSourceURI,
+    QgsDataSourceUri,
     QgsBrowserModel)
 
 import safe.definitions.layer_geometry
@@ -85,13 +85,13 @@ class WizardStepBrowser(WizardStep):
 
     @staticmethod
     def postgis_path_to_uri(path):
-        """Convert layer path from QgsBrowserModel to full QgsDataSourceURI.
+        """Convert layer path from QgsBrowserModel to full QgsDataSourceUri.
 
         :param path: The layer path from QgsBrowserModel
         :type path: string
 
         :returns: layer uri.
-        :rtype: QgsDataSourceURI
+        :rtype: QgsDataSourceUri
         """
 
         connection_name = path.split('/')[1]
@@ -109,7 +109,7 @@ class WizardStepBrowser(WizardStep):
         use_estimated_metadata = settings.value(
             key + "/estimatedMetadata", False, type=bool)
         sslmode = settings.value(
-            key + "/sslmode", QgsDataSourceURI.SSLprefer, type=int)
+            key + "/sslmode", QgsDataSourceUri.SSLprefer, type=int)
         username = ""
         password = ""
         if settings.value(key + "/saveUsername") == "true":
@@ -124,7 +124,7 @@ class WizardStepBrowser(WizardStep):
             if settings.value(key + "/save") == "true":
                 password = settings.value(key + "/password")
 
-        uri = QgsDataSourceURI()
+        uri = QgsDataSourceUri()
         if service:
             uri.setConnection(service, db, username, password, sslmode)
         else:

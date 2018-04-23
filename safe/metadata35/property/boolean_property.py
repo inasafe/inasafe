@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import json
-from types import NoneType
+NoneType = type(None)
 
 
 from safe.common.exceptions import MetadataCastError

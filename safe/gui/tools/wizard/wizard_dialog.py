@@ -10,7 +10,6 @@ from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import QSettings, pyqtSignal
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtGui import QPixmap, QIcon
-from qgis.core import QgsMapLayerRegistry
 
 from parameters.parameter_exceptions import InvalidValidationException
 from safe.common.exceptions import (
@@ -115,8 +114,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
 
-        :param iface: QGIS QGisAppInterface instance.
-        :type iface: QGisAppInterface
+        :param iface: QGIS QgisAppInterface instance.
+        :type iface: QgisAppInterface
 
         :param dock: Dock widget instance that we can notify of changes to
             the keywords. Optional.

@@ -84,7 +84,7 @@ class BaseProperty(with_metaclass(abc.ABCMeta, object)):
             self._value = value
             return True
         # pylint: disable=unidiomatic-typecheck
-        elif type(value) in [str, str]:
+        elif type(value) == str:
             try:
                 casted_value = self.cast_from_str(value)
                 self.is_allowed_type(casted_value)

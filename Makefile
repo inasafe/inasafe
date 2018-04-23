@@ -257,7 +257,7 @@ dependency_test:
 list_gpackages:
 	@echo
 	@echo "----------------------------------------"
-	@echo "List of QGis related packages installed."
+	@echo "List of Qgis related packages installed."
 	@echo "----------------------------------------"
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true

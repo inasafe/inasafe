@@ -13,7 +13,7 @@ by Tim Sutton, Oct 2014.
 from qgis.PyQt.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtGui import QColor
-from qgis.core import QgsPoint, QgsRectangle, QGis
+from qgis.core import QgsPoint, QgsRectangle, Qgis
 # pylint: disable=no-name-in-module
 from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
@@ -38,7 +38,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
-        self.rubber_band = QgsRubberBand(self.canvas, geometryType=QGis.Line)
+        self.rubber_band = QgsRubberBand(self.canvas, geometryType=Qgis.Line)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
         # Needs QGIS 2.6
         # self.rubber_band.setFillColor(QColor(0, 0, 240, 0))
@@ -52,7 +52,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         self.start_point = self.end_point = None
         self.is_emitting_point = False
-        self.rubber_band.reset(QGis.Polygon)
+        self.rubber_band.reset(Qgis.Polygon)
 
     def canvasPressEvent(self, e):
         """
@@ -102,7 +102,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         :return:
         """
-        self.rubber_band.reset(QGis.Polygon)
+        self.rubber_band.reset(Qgis.Polygon)
         if (start_point.x() == end_point.x() or
                 start_point.y() == end_point.y()):
             return
@@ -160,6 +160,6 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         Disable the tool.
         """
-        self.rubber_band.reset(QGis.Polygon)
+        self.rubber_band.reset(Qgis.Polygon)
         QgsMapTool.deactivate(self)
         self.deactivated.emit()

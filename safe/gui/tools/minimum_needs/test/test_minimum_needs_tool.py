@@ -5,7 +5,6 @@
 
 import unittest
 import os
-from qgis.core import QgsMapLayerRegistry
 
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (

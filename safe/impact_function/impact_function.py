@@ -22,9 +22,8 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsRectangle,
     QgsVectorLayer,
-    QGis,
+    Qgis,
     QgsMapLayer,
-    QgsMapLayerRegistry,
     QgsRasterLayer,
 )
 from qgis.utils import iface as iface_object
@@ -301,7 +300,7 @@ class ImpactFunction():
         set_provenance(self._provenance, provenance_host_name, gethostname())
         set_provenance(self._provenance, provenance_user, getpass.getuser())
         set_provenance(
-            self._provenance, provenance_qgis_version, QGis.QGIS_VERSION)
+            self._provenance, provenance_qgis_version, Qgis.QGIS_VERSION)
         set_provenance(
             self._provenance, provenance_gdal_version, gdal.__version__)
         set_provenance(self._provenance, provenance_qt_version, QT_VERSION_STR)
@@ -421,8 +420,8 @@ class ImpactFunction():
                         return False, message
                 else:
                     if property_a != property_b:
-                        string_a = get_unicode(property_a)
-                        string_b = get_unicode(property_b)
+                        string_a = property_a
+                        string_b = property_b
                         message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
@@ -2282,7 +2281,7 @@ class ImpactFunction():
         exposure = self.exposure.keywords.get('exposure')
         geometry = self.exposure.geometryType()
         indivisible_keys = [f['key'] for f in indivisible_exposure]
-        if exposure not in indivisible_keys and geometry != QGis.Point:
+        if exposure not in indivisible_keys and geometry != Qgis.Point:
             # We can now split features because the `prepare_vector_layer`
             # might have added the size field.
             self.set_state_process(
@@ -2339,7 +2338,7 @@ class ImpactFunction():
             exposure = self.exposure.keywords.get('exposure')
             is_divisible = exposure not in indivisible_keys
 
-            if geometry in [QGis.Line, QGis.Polygon] and is_divisible:
+            if geometry in [Qgis.Line, Qgis.Polygon] and is_divisible:
 
                 self.set_state_process(
                     'exposure', 'Make exposure layer valid')
@@ -2478,7 +2477,7 @@ class ImpactFunction():
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self._outputs():
-            without_geometries = [QGis.NoGeometry, QGis.UnknownGeometry]
+            without_geometries = [Qgis.NoGeometry, Qgis.UnknownGeometry]
             if layer.geometryType() not in without_geometries:
                 display_not_exposed = False
                 if layer == self.impact or self.debug_mode:

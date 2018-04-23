@@ -22,7 +22,6 @@ from .exceptions import InvalidMessageItemError
 
 from .message_element import MessageElement
 from safe.utilities.i18n import tr
-from safe.utilities.str import get_unicode
 
 
 # FIXME (MB) remove when all to_* methods are implemented
@@ -147,7 +146,7 @@ class PlainText(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(PlainText, self).__init__(**kwargs)
-        self.text = get_unicode(text)
+        self.text = text
 
     def to_html(self):
         """Render as html
