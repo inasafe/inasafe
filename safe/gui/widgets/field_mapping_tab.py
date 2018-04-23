@@ -1,21 +1,14 @@
 # coding=utf-8
 """Field Mapping Widget Implementation."""
+from builtins import str
+from builtins import range
 
 import logging
 from collections import OrderedDict
 from functools import partial
 
-from PyQt4.QtCore import Qt, QSettings
-from PyQt4.QtGui import (
-    QWidget,
-    QListWidget,
-    QAbstractItemView,
-    QListWidgetItem,
-    QLayout,
-    QHBoxLayout,
-    QVBoxLayout,
-    QLabel,
-    QSizePolicy)
+from qgis.PyQt.QtCore import Qt, QSettings
+from qgis.PyQt.QtWidgets import QWidget, QListWidget, QAbstractItemView, QListWidgetItem, QLayout, QHBoxLayout, QVBoxLayout, QLabel, QSizePolicy
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
 from safe.common.exceptions import KeywordNotFoundError
@@ -231,7 +224,7 @@ class FieldMappingTab(QWidget, object):
                 field['key'], [])
             if field['key'] in self.metadata.get('inasafe_fields', {}):
                 selected_option = FIELDS
-            if isinstance(custom_fields, basestring):
+            if isinstance(custom_fields, str):
                 custom_fields = [custom_fields]
             options[FIELDS] = {
                 'label': field_label,
@@ -260,7 +253,7 @@ class FieldMappingTab(QWidget, object):
 
         constraints = self.field_group.get('constraints', {})
 
-        for key, value in constraints.items():
+        for key, value in list(constraints.items()):
             self.parameter_container.add_validator(
                 validators[key],
                 kwargs=value['kwargs'],

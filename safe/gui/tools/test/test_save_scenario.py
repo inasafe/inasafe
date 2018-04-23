@@ -63,7 +63,7 @@ class SaveScenarioTest(unittest.TestCase):
     def tearDown(self):
         """Fixture run after each test."""
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         self.DOCK.hazard_layer_combo.clear()
         self.DOCK.exposure_layer_combo.clear()
         # self.DOCK.aggregation_layer_combo.clear()

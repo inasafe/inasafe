@@ -3,6 +3,8 @@
 
 This context then used for SVG Jinja2 generation.
 """
+from builtins import range
+from builtins import object
 import math
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

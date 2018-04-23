@@ -15,7 +15,7 @@ import unittest
 import sys
 from tempfile import mktemp
 from qgis.core import QgsVectorLayer, QgsRasterLayer
-from PyQt4.QtCore import QFileInfo
+from qgis.PyQt.QtCore import QFileInfo
 from osgeo import gdal
 
 from safe.test.utilities import (

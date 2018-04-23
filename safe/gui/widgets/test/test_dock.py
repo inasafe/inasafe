@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test Dock."""
+from builtins import str
 
 import logging
 import os
@@ -8,7 +9,7 @@ import unittest
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from qgis.core import QgsMapLayerRegistry
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitions.constants import (
@@ -61,7 +62,7 @@ class TestDock(unittest.TestCase):
 
     def tearDown(self):
         """Fixture run after each test."""
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
         self.dock.hazard_layer_combo.clear()
         self.dock.exposure_layer_combo.clear()
         # self.dock.aggregation_layer_combo.clear()

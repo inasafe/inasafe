@@ -1,5 +1,7 @@
 # coding=utf-8
 """InaSAFE Dock."""
+from builtins import str
+from builtins import range
 
 import codecs
 import logging
@@ -8,17 +10,9 @@ import shutil
 from datetime import datetime
 from numbers import Number
 
-from PyQt4.QtCore import Qt, pyqtSlot, QPyNullVariant, QUrl
-from PyQt4.QtGui import (
-    QAction,
-    qApp,
-    QApplication,
-    QDesktopServices,
-    QDockWidget,
-    QMenu,
-    QMessageBox,
-    QPixmap,
-)
+from qgis.PyQt.QtCore import Qt, pyqtSlot, QPyNullVariant, QUrl
+from qgis.PyQt.QtWidgets import QAction, qApp, QApplication, QDockWidget, QMenu, QMessageBox
+from qgis.PyQt.QtGui import QDesktopServices, QPixmap
 from qgis.core import (
     QgsGeometry,
     QgsMapLayer,
@@ -115,7 +109,7 @@ from safe.utilities.qgis_utilities import (
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import get_ui_class
 from safe.utilities.settings import setting, set_setting
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 from safe.utilities.utilities import (
     get_error_message,
     basestring_to_message,
@@ -457,10 +451,10 @@ class Dock(QDockWidget, FORM_CLASS):
 
         ..seealso:: disconnect_layer_listener
         """
-        registry = QgsMapLayerRegistry.instance()
-        registry.layersWillBeRemoved.connect(self.get_layers)
-        registry.layersAdded.connect(self.get_layers)
-        registry.layersRemoved.connect(self.get_layers)
+        project = QgsProject.instance()
+        project.layersWillBeRemoved.connect(self.get_layers)
+        project.layersAdded.connect(self.get_layers)
+        project.layersRemoved.connect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -484,10 +478,10 @@ class Dock(QDockWidget, FORM_CLASS):
 
         ..seealso:: connect_layer_listener
         """
-        registry = QgsMapLayerRegistry.instance()
-        registry.layersWillBeRemoved.disconnect(self.get_layers)
-        registry.layersAdded.disconnect(self.get_layers)
-        registry.layersRemoved.disconnect(self.get_layers)
+        project = QgsProject.instance()
+        project.layersWillBeRemoved.disconnect(self.get_layers)
+        project.layersAdded.disconnect(self.get_layers)
+        project.layersRemoved.disconnect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
@@ -662,10 +656,10 @@ class Dock(QDockWidget, FORM_CLASS):
             return
 
         # Map registry may be invalid if QGIS is shutting down
-        registry = QgsMapLayerRegistry.instance()
+        project = QgsProject.instance()
         canvas_layers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
+        layers = list(project.mapLayers().values())
 
         # For issue #618
         if len(layers) == 0:
@@ -1013,7 +1007,7 @@ class Dock(QDockWidget, FORM_CLASS):
                         break
 
             if show_keywords:
-                if inasafe_keyword_version_key not in keywords.keys():
+                if inasafe_keyword_version_key not in list(keywords.keys()):
                     show_keyword_version_message(
                         self, tr('No Version'), self.inasafe_version)
                     self.print_button.setEnabled(False)
@@ -1148,7 +1142,7 @@ class Dock(QDockWidget, FORM_CLASS):
                     for p in path:
                         paths.append(p)
                 elif isinstance(path, dict):
-                    for p in path.itervalues():
+                    for p in path.values():
                         paths.append(p)
                 else:
                     paths.append(path)
@@ -1586,16 +1580,16 @@ def set_provenance_to_project_variables(provenances):
         :param value: A list of dictionary.
         :type value: dict, list, tuple, set
         """
-        if key in duplicated_global_variables.keys():
+        if key in list(duplicated_global_variables.keys()):
             return
         if isinstance(value, (list, tuple, set)):
             # Skip if the type is too complex (list of note, actions)
             return
         elif isinstance(value, dict):
-            for dict_key, dict_value in value.items():
+            for dict_key, dict_value in list(value.items()):
                 write_project_variable(
                     '%s__%s' % (key, dict_key), dict_value)
-        elif isinstance(value, (bool, str, unicode, Number)):
+        elif isinstance(value, (bool, str, Number)):
             # Don't use get_name for field
             if 'field' in key:
                 pretty_value = get_name(value)
@@ -1618,7 +1612,7 @@ def set_provenance_to_project_variables(provenances):
 
     # Remove old provenance data first
     remove_provenance_project_variables()
-    for key, value in provenances.items():
+    for key, value in list(provenances.items()):
         if QgsExpressionContextUtils.globalScope().hasVariable(key):
             continue
         write_project_variable(key, value)
@@ -1652,7 +1646,7 @@ def remove_provenance_project_variables():
 
     # Need to change QPyNullVariant to None, to be able to store it back.
     non_null_existing_variables = {}
-    for k, v in existing_variables.items():
+    for k, v in list(existing_variables.items()):
         if not isinstance(v, QPyNullVariant):
             non_null_existing_variables[k] = v
         else:

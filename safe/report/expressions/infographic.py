@@ -72,7 +72,7 @@ def inasafe_field_header(field, feature, parent):
             field_name = field_definition.get('field_name')
             if field_name:
                 symbol, age = field_name.split('_')[:2]
-                if symbol.lower() in symbol_mapping.keys():
+                if symbol.lower() in list(symbol_mapping.keys()):
                     header_name = header_format.format(
                         symbol=symbol_mapping[symbol.lower()],
                         age=age

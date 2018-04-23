@@ -2,7 +2,7 @@
 
 """Definitions relating to fields."""
 
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.definitions import concepts
 from safe.definitions.constants import (

@@ -1,7 +1,7 @@
 # coding=utf-8
 """InaSAFE Wizard Step Aggregation Layer Origin."""
 
-from PyQt4.QtGui import QPixmap
+from qgis.PyQt.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.gui.tools.wizard.wizard_step import WizardStep

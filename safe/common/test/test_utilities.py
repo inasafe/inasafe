@@ -1,6 +1,8 @@
 # coding=utf-8
 
 """Test for Common Utilities."""
+from __future__ import print_function
+from builtins import range
 
 import unittest
 import os
@@ -42,15 +44,21 @@ def print_class(array, result_class, expected_result):
     :type expected_result: list
 
     """
-    print 'Original Array'
-    for i in xrange(len(array[1:])):
-        print array[i], ' - ', array[i + 1]
-    print 'Classes result'
+    # fix_print_with_import
+    print('Original Array')
+    for i in range(len(array[1:])):
+        # fix_print_with_import
+        print(array[i], ' - ', array[i + 1])
+    # fix_print_with_import
+    print('Classes result')
     for result in result_class:
-        print result[0], ' - ', result[1]
-    print 'Expect result'
+        # fix_print_with_import
+        print(result[0], ' - ', result[1])
+    # fix_print_with_import
+    print('Expect result')
     for expect in expected_result:
-        print expect[0], ' - ', expect[1]
+        # fix_print_with_import
+        print(expect[0], ' - ', expect[1])
 
 
 class TestUtilities(unittest.TestCase):
@@ -219,7 +227,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_romanise(self):
         """Test we can convert MMI values to float."""
-        values = range(2, 10)
+        values = list(range(2, 10))
         expected_result = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
         result = []
         for value in values:

@@ -1,14 +1,12 @@
 # coding=utf-8
 
 """Geonode uploader."""
+from builtins import str
 
 from requests.compat import urljoin
 
-from PyQt4.QtGui import (
-    QDialog,
-    QDialogButtonBox,
-    QIcon,
-)
+from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox
+from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsMapLayerRegistry
 
 from safe.gui.gui_utilities import layer_from_combo
@@ -59,7 +57,7 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
             'If you save your credentials, it will be stored in plain text in '
             'your QGIS settings. '
             'The layer must be file based, only these extensions are '
-            'supported: {}.').format(', '.join(extension_siblings.keys())))
+            'supported: {}.').format(', '.join(list(extension_siblings.keys()))))
 
         # Fix for issue 1699 - cancel button does nothing
         cancel_button = self.button_box.button(QDialogButtonBox.Cancel)
@@ -86,17 +84,17 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
         self.save_url.setChecked(False)
 
         # Pre fill the form
-        login = setting(GEONODE_USER, '', basestring)
+        login = setting(GEONODE_USER, '', str)
         if login:
             self.login.setText(login)
             self.save_login.setChecked(True)
 
-        password = setting(GEONODE_PASSWORD, '', basestring)
+        password = setting(GEONODE_PASSWORD, '', str)
         if password:
             self.password.setText(password)
             self.save_password.setChecked(True)
 
-        url = setting(GEONODE_URL, '', basestring)
+        url = setting(GEONODE_URL, '', str)
         if url:
             self.url.setText(url)
             self.save_url.setChecked(True)
@@ -119,9 +117,9 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
 
     def fill_layer_combo(self):
         """Fill layer combobox."""
-        registry = QgsMapLayerRegistry.instance()
+        project = QgsProject.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
+        layers = project.mapLayers().values()
 
         extensions = tuple(extension_siblings.keys())
         for layer in layers:
@@ -189,5 +187,5 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
             display_warning_message_box(
                 self,
                 tr('Error while uploading the layer.'),
-                unicode(result)
+                str(result)
             )

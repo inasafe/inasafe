@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from __future__ import print_function
 import unittest
 import os
 import sys
@@ -37,7 +38,8 @@ class TestPythonPep(unittest.TestCase):
 
         # make pep8 produces some extra lines by default.
         lines = len(output.splitlines()) - default_number_lines
-        print output
+        # fix_print_with_import
+        print(output)
         message = 'Hey mate, go back to your keyboard :)'
         self.assertEquals(lines, 0, message)
 
@@ -77,7 +79,8 @@ class TestPythonPep(unittest.TestCase):
             default_number_lines = 0
 
         # make pep257 produces some extra lines by default.
-        print output
+        # fix_print_with_import
+        print(output)
         lines = (len(output.splitlines()) - default_number_lines) / 2
 
         message = (

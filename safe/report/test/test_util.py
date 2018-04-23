@@ -1,5 +1,6 @@
 # coding=utf-8
 """Unittest for report utilities."""
+from builtins import zip
 import logging
 import unittest
 

@@ -7,7 +7,7 @@ from safe.test.utilities import get_qgis_app, load_test_vector_layer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout  # NOQA
+from qgis.PyQt.QtWidgets import QApplication, QWidget, QGridLayout  # NOQA
 
 from safe.gui.widgets.field_mapping_tab import FieldMappingTab  # NOQA
 from safe.definitions.field_groups import age_ratio_group  # NOQA

@@ -5,7 +5,7 @@
 import re
 import sys
 
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile

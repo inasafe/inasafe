@@ -1,8 +1,10 @@
 # coding=utf-8
 
 """GUI utilities for the dock and the multi Exposure Tool."""
+from past.builtins import cmp
+from builtins import range
 
-from PyQt4.QtCore import Qt
+from qgis.PyQt.QtCore import Qt
 from qgis.core import QgsMapLayerRegistry
 
 from safe.utilities.i18n import tr
@@ -22,7 +24,7 @@ def layer_from_combo(combo):
         return None
 
     layer_id = combo.itemData(index, Qt.UserRole)
-    layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+    layer = QgsProject.instance().mapLayer(layer_id)
     return layer
 
 

@@ -1,13 +1,16 @@
 # coding=utf-8
 
 """WebView."""
+from __future__ import print_function
+from builtins import range
+from builtins import object
 
 import sys
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4 import Qt, QtWebKit
+from qgis.PyQt import Qt, QtWebKit
 from pydispatch import dispatcher
 
 from safe.messaging import (
@@ -84,7 +87,8 @@ class WebView(QtWebKit.QWebView):
             string += message.to_html()
 
         string += self.footer
-        print string
+        # fix_print_with_import
+        print(string)
         self.setHtml(string)
 
 

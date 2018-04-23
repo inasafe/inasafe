@@ -4,7 +4,7 @@
 
 import logging
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
@@ -232,7 +232,7 @@ def union(union_a, union_b, callback=None):
 
         for id in intersects:
             request = QgsFeatureRequest().setFilterFid(id)
-            inFeatB = union_a.getFeatures(request).next()
+            inFeatB = next(union_a.getFeatures(request))
             tmpGeom = QgsGeometry(geometry_checker(inFeatB.geometry()))
 
             if geom.intersects(tmpGeom):

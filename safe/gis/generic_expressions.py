@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
+from builtins import str
 
 from dateutil.parser import parse
 from qgis.core import (
@@ -19,7 +20,7 @@ from safe.report.expressions.map_report import exposure_summary_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.rounding import denomination, round_affected_number
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -55,7 +56,7 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
     """
     _ = feature, parent  # NOQA
     project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
+    registry = QgsProject.instance()
 
     key = provenance_layer_analysis_impacted_id['provenance_key']
     if not project_context_scope.hasVariable(key):
@@ -70,7 +71,7 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
     if index < 0:
         return None
 
-    feature = layer.getFeatures().next()
+    feature = next(layer.getFeatures())
     return feature[index]
 
 
@@ -93,7 +94,7 @@ def inasafe_sub_analysis_summary_field_value(
     """
     _ = feature, parent  # NOQA
     project_context_scope = QgsExpressionContextUtils.projectScope()
-    registry = QgsMapLayerRegistry.instance()
+    project = QgsProject.instance()
 
     key = ('{provenance}__{exposure}').format(
         provenance=provenance_multi_exposure_analysis_summary_layers_id[
@@ -102,7 +103,7 @@ def inasafe_sub_analysis_summary_field_value(
     if not project_context_scope.hasVariable(key):
         return None
 
-    analysis_summary_layer = registry.mapLayer(
+    analysis_summary_layer = project.mapLayer(
         project_context_scope.variable(key))
     if not analysis_summary_layer:
         return None
@@ -111,7 +112,7 @@ def inasafe_sub_analysis_summary_field_value(
     if index < 0:
         return None
 
-    feature = analysis_summary_layer.getFeatures().next()
+    feature = next(analysis_summary_layer.getFeatures())
     return feature[index]
 
 

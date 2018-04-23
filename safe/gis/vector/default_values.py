@@ -4,7 +4,7 @@
 
 import logging
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm)
@@ -66,7 +66,7 @@ def add_default_values(layer, callback=None):
             'ratios for this layer.')
         return layer
 
-    for default in defaults.keys():
+    for default in list(defaults.keys()):
 
         field = fields.get(default)
         target_field = definition(default)

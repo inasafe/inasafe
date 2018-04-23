@@ -7,7 +7,7 @@ from safe.test.utilities import (
     load_test_vector_layer,
     standard_data_path,
     get_qgis_app)
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -31,7 +31,7 @@ class MultiBufferTest(unittest.TestCase):
         """
         dialog = MultiBufferDialog(PARENT, IFACE)
         layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
+        QgsProject.instance().addMapLayers([layer])
 
         dialog.layer.setLayer(layer)
         if output_path:
@@ -106,7 +106,7 @@ class MultiBufferTest(unittest.TestCase):
         self.assertFalse(ok_button.isEnabled())
 
         layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
+        QgsProject.instance().addMapLayers([layer])
 
         # Test directory button after a layer is selected
         dialog.layer.setLayer(layer)

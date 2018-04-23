@@ -1,23 +1,15 @@
 # coding=utf-8
 
 """Multi Exposure Tool."""
+from builtins import str
+from builtins import range
 
 import logging
 
-from PyQt4.QtCore import (
-    Qt,
-)
-from PyQt4.QtGui import (
-    QDialog,
-    QComboBox,
-    QIcon,
-    QLabel,
-    QApplication,
-    QSizePolicy,
-    QTreeWidgetItem,
-    QListWidgetItem,
-)
-from PyQt4.QtXml import QDomDocument
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QDialog, QComboBox, QLabel, QApplication, QSizePolicy, QTreeWidgetItem, QListWidgetItem
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from qgis.utils import iface as iface_object
 
@@ -188,7 +180,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         :return: An ordered list of layers following a structure.
         :rtype: list
         """
-        registry = QgsMapLayerRegistry.instance()
+        registry = QgsProject.instance()
         layers = []
         count = self.list_layers_in_map_report.count()
         for i in range(count):
@@ -319,7 +311,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
         if self._multi_exposure_if:
             expected = self._multi_exposure_if.output_layers_expected()
-            for group, layers in expected.iteritems():
+            for group, layers in expected.items():
                 group_branch = QTreeWidgetItem(analysis_branch, [group])
                 group_branch.setFont(0, bold_font)
                 group_branch.setExpanded(True)
@@ -344,7 +336,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         canvas_branch.setFlags(Qt.ItemIsEnabled)
 
         # List layers from the canvas
-        loaded_layers = QgsMapLayerRegistry.instance().mapLayers().values()
+        loaded_layers = list(QgsProject.instance().mapLayers().values())
         canvas_layers = self.iface.mapCanvas().layers()
         flag = setting('visibleLayersOnlyFlag', expected_type=bool)
         for loaded_layer in loaded_layers:
@@ -362,10 +354,10 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
     def _create_exposure_combos(self):
         """Create one combobox for each exposure and insert them in the UI."""
         # Map registry may be invalid if QGIS is shutting down
-        registry = QgsMapLayerRegistry.instance()
+        project = QgsProject.instance()
         canvas_layers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
+        layers = project.mapLayers().values()
 
         show_only_visible_layers = setting(
             'visibleLayersOnlyFlag', expected_type=bool)
@@ -458,13 +450,13 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     # continue ignoring this layer
                     continue
 
-                for key, combo in self.combos_exposures.iteritems():
+                for key, combo in self.combos_exposures.items():
                     if key == exposure_type:
                         add_ordered_combo_item(
                             combo, title, source, icon=icon)
 
         self.cbx_aggregation.addItem(entire_area_item_aggregation, None)
-        for combo in self.combos_exposures.itervalues():
+        for combo in self.combos_exposures.values():
             combo.currentIndexChanged.connect(self.validate_impact_function)
 
     def progress_callback(self, current_value, maximum_value, message=None):
@@ -501,14 +493,14 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         # Always set it to False
         self.btn_run.setEnabled(False)
 
-        for combo in self.combos_exposures.itervalues():
+        for combo in self.combos_exposures.values():
             if combo.count() == 1:
                 combo.setEnabled(False)
 
         hazard = layer_from_combo(self.cbx_hazard)
         aggregation = layer_from_combo(self.cbx_aggregation)
         exposures = []
-        for combo in self.combos_exposures.itervalues():
+        for combo in self.combos_exposures.values():
             exposures.append(layer_from_combo(combo))
         exposures = [layer for layer in exposures if layer]
 
@@ -610,7 +602,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
                 for layer in self._multi_exposure_if.outputs:
-                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+                    QgsProject.instance().addMapLayer(layer, False)
                     layer_node = group_analysis.addLayer(layer)
                     layer_node.setVisible(Qt.Unchecked)
 
@@ -677,7 +669,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             # If hide exposure layers
             if setting('setHideExposureFlag', expected_type=bool):
                 legend = self.iface.legendInterface()
-                for combo in self.combos_exposures.itervalues():
+                for combo in self.combos_exposures.values():
                     layer = layer_from_combo(combo)
                     legend.setLayerVisible(layer, False)
 

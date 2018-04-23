@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from past.builtins import cmp
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'

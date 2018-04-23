@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import object
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -24,9 +25,9 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QFile, QUrl, QByteArray
+from qgis.PyQt.QtCore import QCoreApplication, QFile, QUrl, QByteArray
 # noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
+from qgis.PyQt.QtNetwork import QNetworkRequest, QNetworkReply
 
 from safe.common.utilities import humanize_file_size
 from safe.utilities.i18n import tr

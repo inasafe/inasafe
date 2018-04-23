@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Clip and mask a hazard layer."""
+from builtins import next
 
 import logging
 

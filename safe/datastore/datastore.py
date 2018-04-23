@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Datastore implementation."""
+from builtins import object
 
 import logging
 from abc import ABCMeta, abstractmethod
@@ -10,6 +11,7 @@ from qgis.core import QgsRasterLayer, QgsVectorLayer, QGis
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import monkey_patch_keywords
+from future.utils import with_metaclass
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -19,14 +21,12 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class DataStore(object):
+class DataStore(with_metaclass(ABCMeta, object)):
 
     """DataStore.
 
     .. versionadded:: 4.0
     """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, uri):
         """Constructor for the DataStore.

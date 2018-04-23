@@ -1,11 +1,12 @@
 # coding=utf-8
 
 """Table."""
+from __future__ import absolute_import
 
-from exceptions import InvalidMessageItemError
+from .exceptions import InvalidMessageItemError
 
-from message_element import MessageElement
-from row import Row
+from .message_element import MessageElement
+from .row import Row
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

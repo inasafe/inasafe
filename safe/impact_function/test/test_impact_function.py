@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Test for Impact Function."""
+from __future__ import print_function
 
 import getpass
 import json
@@ -113,7 +114,7 @@ from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
 )
 from safe.gis.sanity_check import check_inasafe_fields
-from safe.utilities.unicode import byteify
+from safe.utilities.str import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
@@ -267,13 +268,13 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
 
-        fields = exposure_layer.dataProvider().fieldNameMap().keys()
+        fields = list(exposure_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(
             exposure_layer.keywords['inasafe_fields']['exposure_type_field'],
             fields
         )
         # We check that this key exists in the dictionary.
-        self.assertIn('inasafe_fields', exposure_layer.keywords.keys())
+        self.assertIn('inasafe_fields', list(exposure_layer.keywords.keys()))
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function."""
@@ -810,8 +811,10 @@ class TestImpactFunction(unittest.TestCase):
             scenario, expected_steps, expected_outputs = read_json_flow(
                 json_file)
             if scenario.get('enable', True):
-                print "Test JSON scenario : "
-                print json_file
+                # fix_print_with_import
+                print("Test JSON scenario : ")
+                # fix_print_with_import
+                print(json_file)
                 self.test_scenario(json_file, test_loader=True)
                 count += 1
         self.assertEqual(len(json_files), count)
@@ -837,7 +840,7 @@ class TestImpactFunction(unittest.TestCase):
 
         # Now, we remove one field
         exposure_layer.startEditing()
-        field = exposure_layer.keywords['inasafe_fields'].values()[0]
+        field = list(exposure_layer.keywords['inasafe_fields'].values())[0]
         index = exposure_layer.fieldNameIndex(field)
         exposure_layer.deleteAttribute(index)
         exposure_layer.commitChanges()
@@ -888,10 +891,10 @@ class TestImpactFunction(unittest.TestCase):
         ]
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         for post_processor in used_post_processors:
             # noinspection PyTypeChecker
-            for output_value in post_processor['output'].values():
+            for output_value in list(post_processor['output'].values()):
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
@@ -990,7 +993,7 @@ class TestImpactFunction(unittest.TestCase):
         ]
 
         for key in output_layer_provenance_keys:
-            self.assertIn(key, impact_function.provenance.keys())
+            self.assertIn(key, list(impact_function.provenance.keys()))
 
         # Future reference: I comment out these lines since the keywords
         # properties are used in the report generation. Removing it will make
@@ -1097,7 +1100,7 @@ class TestImpactFunction(unittest.TestCase):
         ]
 
         for key in output_layer_provenance_keys:
-            self.assertIn(key, impact_function.provenance.keys())
+            self.assertIn(key, list(impact_function.provenance.keys()))
 
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.
@@ -1202,7 +1205,7 @@ class TestImpactFunction(unittest.TestCase):
     def _check_minimum_fields_value(self, expected_value, impact_function):
         """Private method for checking minimum needs value."""
         analysis_impacted = impact_function.analysis_impacted
-        feature = analysis_impacted.getFeatures().next()
+        feature = next(analysis_impacted.getFeatures())
         inasafe_fields = analysis_impacted.keywords['inasafe_fields']
         for field in minimum_needs_fields:
             field_name = inasafe_fields[field['key']]

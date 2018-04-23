@@ -1,3 +1,4 @@
+from builtins import next
 # coding=utf-8
 
 import unittest
@@ -111,7 +112,7 @@ class TestSummary(unittest.TestCase):
         pattern = pattern.replace('%s', '')
         unique_exposure = []
         inasafe_fields = aggregate_hazard.keywords['inasafe_fields']
-        for key, name_field in inasafe_fields.iteritems():
+        for key, name_field in inasafe_fields.items():
             if key.endswith(pattern):
                 unique_exposure.append(key.replace(pattern, ''))
 

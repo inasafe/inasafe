@@ -361,7 +361,7 @@ def analysis_provenance_details_report_extractor(
 
     context['brand_logo'] = resource_url(
         resources_path('img', 'logos', 'inasafe-logo-white.png'))
-    for key, component in components_list.iteritems():
+    for key, component in components_list.items():
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 
@@ -430,7 +430,7 @@ def headerize(provenances):
         'Gdal': 'GDAL',
         'Maps': 'Map'
     }
-    for key, value in provenances.iteritems():
+    for key, value in provenances.items():
         if '_' in key:
             header = key.replace('_', ' ').title()
         else:
@@ -440,7 +440,7 @@ def headerize(provenances):
         proper_word = None
         proper_word_index = None
         for index, word in enumerate(header_list):
-            if word in special_case.keys():
+            if word in list(special_case.keys()):
                 proper_word = special_case[word]
                 proper_word_index = index
 
@@ -505,13 +505,13 @@ def sorted_keywords_by_order(keywords, order):
     """
 
     # we need to delete item with no value
-    for key, value in keywords.iteritems():
+    for key, value in keywords.items():
         if value is None:
             del keywords[key]
 
     ordered_keywords = OrderedDict()
     for key in order:
-        if key in keywords.keys():
+        if key in list(keywords.keys()):
             ordered_keywords[key] = keywords.get(key)
 
     for keyword in keywords:

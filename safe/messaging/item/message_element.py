@@ -1,6 +1,8 @@
 # coding=utf-8
 
 """Message Element class for the Messaging package."""
+from builtins import str
+from builtins import object
 
 import json
 
@@ -64,9 +66,9 @@ class MessageElement(object):
 
     @staticmethod
     def _is_stringable(message):
-        return (isinstance(message, basestring) or
+        return (isinstance(message, str) or
                 isinstance(message, int) or
-                isinstance(message, long) or
+                isinstance(message, int) or
                 isinstance(message, float))
 
     def to_html(self):

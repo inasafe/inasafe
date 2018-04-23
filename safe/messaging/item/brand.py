@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -20,7 +21,7 @@ __copyright__ = ('Copyright 2015, Australia Indonesia Facility for '
 from safe.utilities.resources import (
     resources_path,
     resource_url)
-from text import Text
+from .text import Text
 
 
 class Brand(Text):

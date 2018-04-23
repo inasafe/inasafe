@@ -1,5 +1,6 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
+from builtins import str
 
 from osgeo import gdal
 from qgis.core import (
@@ -355,6 +356,6 @@ def qgis_version():
     :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
     :rtype: int
     """
-    version = unicode(QGis.QGIS_VERSION_INT)
+    version = str(QGis.QGIS_VERSION_INT)
     version = int(version)
     return version

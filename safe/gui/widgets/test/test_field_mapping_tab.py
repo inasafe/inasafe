@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test Field Mapping Tab."""
+from builtins import range
 
 import unittest
 
@@ -35,12 +36,12 @@ class TestFieldMappingTab(unittest.TestCase):
         # Empty keywords should give empty for all aspect
         parameter_values = field_mapping.get_parameter_value()
         self.assertEqual(parameter_values['fields'], {})
-        for v in parameter_values['values'].values():
+        for v in list(parameter_values['values'].values()):
             self.assertIsNone(v)
 
         # Make sure all keys exist
-        fields_keys = parameter_values['fields'].keys()
-        values_keys = parameter_values['values'].keys()
+        fields_keys = list(parameter_values['fields'].keys())
+        values_keys = list(parameter_values['values'].keys())
         age_ratio_fields_keys = [field['key'] for field in age_ratio_group[
             'fields']]
         for key in fields_keys + values_keys:
@@ -48,7 +49,7 @@ class TestFieldMappingTab(unittest.TestCase):
 
         # Check field list
         fields = []
-        for index in xrange(field_mapping.field_list.count()):
+        for index in range(field_mapping.field_list.count()):
             fields.append(field_mapping.field_list.item(index))
         labels = [i.text() for i in fields]
 
@@ -73,7 +74,7 @@ class TestFieldMappingTab(unittest.TestCase):
 
         parameter_values = field_mapping.get_parameter_value()
         self.assertEqual(parameter_values['fields'], {})
-        for k, v in parameter_values['values'].items():
+        for k, v in list(parameter_values['values'].items()):
             if k == female_ratio_field['key']:
                 self.assertEqual(0.7, v)
             else:
@@ -82,8 +83,8 @@ class TestFieldMappingTab(unittest.TestCase):
                 self.assertIsNone(v, message)
 
         # Make sure all keys exist
-        fields_keys = parameter_values['fields'].keys()
-        values_keys = parameter_values['values'].keys()
+        fields_keys = list(parameter_values['fields'].keys())
+        values_keys = list(parameter_values['values'].keys())
         gender_ratio_fields_keys = [
             field['key'] for field in gender_ratio_group[
             'fields']]
@@ -92,7 +93,7 @@ class TestFieldMappingTab(unittest.TestCase):
 
         # Check field list
         fields = []
-        for index in xrange(field_mapping.field_list.count()):
+        for index in range(field_mapping.field_list.count()):
             fields.append(field_mapping.field_list.item(index))
         labels = [i.text() for i in fields]
 

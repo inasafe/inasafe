@@ -10,13 +10,12 @@
 
 [general]
 name=InaSAFE
-qgisMinimumVersion=2.14.0
-qgisMaximumVersion=2.18.99
+qgisMinimumVersion=3.0
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=4.3.4
+version=4.3.5
 # alpha, beta, rc or final
 status=final
 
@@ -26,6 +25,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 4.3.5:
+    - QGIS 3 support
     Version 4.3.4:
     - Add template extent setting as a property of Impact Report.
     - Fix no expressions on infographic on multi-exposure analysis.

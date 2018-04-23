@@ -1,9 +1,10 @@
 # coding=utf-8
 """InaSAFE Wizard Step Classifications."""
+from builtins import range
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidWizardStep
@@ -143,7 +144,7 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             'classification')
         if classification_keyword:
             classifications = []
-            for index in xrange(self.lstClassifications.count()):
+            for index in range(self.lstClassifications.count()):
                 item = self.lstClassifications.item(index)
                 classifications.append(item.data(QtCore.Qt.UserRole))
             if classification_keyword in classifications:

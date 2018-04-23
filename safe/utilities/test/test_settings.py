@@ -5,7 +5,7 @@ import unittest
 import os
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.utilities.settings import (
     general_setting,
@@ -120,7 +120,7 @@ class TestSettings(unittest.TestCase):
             'key_float': 2.0
         }
         # Write
-        for key, value in original_settings.items():
+        for key, value in list(original_settings.items()):
             set_setting(key, value, self.qsettings)
         # Export
         inasafe_settings = export_setting(profile_file, self.qsettings)

@@ -1,8 +1,10 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Purpose Type."""
+from builtins import range
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem, QPixmap
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import (
@@ -139,7 +141,7 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         # Set values based on existing keywords or parent mode
         if keyword:
             subcategories = []
-            for index in xrange(self.lstSubcategories.count()):
+            for index in range(self.lstSubcategories.count()):
                 item = self.lstSubcategories.item(index)
                 subcategories.append(item.data(QtCore.Qt.UserRole))
             if keyword in subcategories:

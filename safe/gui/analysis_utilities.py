@@ -4,8 +4,8 @@
 
 from collections import OrderedDict
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtXml import QDomDocument
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import (
     QGis,
     QgsMapLayer,
@@ -24,7 +24,7 @@ from safe.impact_function.style import hazard_class_style
 from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -59,7 +59,7 @@ def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
 
     for layer in layers:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+        QgsProject.instance().addMapLayer(layer, False)
         layer_node = group_analysis.addLayer(layer)
 
         # set layer title if any
@@ -124,7 +124,7 @@ def add_debug_layers_to_canvas(impact_function):
         qgis_layer = datastore.layer(layer)
         if not isinstance(qgis_layer, QgsMapLayer):
             continue
-        QgsMapLayerRegistry.instance().addMapLayer(
+        QgsProject.instance().addMapLayer(
             qgis_layer, False)
         layer_node = group_debug.insertLayer(0, qgis_layer)
         layer_node.setVisible(Qt.Unchecked)
@@ -174,14 +174,14 @@ def add_layers_to_canvas_with_custom_orders(
             style.setContent(get_string(layer_definition[3]))
             layer = load_layer(layer_definition[2], layer_definition[1])[0]
             layer.importNamedStyle(style)
-            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+            QgsProject.instance().addMapLayer(layer, False)
             layer_node = group_analysis.addLayer(layer)
             layer_node.setVisible(Qt.Checked)
         else:
             if layer_definition[2] == impact_function.name:
                 for layer in impact_function.outputs:
                     if layer.keywords['layer_purpose'] == layer_definition[1]:
-                        QgsMapLayerRegistry.instance().addMapLayer(
+                        QgsProject.instance().addMapLayer(
                             layer, False)
                         layer_node = group_analysis.addLayer(layer)
                         layer_node.setVisible(Qt.Checked)
@@ -202,7 +202,7 @@ def add_layers_to_canvas_with_custom_orders(
                         for layer in sub_impact_function.outputs:
                             purpose = layer_definition[1]
                             if layer.keywords['layer_purpose'] == purpose:
-                                QgsMapLayerRegistry.instance().addMapLayer(
+                                QgsProject.instance().addMapLayer(
                                     layer, False)
                                 layer_node = group_analysis.addLayer(
                                     layer)
@@ -236,4 +236,4 @@ def add_layer_to_canvas(layer, name):
     else:
         layer.setLayerName(name)
 
-    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+    QgsProject.instance().addMapLayer(layer, False)

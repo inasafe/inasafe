@@ -4,8 +4,8 @@
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4 import QtGui
-from PyQt4.QtCore import Qt
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtCore import Qt
 
 from safe.gui.tools.help.dock_help import dock_help
 from safe.utilities.resources import (

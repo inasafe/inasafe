@@ -29,7 +29,7 @@ extra_keyword_time_zone = {
     'key': 'time_zone',
     'name': tr('Time zone'),
     'description': tr('Time zone'),
-    'type': unicode,
+    'type': str,
     'options': timezones_dicts,
     'default_option': 'Asia/Jakarta'
 }
@@ -37,7 +37,7 @@ extra_keyword_region = {
     'key': 'region',
     'name': tr('Region'),
     'description': tr('Region of the event.'),
-    'type': unicode
+    'type': str
 }
 
 # Flood Extra Keywords
@@ -49,7 +49,7 @@ extra_keyword_flood_event_id = {
         'the flood in YYYYMMDDHH-[extra information]. The extra information '
         'can be a period and the region level, for example 6-province that '
         'represent 6 hours period and province level.'),
-    'type': unicode
+    'type': str
 }
 
 extra_keyword_flood_event_time = {
@@ -70,7 +70,7 @@ extra_keyword_earthquake_event_id = {
     'description': tr(
         'The ID of the earthquake event or shakemap. It is constructed from '
         'the timestamp of the event in YYYYMMDDHHmmSS format.'),
-    'type': unicode
+    'type': str
 }
 
 extra_keyword_earthquake_latitude = {
@@ -117,7 +117,7 @@ extra_keyword_earthquake_description = {
     'key': 'earthquake_description',
     'name': tr('Description'),
     'description': tr('Additional description of the earthquake event.'),
-    'type': unicode,
+    'type': str,
 }
 
 extra_keyword_earthquake_location = {
@@ -126,7 +126,7 @@ extra_keyword_earthquake_location = {
     'description': tr(
         'The location information of the earthquake event. It usually refers '
         'to the nearest city in the location.'),
-    'type': unicode,
+    'type': str,
 }
 
 extra_keyword_earthquake_event_time = {
@@ -194,7 +194,7 @@ extra_keyword_earthquake_source = {
     'description': tr(
         'Source of the earthquake, it can be initial or post-processed '
         '(data-informed).'),
-    'type': unicode,
+    'type': str,
     'options': [
         {
             'key': 'initial',
@@ -224,14 +224,14 @@ extra_keyword_volcano_event_id = {
         'of the eruption event time. [zone offset] is the offset of its time '
         'zone. [volcano_name] is the name of the volcano. For example: '
         '201712012200+0800_Agung'),
-    'type': unicode
+    'type': str
 }
 
 extra_keyword_volcano_name = {
     'key': 'volcano_name',
     'name': tr('Volcano name'),
     'description': tr('The name of the volcano.'),
-    'type': unicode
+    'type': str
 }
 
 extra_keyword_eruption_height = {
@@ -342,7 +342,7 @@ extra_keyword_volcano_alert_level = {
     'description': tr(
         'This information shows the estimated severity level of the model. It '
         'is usually a choice between Normal, Advisory, Watch, or Warning.'),
-    'type': unicode,
+    'type': str,
     'options': [
         volcano_alert_normal,
         volcano_alert_advisory,

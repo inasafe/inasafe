@@ -14,6 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '02/24/15'
@@ -23,7 +24,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 def __if_not_basestring(text_object):
     converted_str = text_object
-    if not isinstance(text_object, basestring):
+    if not isinstance(text_object, str):
         converted_str = str(text_object)
     return converted_str
 
@@ -41,9 +42,9 @@ def get_unicode(input_text, encoding='utf-8'):
     :rtype: unicode
     """
     input_text = __if_not_basestring(input_text)
-    if isinstance(input_text, unicode):
+    if isinstance(input_text, str):
         return input_text
-    return unicode(input_text, encoding, errors='ignore')
+    return str(input_text, encoding, errors='ignore')
 
 
 def get_string(input_text, encoding='utf-8'):
@@ -59,7 +60,7 @@ def get_string(input_text, encoding='utf-8'):
     :rtype: str
     """
     input_text = __if_not_basestring(input_text)
-    if isinstance(input_text, unicode):
+    if isinstance(input_text, str):
         return input_text.encode(encoding)
     return input_text
 
@@ -74,10 +75,10 @@ def byteify(input_object):
     """
     if isinstance(input_object, dict):
         return {byteify(key): byteify(value)
-                for key, value in input_object.iteritems()}
+                for key, value in input_object.items()}
     elif isinstance(input_object, list):
         return [byteify(element) for element in input_object]
-    elif isinstance(input_object, unicode):
+    elif isinstance(input_object, str):
         return input_object.encode('utf-8')
     else:
         return input_object

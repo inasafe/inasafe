@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -17,8 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
-from item.exceptions import InvalidMessageItemError
-from item.message_element import MessageElement
+from .item.exceptions import InvalidMessageItemError
+from .item.message_element import MessageElement
 from safe.utilities.i18n import tr
 from . import (
     Message,

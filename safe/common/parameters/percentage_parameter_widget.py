@@ -1,6 +1,6 @@
 # coding=utf-8
 """Percentage Parameter Widget."""
-from PyQt4.QtGui import QDoubleSpinBox
+from qgis.PyQt.QtWidgets import QDoubleSpinBox
 
 from parameters.qt_widgets.float_parameter_widget import FloatParameterWidget
 

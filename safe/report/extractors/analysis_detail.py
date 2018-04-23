@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Module used to generate context for analysis detail section."""
+from builtins import range
 
 import logging
 from copy import deepcopy
@@ -58,7 +59,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
-    analysis_feature = analysis_layer.getFeatures().next()
+    analysis_feature = next(analysis_layer.getFeatures())
     exposure_summary_table = impact_report.exposure_summary_table
     if exposure_summary_table:
         exposure_summary_table_fields = exposure_summary_table.keywords[
@@ -149,7 +150,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             'total': []
         }
     }
-    for key, group in header_hazard_group.iteritems():
+    for key, group in header_hazard_group.items():
         if key in hazard_class_header_mapping:
             header_hazard_group[key].update(hazard_class_header_mapping[key])
 
@@ -229,7 +230,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 hazard_class['key'], )
 
             group_key = None
-            for key, group in header_hazard_group.iteritems():
+            for key, group in header_hazard_group.items():
                 if hazard_class['name'] in group['hazards']:
                     group_key = key
                     break
@@ -263,7 +264,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
         for field in report_fields:
             group_key = None
-            for key, group in header_hazard_group.iteritems():
+            for key, group in header_hazard_group.items():
                 if field['name'] in group['total']:
                     group_key = key
                     break
@@ -361,7 +362,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             save_total_affected_field = True
 
         group_key = None
-        for key, group in header_hazard_group.iteritems():
+        for key, group in header_hazard_group.items():
             if hazard_class['name'] in group['hazards']:
                 group_key = key
                 break
@@ -416,7 +417,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 field['field_name'], analysis_layer)
 
         group_key = None
-        for key, group in header_hazard_group.iteritems():
+        for key, group in header_hazard_group.items():
             if field['name'] in group['total']:
                 group_key = key
                 break
@@ -475,7 +476,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     for i in range(breakdown_header_index, total_header_index):
         hazard_class_name = headers[i]
         group_key = None
-        for key, group in header_hazard_group.iteritems():
+        for key, group in header_hazard_group.items():
             if hazard_class_name in group['hazards'] or (
                     hazard_class_name in group['total']):
                 group_key = key
@@ -532,7 +533,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     # extra table for specific exposure if exist
     extra_fields = resolve_from_dictionary(extra_args, 'exposure_extra_fields')
-    if exposure_type['key'] in extra_fields.keys():
+    if exposure_type['key'] in list(extra_fields.keys()):
 
         # create header for the extra table
         extra_table_header_format = resolve_from_dictionary(

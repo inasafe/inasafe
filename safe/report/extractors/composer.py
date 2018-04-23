@@ -7,6 +7,7 @@ Particular example are:
 - PNG rendering
 
 """
+from builtins import object
 import datetime
 from copy import deepcopy
 
@@ -243,7 +244,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     """Define the layers for the impact map."""
 
-    layer_registry = QgsMapLayerRegistry.instance()
+    project = QgsProject.instance()
     layers = []
 
     exposure_summary_layers = []
@@ -310,12 +311,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
             show_only_impact = setting(
                 'set_show_only_impact_on_report', expected_type=bool)
             if not show_only_impact:
-                hazard_layer = layer_registry.mapLayers().get(
+                hazard_layer = project.mapLayers().get(
                     provenance['hazard_layer_id'], None)
 
                 aggregation_layer_id = provenance['aggregation_layer_id']
                 if aggregation_layer_id:
-                    aggregation_layer = layer_registry.mapLayers().get(
+                    aggregation_layer = project.mapLayers().get(
                         aggregation_layer_id, None)
                     layers.append(aggregation_layer)
 
@@ -338,7 +339,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
                 # place exposure at the bottom
                 for layer_id in exposure_layers_id:
-                    exposure_layer = layer_registry.mapLayers().get(layer_id)
+                    exposure_layer = project.mapLayers().get(layer_id)
                     layers.append(exposure_layer)
 
     # default extent is analysis extent
@@ -546,8 +547,8 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
     """Map Elements."""
 
     map_overview_layer = None
-    layer_registry = QgsMapLayerRegistry.instance()
-    for layer in layer_registry.mapLayers().values():
+    project = QgsProject.instance()
+    for layer in project.mapLayers().values():
         if layer.name() == map_overview['id']:
             map_overview_layer = layer
 

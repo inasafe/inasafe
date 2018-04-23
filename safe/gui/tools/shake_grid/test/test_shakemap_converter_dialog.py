@@ -9,7 +9,7 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialogButtonBox
+from qgis.PyQt.QtWidgets import QDialogButtonBox
 
 from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
     ShakemapConverterDialog)

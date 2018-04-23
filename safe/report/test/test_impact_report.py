@@ -2191,10 +2191,10 @@ class TestImpactReport(unittest.TestCase):
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         # insert layer to registry
-        layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.addMapLayers(
+        project = QgsProject.instance()
+        project.addMapLayers(
             [hazard_layer, exposure_layer, aggregation_layer])
-        layer_registry.addMapLayers(impact_function.outputs)
+        project.addMapLayers(impact_function.outputs)
 
         return_code, message = impact_function.generate_report(
             [map_report], output_folder=output_folder, iface=IFACE)
@@ -2208,13 +2208,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -2249,13 +2249,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -2294,13 +2294,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.itervalues():
+        for path in output_path.values():
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)

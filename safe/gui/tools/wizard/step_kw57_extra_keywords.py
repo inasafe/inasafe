@@ -1,13 +1,12 @@
 # coding=utf-8
 """InaSAFE Wizard Step Extra Keywords."""
+from builtins import range
 
 from collections import OrderedDict
 from datetime import datetime
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (
-    QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox, QSpinBox
-)
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox, QSpinBox
 
 from safe import messaging as m
 from safe.common.custom_logging import LOGGER
@@ -74,7 +73,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
         # Add to layout
         index = 0
-        for key, widgets in self.widgets_dict.items():
+        for key, widgets in list(self.widgets_dict.items()):
             self.extra_keywords_layout.addWidget(widgets[0], index, 0)
             self.extra_keywords_layout.addWidget(widgets[1], index, 1)
             index += 1
@@ -108,7 +107,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
     def get_extra_keywords(self):
         """Obtain extra keywords from the current state."""
         extra_keywords = {}
-        for key, widgets in self.widgets_dict.items():
+        for key, widgets in list(self.widgets_dict.items()):
             if widgets[0].isChecked():
                 if isinstance(widgets[1], QLineEdit):
                     extra_keywords[key] = widgets[1].text()
@@ -126,7 +125,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
     def set_existing_extra_keywords(self):
         """Set extra keywords from the value from metadata."""
         extra_keywords = self.parent.get_existing_keyword('extra_keywords')
-        for key, widgets in self.widgets_dict.items():
+        for key, widgets in list(self.widgets_dict.items()):
             value = extra_keywords.get(key)
             if value is None:
                 widgets[0].setChecked(False)
@@ -160,7 +159,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
     def clear(self):
         """Clear current state."""
         # Adapted from http://stackoverflow.com/a/13103617/1198772
-        for i in reversed(range(self.extra_keywords_layout.count())):
+        for i in reversed(list(range(self.extra_keywords_layout.count()))):
             self.extra_keywords_layout.itemAt(i).widget().setParent(None)
         self.widgets_dict = OrderedDict()
 
@@ -190,7 +189,7 @@ def extra_keywords_to_widgets(extra_keyword_definition):
         input_widget.setMinimum(extra_keyword_definition['minimum'])
         input_widget.setMaximum(extra_keyword_definition['maximum'])
         input_widget.setSuffix(extra_keyword_definition['unit_string'])
-    elif extra_keyword_definition['type'] == unicode:
+    elif extra_keyword_definition['type'] == str:
         if extra_keyword_definition.get('options'):
             input_widget = QComboBox()
             options = extra_keyword_definition['options']

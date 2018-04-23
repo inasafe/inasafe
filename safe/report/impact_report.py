@@ -5,6 +5,7 @@ Enable dynamic report generation based on report metadata.
 Easily customize map report or document based report.
 
 """
+from builtins import object
 
 import imp
 import logging
@@ -70,7 +71,7 @@ class InaSAFEReportContext(object):
         :param north_arrow_path: Path to the north arrow image.
         :type north_arrow_path: str
         """
-        if isinstance(north_arrow_path, basestring) and os.path.exists(
+        if isinstance(north_arrow_path, str) and os.path.exists(
                 north_arrow_path):
             self._north_arrow = north_arrow_path
         else:
@@ -117,7 +118,7 @@ class InaSAFEReportContext(object):
         :param logo: Path to the organisation logo image.
         :type logo: str
         """
-        if isinstance(logo, basestring) and os.path.exists(logo):
+        if isinstance(logo, str) and os.path.exists(logo):
             self._organisation_logo = logo
         else:
             self._organisation_logo = supporters_logo_path()
@@ -149,7 +150,7 @@ class InaSAFEReportContext(object):
         :param text: Disclaimer text
         :type text: str
         """
-        if not isinstance(text, basestring):
+        if not isinstance(text, str):
             self._disclaimer = disclaimer()
         else:
             self._disclaimer = text
@@ -422,7 +423,7 @@ class ImpactReport(object):
                 return output_list
             elif isinstance(output_path, dict):
                 output_dict = {}
-                for key, path in output_path.iteritems():
+                for key, path in output_path.items():
                     output_dict[key] = os.path.abspath(
                         os.path.join(output_folder, path))
                 return output_dict

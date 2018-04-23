@@ -212,7 +212,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     """Get the super total affected."""
 
     # total for affected (super total)
-    analysis_feature = analysis_layer.getFeatures().next()
+    analysis_feature = next(analysis_layer.getFeatures())
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
     total_all = format_number(

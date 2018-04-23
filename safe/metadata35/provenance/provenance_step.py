@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import object
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -42,7 +43,7 @@ class ProvenanceStep(object):
             self._time = datetime.now()
         elif isinstance(timestamp, datetime):
             self._time = timestamp
-        elif isinstance(timestamp, basestring):
+        elif isinstance(timestamp, str):
             try:
                 self._time = datetime.strptime(
                     timestamp, "%Y-%m-%dT%H:%M:%S.%f")

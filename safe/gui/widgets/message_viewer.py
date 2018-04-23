@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
+from builtins import str
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -22,7 +24,7 @@ import time
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4 import QtCore, QtGui, QtWebKit
+from qgis.PyQt import QtCore, QtGui
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
@@ -271,7 +273,7 @@ class MessageViewer(QtWebKit.QWebView):
 
             string += html_footer()
         elif (isinstance(self.static_message, str) or
-                isinstance(self.static_message, unicode)):
+                isinstance(self.static_message, str)):
             # Handle sent text directly
             string = self.static_message
         elif not self.static_message:
@@ -316,7 +318,8 @@ class MessageViewer(QtWebKit.QWebView):
 
     def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
-        print self.page_to_text()
+        # fix_print_with_import
+        print(self.page_to_text())
 
     def save_report_to_html(self):
         """Save report in the dock to html."""

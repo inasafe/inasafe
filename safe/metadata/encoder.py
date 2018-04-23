@@ -4,7 +4,7 @@
 import json
 from datetime import datetime, date
 
-from PyQt4.QtCore import QDate, Qt, QDateTime, QUrl
+from qgis.PyQt.QtCore import QDate, Qt, QDateTime, QUrl
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -1,10 +1,12 @@
 # coding=utf-8
 
 """Prepare layers for InaSAFE."""
+from builtins import next
+from builtins import str
 
 import logging
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsField,
     QgsFeatureRequest,
@@ -173,12 +175,12 @@ def _check_value_mapping(layer, exposure_key=None):
         other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
-    for group in value_map.itervalues():
+    for group in value_map.values():
         exposure_mapped.extend(group)
 
     diff = list(set(unique_exposure) - set(exposure_mapped))
 
-    if other in value_map.keys():
+    if other in list(value_map.keys()):
         value_map[other].extend(diff)
     else:
         value_map[other] = diff
@@ -228,9 +230,9 @@ def clean_inasafe_fields(layer):
 
     # Convert the field name and sum up if needed
     new_keywords = {}
-    for key, val in layer.keywords.get('inasafe_fields').iteritems():
+    for key, val in layer.keywords.get('inasafe_fields').items():
         if key in expected_fields:
-            if isinstance(val, basestring):
+            if isinstance(val, str):
                 val = [val]
             sum_fields(layer, key, val)
             new_keywords[key] = expected_fields[key]
@@ -241,7 +243,7 @@ def clean_inasafe_fields(layer):
     to_remove = []
     # Remove unnecessary fields (the one that is not in the inasafe_fields)
     for field in layer.fields().toList():
-        if field.name() not in layer.keywords['inasafe_fields'].values():
+        if field.name() not in list(layer.keywords['inasafe_fields'].values()):
             to_remove.append(field.name())
     remove_fields(layer, to_remove)
     LOGGER.debug(
@@ -381,7 +383,7 @@ def _add_id_column(layer):
     }
 
     has_id_column = False
-    for layer_type, field in mapping.iteritems():
+    for layer_type, field in mapping.items():
         if layer_purpose == layer_type:
             safe_id = field
             if layer.keywords['inasafe_fields'].get(field['key']):

@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Impact Function."""
+from builtins import object
 
 import getpass
 import logging
@@ -12,7 +13,7 @@ from os.path import join, exists, dirname
 from socket import gethostname
 
 from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QT_VERSION_STR, QSettings, QDir
+from qgis.PyQt.QtCore import QSettings, QDir
 from osgeo import gdal
 from qgis.core import (
     QgsGeometry,
@@ -211,7 +212,7 @@ from safe.utilities.metadata import (
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
-from safe.utilities.unicode import get_unicode, byteify
+from safe.utilities.str import get_unicode, byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
@@ -618,7 +619,7 @@ class ImpactFunction(object):
         # Extra layers produced by pre-processing
         layers.update(self._preprocessors_layers)
 
-        for expected_purpose, layer in layers.iteritems():
+        for expected_purpose, layer in layers.items():
             if layer:
                 purpose = layer.keywords.get('layer_purpose')
                 if purpose != expected_purpose:
@@ -631,7 +632,7 @@ class ImpactFunction(object):
                     pass
 
         # Remove layers which are not set.
-        layers = [layer for layer in layers.values() if layer]
+        layers = [layer for layer in list(layers.values()) if layer]
         return layers
 
     @property
@@ -1930,7 +1931,7 @@ class ImpactFunction(object):
                     layer_purpose_exposure['key'], exposure['key'])
                 for count_field in non_compulsory_fields:
                     count_key = count_field['key']
-                    if count_key in count_ratio_mapping.keys():
+                    if count_key in list(count_ratio_mapping.keys()):
                         ratio_field = count_ratio_mapping[count_key]
                         if count_key not in keywords['inasafe_fields']:
                             # The exposure hasn't a count field, we should add
@@ -1963,7 +1964,7 @@ class ImpactFunction(object):
                     layer_purpose_exposure['key'], exposure['key'])
                 for count_field in non_compulsory_fields:
                     count_key = count_field['key']
-                    if count_key in count_ratio_mapping.keys():
+                    if count_key in list(count_ratio_mapping.keys()):
                         ratio_field = count_ratio_mapping[count_key]
                         default_value = get_inasafe_default_value_qsetting(
                             QSettings(), GLOBAL, ratio_field)
@@ -2003,7 +2004,7 @@ class ImpactFunction(object):
             non_compulsory_fields = get_non_compulsory_fields(
                 layer_purpose_exposure['key'], exposure['key'])
             for count_field in non_compulsory_fields:
-                if count_field['key'] in count_ratio_mapping.keys():
+                if count_field['key'] in list(count_ratio_mapping.keys()):
                     ratio_field = count_ratio_mapping[count_field['key']]
                     if count_field['key'] not in exposure_fields:
                         # The exposure layer can be vector or a raster.
@@ -3013,7 +3014,7 @@ class ImpactFunction(object):
                 break
 
         if map_overview_layer:
-            QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
+            QgsProject.instance().removeMapLayer(map_overview_layer)
 
         # Create json file for report urls
         report_path = self._impact_report.output_folder

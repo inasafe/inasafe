@@ -6,9 +6,10 @@ import os
 from collections import OrderedDict
 from operator import itemgetter
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
-from PyQt4.QtGui import QFileDialog, QIcon
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtCore import pyqtSlot
+from qgis.PyQt.QtWidgets import QFileDialog
+from qgis.PyQt.QtGui import QIcon
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel
 
@@ -145,7 +146,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         # add output layer to map canvas
         self.output_layer = self.data_store.layer(self.output_filename)
 
-        QgsMapLayerRegistry.instance().addMapLayers(
+        QgsProject.instance().addMapLayers(
             [self.output_layer])
         self.iface.setActiveLayer(self.output_layer)
         self.iface.zoomToActiveLayer()
@@ -164,7 +165,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         file_extension = os.path.splitext(self.output_filename)[1]
         self.output_filename = os.path.splitext(self.output_filename)[0]
         # show Qt file directory dialog
-        output_path = QFileDialog.getSaveFileName(
+        output_path, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Output file'),
             '%s_multi_buffer%s' % (

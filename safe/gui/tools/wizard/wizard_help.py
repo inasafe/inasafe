@@ -2,7 +2,7 @@
 """Wizard Help Widget."""
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 

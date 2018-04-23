@@ -3,7 +3,7 @@
 """Utilities for Impact Function."""
 
 from os.path import exists
-from PyQt4.QtCore import Qt
+from qgis.PyQt.QtCore import Qt
 
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
@@ -178,7 +178,7 @@ def report_urls(impact_function):
                     if p.endswith(suffix) and exists(p):
                         paths[product.key] = p
             elif isinstance(path, dict):
-                for p in path.itervalues():
+                for p in path.values():
                     if p.endswith(suffix) and exists(p):
                         paths[product.key] = p
             elif exists(path):

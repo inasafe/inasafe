@@ -2,7 +2,7 @@
 
 """QGIS utilities for InaSAFE."""
 
-from PyQt4.QtGui import QMessageBox, QPushButton
+from qgis.PyQt.QtWidgets import QMessageBox, QPushButton
 from qgis.gui import QgsMessageBar
 from qgis.utils import iface
 

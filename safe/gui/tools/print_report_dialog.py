@@ -6,7 +6,7 @@ from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, dirname
 
-from PyQt4 import QtGui, QtCore, QtXml
+from qgis.PyQt import QtGui, QtCore, QtXml
 from qgis.core import QgsApplication
 
 from safe import messaging as m
@@ -91,7 +91,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         }
 
         # setup checkboxes, all checkboxes are checked by default
-        for checkbox in self.all_checkboxes.values():
+        for checkbox in list(self.all_checkboxes.values()):
             checkbox.setChecked(True)
 
         # override template is selected by default
@@ -302,7 +302,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
                 for p in path:
                     paths.append(p)
             elif isinstance(path, dict):
-                for p in path.itervalues():
+                for p in path.values():
                     paths.append(p)
             else:
                 paths.append(path)
@@ -321,8 +321,8 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         report_urls_dict = report_urls(self.impact_function)
 
         # get report urls for each product tag as list
-        for key, value in report_urls_dict.iteritems():
-            report_urls_dict[key] = value.values()
+        for key, value in report_urls_dict.items():
+            report_urls_dict[key] = list(value.values())
 
         if self.dock:
             # create message to user
@@ -420,7 +420,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             infographic_report['key']: infographic_report
         }
         duplicated_report_metadata = None
-        for key, checkbox in self.all_checkboxes.iteritems():
+        for key, checkbox in self.all_checkboxes.items():
             if not checkbox.isChecked():
                 component = component_definitions[key]
                 if component in generated_components:
@@ -533,7 +533,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         """
         path = self.template_path.text()
         if not path:
-            path = setting('lastCustomTemplate', '', basestring)
+            path = setting('lastCustomTemplate', '', str)
         if path:
             directory = dirname(path)
         else:

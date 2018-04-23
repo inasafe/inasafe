@@ -1,6 +1,7 @@
 # coding=utf-8
 """Module for class container of Report and ReportComponent Metadata.
 """
+from builtins import object
 from copy import deepcopy
 from importlib import import_module
 
@@ -68,7 +69,7 @@ class ReportComponentsMetadata(object):
         self._key = key
         if callable(processor):
             self._processor = processor
-        elif isinstance(processor, basestring):
+        elif isinstance(processor, str):
             _package, _method = processor.rsplit('.', 1)
             _module = import_module(_package)
             self._processor = getattr(_module, _method)

@@ -4,7 +4,7 @@ import unittest
 from datetime import datetime
 # Do not remove this, needed for QUrl
 from qgis.utils import iface  # pylint: disable=W0621
-from PyQt4.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl
 
 
 from safe.definitions.versions import inasafe_keyword_version
