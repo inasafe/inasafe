@@ -12,7 +12,6 @@ import qgis  # NOQA pylint: disable=unused-import
 from qgis.PyQt.QtCore import QCoreApplication, QLocale
 from qgis.PyQt.QtCore import QSettings  # QSettings can't be moved to our class
 
-from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -39,8 +38,6 @@ def tr(text, context='@default'):
         the original string.
     :rtype: str, unicode
     """
-    # Ensure it's in unicode
-    text = get_unicode(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     translated_text = QCoreApplication.translate(context, text)
     # Check if there is missing container. If so, return the original text.

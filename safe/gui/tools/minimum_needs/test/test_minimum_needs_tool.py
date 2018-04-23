@@ -5,7 +5,6 @@
 
 import unittest
 import os
-from qgis.core import QgsMapLayerRegistry
 
 from safe.test.utilities import (
     standard_data_path, get_qgis_app, load_test_vector_layer)

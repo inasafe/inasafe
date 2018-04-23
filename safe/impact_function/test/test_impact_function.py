@@ -97,7 +97,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QgsGeometry,
-    QGis)
+    Qgis)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -922,7 +922,7 @@ class TestImpactFunction(unittest.TestCase):
             provenance_user['provenance_key']: getpass.getuser(),
             provenance_os['provenance_key']: readable_os_version(),
             provenance_pyqt_version['provenance_key']: PYQT_VERSION_STR,
-            provenance_qgis_version['provenance_key']: QGis.QGIS_VERSION,
+            provenance_qgis_version['provenance_key']: Qgis.QGIS_VERSION,
             provenance_qt_version['provenance_key']: QT_VERSION_STR,
             provenance_inasafe_version['provenance_key']: get_version(),
             provenance_aggregation_layer['provenance_key']:
@@ -1034,7 +1034,7 @@ class TestImpactFunction(unittest.TestCase):
             provenance_user['provenance_key']: getpass.getuser(),
             provenance_os['provenance_key']: readable_os_version(),
             provenance_pyqt_version['provenance_key']: PYQT_VERSION_STR,
-            provenance_qgis_version['provenance_key']: QGis.QGIS_VERSION,
+            provenance_qgis_version['provenance_key']: Qgis.QGIS_VERSION,
             provenance_qt_version['provenance_key']: QT_VERSION_STR,
             provenance_inasafe_version['provenance_key']: get_version(),
             provenance_aggregation_layer['provenance_key']: None,

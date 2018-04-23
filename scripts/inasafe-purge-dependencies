@@ -3,7 +3,7 @@
 echo "---------------------------------------------------------"
 echo "Removing InaSAFE dependencies                      "
 echo
-echo "This will completely remove QGis, GDAL, geos etc         "
+echo "This will completely remove Qgis, GDAL, geos etc         "
 echo
 echo "THIS IS DANGEROUS AND COULD AFFECT YOUR ENTIRE SYSTEM    "
 

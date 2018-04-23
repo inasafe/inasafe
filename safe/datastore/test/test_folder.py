@@ -21,7 +21,7 @@ from qgis.PyQt.QtCore import QDir, QVariant
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsField,
-    QGis,
+    Qgis,
 )
 
 from safe.datastore.folder import Folder
@@ -119,7 +119,7 @@ class TestFolder(unittest.TestCase):
         """Test if we import an empty layer."""
         layer = create_memory_layer(
             'test',
-            QGis.Polygon,
+            Qgis.Polygon,
             QgsCoordinateReferenceSystem(3857),
             [
                 QgsField('my_field_1', QVariant.Int),

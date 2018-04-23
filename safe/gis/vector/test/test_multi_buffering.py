@@ -8,7 +8,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import QGis
+from qgis.core import Qgis
 from safe.gis.vector.multi_buffering import multi_buffering
 from safe.definitions.fields import hazard_class_field, buffer_distance_field
 
@@ -48,7 +48,7 @@ class TestMultiBuffering(unittest.TestCase):
             radii=radii)
 
         self.assertDictEqual(result.keywords, expected_keywords)
-        self.assertEqual(result.geometryType(), QGis.Polygon)
+        self.assertEqual(result.geometryType(), Qgis.Polygon)
         expected_feature_count = layer.featureCount() * len(radii)
         self.assertEqual(result.featureCount(), expected_feature_count)
 

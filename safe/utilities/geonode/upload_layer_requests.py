@@ -79,12 +79,12 @@ def pretty_print_post(req):
     this function because it is programmed to be pretty
     printed and may differ from the actual request.
     """
-    print('{}\n{}\n{}\n\n{}'.format(
+    print(('{}\n{}\n{}\n\n{}'.format(
         '-----------START-----------',
         req.method + ' ' + req.url,
         '\n'.join('{}: {}'.format(k, v) for k, v in list(req.headers.items())),
         req.body,
-    ))
+    )))
 
 
 def login_user(server, login, password):

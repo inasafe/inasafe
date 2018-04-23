@@ -9,7 +9,6 @@ from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QListWidgetItem
 from qgis.PyQt.QtGui import QPixmap
-from qgis.core import QgsMapLayerRegistry
 
 from safe import messaging as m
 from safe.gui.tools.wizard.utilities import layers_intersect

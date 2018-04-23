@@ -5,7 +5,7 @@
 
 import logging
 
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import Qgis, QgsFeatureRequest
 
 from safe.definitions.fields import (
     aggregation_id_field,
@@ -237,9 +237,9 @@ def report_on_field(layer):
     # we do not want to report on the size.
     geometry = layer.geometryType()
     exposure = layer.keywords.get('exposure')
-    if geometry == QGis.Point:
+    if geometry == Qgis.Point:
         field_index = None
-    if geometry == QGis.Polygon and exposure == 'structure':
+    if geometry == Qgis.Polygon and exposure == 'structure':
         field_index = None
 
     # Special case if it's an exposure without classification. It means it's

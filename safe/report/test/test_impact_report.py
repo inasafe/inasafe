@@ -8,7 +8,7 @@ import shutil
 import unittest
 from collections import OrderedDict
 from osgeo import gdal
-from qgis.core import QGis
+from qgis.core import Qgis
 
 from copy import deepcopy
 from jinja2.environment import Template
@@ -63,7 +63,7 @@ from safe.utilities.settings import setting, set_setting, delete_setting
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import QgsMapLayerRegistry, QgsCoordinateReferenceSystem
+from qgis.core import QgsCoordinateReferenceSystem
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1064,7 +1064,7 @@ class TestImpactReport(unittest.TestCase):
                     'content': 'Off',
                     'header': 'Debug Mode '
                 }), ('qgis_version', {
-                    'content': QGis.QGIS_VERSION,
+                    'content': Qgis.QGIS_VERSION,
                     'header': 'QGIS Version '
                 }), ('qt_version', {
                     'content': QT_VERSION_STR,

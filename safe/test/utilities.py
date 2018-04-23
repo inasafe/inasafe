@@ -21,8 +21,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
-    QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry)
+    QgsCoordinateReferenceSystem)
+
 from qgis.utils import iface
 
 from safe.common.utilities import unique_filename, temp_dir
@@ -943,7 +943,7 @@ def load_layers(
         elif layer_type == 'exposure':
             exposure_layer_count += 1
 
-        # Add layer to the registry (that QGis knows about) a slot
+        # Add layer to the registry (that Qgis knows about) a slot
         # in qgis_interface will also ensure it gets added to the canvas
 
         # noinspection PyArgumentList

@@ -10,7 +10,7 @@ from qgis.PyQt import QtGui, QtCore
 from qgis.PyQt.QtCore import QFileInfo, pyqtSlot
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
-from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayerRegistry
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 from qgis.utils import iface
 
 from safe import messaging as m
@@ -58,8 +58,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         :param parent: parent - widget to use as parent.
         :type parent: QWidget
 
-        :param iface: QGIS QGisAppInterface instance.
-        :type iface: QGisAppInterface
+        :param iface: QGIS QgisAppInterface instance.
+        :type iface: QgisAppInterface
 
         :param dock_widget: Dock widget instance.
         :type dock_widget: Dock

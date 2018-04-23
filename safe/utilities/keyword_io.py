@@ -298,7 +298,7 @@ class KeywordIO(QObject):
                 pretty_value = value_definition.get('name')
 
             if not pretty_value:
-                pretty_value = get_string(value)
+                pretty_value = value
             value = pretty_value
 
         key = m.ImportantText(keyword_definition)

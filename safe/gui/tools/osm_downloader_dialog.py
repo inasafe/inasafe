@@ -63,8 +63,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :param parent: Optional widget to use as parent.
         :type parent: QWidget
 
-        :param iface: An instance of QGisInterface.
-        :type iface: QGisInterface
+        :param iface: An instance of QgisInterface.
+        :type iface: QgisInterface
         """
         QDialog.__init__(self, parent)
         self.parent = parent

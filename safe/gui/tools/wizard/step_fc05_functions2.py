@@ -119,7 +119,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         for row in range(self.tblFunctions2.rowCount()):
             for column in range(self.tblFunctions2.columnCount()):
                 item = self.tblFunctions2.item(row, column)
-                item.setText((item == selItem) and '\u2022' or '')
+                item.setText((item == selItem) and '\\u2022' or '')
 
     # pylint: disable=W0613
     # noinspection PyPep8Naming,PyUnusedLocal

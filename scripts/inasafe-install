@@ -84,7 +84,7 @@ function checkup() {
 echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
 
-echo "Create symlink $InaSAFEQGIS from QGis plugin area"
+echo "Create symlink $InaSAFEQGIS from Qgis plugin area"
 chown $USER ~/.qgis2
 mkdir ~/.qgis2/python
 mkdir ~/.qgis2/python/plugins

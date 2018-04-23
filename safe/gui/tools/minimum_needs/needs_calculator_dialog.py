@@ -10,7 +10,6 @@ import os
 
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import pyqtSlot, QSettings
-from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
 
 from safe.common.utilities import temp_dir, unique_filename

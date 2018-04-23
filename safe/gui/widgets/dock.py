@@ -16,7 +16,6 @@ from qgis.PyQt.QtGui import QDesktopServices, QPixmap
 from qgis.core import (
     QgsGeometry,
     QgsMapLayer,
-    QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QgsExpressionContextUtils,
     QgsLayerTreeLayer
@@ -147,7 +146,7 @@ class Dock(QDockWidget, FORM_CLASS):
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
 
-        :param iface: A QGisAppInterface instance we use to access QGIS via.
+        :param iface: A QgisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
         """
         QDockWidget.__init__(self, None)

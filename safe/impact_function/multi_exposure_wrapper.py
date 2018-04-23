@@ -23,7 +23,6 @@ from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsMapLayer,
-    QgsMapLayerRegistry,
     QgsVectorLayer,
     QgsRasterLayer,
     QgsProject,
@@ -707,8 +706,8 @@ class MultiExposureImpactFunction():
                         return False, message
                 else:
                     if property_a != property_b:
-                        string_a = get_unicode(property_a)
-                        string_b = get_unicode(property_b)
+                        string_a = property_a
+                        string_b = property_b
                         message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))

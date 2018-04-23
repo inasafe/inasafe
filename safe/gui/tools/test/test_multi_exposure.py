@@ -3,7 +3,7 @@
 
 import unittest
 
-from qgis.core import QgsMapLayerRegistry, QgsProject
+from qgis.core import QgsProject
 from qgis.gui import QgsMapCanvasLayer
 
 from safe.definitions.exposure import exposure_road, exposure_population

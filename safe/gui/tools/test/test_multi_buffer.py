@@ -1,7 +1,6 @@
 import unittest
 import os
 
-from qgis.core import QgsMapLayerRegistry
 from safe.definitions.fields import buffer_distance_field, hazard_class_field
 from safe.test.utilities import (
     load_test_vector_layer,

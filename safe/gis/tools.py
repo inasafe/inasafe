@@ -8,8 +8,7 @@ import os
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
-    QgsMapLayerRegistry,
-    QgsDataSourceURI,
+    QgsDataSourceUri,
 )
 
 from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
@@ -230,7 +229,7 @@ def load_layer(full_layer_uri_string, name=None, provider=None):
             name = os.path.splitext(file_name)[0]
         else:
             # Might be a DB, take the DB name
-            source = QgsDataSourceURI(source)
+            source = QgsDataSourceUri(source)
             name = source.table()
 
     if not name:

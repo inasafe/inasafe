@@ -8,8 +8,7 @@ from qgis.PyQt import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from qgis.core import (
     QgsGeometry,
-    QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry)
+    QgsCoordinateReferenceSystem)
 
 from safe import messaging as m
 from safe.common.signals import send_static_message, send_error_message

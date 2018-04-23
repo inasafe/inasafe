@@ -5,7 +5,7 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
-from qgis.core import QgsRasterLayer, QgsVectorLayer, QGis
+from qgis.core import QgsRasterLayer, QgsVectorLayer, Qgis
 
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -39,8 +39,8 @@ class DataStore(with_metaclass(ABCMeta, object)):
 
         In a datastore, we should be able to save many layers.
 
-        :param uri: The URI using a QFileInfo, QgsDataSourceURI or the path.
-        :type uri: QDir, QFileInfo, QgsDataSourceURI, str
+        :param uri: The URI using a QFileInfo, QgsDataSourceUri or the path.
+        :type uri: QDir, QFileInfo, QgsDataSourceUri, str
 
         .. versionadded:: 4.0
         """
@@ -71,7 +71,7 @@ class DataStore(with_metaclass(ABCMeta, object)):
         """Return the URI of the datastore. It's not a layer URI.
 
         :return: The URI.
-        :rtype: QgsDataSourceURI, str
+        :rtype: QgsDataSourceUri, str
 
         .. versionadded:: 4.0
         """
@@ -114,7 +114,7 @@ class DataStore(with_metaclass(ABCMeta, object)):
         if isinstance(layer, QgsRasterLayer):
             result = self._add_raster_layer(layer, layer_name)
         else:
-            if layer.wkbType() == QGis.WKBNoGeometry:
+            if layer.wkbType() == Qgis.WKBNoGeometry:
                 result = self._add_tabular_layer(layer, layer_name)
             else:
                 result = self._add_vector_layer(layer, layer_name)
@@ -200,7 +200,7 @@ class DataStore(with_metaclass(ABCMeta, object)):
         :type layer_name: str
 
         :return: The URI of the layer.
-        :rtype: QgsDataSourceURI, str
+        :rtype: QgsDataSourceUri, str
 
         .. versionadded:: 4.0
         """

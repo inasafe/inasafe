@@ -118,7 +118,7 @@ def main():
                     show_parameter_value(param)
             else:
                 # fix_print_with_import
-                print(a_parameter.guid, a_parameter.name, a_parameter.value)
+                print((a_parameter.guid, a_parameter.name, a_parameter.value))
 
         try:
             the_parameters = the_parameter_container.get_parameters()

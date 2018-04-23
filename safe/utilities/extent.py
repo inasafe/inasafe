@@ -7,7 +7,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.core import (
     QgsCoordinateTransform,
     QgsGeometry,
-    QGis)
+    Qgis)
 from qgis.gui import QgsRubberBand
 
 from safe.definitions.styles import (
@@ -212,7 +212,7 @@ class Extent():
         """
         # noinspection PyArgumentList
         rubber_band = QgsRubberBand(
-            self._map_canvas, geometryType=QGis.Polygon)
+            self._map_canvas, geometryType=Qgis.Polygon)
         rubber_band.setBrushStyle(Qt.NoBrush)
         rubber_band.setColor(colour)
         rubber_band.setWidth(width)
@@ -260,7 +260,7 @@ class Extent():
         .. versionadded: 2.2.0
         """
         if self._user_analysis_rubberband is not None:
-            self._user_analysis_rubberband.reset(QGis.Polygon)
+            self._user_analysis_rubberband.reset(Qgis.Polygon)
             self._user_analysis_rubberband = None
 
     def hide_next_analysis_extent(self):
@@ -269,7 +269,7 @@ class Extent():
         .. versionadded:: 2.1.0
         """
         if self._next_analysis_rubberband is not None:
-            self._next_analysis_rubberband.reset(QGis.Polygon)
+            self._next_analysis_rubberband.reset(Qgis.Polygon)
             self._next_analysis_rubberband = None
 
     def hide_last_analysis_extent(self):
@@ -280,5 +280,5 @@ class Extent():
         .. versionadded:: 2.1.0
         """
         if self._last_analysis_rubberband is not None:
-            self._last_analysis_rubberband.reset(QGis.Polygon)
+            self._last_analysis_rubberband.reset(Qgis.Polygon)
             self._last_analysis_rubberband = None

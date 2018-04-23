@@ -23,13 +23,13 @@ from safe.utilities.str import get_string, get_unicode
 class UnicodeTest(unittest.TestCase):
     """Test Unicode helper module."""
     # noinspection PyMethodMayBeStatic
-    def test_get_unicode(self):
+    def test_self:
         """Test get_unicode function."""
         text = 'Test á, é, í, ó, ú, ü, ñ, ¿'
         unicode_repr = 'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
         message = 'It should return %s, but it returned %s' % (
-            get_unicode(text), unicode_repr)
-        self.assertEqual(get_unicode(text), unicode_repr, message)
+            text, unicode_repr)
+        self.assertEqual(text, unicode_repr, message)
 
     def test_get_string(self):
         """Test get_string function."""
@@ -43,7 +43,7 @@ class UnicodeTest(unittest.TestCase):
     def test_str_unicode_str(self):
         """Test if str(unicode(str)) works correctly."""
         text = 'Test á, é, í, ó, ú, ü, ñ, ¿'
-        unicode_repr = get_unicode(text)
+        unicode_repr = text
         str_repr = get_string(unicode_repr)
         message = 'It should return %s, but it returned %s' % (text, str_repr)
         self.assertEqual(text, str_repr, message)
