@@ -278,7 +278,7 @@ def is_line_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QgiQgsWkbTypes.Line)
+            layer.geometryType() == QgsWkbTypes.LineString)
     except AttributeError:
         return False
 
