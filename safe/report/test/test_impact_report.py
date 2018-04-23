@@ -13,8 +13,8 @@ from qgis.core import Qgis
 from copy import deepcopy
 from jinja2.environment import Template
 
-from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR
+from qgis.PyQt.QtCore import QT_VERSION_STR
 
 from safe.common.version import get_version
 from safe.definitions.constants import (

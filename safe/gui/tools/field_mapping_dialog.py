@@ -26,7 +26,6 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header, resources_path)
-from safe.utilities.str import get_string
 from safe.utilities.utilities import get_error_message
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
@@ -283,6 +282,6 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             self.save_metadata()
         except InvalidValidationException as e:
             display_warning_message_box(
-                self, tr('Invalid Field Mapping'), get_string(e.message))
+                self, tr('Invalid Field Mapping'), e.message)
             return
         super(FieldMappingDialog, self).accept()

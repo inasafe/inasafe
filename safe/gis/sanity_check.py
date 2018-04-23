@@ -2,7 +2,7 @@
 
 """Sanity check module."""
 
-from qgis.core import Qgis, QgsWKBTypes
+from qgis.core import Qgis, QgsWkbTypes
 
 from safe.common.exceptions import InvalidLayerError
 from safe.utilities.gis import is_vector_layer, is_raster_layer
@@ -102,7 +102,7 @@ def check_layer(layer, has_geometry=True):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))
 
-            if layer.wkbType() == QgsWKBTypes.Unknown and (
+            if layer.wkbType() == QgsWkbTypes.Unknown and (
                     layer.featureCount() != 0):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))

@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.utilities.str import get_string, get_unicode
+from safe.utilities.unicode import get_string, get_unicode
 
 
 class UnicodeTest(unittest.TestCase):

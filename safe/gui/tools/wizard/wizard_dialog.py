@@ -47,7 +47,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.str import get_unicode, get_string
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
 from .step_fc00_functions1 import StepFcFunctions1
@@ -635,7 +634,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.step_kw_fields_mapping.get_field_mapping()
             except InvalidValidationException as e:
                 display_warning_message_box(
-                    self, tr('Invalid Field Mapping'), get_string(e.message))
+                    self, tr('Invalid Field Mapping'), e.message)
                 return
 
         if current_step.step_type == STEP_FC:
@@ -798,21 +797,17 @@ class WizardDialog(QDialog, FORM_CLASS):
                         keywords['value_map'] = value_map
 
         if self.step_kw_source.leSource.text():
-            keywords['source'] = get_unicode(
-                self.step_kw_source.leSource.text())
+            keywords['source'] = self.step_kw_source.leSource.text()
         if self.step_kw_source.leSource_url.text():
-            keywords['url'] = get_unicode(
-                self.step_kw_source.leSource_url.text())
+            keywords['url'] = self.step_kw_source.leSource_url.text()
         if self.step_kw_source.leSource_scale.text():
-            keywords['scale'] = get_unicode(
-                self.step_kw_source.leSource_scale.text())
+            keywords['scale'] = self.step_kw_source.leSource_scale.text()
         if self.step_kw_source.ckbSource_date.isChecked():
             keywords['date'] = self.step_kw_source.dtSource_date.dateTime()
         if self.step_kw_source.leSource_license.text():
-            keywords['license'] = get_unicode(
-                self.step_kw_source.leSource_license.text())
+            keywords['license'] = self.step_kw_source.leSource_license.text()
         if self.step_kw_title.leTitle.text():
-            keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
+            keywords['title'] = self.step_kw_title.leTitle.text()
 
         inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
         inasafe_fields.update(

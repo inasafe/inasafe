@@ -5,7 +5,8 @@
 from dateutil.parser import parse
 from qgis.core import (
     qgsfunction,
-    QgsExpressionContextUtils
+    QgsExpressionContextUtils,
+    QgsProject
 )
 
 from safe.definitions.extra_keywords import all_extra_keywords_description
@@ -18,7 +19,6 @@ from safe.report.expressions.map_report import exposure_summary_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.rounding import denomination, round_affected_number
-from safe.utilities.str import get_string
 from safe.utilities.utilities import generate_expression_help
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -140,7 +140,7 @@ def inasafe_exposure_summary_field_values(field, feature, parent):
 
     values = []
     for feat in layer.getFeatures():
-        value = get_string(feat[index])
+        value = feat[index]
         values.append(value)
 
     return str(values)
