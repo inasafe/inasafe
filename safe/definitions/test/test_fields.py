@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from __future__ import print_function
+
 import unittest
 from collections import OrderedDict
 from safe.definitions.fields import (

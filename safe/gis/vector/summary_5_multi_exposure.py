@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Multi-exposure summary calculation."""
-from builtins import next
+
 
 from qgis.core import QgsFeatureRequest
 
@@ -250,7 +250,7 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
             iterator = aggregation.getFeatures(target_expression)
             target_feature = next(iterator)  # It must return only 1 feature.
 
-            for source_field, target_field in field_map.items():
+            for source_field, target_field in list(field_map.items()):
                 aggregation.changeAttributeValue(
                     target_feature.id(),
                     target_field,

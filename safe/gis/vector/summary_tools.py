@@ -105,7 +105,7 @@ def add_fields(
             static_field['field_name'])
 
     # For each absolute values
-    for absolute_field in absolute_values.keys():
+    for absolute_field in list(absolute_values.keys()):
         field_definition = definition(absolute_values[absolute_field][1])
         field = create_field_from_definition(field_definition)
         layer.addAttribute(field)

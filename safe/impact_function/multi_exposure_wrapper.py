@@ -5,8 +5,8 @@ Multi-exposure wrapper.
 
 This class will manage how to launch and optimize a multi exposure analysis.
 """
-from builtins import zip
-from builtins import object
+
+
 
 import getpass
 import logging
@@ -143,7 +143,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class MultiExposureImpactFunction(object):
+class MultiExposureImpactFunction():
 
     """Multi-exposure wrapper.
 
@@ -832,14 +832,14 @@ class MultiExposureImpactFunction(object):
         hazard_name = get_name(self.hazard.keywords.get('hazard'))
         hazard_geometry_name = get_name(geometry_type(self.hazard))
         self._name = (
-            u'Multi exposure {hazard_type} {hazard_geometry} On '.format(
+            'Multi exposure {hazard_type} {hazard_geometry} On '.format(
                 hazard_type=hazard_name, hazard_geometry=hazard_geometry_name))
         exposures_strings = []
         for exposure in self.exposures:
             exposure_name = get_name(exposure.keywords.get('exposure'))
             exposure_geometry_name = get_name(geometry_type(exposure))
             exposures_strings.append(
-                u'{exposure_type} {exposure_geometry}'.format(
+                '{exposure_type} {exposure_geometry}'.format(
                     exposure_type=exposure_name,
                     exposure_geometry=exposure_geometry_name))
         self._name += ', '.join(exposures_strings)
@@ -1298,7 +1298,7 @@ class MultiExposureImpactFunction(object):
                     population_analysis_summary = None
                     project = QgsProject.instance()
                     for layer_id, layer in (
-                            iter(project.mapLayers().items())):
+                            iter(list(project.mapLayers().items()))):
                         if layer_id == impact_function.analysis_impacted.id():
                             population_analysis_summary = layer
                     # FIXME: add_layer_to_canvas() requires a layer AND a name
@@ -1457,7 +1457,7 @@ class MultiExposureImpactFunction(object):
         dict_of_analysis_summary_id = {}
 
         for exposure_key, exposure_summary in (
-                iter(dict_of_exposure_summary.items())):
+                iter(list(dict_of_exposure_summary.items()))):
             layer = load_layer_from_registry(exposure_summary)
             keywords = KeywordIO.read_keywords(layer)
 

@@ -1,6 +1,6 @@
 # coding=utf-8
 """Test Field Mapping Tab."""
-from builtins import range
+
 
 import unittest
 

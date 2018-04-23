@@ -1,6 +1,6 @@
 # coding=utf-8
 """Wizard Step Browser."""
-from builtins import str
+
 
 import os
 from sqlite3 import OperationalError

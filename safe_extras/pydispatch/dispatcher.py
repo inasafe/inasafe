@@ -391,7 +391,7 @@ def _removeReceiver(receiver):
 				else:
 					try:
 						receivers.remove( receiver )
-					except Exception, err:
+					except Exception as err:
 						pass
 				_cleanupConnections(senderkey, signal)
 	try:

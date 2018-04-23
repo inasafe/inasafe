@@ -9,13 +9,13 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from builtins import range
-from builtins import object
+
+
 
 import json
 
 
-class FlatTable(object):
+class FlatTable():
     """ Flat table object - used as a source of data for pivot tables.
     After constructing the object, repeatedly call "add_value" method
     for each row of the input table. FlatTable stores only fields
@@ -125,7 +125,7 @@ class FlatTable(object):
         return self
 
 
-class PivotTable(object):
+class PivotTable():
     """ Pivot tables as known from spreadsheet software.
 
     Pivot table restructures the input data table. For example,
@@ -219,7 +219,7 @@ class PivotTable(object):
 
         sums = {}  # key = (row, column), value = sum
         sums_affected = {}  # key = row, value = sum
-        for flat_key, flat_value in flat_table.data.items():
+        for flat_key, flat_value in list(flat_table.data.items()):
             # apply filtering
             if filter_field is not None:
                 if flat_key[flat_filter_index] != filter_value:
@@ -277,7 +277,7 @@ class PivotTable(object):
         for i in range(len(self.rows)):
             self.data[i] = [0.0] * len(self.columns)
 
-        for (sum_row, sum_column), sum_value in sums.items():
+        for (sum_row, sum_column), sum_value in list(sums.items()):
             sum_row_index = self.rows.index(sum_row)
             sum_column_index = self.columns.index(sum_column)
             self.data[sum_row_index][sum_column_index] = sum_value
@@ -288,7 +288,7 @@ class PivotTable(object):
 
         self.total_rows_affected = [0.0] * len(self.rows)
         self.total_affected = 0.0
-        for row, value in sums_affected.items():
+        for row, value in list(sums_affected.items()):
             self.total_affected += value
             sum_row_index = self.rows.index(row)
             self.total_rows_affected[sum_row_index] = value

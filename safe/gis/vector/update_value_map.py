@@ -78,7 +78,7 @@ def update_value_map(layer, exposure_key=None):
     unclassified_index = layer.fieldNameIndex(unclassified_column)
 
     reversed_value_map = {}
-    for inasafe_class, values in value_map.items():
+    for inasafe_class, values in list(value_map.items()):
         for val in values:
             reversed_value_map[val] = inasafe_class
 

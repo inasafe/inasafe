@@ -1,7 +1,6 @@
 # coding=utf-8
 
 """Definitions about earthquake."""
-from builtins import range
 
 import numpy
 
@@ -239,7 +238,7 @@ EARTHQUAKE_FUNCTIONS = (
                     'Estimating casualties for large worldwide earthquakes '
                     'using an empirical approach. U.S. Geological Survey '
                     'Open-File Report 2009-1136.'),
-                'link': u'https://pubs.usgs.gov/of/2009/1136/pdf/'
+                'link': 'https://pubs.usgs.gov/of/2009/1136/pdf/'
             }
         ],
         'fatality_rates': pager_fatality_rates

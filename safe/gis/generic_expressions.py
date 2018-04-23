@@ -1,7 +1,6 @@
 # coding=utf-8
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
-from builtins import str
 
 from dateutil.parser import parse
 from qgis.core import (

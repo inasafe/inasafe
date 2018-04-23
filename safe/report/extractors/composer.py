@@ -7,7 +7,7 @@ Particular example are:
 - PNG rendering
 
 """
-from builtins import object
+
 import datetime
 from copy import deepcopy
 
@@ -35,7 +35,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class QGISComposerContext(object):
+class QGISComposerContext():
 
     """Default context class for QGIS Composition.
 
@@ -548,7 +548,7 @@ def qgis_composer_infographic_extractor(impact_report, component_metadata):
 
     map_overview_layer = None
     project = QgsProject.instance()
-    for layer in project.mapLayers().values():
+    for layer in list(project.mapLayers().values()):
         if layer.name() == map_overview['id']:
             map_overview_layer = layer
 

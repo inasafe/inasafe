@@ -129,14 +129,14 @@ class TestImpactMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertEquals(expected_json, written_json)
+        self.assertEqual(expected_json, written_json)
 
     def test_json_read(self):
         metadata = ImpactLayerMetadata(EXISTING_IMPACT_FILE)
         with open(EXISTING_IMPACT_JSON) as f:
             expected_metadata = f.read()
 
-        self.assertEquals(expected_metadata, metadata.json)
+        self.assertEqual(expected_metadata, metadata.json)
 
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
@@ -154,7 +154,7 @@ class TestImpactMetadata(TestCase):
             EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML)
 
         # TODO (MB): add more checks
-        self.assertEquals(generated_metadata.get_xml_value('license'), 'GPLv2')
+        self.assertEqual(generated_metadata.get_xml_value('license'), 'GPLv2')
 
     def test_xml_to_json_to_xml(self):
         generated_metadata = ImpactLayerMetadata(
@@ -168,7 +168,7 @@ class TestImpactMetadata(TestCase):
         read_tmp_metadata = ImpactLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
-        self.assertEquals(expected_metadata, read_tmp_metadata.xml)
+        self.assertEqual(expected_metadata, read_tmp_metadata.xml)
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON

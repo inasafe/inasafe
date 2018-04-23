@@ -2,7 +2,7 @@
 
 """GUI utilities for the dock and the multi Exposure Tool."""
 from past.builtins import cmp
-from builtins import range
+
 
 from qgis.PyQt.QtCore import Qt
 from qgis.core import QgsMapLayerRegistry

@@ -80,7 +80,7 @@ extra_keyword_earthquake_latitude = {
     'type': float,
     'minimum': -90,
     'maximum': 90,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_longitude = {
@@ -90,7 +90,7 @@ extra_keyword_earthquake_longitude = {
     'type': float,
     'minimum': -180,
     'maximum': 180,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_magnitude = {
@@ -100,7 +100,7 @@ extra_keyword_earthquake_magnitude = {
     'type': float,
     'minimum': 0,
     'maximum': 12,
-    'unit_string': u''
+    'unit_string': ''
 }
 
 extra_keyword_earthquake_depth = {
@@ -110,7 +110,7 @@ extra_keyword_earthquake_depth = {
     'type': float,
     'minimum': 0,
     'maximum': 1000,
-    'unit_string': u' km'
+    'unit_string': ' km'
 }
 
 extra_keyword_earthquake_description = {
@@ -149,7 +149,7 @@ extra_keyword_earthquake_x_minimum = {
     'type': float,
     'minimum': -180,
     'maximum': 180,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_x_maximum = {
@@ -161,7 +161,7 @@ extra_keyword_earthquake_x_maximum = {
     'type': float,
     'minimum': -180,
     'maximum': 180,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_y_minimum = {
@@ -173,7 +173,7 @@ extra_keyword_earthquake_y_minimum = {
     'type': float,
     'minimum': -90,
     'maximum': 90,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_y_maximum = {
@@ -185,7 +185,7 @@ extra_keyword_earthquake_y_maximum = {
     'type': float,
     'minimum': -90,
     'maximum': 90,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_earthquake_source = {
@@ -243,7 +243,7 @@ extra_keyword_eruption_height = {
     'type': float,
     'minimum': 0,
     'maximum': 100000,
-    'unit_string': ' ' + tr(u'metres')  # with extra space
+    'unit_string': ' ' + tr('metres')  # with extra space
 }
 
 extra_keyword_volcano_eruption_event_time = {
@@ -264,7 +264,7 @@ extra_keyword_volcano_latitude = {
     'type': float,
     'minimum': -90,
     'maximum': 90,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 extra_keyword_volcano_longitude = {
@@ -274,7 +274,7 @@ extra_keyword_volcano_longitude = {
     'type': float,
     'minimum': -180,
     'maximum': 180,
-    'unit_string': u'°'
+    'unit_string': '°'
 }
 
 volcano_alert_normal = {
@@ -361,7 +361,7 @@ extra_keyword_volcano_height = {
     'type': float,
     'minimum': 0,
     'maximum': 10000,
-    'unit_string': u' metres'
+    'unit_string': ' metres'
 }
 
 extra_keyword_volcano_forecast_duration = {
@@ -375,7 +375,7 @@ extra_keyword_volcano_forecast_duration = {
     'type': int,
     'minimum': 0,
     'maximum': 10000,
-    'unit_string': u' days'
+    'unit_string': ' days'
 }
 
 earthquake_extra_keywords = [

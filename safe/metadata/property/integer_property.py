@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Integer property."""
-from builtins import str
+
 
 from types import NoneType
 

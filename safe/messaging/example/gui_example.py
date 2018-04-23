@@ -1,9 +1,9 @@
 # coding=utf-8
 
 """WebView."""
-from __future__ import print_function
-from builtins import range
-from builtins import object
+
+
+
 
 import sys
 
@@ -92,7 +92,7 @@ class WebView(QtWebKit.QWebView):
         self.setHtml(string)
 
 
-class ImpactFunction1(object):
+class ImpactFunction1():
 
     """Fake impact function 1."""
 
@@ -114,7 +114,7 @@ class ImpactFunction1(object):
             message=message)
 
 
-class ImpactFunction2(object):
+class ImpactFunction2():
 
     """Fake impact function 2."""
 
@@ -136,7 +136,7 @@ class ImpactFunction2(object):
             message=message)
 
 
-class Dock(object):
+class Dock():
 
     """Dock."""
 

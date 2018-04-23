@@ -83,8 +83,8 @@ ITEMS = (
         'hazard': hazard_flood,
         'exposure': exposure_road,
         'analysis_question': {
-            'fr': u"Dans l'événement d'une inondation, quelle longueur de "
-                  u"routes peut-être affectée?"
+            'fr': "Dans l'événement d'une inondation, quelle longueur de "
+                  "routes peut-être affectée?"
         }
     },
 )

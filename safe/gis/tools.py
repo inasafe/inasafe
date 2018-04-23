@@ -106,7 +106,7 @@ def reclassify_value(one_value, ranges):
             one_value, QPyNullVariant):
         return None
 
-    for threshold_id, threshold in ranges.items():
+    for threshold_id, threshold in list(ranges.items()):
         value_min = threshold[0]
         value_max = threshold[1]
 

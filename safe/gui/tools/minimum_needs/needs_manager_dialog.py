@@ -1,6 +1,6 @@
 # coding=utf-8
 """Need Manager Dialog."""
-from builtins import range
+
 
 import os
 from os.path import expanduser, basename
@@ -578,7 +578,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
 
         # To store parameters, we need the english version.
         translated_to_english = dict(
-            (y, x) for x, y in self.resource_parameters.items())
+            (y, x) for x, y in list(self.resource_parameters.items()))
         resource = {}
         for parameter in parameters:
             resource[translated_to_english[parameter.name]] = parameter.value

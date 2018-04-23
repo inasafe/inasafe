@@ -105,4 +105,4 @@ class TestImpactFunctionProvenanceStep(TestCase):
             'TEST &" \' < > description',
             data=self.good_data,
             timestamp='2015-08-13T20:20:48.178268')
-        self.assertEquals(self.good_data_xml, step.xml)
+        self.assertEqual(self.good_data_xml, step.xml)

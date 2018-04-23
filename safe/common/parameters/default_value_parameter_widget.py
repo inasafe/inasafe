@@ -1,6 +1,5 @@
 # coding=utf-8
 """Default Value Parameter Widget."""
-from builtins import range
 
 from qgis.PyQt.QtWidgets import QHBoxLayout, QDoubleSpinBox, QRadioButton, QButtonGroup
 

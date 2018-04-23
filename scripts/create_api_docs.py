@@ -128,7 +128,7 @@ def write_rst_file(file_directory, file_name, content):
         fl.write(content)
         fl.close()
 
-    except Exception, e:
+    except Exception as e:
         print('Creating %s failed' % os.path.join(
             file_directory, file_name + '.rst'), e)
 

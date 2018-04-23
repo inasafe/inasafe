@@ -1,8 +1,6 @@
 # coding=utf-8
 
 """Utilities for InaSAFE."""
-from builtins import str
-from builtins import range
 
 import colorsys
 import ctypes
@@ -629,7 +627,7 @@ def humanize_file_size(size):
     """
     for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
         if size < 1024.0:
-            return u'%3.1f %s' % (size, x)
+            return '%3.1f %s' % (size, x)
         size /= 1024.0
 
 

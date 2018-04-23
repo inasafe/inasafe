@@ -1,6 +1,6 @@
 # coding=utf-8
 """Test for Post Processors."""
-from builtins import object
+
 
 import unittest
 
@@ -70,7 +70,7 @@ class TestPostProcessors(unittest.TestCase):
 
     """Test Post Processors."""
 
-    class FakeMonkeyPatch(object):
+    class FakeMonkeyPatch():
 
         """Patch class for testings."""
 
@@ -513,7 +513,7 @@ class TestPostProcessors(unittest.TestCase):
             'population': 100,
             'gender_ratio': 0.45
         }
-        self.assertEquals(45, evaluate_formula(formula, variables))
+        self.assertEqual(45, evaluate_formula(formula, variables))
 
         variables = {
             'population': None,

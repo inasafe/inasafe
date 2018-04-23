@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Profile Widget."""
-from builtins import range
+
 
 from collections import OrderedDict
 

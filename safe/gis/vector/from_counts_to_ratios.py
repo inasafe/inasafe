@@ -88,7 +88,7 @@ def from_counts_to_ratios(layer):
     for feature in layer.getFeatures():
         total_count = feature[inasafe_fields[population_count_field['key']]]
 
-        for count_field, index in mapping.items():
+        for count_field, index in list(mapping.items()):
             count = feature[count_field]
             try:
                 # For #4669, fix always get 0

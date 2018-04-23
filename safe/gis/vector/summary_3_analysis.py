@@ -116,7 +116,7 @@ def analysis_summary(aggregate_hazard, analysis):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.items():
+        for field, field_definition in list(absolute_values.items()):
             value = area[field]
             if value == '' or isinstance(value, QPyNullVariant):
                 value = 0

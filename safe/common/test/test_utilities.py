@@ -1,8 +1,7 @@
 # coding=utf-8
 
 """Test for Common Utilities."""
-from __future__ import print_function
-from builtins import range
+
 
 import unittest
 import os
@@ -239,7 +238,7 @@ class TestUtilities(unittest.TestCase):
         """Test we can convert size values to human readable size."""
         values = [1023, 1024, 1048575, 1048576, 1604321.28]
         expected_result = [
-            u'1023.0 bytes', u'1.0 KB', u'1024.0 KB', u'1.0 MB', u'1.5 MB']
+            '1023.0 bytes', '1.0 KB', '1024.0 KB', '1.0 MB', '1.5 MB']
 
         result = []
         for value in values:

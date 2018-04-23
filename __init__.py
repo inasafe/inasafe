@@ -1,7 +1,6 @@
 # coding=utf-8
 """Plugin Initialization."""
 from __future__ import absolute_import
-from builtins import str
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"

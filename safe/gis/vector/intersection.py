@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Intersect two layers."""
-from builtins import next
+
 
 import logging
 

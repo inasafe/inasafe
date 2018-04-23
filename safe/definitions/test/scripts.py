@@ -1,5 +1,5 @@
 """Test script."""
-from __future__ import print_function
+
 
 from safe.definitions.test.test_fields import all_fields
 

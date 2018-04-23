@@ -1,6 +1,6 @@
 # coding=utf-8
 """Unit Test for Prepare Vector Layer."""
-from builtins import range
+
 
 import unittest
 from osgeo import gdal
@@ -234,20 +234,20 @@ class TestPrepareLayer(unittest.TestCase):
         layer = load_test_vector_layer(
             'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
         original_female_fields = [
-            u'F_0_4',
-            u'F_5_9',
-            u'F_9_15',
-            u'F_15_30',
-            u'F_30_60',
-            u'F_60_100'
+            'F_0_4',
+            'F_5_9',
+            'F_9_15',
+            'F_15_30',
+            'F_30_60',
+            'F_60_100'
         ]
         layer.keywords = {
-            u'layer_purpose': u'exposure',
-            u'exposure': u'population',
-            u'inasafe_fields': {
-                u'exposure_id_field': u'exposure_id',
-                u'population_count_field': u'population',
-                u'female_count_field': original_female_fields
+            'layer_purpose': 'exposure',
+            'exposure': 'population',
+            'inasafe_fields': {
+                'exposure_id_field': 'exposure_id',
+                'population_count_field': 'population',
+                'female_count_field': original_female_fields
             }
         }
         clean_inasafe_fields(layer)

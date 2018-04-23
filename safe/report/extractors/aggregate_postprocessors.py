@@ -274,7 +274,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         # minimum needs should provide unit for column headers
         units_label = []
         minimum_needs_items = {
-            'group_header': u'Minimum needs breakdown',
+            'group_header': 'Minimum needs breakdown',
             'fields': minimum_needs_fields + additional_minimum_needs
         }
 
@@ -306,7 +306,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         )
     else:
         sections_not_empty = True
-        for _, values in context['sections'].items():
+        for _, values in list(context['sections'].items()):
             for value in values:
                 if value.get('rows'):
                     break
@@ -464,15 +464,15 @@ def create_section_with_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = u'{name} [{unit}]'
+                header_format = '{name} [{unit}]'
             else:
-                header_format = u'{name}'
+                header_format = '{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = u'{name}'
+            header_format = '{name}'
             header = header_format.format(name=name)
 
         if type(postprocessor_fields) is dict:
@@ -670,15 +670,15 @@ def create_section_without_aggregation(
                 unit = output_field.get('unit').get('abbreviation')
 
             if unit:
-                header_format = u'{name} [{unit}]'
+                header_format = '{name} [{unit}]'
             else:
-                header_format = u'{name}'
+                header_format = '{name}'
 
             header = header_format.format(
                 name=name,
                 unit=unit)
         else:
-            header_format = u'{name}'
+            header_format = '{name}'
             header = header_format.format(name=name)
 
         row.append(header)

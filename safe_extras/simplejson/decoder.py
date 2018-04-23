@@ -269,7 +269,7 @@ def JSONArray(state, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
 
     return values, end
 
-class JSONDecoder(object):
+class JSONDecoder():
     """Simple JSON <http://json.org> decoder
 
     Performs the following translations in decoding by default:

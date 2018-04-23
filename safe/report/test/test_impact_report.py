@@ -99,7 +99,7 @@ class TestImpactReport(unittest.TestCase):
 
         with io.open(actual_path, encoding='utf-8') as actual_file:
             actual_string = actual_file.read().strip()
-            self.assertEquals(control_string, actual_string)
+            self.assertEqual(control_string, actual_string)
 
     def setUp(self):
         """Executed before test method."""
@@ -277,64 +277,64 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'general-report',
-            'header': u'General Report',
+            'header': 'General Report',
             'table_header': (
-                u'Estimated Number of structures affected per hazard zone'),
+                'Estimated Number of structures affected per hazard zone'),
             'summary': [
                 {
-                    'header_label': u'Hazard Zone',
+                    'header_label': 'Hazard Zone',
                     'rows': [
                         {
                             'numbers': ['4'],
-                            'name': u'High',
+                            'name': 'High',
                             'key': 'high'
                         },
                         {
                             'numbers': ['1'],
-                            'name': u'Medium',
+                            'name': 'Medium',
                             'key': 'medium'
                         },
                         {
                             'numbers': ['0'],
-                            'name': u'Low',
+                            'name': 'Low',
                             'key': 'low'
                         },
                         {
                             'numbers': ['5'],
-                            'name': u'Total Exposed',
+                            'name': 'Total Exposed',
                             'as_header': True,
                             'key': total_exposed_field['key']
                         }
                     ],
-                    'value_labels': [u'Count']
+                    'value_labels': ['Count']
                 },
                 {
-                    'header_label': u'Structures',
+                    'header_label': 'Structures',
                     'rows': [
                         {
                             'numbers': ['5'],
-                            'name': u'Affected',
+                            'name': 'Affected',
                             'key': total_affected_field['key']
                         },
                         {
                             'numbers': ['0'],
-                            'name': u'Not Affected',
+                            'name': 'Not Affected',
                             'key': total_not_affected_field['key']
                         },
                         {
                             'numbers': ['4'],
-                            'name': u'Not Exposed',
+                            'name': 'Not Exposed',
                             'key': total_not_exposed_field['key']
                         }
                     ],
-                    'value_labels': [u'Count']
+                    'value_labels': ['Count']
                 }
             ],
             'notes': [
-                u'Affected: An exposure element (e.g. people, roads, '
-                u'buildings, land cover) that experiences a hazard (e.g. '
-                u'tsunami, flood, earthquake) and endures consequences (e.g. '
-                u'damage, evacuation, displacement, death) due to that hazard.'
+                'Affected: An exposure element (e.g. people, roads, '
+                'buildings, land cover) that experiences a hazard (e.g. '
+                'tsunami, flood, earthquake) and endures consequences (e.g. '
+                'damage, evacuation, displacement, death) due to that hazard.'
             ]
         }
         actual_context = analysis_summary.context
@@ -349,7 +349,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
             'component_key': 'action-checklist',
-            'header': u'Action Checklist',
+            'header': 'Action Checklist',
             'items': [
                 {
                     'item_category': 'general',
@@ -385,14 +385,14 @@ class TestImpactReport(unittest.TestCase):
         # definitions. TS. I reduced the test fragments to snippets which
         # will hopefully make things a little less fragile.
         expected_context = {
-            u'impacts on roads, people, buildings',
-            u'overlapping the analysis extent',
-            u'more than 1,000 and less than 100,000',
-            u'cause discrepancies',
-            u'zones may not be consistent with future events',
-            u'terrain and infrastructure type',
-            u'analysis extent is limited',
-            u'Hazard and exposure data outside'
+            'impacts on roads, people, buildings',
+            'overlapping the analysis extent',
+            'more than 1,000 and less than 100,000',
+            'cause discrepancies',
+            'zones may not be consistent with future events',
+            'terrain and infrastructure type',
+            'analysis extent is limited',
+            'Hazard and exposure data outside'
         }
         actual_context = notes_assumptions.context
         for expected_item in expected_context:
@@ -516,61 +516,61 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'analysis-detail',
-            'header': u'Analysis Detail',
+            'header': 'Analysis Detail',
             'notes': [],
-            'group_border_color': u'#36454f',
+            'group_border_color': '#36454f',
             'extra_table': {},
             'detail_header': {
                 'total_header_index': 5,
                 'breakdown_header_index': 0,
                 'header_hazard_group': {
                     'not_affected': {
-                        'header': u'Not affected',
+                        'header': 'Not affected',
                         'hazards': [
-                            u'Low'],
-                        'total': [u'Total Not Affected'],
+                            'Low'],
+                        'total': ['Total Not Affected'],
                         'start_index': 4
                     },
                     'affected': {
-                        'header': u'Affected',
+                        'header': 'Affected',
                         'hazards': [
-                            u'High',
-                            u'Medium'],
-                        'total': [u'Total Affected'],
+                            'High',
+                            'Medium'],
+                        'total': ['Total Affected'],
                         'start_index': 1
                     }
                 }
             },
             'detail_table': {
-                'table_header': u'Estimated Number of structures affected by '
-                                u'Structure type',
+                'table_header': 'Estimated Number of structures affected by '
+                                'Structure type',
                 'headers': [
-                    u'Structure type',
+                    'Structure type',
                     {
                         'start': True, 'colspan': 3,
-                        'name': u'High',
+                        'name': 'High',
                         'header_group': 'affected'
                     },
                     {
                         'start': False,
-                        'name': u'Medium',
+                        'name': 'Medium',
                         'header_group': 'affected'
                     },
                     {
                         'start': False,
-                        'name': u'Total Affected',
+                        'name': 'Total Affected',
                         'header_group': 'affected'
                     },
                     {
                         'start': True, 'colspan': 1,
-                        'name': u'Total Not Affected',
+                        'name': 'Total Not Affected',
                         'header_group': 'not_affected'
                     },
-                    u'Total Not Exposed', u'Total'
+                    'Total Not Exposed', 'Total'
                 ],
                 'details': [
                     [
-                        u'Education',
+                        'Education',
                         {
                             'value': '2',
                             'header_group': 'affected'
@@ -590,7 +590,7 @@ class TestImpactReport(unittest.TestCase):
                         '3', '5'
                     ],
                     [
-                        u'Health',
+                        'Health',
                         {
                             'value': '1',
                             'header_group': 'affected'
@@ -610,7 +610,7 @@ class TestImpactReport(unittest.TestCase):
                         '0', '1'
                     ],
                     [
-                        u'Government',
+                        'Government',
                         {
                             'value': '0',
                             'header_group': 'affected'
@@ -630,7 +630,7 @@ class TestImpactReport(unittest.TestCase):
                         '0', '1'
                     ],
                     [
-                        u'Commercial',
+                        'Commercial',
                         {
                             'value': '1',
                             'header_group': 'affected'
@@ -650,7 +650,7 @@ class TestImpactReport(unittest.TestCase):
                         '0', '1'
                     ],
                     [
-                        u'Other',
+                        'Other',
                         {
                             'value': '0',
                             'header_group': 'affected'
@@ -671,7 +671,7 @@ class TestImpactReport(unittest.TestCase):
                     ],
                 ],
                 'footers': [
-                    u'Total', {
+                    'Total', {
                         'value': '4',
                         'header_group': 'affected'
                     },
@@ -704,40 +704,40 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'aggregation-result',
-            'header': u'Aggregation Result',
+            'header': 'Aggregation Result',
             'notes': [],
             'aggregation_result': {
-                'table_header': u'Estimated Number of structures affected by '
-                                u'aggregation area',
-                'header_label': u'Aggregation area',
+                'table_header': 'Estimated Number of structures affected by '
+                                'aggregation area',
+                'header_label': 'Aggregation area',
                 'rows': [
                     {
                         'type_values': ['1', '0', '0', '1', '1'],
                         'total': '3',
-                        'name': u'area 1'
+                        'name': 'area 1'
                     },
                     {
                         'type_values': ['0', '0', '1', '0', '0'],
                         'total': '1',
-                        'name': u'area 2'
+                        'name': 'area 2'
                     },
                     {
                         'type_values': ['1', '1', '0', '0', '0'],
                         'total': '2',
-                        'name': u'area 3'
+                        'name': 'area 3'
                     }
                 ],
                 'type_header_labels': [
-                    u'Education',
-                    u'Health',
-                    u'Government',
-                    u'Commercial',
-                    u'Other',
+                    'Education',
+                    'Health',
+                    'Government',
+                    'Commercial',
+                    'Other',
                 ],
                 'type_total_values': ['2', '1', '1', '1', '1'],
-                'total_label': u'Total',
+                'total_label': 'Total',
                 'total_all': '6',
-                'total_in_aggregation_area_label': u'Total'
+                'total_in_aggregation_area_label': 'Total'
             }
         }
         actual_context = aggregate_result.context
@@ -787,29 +787,29 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'analysis-provenance-details-simplified',
-            'header': u'Analysis details',
+            'header': 'Analysis details',
             'details': OrderedDict(
                 [
                     ('hazard', {
-                        'header': u'Hazard source',
-                        'provenance': u'classified_vector - '
-                                      u'InaSAFE v4 GeoJSON test layer - '}),
+                        'header': 'Hazard source',
+                        'provenance': 'classified_vector - '
+                                      'InaSAFE v4 GeoJSON test layer - '}),
                     ('exposure', {
                         'header':
-                            u'Exposure '
-                            u'source',
+                            'Exposure '
+                            'source',
                         'provenance':
-                            u'building-points - '
-                            u'InaSAFE v4 GeoJSON test layer - '}),
+                            'building-points - '
+                            'InaSAFE v4 GeoJSON test layer - '}),
                     ('aggregation', {
-                        'header': u'Aggregation source',
-                        'provenance': u'small grid - '
-                                      u'InaSAFE v4 GeoJSON test layer - '}),
+                        'header': 'Aggregation source',
+                        'provenance': 'small grid - '
+                                      'InaSAFE v4 GeoJSON test layer - '}),
                     ('impact_function', {
-                        'header': u'Impact Function',
-                        'provenance': u'Generic Hazard '
-                                      u'Polygon On '
-                                      u'Structures Point'})
+                        'header': 'Impact Function',
+                        'provenance': 'Generic Hazard '
+                                      'Polygon On '
+                                      'Structures Point'})
                 ])
         }
 
@@ -860,206 +860,206 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'analysis-provenance-details',
-            'header': u'Analysis details',
+            'header': 'Analysis details',
             'details': OrderedDict([('impact_function', {
-                'header': u'Impact Function',
-                'provenances': u'Generic Hazard Polygon On Structures Point'
+                'header': 'Impact Function',
+                'provenances': 'Generic Hazard Polygon On Structures Point'
             }), ('hazard', {
-                'header': u'Hazard',
+                'header': 'Hazard',
                 'provenances': OrderedDict([('title', {
-                    'content': u'classified_vector',
+                    'content': 'classified_vector',
                     'header': 'Title '
                 }), ('source', {
-                    'content': u'InaSAFE v4 GeoJSON test layer',
+                    'content': 'InaSAFE v4 GeoJSON test layer',
                     'header': 'Source '
                 }), ('layer_purpose', {
-                    'content': u'hazard',
+                    'content': 'hazard',
                     'header': 'Layer Purpose '
                 }), ('layer_geometry', {
-                    'content': u'polygon',
+                    'content': 'polygon',
                     'header': 'Layer Geometry '
                 }), ('hazard', {
-                    'content': u'hazard_generic',
+                    'content': 'hazard_generic',
                     'header': 'Hazard '
                 }), ('hazard_category', {
-                    'content': u'single_event',
+                    'content': 'single_event',
                     'header': 'Hazard Category '
                 }), ('value_maps', {
                     'content':
-                        u'<table class="table table-condensed table-striped">'
-                        u'\n'
-                        u'<tbody>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Exposure</strong></td>\n'
-                        u'<td colspan=1>Structures</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Classification</strong></td>\n'
-                        u'<td colspan=1>Generic classes</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1>Class name</td>\n'
-                        u'<td colspan=1>Values</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1>Low</td>\n'
-                        u'<td colspan=1>low</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1>Medium</td>\n'
-                        u'<td colspan=1>medium</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1>High</td>\n'
-                        u'<td colspan=1>high</td>\n'
-                        u'</tr>\n'
-                        u'</tbody>\n'
-                        u'</table>\n',
+                        '<table class="table table-condensed table-striped">'
+                        '\n'
+                        '<tbody>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Exposure</strong></td>\n'
+                        '<td colspan=1>Structures</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Classification</strong></td>\n'
+                        '<td colspan=1>Generic classes</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1>Class name</td>\n'
+                        '<td colspan=1>Values</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1>Low</td>\n'
+                        '<td colspan=1>low</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1>Medium</td>\n'
+                        '<td colspan=1>medium</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1>High</td>\n'
+                        '<td colspan=1>high</td>\n'
+                        '</tr>\n'
+                        '</tbody>\n'
+                        '</table>\n',
                     'header': 'Value Map '
                 }), ('inasafe_fields', {
                     'content':
-                        u'<table class="table table-condensed">\n'
-                        u'<tbody>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Hazard ID</strong></td>\n'
-                        u'<td colspan=1>hazard_id</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Hazard Value</strong>'
-                        u'</td>\n<td colspan=1>hazard_value</td>\n'
-                        u'</tr>\n'
-                        u'</tbody>\n'
-                        u'</table>\n',
+                        '<table class="table table-condensed">\n'
+                        '<tbody>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Hazard ID</strong></td>\n'
+                        '<td colspan=1>hazard_id</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Hazard Value</strong>'
+                        '</td>\n<td colspan=1>hazard_value</td>\n'
+                        '</tr>\n'
+                        '</tbody>\n'
+                        '</table>\n',
                     'header': 'InaSAFE Fields '
                 }), ('layer_mode', {
-                    'content': u'classified',
+                    'content': 'classified',
                     'header': 'Layer Mode '
                 }), ('hazard_layer', {
                     'content': hazard_layer.source(),
                     'header': 'Hazard Layer '
                 }), ('keyword_version', {
-                    'content': u'4.0',
+                    'content': '4.0',
                     'header': 'Keyword Version '
                 })])
             }), ('exposure', {
-                'header': u'Exposure',
+                'header': 'Exposure',
                 'provenances': OrderedDict([('title', {
-                    'content': u'building-points',
+                    'content': 'building-points',
                     'header': 'Title '
                 }), ('source', {
-                    'content': u'InaSAFE v4 GeoJSON test layer',
+                    'content': 'InaSAFE v4 GeoJSON test layer',
                     'header': 'Source '
                 }), ('layer_purpose', {
-                    'content': u'exposure',
+                    'content': 'exposure',
                     'header': 'Layer Purpose '
                 }), ('layer_geometry', {
-                    'content': u'point',
+                    'content': 'point',
                     'header': 'Layer Geometry '
                 }), ('exposure', {
-                    'content': u'structure',
+                    'content': 'structure',
                     'header': 'Exposure '
                 }), ('value_map', {
                     'content':
-                        u'<table class="table table-condensed">\n'
-                        u'<tbody>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Commercial</strong></td>\n'
-                        u'<td colspan=1>shop</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Education</strong></td>\n'
-                        u'<td colspan=1>school</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Government</strong></td>\n'
-                        u'<td colspan=1>ministry</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Health</strong></td>\n'
-                        u'<td colspan=1>hospital</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Residential</strong></td>\n'
-                        u'<td colspan=1>house</td>\n'
-                        u'</tr>\n'
-                        u'</tbody>\n'
-                        u'</table>\n',
+                        '<table class="table table-condensed">\n'
+                        '<tbody>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Commercial</strong></td>\n'
+                        '<td colspan=1>shop</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Education</strong></td>\n'
+                        '<td colspan=1>school</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Government</strong></td>\n'
+                        '<td colspan=1>ministry</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Health</strong></td>\n'
+                        '<td colspan=1>hospital</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Residential</strong></td>\n'
+                        '<td colspan=1>house</td>\n'
+                        '</tr>\n'
+                        '</tbody>\n'
+                        '</table>\n',
                     'header': 'Value Map '
                 }), ('inasafe_fields', {
-                    'content': u'<table class="table table-condensed">\n'
-                               u'<tbody>\n<tr>\n<td colspan=1><strong>'
-                               u'Exposure ID</strong></td>\n<td colspan=1>'
-                               u'exposure_id</td>\n</tr>\n<tr>\n<td colspan=1>'
-                               u'<strong>Exposure Type</strong></td>\n'
-                               u'<td colspan=1>exposure_type</td>\n</tr>\n'
-                               u'</tbody>\n</table>\n',
+                    'content': '<table class="table table-condensed">\n'
+                               '<tbody>\n<tr>\n<td colspan=1><strong>'
+                               'Exposure ID</strong></td>\n<td colspan=1>'
+                               'exposure_id</td>\n</tr>\n<tr>\n<td colspan=1>'
+                               '<strong>Exposure Type</strong></td>\n'
+                               '<td colspan=1>exposure_type</td>\n</tr>\n'
+                               '</tbody>\n</table>\n',
                     'header': 'InaSAFE Fields '
                 }), ('layer_mode', {
-                    'content': u'classified',
+                    'content': 'classified',
                     'header': 'Layer Mode '
                 }), ('exposure_layer', {
                     'content': exposure_layer.source(),
                     'header': 'Exposure Layer '
                 }), ('classification', {
-                    'content': u'generic_structure_classes',
+                    'content': 'generic_structure_classes',
                     'header': 'Classification '
                 }), ('keyword_version', {
-                    'content': u'4.0',
+                    'content': '4.0',
                     'header': 'Keyword Version '
                 })])
             }), ('aggregation', {
-                'header': u'Aggregation',
+                'header': 'Aggregation',
                 'provenances': OrderedDict([('title', {
-                    'content': u'small grid',
+                    'content': 'small grid',
                     'header': 'Title '
                 }), ('source', {
-                    'content': u'InaSAFE v4 GeoJSON test layer',
+                    'content': 'InaSAFE v4 GeoJSON test layer',
                     'header': 'Source '
                 }), ('layer_purpose', {
-                    'content': u'aggregation',
+                    'content': 'aggregation',
                     'header': 'Layer Purpose '
                 }), ('layer_geometry', {
-                    'content': u'polygon',
+                    'content': 'polygon',
                     'header': 'Layer Geometry '
                 }), ('inasafe_fields', {
                     'content':
-                        u'<table class="table table-condensed">\n'
-                        u'<tbody>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Aggregation ID</strong></td>\n'
-                        u'<td colspan=1>area_id</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Aggregation Name</strong>'
-                        u'</td>\n'
-                        u'<td colspan=1>area_name</td>\n'
-                        u'</tr>\n'
-                        u'<tr>\n'
-                        u'<td colspan=1><strong>Female Ratio</strong>'
-                        u'</td>\n'
-                        u'<td colspan=1>ratio_female</td>\n'
-                        u'</tr>\n'
-                        u'</tbody>\n'
-                        u'</table>\n',
+                        '<table class="table table-condensed">\n'
+                        '<tbody>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Aggregation ID</strong></td>\n'
+                        '<td colspan=1>area_id</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Aggregation Name</strong>'
+                        '</td>\n'
+                        '<td colspan=1>area_name</td>\n'
+                        '</tr>\n'
+                        '<tr>\n'
+                        '<td colspan=1><strong>Female Ratio</strong>'
+                        '</td>\n'
+                        '<td colspan=1>ratio_female</td>\n'
+                        '</tr>\n'
+                        '</tbody>\n'
+                        '</table>\n',
                     'header': 'InaSAFE Fields '
                 }), ('inasafe_default_values', {
-                    'content': u'<table class="table table-condensed">\n'
-                               u'<tbody>\n<tr>\n<td colspan=1><strong>'
-                               u'Lactating Ratio</strong></td>\n'
-                               u'<td colspan=1>0.03</td>\n</tr>\n<tr>\n'
-                               u'<td colspan=1><strong>Pregnant Ratio</strong>'
-                               u'</td>\n<td colspan=1>0.02</td>\n</tr>\n'
-                               u'</tbody>\n</table>\n',
+                    'content': '<table class="table table-condensed">\n'
+                               '<tbody>\n<tr>\n<td colspan=1><strong>'
+                               'Lactating Ratio</strong></td>\n'
+                               '<td colspan=1>0.03</td>\n</tr>\n<tr>\n'
+                               '<td colspan=1><strong>Pregnant Ratio</strong>'
+                               '</td>\n<td colspan=1>0.02</td>\n</tr>\n'
+                               '</tbody>\n</table>\n',
                     'header': 'InaSAFE Default Values '
                 }), ('aggregation_layer', {
                     'content': aggregation_layer.source(),
                     'header': 'Aggregation Layer '
                 }), ('keyword_version', {
-                    'content': u'4.1',
+                    'content': '4.1',
                     'header': 'Keyword Version '
                 })])
             }), ('analysis_environment', {
-                'header': u'Analysis Environment',
+                'header': 'Analysis Environment',
                 'provenances': OrderedDict([('os', {
                     'content': readable_os_version(),
                     'header': 'OS '
@@ -1144,44 +1144,44 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'minimum-needs',
-            'header': u'Minimum needs', 'needs': [
+            'header': 'Minimum needs', 'needs': [
                 {
-                    'header': u'Relief items to be provided single',
+                    'header': 'Relief items to be provided single',
                     'needs': [
                         {
-                            'header': u'Toilets',
+                            'header': 'Toilets',
                             'value': '0'
                         }],
-                    'total_header': u'Total'
+                    'total_header': 'Total'
                 },
                 {
-                    'header': u'Relief items to be provided weekly',
+                    'header': 'Relief items to be provided weekly',
                     'needs': [
                         {
-                            'header': u'Rice [kg]',
+                            'header': 'Rice [kg]',
                             'value': '60'
                         },
                         {
-                            'header': u'Drinking Water [l]',
+                            'header': 'Drinking Water [l]',
                             'value': '340'
                         },
                         {
-                            'header': u'Clean Water [l]',
+                            'header': 'Clean Water [l]',
                             'value': '1,300'
                         },
                         {
-                            'header': u'Family Kits',
+                            'header': 'Family Kits',
                             'value': '10'
                         },
                         {
-                            'header': u'Hygiene Packs',
+                            'header': 'Hygiene Packs',
                             'value': '10'
                         },
                         {
-                            'header': u'Additional Rice [kg]',
+                            'header': 'Additional Rice [kg]',
                             'value': '10'
                         }],
-                    'total_header': u'Total'
+                    'total_header': 'Total'
                 }
             ]
         }
@@ -1280,44 +1280,44 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'component_key': 'minimum-needs',
-            'header': u'Minimum needs', 'needs': [
+            'header': 'Minimum needs', 'needs': [
                 {
-                    'header': u'Relief items to be provided single',
+                    'header': 'Relief items to be provided single',
                     'needs': [
                         {
-                            'header': u'Toilets',
+                            'header': 'Toilets',
                             'value': '0'
                         }],
-                    'total_header': u'Total'
+                    'total_header': 'Total'
                 },
                 {
-                    'header': u'Relief items to be provided weekly',
+                    'header': 'Relief items to be provided weekly',
                     'needs': [
                         {
-                            'header': u'Rice [kg]',
+                            'header': 'Rice [kg]',
                             'value': '40'
                         },
                         {
-                            'header': u'Drinking Water [l]',
+                            'header': 'Drinking Water [l]',
                             'value': '260'
                         },
                         {
-                            'header': u'Clean Water [l]',
+                            'header': 'Clean Water [l]',
                             'value': '970'
                         },
                         {
-                            'header': u'Family Kits',
+                            'header': 'Family Kits',
                             'value': '10'
                         },
                         {
-                            'header': u'Hygiene Packs',
+                            'header': 'Hygiene Packs',
                             'value': '10'
                         },
                         {
-                            'header': u'Additional Rice [kg]',
+                            'header': 'Additional Rice [kg]',
                             'value': '10'
                         }],
-                    'total_header': u'Total'
+                    'total_header': 'Total'
                 }
             ]
         }
@@ -1475,46 +1475,46 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'aggregation_result': {
-                'table_header': u'Estimated Number of structures affected by '
-                                u'aggregation area',
-                'header_label': u'Aggregation area',
+                'table_header': 'Estimated Number of structures affected by '
+                                'aggregation area',
+                'header_label': 'Aggregation area',
                 'rows': [
                     {
                         'type_values': ['0', '1', '0', '1', '3', '0'],
                         'total': '5',
-                        'name': u'B'
+                        'name': 'B'
                     },
                     {
                         'type_values': ['2', '0', '0', '0', '0', '0'],
                         'total': '2',
-                        'name': u'C'
+                        'name': 'C'
                     },
                     {
                         'type_values': ['6', '1', '0', '3', '1', '0'],
                         'total': '11',
-                        'name': u'F'
+                        'name': 'F'
                     },
                     {
                         'type_values': ['13', '0', '1', '0', '0', '1'],
                         'total': '15',
-                        'name': u'G'
+                        'name': 'G'
                     }
                 ],
                 'type_header_labels': [
-                    u'Residential',
-                    u'Education',
-                    u'Health',
-                    u'Place of worship',
-                    u'Government',
-                    u'Commercial',
+                    'Residential',
+                    'Education',
+                    'Health',
+                    'Place of worship',
+                    'Government',
+                    'Commercial',
                 ],
-                'total_in_aggregation_area_label': u'Total',
-                'total_label': u'Total',
+                'total_in_aggregation_area_label': 'Total',
+                'total_label': 'Total',
                 'total_all': '33',
                 'type_total_values': ['21', '2', '1', '4', '4', '1']
             },
             'component_key': 'aggregation-result',
-            'header': u'Aggregation Result',
+            'header': 'Aggregation Result',
             'notes': []
         }
 
@@ -1576,136 +1576,136 @@ class TestImpactReport(unittest.TestCase):
         actual_context = aggregation_postprocessors.context
         expected_context = {
             'component_key': 'aggregation-postprocessors',
-            'header': u'Detailed demographic breakdown',
+            'header': 'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Age per aggregation area',
+                        'header': 'Estimated number of people displaced by '
+                                  'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [[u'B', '2,600', '640', '1,700', '230'],
-                                 [u'C', '6,500', '1,700', '4,300', '590'],
-                                 [u'F', '7,200', '1,800', '4,700', '640'],
-                                 [u'G', '9,500', '2,400', '6,300', '850']],
-                        'columns': [u'Aggregation area',
-                                    u'Total Displaced Population',
+                        'rows': [['B', '2,600', '640', '1,700', '230'],
+                                 ['C', '6,500', '1,700', '4,300', '590'],
+                                 ['F', '7,200', '1,800', '4,700', '640'],
+                                 ['G', '9,500', '2,400', '6,300', '850']],
+                        'columns': ['Aggregation area',
+                                    'Total Displaced Population',
                                     {
                                         'start_group_header': True,
-                                        'name': u'Youth',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Youth',
+                                        'group_header': 'Age breakdown'
                                     },
                                     {
                                         'start_group_header': False,
-                                        'name': u'Adult',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Adult',
+                                        'group_header': 'Age breakdown'
                                     },
                                     {
                                         'start_group_header': False,
-                                        'name': u'Elderly',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Elderly',
+                                        'group_header': 'Age breakdown'
                                     }],
                         'group_header_colspan': 3,
                         'totals': [
-                            u'Total', '25,600', '6,400', '16,900', '2,400']
+                            'Total', '25,600', '6,400', '16,900', '2,400']
                     }
                 ]),
                 ('gender', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Gender per aggregation area',
+                        'header': 'Estimated number of people displaced by '
+                                  'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
                         'rows': [
-                            [u'B', '2,600', '1,300'],
-                            [u'C', '6,500', '3,300'],
-                            [u'F', '7,200', '3,600'],
-                            [u'G', '9,500', '4,800']],
+                            ['B', '2,600', '1,300'],
+                            ['C', '6,500', '3,300'],
+                            ['F', '7,200', '3,600'],
+                            ['G', '9,500', '4,800']],
                         'columns': [
-                            u'Aggregation area',
-                            u'Total Displaced Population',
+                            'Aggregation area',
+                            'Total Displaced Population',
                             {
                                 'start_group_header': True,
-                                'name': u'Female',
-                                'group_header': u'Gender breakdown'
+                                'name': 'Female',
+                                'group_header': 'Gender breakdown'
                             }],
                         'group_header_colspan': 1,
                         'totals': [
-                            u'Total', '25,600', '12,800']
+                            'Total', '25,600', '12,800']
                     }
                 ]),
                 ('vulnerability', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Age Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Age Vulnerability per aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Gender Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Gender Vulnerability per aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Disability Vulnerability per '
-                                  u'aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Disability Vulnerability per '
+                                  'aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     }
                 ]),
                 ('minimum_needs', [
                     {
-                        'header': u'Estimated number of minimum needs '
-                                  u'per week',
+                        'header': 'Estimated number of minimum needs '
+                                  'per week',
                         'notes': [],
                         'rows': [
-                            [u'B', '2,600', '7,200', '44,400', '170,000',
+                            ['B', '2,600', '7,200', '44,400', '170,000',
                              '510', '130', '1,100'],
-                            [u'C', '6,500', '18,200', '114,000', '434,000',
+                            ['C', '6,500', '18,200', '114,000', '434,000',
                              '1,300', '330', '2,600'],
-                            [u'F', '7,200', '20,000', '125,000', '477,000',
+                            ['F', '7,200', '20,000', '125,000', '477,000',
                              '1,500', '360', '2,900'],
-                            [u'G', '9,500', '26,500', '166,000', '634,000',
+                            ['G', '9,500', '26,500', '166,000', '634,000',
                              '1,900', '480', '3,800']],
                         'columns': [
-                            u'Aggregation area',
-                            u'Total Displaced Population',
+                            'Aggregation area',
+                            'Total Displaced Population',
                             {
                                 'start_group_header': True,
-                                'name': u'Rice [kg]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Rice [kg]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Drinking Water [l]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Drinking Water [l]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Clean Water [l]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Clean Water [l]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Family Kits',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Family Kits',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Toilets',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Toilets',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Hygiene Packs',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Hygiene Packs',
+                                'group_header': 'Minimum needs breakdown'
                             }],
                         'group_header_colspan': 6,
                         'totals': [
-                            u'Total',
+                            'Total',
                             '25,600',
                             '71,700',
                             '448,000',
@@ -1776,132 +1776,132 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
             'component_key': 'aggregation-postprocessors',
-            'header': u'Detailed demographic breakdown',
+            'header': 'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Age per aggregation area',
+                        'header': 'Estimated number of people displaced by '
+                                  'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [[u'B', '10', '0', '0', '0'],
-                                 [u'C', '10', '10', '10', '0'],
-                                 [u'F', '10', '0', '10', '0'],
-                                 [u'G', '10', '10', '10', '0'],
-                                 [u'K', '10', '0', '10', '0']],
-                        'columns': [u'Aggregation area',
-                                    u'Total Displaced Population',
+                        'rows': [['B', '10', '0', '0', '0'],
+                                 ['C', '10', '10', '10', '0'],
+                                 ['F', '10', '0', '10', '0'],
+                                 ['G', '10', '10', '10', '0'],
+                                 ['K', '10', '0', '10', '0']],
+                        'columns': ['Aggregation area',
+                                    'Total Displaced Population',
                                     {
                                         'start_group_header': True,
-                                        'name': u'Youth',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Youth',
+                                        'group_header': 'Age breakdown'
                                     },
                                     {
                                         'start_group_header': False,
-                                        'name': u'Adult',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Adult',
+                                        'group_header': 'Age breakdown'
                                     },
                                     {
                                         'start_group_header': False,
-                                        'name': u'Elderly',
-                                        'group_header': u'Age breakdown'
+                                        'name': 'Elderly',
+                                        'group_header': 'Age breakdown'
                                     }],
                         'group_header_colspan': 3,
-                        'totals': [u'Total', '20', '10', '20', '10']
+                        'totals': ['Total', '20', '10', '20', '10']
                     }
                 ]),
                 ('gender', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Gender per aggregation area',
+                        'header': 'Estimated number of people displaced by '
+                                  'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
-                        'rows': [[u'B', '10', '0'],
-                                 [u'C', '10', '10'],
-                                 [u'F', '10', '10'],
-                                 [u'G', '10', '10'],
-                                 [u'K', '10', '0']],
+                        'rows': [['B', '10', '0'],
+                                 ['C', '10', '10'],
+                                 ['F', '10', '10'],
+                                 ['G', '10', '10'],
+                                 ['K', '10', '0']],
                         'columns': [
-                            u'Aggregation area',
-                            u'Total Displaced Population',
+                            'Aggregation area',
+                            'Total Displaced Population',
                             {
                                 'start_group_header': True,
-                                'name': u'Female',
-                                'group_header': u'Gender breakdown'
+                                'name': 'Female',
+                                'group_header': 'Gender breakdown'
                             }],
                         'group_header_colspan': 1,
-                        'totals': [u'Total', '20', '10']
+                        'totals': ['Total', '20', '10']
                     }
                 ]),
                 ('vulnerability', [
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Age Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Age Vulnerability per aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Gender Vulnerability per aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Gender Vulnerability per aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     },
                     {
-                        'header': u'Estimated number of people displaced by '
-                                  u'Disability Vulnerability per '
-                                  u'aggregation area',
-                        'message': u'Vulnerability ratio is not found. '
-                                   u'No calculations produced.',
+                        'header': 'Estimated number of people displaced by '
+                                  'Disability Vulnerability per '
+                                  'aggregation area',
+                        'message': 'Vulnerability ratio is not found. '
+                                   'No calculations produced.',
                         'empty': True
                     }
                 ]),
                 ('minimum_needs', [
                     {
-                        'header': u'Estimated number of minimum needs '
-                                  u'per week',
+                        'header': 'Estimated number of minimum needs '
+                                  'per week',
                         'notes': [],
                         'rows': [
-                            [u'B', '10', '10', '20', '80', '0', '0', '0'],
-                            [u'C', '10', '20', '90', '340', '0', '0', '10'],
-                            [u'F', '10', '10', '70', '260', '0', '0', '10'],
-                            [u'G', '10', '20', '110', '410', '10', '0', '10'],
-                            [u'K', '10', '10', '40', '130', '0', '0', '0']],
+                            ['B', '10', '10', '20', '80', '0', '0', '0'],
+                            ['C', '10', '20', '90', '340', '0', '0', '10'],
+                            ['F', '10', '10', '70', '260', '0', '0', '10'],
+                            ['G', '10', '20', '110', '410', '10', '0', '10'],
+                            ['K', '10', '10', '40', '130', '0', '0', '0']],
                         'columns': [
-                            u'Aggregation area',
-                            u'Total Displaced Population',
+                            'Aggregation area',
+                            'Total Displaced Population',
                             {
                                 'start_group_header': True,
-                                'name': u'Rice [kg]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Rice [kg]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Drinking Water [l]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Drinking Water [l]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Clean Water [l]',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Clean Water [l]',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Family Kits',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Family Kits',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Toilets',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Toilets',
+                                'group_header': 'Minimum needs breakdown'
                             },
                             {
                                 'start_group_header': False,
-                                'name': u'Hygiene Packs',
-                                'group_header': u'Minimum needs breakdown'
+                                'name': 'Hygiene Packs',
+                                'group_header': 'Minimum needs breakdown'
                             }],
                         'group_header_colspan': 6,
                         'totals': [
-                            u'Total',
+                            'Total',
                             '20',
                             '60',
                             '350',
@@ -1971,8 +1971,8 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'data': [30, 40],
             'total_value': 70,
-            'labels': [u'Wet', u'Total Not Affected'],
-            'colors': [u'#f03b20', u'#1a9641'],
+            'labels': ['Wet', 'Total Not Affected'],
+            'colors': ['#f03b20', '#1a9641'],
         }
 
         donut_context = population_infographic['sections'][
@@ -2026,16 +2026,16 @@ class TestImpactReport(unittest.TestCase):
 
         # Check vulnerabilities section
         expected_context = {
-            'header': u'Vulnerability',
-            'small_header': u'from 20 displaced',
+            'header': 'Vulnerability',
+            'small_header': 'from 20 displaced',
             'items': [
                 {
                     'bootstrap_column': 'col-xs-3',
                     'element_column': 'col-xs-12',
-                    'group_header': u'Gender group',
+                    'group_header': 'Gender group',
                     'items': [
                         {
-                            'header': u'Female',
+                            'header': 'Female',
                             'header_note': None,
                             'number': '10',
                             'percentage': '47.4',
@@ -2045,22 +2045,22 @@ class TestImpactReport(unittest.TestCase):
                 {
                     'bootstrap_column': 'col-xs-9',
                     'element_column': 'col-xs-4',
-                    'group_header': u'Age group',
+                    'group_header': 'Age group',
                     'items': [
                         {
-                            'header': u'Youth',
+                            'header': 'Youth',
                             'header_note': None,
                             'number': '10',
                             'percentage': '21.1',
                         },
                         {
-                            'header': u'Adult',
+                            'header': 'Adult',
                             'header_note': None,
                             'number': '20',
                             'percentage': '68.4',
                         },
                         {
-                            'header': u'Elderly',
+                            'header': 'Elderly',
                             'header_note': None,
                             'number': '10',
                             'percentage': '5.3',
@@ -2097,29 +2097,29 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'items': [
                 {
-                    'header': u'Rice',
+                    'header': 'Rice',
                     'number': '60',
-                    'unit': u'kg/weekly',
+                    'unit': 'kg/weekly',
                 },
                 {
-                    'header': u'Drinking Water',
+                    'header': 'Drinking Water',
                     'number': '350',
-                    'unit': u'l/weekly',
+                    'unit': 'l/weekly',
                 },
                 {
-                    'header': u'Clean Water',
+                    'header': 'Clean Water',
                     'number': '1,400',
-                    'unit': u'l/weekly',
+                    'unit': 'l/weekly',
                 },
                 {
-                    'header': u'Family Kits',
+                    'header': 'Family Kits',
                     'number': '10',
-                    'unit': u'units',
+                    'unit': 'units',
                 },
                 {
                     'header': 'Toilets',
                     'number': '0',
-                    'unit': u'units',
+                    'unit': 'units',
                 },
             ]
         }
@@ -2222,13 +2222,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -2263,13 +2263,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -2308,13 +2308,13 @@ class TestImpactReport(unittest.TestCase):
             'inasafe-map-report-portrait')
 
         # for now, test that output exists
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         output_path = impact_report.component_absolute_output_path(
             'inasafe-map-report-landscape')
 
-        for path in output_path.values():
+        for path in list(output_path.values()):
             self.assertTrue(os.path.exists(path), msg=path)
 
         shutil.rmtree(output_folder, ignore_errors=True)
@@ -2352,17 +2352,17 @@ class TestImpactReport(unittest.TestCase):
                 report_metadata_file.read())
 
         expected_report_urls_metadata = {
-            u'pdf_product_tag': {},
-            u'html_product_tag': {
-                u'impact-report': os.path.join(
+            'pdf_product_tag': {},
+            'html_product_tag': {
+                'impact-report': os.path.join(
                     output_folder, 'impact-report-output.html'),
-                u'action-checklist-report': os.path.join(
+                'action-checklist-report': os.path.join(
                     output_folder, 'action-checklist-output.html'),
-                u'analysis-provenance-details-report': os.path.join(
+                'analysis-provenance-details-report': os.path.join(
                     output_folder,
                     'analysis-provenance-details-report-output.html')
             },
-            u'qpt_product_tag': {}
+            'qpt_product_tag': {}
         }
 
         self.assertDictEqual(

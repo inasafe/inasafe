@@ -26,14 +26,14 @@ class UnicodeTest(unittest.TestCase):
     def test_get_unicode(self):
         """Test get_unicode function."""
         text = 'Test á, é, í, ó, ú, ü, ñ, ¿'
-        unicode_repr = u'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
+        unicode_repr = 'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
         message = 'It should return %s, but it returned %s' % (
             get_unicode(text), unicode_repr)
         self.assertEqual(get_unicode(text), unicode_repr, message)
 
     def test_get_string(self):
         """Test get_string function."""
-        unicode_text = u'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
+        unicode_text = 'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
         string_repr = 'Test \xc3\xa1, \xc3\xa9, \xc3\xad, \xc3\xb3, ' \
                       '\xc3\xba, \xc3\xbc, \xc3\xb1, \xc2\xbf'
         message = 'It should return %s, but it returned %s' % (

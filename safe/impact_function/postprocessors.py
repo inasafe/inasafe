@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Postprocessors."""
-from builtins import str
+
 
 # noinspection PyUnresolvedReferences
 from qgis.PyQt.QtCore import QPyNullVariant

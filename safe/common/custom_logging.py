@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from __future__ import print_function
+
 import logging
 import os
 import socket

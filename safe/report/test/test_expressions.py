@@ -121,11 +121,11 @@ class TestExpressions(unittest.TestCase):
         """
 
         # legend_title_header_element
-        expected_result = u'Legend'
+        expected_result = 'Legend'
         self.evaluate(legend_title_header_element, expected_result)
 
         # disclaimer_title_header_element
-        expected_result = u'Disclaimer'
+        expected_result = 'Disclaimer'
         self.evaluate(disclaimer_title_header_element, expected_result)
 
         # disclaimer_text_element

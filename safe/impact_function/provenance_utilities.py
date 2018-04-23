@@ -29,17 +29,17 @@ def get_map_title(hazard, exposure, hazard_category):
     :rtype: str
     """
     if hazard == hazard_generic:
-        map_title = tr(u'{exposure_name} affected').format(
+        map_title = tr('{exposure_name} affected').format(
             exposure_name=exposure['name'])
     else:
         if hazard_category == hazard_category_single_event:
             map_title = tr(
-                u'{exposure_name} affected by {hazard_name} event').format(
+                '{exposure_name} affected by {hazard_name} event').format(
                     exposure_name=exposure['name'],
                     hazard_name=hazard['name'])
         else:
             map_title = tr(
-                u'{exposure_name} affected by {hazard_name} hazard').format(
+                '{exposure_name} affected by {hazard_name} hazard').format(
                     exposure_name=exposure['name'],
                     hazard_name=hazard['name'])
     return map_title

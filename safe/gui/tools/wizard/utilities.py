@@ -1,7 +1,7 @@
 # coding=utf-8
 """Wizard Utilities Functions."""
-from builtins import str
-from builtins import range
+
+
 
 import logging
 import os

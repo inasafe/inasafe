@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Related to the extent (with or without an aggregation layer."""
-from builtins import object
+
 
 from qgis.PyQt.QtCore import Qt
 from qgis.core import (
@@ -42,7 +42,7 @@ def singleton(class_):
 
 
 @singleton
-class Extent(object):
+class Extent():
     """Extent class to handle analysis extent.
 
     Rubber bands and extents for showing analysis extent etc.

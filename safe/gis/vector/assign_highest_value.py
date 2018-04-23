@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Assign the highest value to an exposure according to a hazard layer."""
-from builtins import zip
+
 
 import logging
 

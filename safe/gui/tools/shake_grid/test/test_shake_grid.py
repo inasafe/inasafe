@@ -124,24 +124,24 @@ class TestShakeGrid(unittest.TestCase):
 
     def test_parse_grid_xml(self):
         """Test parse_grid_xml works."""
-        self.assertEquals(5, SMOOTHED_SHAKE_GRID.day)
-        self.assertEquals(11, SMOOTHED_SHAKE_GRID.month)
-        self.assertEquals(2013, SMOOTHED_SHAKE_GRID.year)
-        self.assertEquals(6, SMOOTHED_SHAKE_GRID.hour)
-        self.assertEquals(8, SMOOTHED_SHAKE_GRID.minute)
-        self.assertEquals(9, SMOOTHED_SHAKE_GRID.second)
-        self.assertEquals('Asia/Jakarta', SMOOTHED_SHAKE_GRID.time_zone)
-        self.assertEquals(140.62, SMOOTHED_SHAKE_GRID.longitude)
-        self.assertEquals(-2.43, SMOOTHED_SHAKE_GRID.latitude)
-        self.assertEquals(10.0, SMOOTHED_SHAKE_GRID.depth)
-        self.assertEquals('Papua', SMOOTHED_SHAKE_GRID.location)
-        self.assertEquals(139.37, SMOOTHED_SHAKE_GRID.x_minimum)
-        self.assertEquals(141.87, SMOOTHED_SHAKE_GRID.x_maximum)
-        self.assertEquals(-3.67875, SMOOTHED_SHAKE_GRID.y_minimum)
-        self.assertEquals(-1.18125, SMOOTHED_SHAKE_GRID.y_maximum)
+        self.assertEqual(5, SMOOTHED_SHAKE_GRID.day)
+        self.assertEqual(11, SMOOTHED_SHAKE_GRID.month)
+        self.assertEqual(2013, SMOOTHED_SHAKE_GRID.year)
+        self.assertEqual(6, SMOOTHED_SHAKE_GRID.hour)
+        self.assertEqual(8, SMOOTHED_SHAKE_GRID.minute)
+        self.assertEqual(9, SMOOTHED_SHAKE_GRID.second)
+        self.assertEqual('Asia/Jakarta', SMOOTHED_SHAKE_GRID.time_zone)
+        self.assertEqual(140.62, SMOOTHED_SHAKE_GRID.longitude)
+        self.assertEqual(-2.43, SMOOTHED_SHAKE_GRID.latitude)
+        self.assertEqual(10.0, SMOOTHED_SHAKE_GRID.depth)
+        self.assertEqual('Papua', SMOOTHED_SHAKE_GRID.location)
+        self.assertEqual(139.37, SMOOTHED_SHAKE_GRID.x_minimum)
+        self.assertEqual(141.87, SMOOTHED_SHAKE_GRID.x_maximum)
+        self.assertEqual(-3.67875, SMOOTHED_SHAKE_GRID.y_minimum)
+        self.assertEqual(-1.18125, SMOOTHED_SHAKE_GRID.y_maximum)
 
         grid_xml_data = SMOOTHED_SHAKE_GRID.mmi_data
-        self.assertEquals(10201, len(grid_xml_data))
+        self.assertEqual(10201, len(grid_xml_data))
 
         # Check SHAKE_GRID.grid_bounding_box
         bounds = SMOOTHED_SHAKE_GRID.grid_bounding_box.toString()

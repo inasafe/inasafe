@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Aggregate the impact table to the aggregate hazard."""
-from builtins import str
+
 
 import logging
 
@@ -146,7 +146,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.items():
+        for field, field_definition in list(absolute_values.items()):
             value = feature[field]
             if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
