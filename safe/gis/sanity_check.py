@@ -97,7 +97,7 @@ def check_layer(layer, has_geometry=True):
 
             # We only check the geometry if we have at least one feature.
 
-            if layer.geometryType() == Qgis.UnknownGeometry and (
+            if layer.geometryType() == QgsWkbTypes.UnknownGeometry and (
                     layer.featureCount() != 0):
                 raise InvalidLayerError(
                     tr('The layer has not a valid geometry type.'))

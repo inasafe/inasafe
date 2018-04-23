@@ -105,7 +105,7 @@ def create_memory_layer(
     :type layer_name: str
 
     :param geometry: The geometry of the layer.
-    :rtype geometry: Qgis.WkbType
+    :rtype geometry: QgsWkbTypes
 
     :param coordinate_reference_system: The CRS of the memory layer.
     :type coordinate_reference_system: QgsCoordinateReferenceSystem
@@ -117,13 +117,13 @@ def create_memory_layer(
     :rtype: QgsVectorLayer
     """
 
-    if geometry == Qgis.Point:
+    if geometry == QgsWkbTypes.Point:
         type_string = 'MultiPoint'
-    elif geometry == Qgis.Line:
+    elif geometry ==QgsWkbTypes.Line:
         type_string = 'MultiLineString'
-    elif geometry == Qgis.Polygon:
+    elif geometry == QgsWkbTypes.Polygon:
         type_string = 'MultiPolygon'
-    elif geometry == Qgis.NoGeometry:
+    elif geometry == QgsWkbTypes.NoGeometry:
         type_string = 'none'
     else:
         raise MemoryLayerCreationError(
