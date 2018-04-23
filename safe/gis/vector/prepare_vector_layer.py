@@ -10,6 +10,7 @@ from qgis.core import (
     QgsField,
     QgsFeatureRequest,
     Qgis,
+    QgsWkbTypes,
     QgsExpressionContext,
     QgsExpression
 )
@@ -263,7 +264,7 @@ def _size_is_needed(layer):
         # The exposure is not divisible, We don't need to compute the size.
         return False
 
-    if layer.geometryType() == Qgis.Point:
+    if layer.geometryType() == QgsWkbTypes.Point:
         # The exposure is a point layer. We don't need to compute the size.
         return False
 

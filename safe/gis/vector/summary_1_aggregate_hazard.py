@@ -5,7 +5,7 @@
 
 import logging
 
-from qgis.core import Qgis, QgsFeatureRequest
+from qgis.core import Qgis, QgsWkbTypes, QgsFeatureRequest
 
 from safe.definitions.exposure import exposure_structure
 from safe.definitions.fields import (
@@ -235,9 +235,9 @@ def report_on_field(layer):
     # we do not want to report on the size.
     geometry = layer.geometryType()
     exposure = layer.keywords.get('exposure')
-    if geometry == Qgis.Point:
+    if geometry == QgsWkbTypes.Point:
         field_index = None
-    if geometry == Qgis.Polygon and exposure == exposure_structure['key']:
+    if geometry == QgsWkbTypes.Polygon and exposure == exposure_structure['key']:
         field_index = None
 
     # Special case if it's an exposure without classification. It means it's

@@ -12,6 +12,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     Qgis,
+    QgsWkbTypes,
     QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer,
@@ -260,7 +261,7 @@ def is_point_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == Qgis.Point)
+            layer.geometryType() == QgsWkbTypes.Point)
     except AttributeError:
         return False
 
@@ -277,7 +278,7 @@ def is_line_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == Qgis.Line)
+            layer.geometryType() == QgiQgsWkbTypes.Line)
     except AttributeError:
         return False
 
@@ -294,7 +295,7 @@ def is_polygon_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == Qgis.Polygon)
+            layer.geometryType() == QgsWkbTypes.Polygon)
     except AttributeError:
         return False
 

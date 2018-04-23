@@ -371,7 +371,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
         except Exception:  # pylint: disable=broad-except
             pass
         try:
-            symbol_count += len(layer.rendererV2().legendSymbolItemsV2())
+            symbol_count += len(layer.renderer().legendSymbolItems()))
             continue
         except Exception:  # pylint: disable=broad-except
             pass
