@@ -42,7 +42,7 @@ class TestReclassifyRaster(unittest.TestCase):
         vector = zonal_stats(raster, vector)
 
         self.assertEqual(vector.fields().count(), number_fields + 1)
-        self.assertEqual(vector.geometryType(), Qgis.Polygon)
+        self.assertEqual(vector.geometryType(), QgsWkbTypes.Polygon)
 
         # With different projections
         raster = load_test_raster_layer(
@@ -59,7 +59,7 @@ class TestReclassifyRaster(unittest.TestCase):
         vector_b = zonal_stats(raster, vector_b)
 
         self.assertEqual(vector_b.fields().count(), number_fields + 1)
-        self.assertEqual(vector_b.geometryType(), Qgis.Polygon)
+        self.assertEqual(vector_b.geometryType(), QgsWkbTypes.Polygon)
 
         # We compare the results between these 2 zonal stats.
         for feature_a, feature_b in zip(
