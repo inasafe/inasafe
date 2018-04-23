@@ -129,8 +129,8 @@ def write_rst_file(file_directory, file_name, content):
         fl.close()
 
     except Exception as e:
-        print('Creating %s failed' % os.path.join(
-            file_directory, file_name + '.rst'), e)
+        print(('Creating %s failed' % os.path.join(
+            file_directory, file_name + '.rst'), e))
 
 
 def get_python_files_from_list(files, excluded_files=None):
@@ -272,8 +272,8 @@ def create_api_docs(code_path, api_docs_path, max_depth=2):
 
 def usage():
     """Helper function for telling how to use the script."""
-    print 'Usage:'
-    print 'python %s [optional path to inasafe directory]' % sys.argv[0]
+    print('Usage:')
+    print(('python %s [optional path to inasafe directory]' % sys.argv[0]))
 
 
 def main():
@@ -281,32 +281,33 @@ def main():
         usage()
         sys.exit()
     elif len(sys.argv) == 2:
-        print('Building rst files from %s' % sys.argv[1])
+        print(('Building rst files from %s' % sys.argv[1]))
         inasafe_code_path = os.path.abspath(sys.argv[1])
     else:
         inasafe_code_path = None
 
-    print 'Please make sure there is no unused source code file in inasafe-dev'
+    print('Please make sure there is no unused source '
+          'code file in inasafe-dev')
 
     inasafe_code_path = get_inasafe_code_path(inasafe_code_path)
-    print 'Cleaning api docs...'
+    print('Cleaning api docs...')
     api_docs_path = clean_api_docs_dirs()
     max_depth = 2
     packages = ['safe', 'realtime']
 
     # creating top level index for api-docs
-    print 'Creating top level index page...'
+    print('Creating top level index page...')
     create_top_level_index(api_docs_path, packages, max_depth)
 
     for package in packages:
-        print 'Creating api docs for package %s...' % package
+        print('Creating api docs for package %s...' % package)
         package_code_path = os.path.join(inasafe_code_path, package)
         create_api_docs(
             code_path=package_code_path,
             api_docs_path=api_docs_path,
             max_depth=max_depth)
 
-    print 'Done.'
+    print('Done.')
 
 
 if __name__ == '__main__':

@@ -119,7 +119,7 @@ def create_memory_layer(
 
     if geometry == QgsWkbTypes.Point:
         type_string = 'MultiPoint'
-    elif geometry ==QgsWkbTypes.Line:
+    elif geometry ==QgsWkbTypes.LineString:
         type_string = 'MultiLineString'
     elif geometry == QgsWkbTypes.Polygon:
         type_string = 'MultiPolygon'

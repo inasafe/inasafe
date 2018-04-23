@@ -38,7 +38,6 @@ class TestPythonPep(unittest.TestCase):
 
         # make pep8 produces some extra lines by default.
         lines = len(output.splitlines()) - default_number_lines
-        # fix_print_with_import
         print(output)
         message = 'Hey mate, go back to your keyboard :)'
         self.assertEqual(lines, 0, message)
@@ -79,7 +78,6 @@ class TestPythonPep(unittest.TestCase):
             default_number_lines = 0
 
         # make pep257 produces some extra lines by default.
-        # fix_print_with_import
         print(output)
         lines = (len(output.splitlines()) - default_number_lines) / 2
 
@@ -87,3 +85,10 @@ class TestPythonPep(unittest.TestCase):
             'Hey mate, go back to your keyboard :) I got %s '
             'errors from PEP257.)' % lines)
         self.assertEqual(lines, 0, message)
+
+
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(TestPythonPep, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)

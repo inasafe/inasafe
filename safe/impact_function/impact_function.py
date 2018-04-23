@@ -2339,7 +2339,7 @@ class ImpactFunction():
             exposure = self.exposure.keywords.get('exposure')
             is_divisible = exposure not in indivisible_keys
 
-            if geometry in [QgsWkbTypes.Line, QgsWkbTypes.Polygon] and is_divisible:
+            if geometry in [QgsWkbTypes.LineString, QgsWkbTypes.Polygon] and is_divisible:
 
                 self.set_state_process(
                     'exposure', 'Make exposure layer valid')
