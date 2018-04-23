@@ -5,7 +5,7 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
-from qgis.core import QgsRasterLayer, QgsVectorLayer, Qgis
+from qgis.core import QgsRasterLayer, QgsVectorLayer, Qgis, QgsWkbTypes
 
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -114,7 +114,7 @@ class DataStore(with_metaclass(ABCMeta, object)):
         if isinstance(layer, QgsRasterLayer):
             result = self._add_raster_layer(layer, layer_name)
         else:
-            if layer.wkbType() == Qgis.WKBNoGeometry:
+            if layer.wkbType() == QgsWkbTypes.NoGeometry:
                 result = self._add_tabular_layer(layer, layer_name)
             else:
                 result = self._add_vector_layer(layer, layer_name)

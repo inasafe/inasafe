@@ -48,7 +48,7 @@ class TestMultiBuffering(unittest.TestCase):
             radii=radii)
 
         self.assertDictEqual(result.keywords, expected_keywords)
-        self.assertEqual(result.geometryType(), Qgis.Polygon)
+        self.assertEqual(result.geometryType(), QgsWkbTypes.Polygon)
         expected_feature_count = layer.featureCount() * len(radii)
         self.assertEqual(result.featureCount(), expected_feature_count)
 

@@ -260,9 +260,9 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
 class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
-    """QGIS Composer Component.
+    """QGIS Layout Component.
 
-    Component that can be rendered by QGIS Composition class
+    Component that can be rendered by QGIS Layout class
 
     .. versionadded:: 4.0
     """

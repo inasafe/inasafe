@@ -6,13 +6,14 @@ from collections import OrderedDict
 
 from qgis.PyQt.QtGui import QColor
 from qgis.core import (
-    QgsSymbolV2,
-    QgsRendererCategoryV2,
-    QgsSingleSymbolRendererV2,
-    QgsCategorizedSymbolRendererV2,
-    QgsSymbolLayerV2Registry,
+    QgsSymbol,
+    QgsRendererCategory,
+    QgsSingleSymbolRenderer,
+    QgsCategorizedSymbolRenderer,
+    QgsSymbolLayerRegistry,
     QgsConditionalStyle,
     Qgis,
+    QgsWkbTypes,
 )
 
 from safe.definitions.fields import hazard_class_field, hazard_count_field
@@ -59,18 +60,18 @@ def hazard_class_style(layer, classification, display_null=False):
             # We skip it.
             continue
 
-        symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
+        symbol = QgsSymbol.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
         if is_line_layer(layer):
             symbol.setWidth(line_width_exposure)
-        category = QgsRendererCategoryV2(hazard_class, symbol, label)
+        category = QgsRendererCategory(hazard_class, symbol, label)
         categories.append(category)
 
         style = QgsConditionalStyle()
         style.setName(hazard_class)
         style.setRule("hazard_class='%s'" % hazard_class)
         style.setBackgroundColor(transparent)
-        symbol = QgsSymbolV2.defaultSymbol(Qgis.Point)
+        symbol = QgsSymbol.defaultSymbol(QgsWkbTypes.Point)
         symbol.setColor(color)
         symbol.setSize(3)
         style.setSymbol(symbol)
@@ -78,9 +79,9 @@ def hazard_class_style(layer, classification, display_null=False):
 
     layer.conditionalStyles().setFieldStyles(
         'hazard_class', attribute_table_styles)
-    renderer = QgsCategorizedSymbolRendererV2(
+    renderer = QgsCategorizedSymbolRenderer(
         hazard_class_field['field_name'], categories)
-    layer.setRendererV2(renderer)
+    layer.setRenderer(renderer)
 
 
 def layer_title(layer):
@@ -343,9 +344,9 @@ def simple_polygon_without_brush(layer, width='0.26', color=QColor('black')):
     :param width: Width to use for the line. Default to '0.26'.
     :type width: str
     """
-    registry = QgsSymbolLayerV2Registry.instance()
+    registry = QgsSymbolLayerRegistry.instance()
     line_metadata = registry.symbolLayerMetadata("SimpleLine")
-    symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
+    symbol = QgsSymbol.defaultSymbol(layer.geometryType())
 
     # Line layer
     line_layer = line_metadata.createSymbolLayer(
@@ -363,5 +364,5 @@ def simple_polygon_without_brush(layer, width='0.26', color=QColor('black')):
     symbol.deleteSymbolLayer(0)
     symbol.appendSymbolLayer(line_layer)
 
-    renderer = QgsSingleSymbolRendererV2(symbol)
-    layer.setRendererV2(renderer)
+    renderer = QgsSingleSymbolRenderer(symbol)
+    layer.setRenderer(renderer)

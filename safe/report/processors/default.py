@@ -23,15 +23,15 @@ from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
     QgsMapLayer,
-    QgsComposerFrame,
-    QgsComposition,
-    QgsComposerHtml,
-    QgsComposerPicture,
+    QgsLayoutFrame,
+    QgsLayout,
+    QgsLayoutItemHtml,
+    QgsLayoutItemPicture,
     QgsRectangle,
     QgsLegendRenderer,
-    QgsComposerLegendStyle,
-    QgsComposerMap,
-    QgsComposerLegend,
+    QgsLegendStyle,
+    QgsLayoutItemMap,
+    QgsLayoutItemLegend,
     QgsCoordinateTransform,
     QgsProject,
     PROJECT_SCALES
@@ -56,12 +56,12 @@ LOGGER = logging.getLogger('InaSAFE')
 def composition_item(composer, item_id, item_class):
     """Fetch a specific item according to its type in a composer.
 
-    We got some problem with QgsComposition::getComposerItemById. Don't use it,
+    We got some problem with Qgsomposition::getComposerItemById. Don't use it,
     and use this function instead.
     See https://github.com/inasafe/inasafe/issues/4271
 
-    :param composer: The composer to look in.
-    :type composer: QgsComposition
+    :param layout: The layout to look in.
+    :type layout: QgsLayout
 
     :param item_id: The ID of the item to look for.
     :type item_id: basestring
@@ -69,12 +69,12 @@ def composition_item(composer, item_id, item_class):
     :param item_class: The expected class name.
     :type item_class: cls
 
-    :return: The composition item, inherited class of QgsComposerItem.
+    :return: The composition item, inherited class of QgsLayoutItem.
     """
-    if item_class.__name__ == 'QgsComposerMap':
+    if item_class.__name__ == 'QgsLayoutItemMap':
         # It needs this condition for Rohmat (Ubuntu)
         item = composer.getComposerItemById(item_id)
-        if isinstance(item, QgsComposerMap):
+        if isinstance(item, QgsLayoutItemMap):
             return item
 
     # Normal behaviour
@@ -85,7 +85,7 @@ def composition_item(composer, item_id, item_class):
 
     # Note from Etienne
     # Still no item? No problem, let's try something else to fetch the map.
-    if item_class.__name__ == 'QgsComposerMap':
+    if item_class.__name__ == 'QgsLayoutItemMap':
         maps = composer.composerMapItems()
         for composer_map in maps:
             if composer_map.displayName() == item_id:
@@ -154,13 +154,13 @@ def create_qgis_pdf_output(
         composition,
         file_format,
         metadata):
-    """Produce PDF output using QgsComposition.
+    """Produce PDF output using QgsLayout.
 
     :param output_path: The output path.
     :type output_path: str
 
     :param composition: QGIS Composition object.
-    :type composition: qgis.core.QgsComposition
+    :type composition: qgis.core.QgsLayout
 
     :param qgis_composition_context: QGIS Composition context used by renderer.
     :type qgis_composition_context: safe.report.impact_report.
@@ -590,7 +590,7 @@ def qgis_composer_renderer(impact_report, component):
                 legend.setTitle(title)
 
             # set legend
-            root_group = legend.modelV2().rootGroup()
+            root_group = legend.model().rootGroup()
             for layer in layers:
                 # we need to check whether the layer is registered or not
                 registered_layer = (
@@ -605,7 +605,7 @@ def qgis_composer_renderer(impact_report, component):
                 if impact_report.legend_layers or (
                         not impact_report.multi_exposure_impact_function):
                     QgsLegendRenderer.setNodeLegendStyle(
-                        tree_layer, QgsComposerLegendStyle.Hidden)
+                        tree_layer, QgsLegendStyle.Hidden)
             legend.synchronizeWithModel()
 
     # process to output
