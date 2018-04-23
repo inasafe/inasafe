@@ -6,7 +6,7 @@ import logging
 
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui
-from PyQt4.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSignature
 
 from safe import messaging as m
 from safe.definitions.font import big_font

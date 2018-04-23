@@ -16,7 +16,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-from safe.utilities.str import byteify
+from safe.utilities.unicode import byteify
 
 
 class MinimumNeedsTest(unittest.TestCase):

@@ -17,7 +17,6 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata, read_iso19115_metadata)
-from safe.utilities.str import get_string
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"

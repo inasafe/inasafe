@@ -25,7 +25,7 @@ except ImportError:
     import coverage
 import tempfile
 from osgeo import gdal
-from PyQt4 import Qt
+from qgis.PyQt.import Qt
 from .safe.utilities.gis import qgis_version
 
 __author__ = 'etiennetrimaille'

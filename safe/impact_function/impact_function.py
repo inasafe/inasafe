@@ -12,7 +12,7 @@ from os import makedirs
 from os.path import join, exists, dirname
 from socket import gethostname
 
-from PyQt4.Qt import PYQT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QSettings, QDir
 from osgeo import gdal
 from qgis.core import (
@@ -211,7 +211,7 @@ from safe.utilities.metadata import (
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.utilities.settings import setting
-from safe.utilities.str import get_unicode, byteify
+from safe.utilities.unicode import byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     get_error_message,
@@ -2409,7 +2409,7 @@ class ImpactFunction():
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
-            name = get_unicode(post_processor['name'])
+            name = post_processor['name']
 
             if valid:
                 valid, message = run_single_post_processor(

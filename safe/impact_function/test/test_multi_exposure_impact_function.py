@@ -11,7 +11,7 @@ from socket import gethostname
 
 
 from osgeo import gdal
-from PyQt4.Qt import PYQT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QT_VERSION_STR
 
 from safe.common.version import get_version

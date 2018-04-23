@@ -300,7 +300,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         layer = QgsVectorLayer(
             shapefile_path, self.tr('Jakarta Floods'), 'ogr')
         # Add a calculated field indicating if a poly is flooded or not
-        # from PyQt4.QtCore import QVariant
+        # from qgis.PyQt.QtCore import QVariant
         layer.startEditing()
         # Add field with integer from 0 to 4 which represents the flood
         # class. Its the same as 'state' field except that is being treated

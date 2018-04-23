@@ -18,8 +18,10 @@ from qgis.core import (
     QgsFeature,
     QgsField,
     QgsDistanceArea,
-    QgsWKBTypes
+    QgsWkbTypes
 )
+
+from qgis.PyQt.QtCore import QVariant
 
 from safe.common.exceptions import (
     MemoryLayerCreationError,
@@ -40,20 +42,20 @@ LOGGER = logging.getLogger('InaSAFE')
 
 wkb_type_groups = {
     'Point': (
-        QgsWKBTypes.Point,
-        QgsWKBTypes.MultiPoint,
-        QgsWKBTypes.Point25D,
-        QgsWKBTypes.MultiPoint25D,),
+        QgsWkbTypes.Point,
+        QgsWkbTypes.MultiPoint,
+        QgsWkbTypes.Point25D,
+        QgsWkbTypes.MultiPoint25D,),
     'LineString': (
-        QgsWKBTypes.LineString,
-        QgsWKBTypes.MultiLineString,
-        QgsWKBTypes.LineString25D,
-        QgsWKBTypes.MultiLineString25D,),
+        QgsWkbTypes.LineString,
+        QgsWkbTypes.MultiLineString,
+        QgsWkbTypes.LineString25D,
+        QgsWkbTypes.MultiLineString25D,),
     'Polygon': (
-        QgsWKBTypes.Polygon,
-        QgsWKBTypes.MultiPolygon,
-        QgsWKBTypes.Polygon25D,
-        QgsWKBTypes.MultiPolygon25D,),
+        QgsWkbTypes.Polygon,
+        QgsWkbTypes.MultiPolygon,
+        QgsWkbTypes.Polygon25D,
+        QgsWkbTypes.MultiPolygon25D,),
 }
 for key, value in list(wkb_type_groups.items()):
     for const in value:
@@ -440,7 +442,7 @@ class SizeCalculator():
         self.calculator.setEllipsoid('WGS84')
         self.calculator.setEllipsoidalMode(True)
 
-        if geometry_type == QgsWKBTypes.LineGeometry:
+        if geometry_type == QgsWkbTypes.LineGeometry:
             self.default_unit = unit_metres
             LOGGER.info('The size calculator is set to use {unit}'.format(
                 unit=distance_unit[self.calculator.lengthUnits()]))
@@ -486,7 +488,7 @@ class SizeCalculator():
             # multipart.
             # So we compute the size part per part. See ticket #3812
             for single in geometry.asGeometryCollection():
-                if self.geometry_type == QgsWKBTypes.LineGeometry:
+                if self.geometry_type == QgsWkbTypes.LineGeometry:
                     geometry_size = self.calculator.measureLength(single)
                 else:
                     geometry_size = self.calculator.measureArea(single)
@@ -497,7 +499,7 @@ class SizeCalculator():
                         valid=single.isGeosValid(),
                         wkt=single.exportToWkt()))
         else:
-            if self.geometry_type == QgsWKBTypes.LineGeometry:
+            if self.geometry_type == QgsWkbTypes.LineGeometry:
                 geometry_size = self.calculator.measureLength(geometry)
             else:
                 geometry_size = self.calculator.measureArea(geometry)
