@@ -1,7 +1,7 @@
 # coding=utf-8
 """Styles and colors which are used in InaSAFE."""
 
-from PyQt4.QtGui import QColor
+from qgis.PyQt.QtGui import QColor
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

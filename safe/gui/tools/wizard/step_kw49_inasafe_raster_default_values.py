@@ -1,5 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step InaSAFE Raster Default Fields."""
+from builtins import range
 
 # noinspection PyPackageRequirements
 import logging
@@ -116,7 +117,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             parameter.is_required = False
             parameter.help_text = inasafe_field['default_value']['description']
             # parameter.description = inasafe_field['default_value']
-            parameter.element_type = unicode
+            parameter.element_type = str
             parameter.labels = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[0]
             parameter.options = get_inasafe_default_value_fields(
@@ -142,7 +143,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             parameter_widget.widget().set_value(None)
         # Set default value from existing keywords
         if existing_inasafe_default_values:
-            for guid, default in existing_inasafe_default_values.items():
+            for guid, default in list(existing_inasafe_default_values.items()):
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultValueParameterWidget):
@@ -165,7 +166,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
     def clear(self):
         """Clear current state."""
         # Adapted from http://stackoverflow.com/a/13103617/1198772
-        for i in reversed(range(self.default_values_grid.count())):
+        for i in reversed(list(range(self.default_values_grid.count()))):
             self.default_values_grid.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()

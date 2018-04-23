@@ -1,8 +1,9 @@
 # coding=utf-8
 
 """Related to the extent (with or without an aggregation layer."""
+from builtins import object
 
-from PyQt4.QtCore import Qt
+from qgis.PyQt.QtCore import Qt
 from qgis.core import (
     QgsCoordinateTransform,
     QgsGeometry,

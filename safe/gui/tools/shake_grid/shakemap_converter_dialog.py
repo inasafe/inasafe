@@ -5,11 +5,11 @@ import logging
 import os
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
+from qgis.PyQt.QtCore import QFileInfo, pyqtSlot
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayerRegistry
 from qgis.utils import iface
 
@@ -280,7 +280,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
                 LOGGER.debug("Failed to load")
             else:
                 # noinspection PyArgumentList
-                QgsMapLayerRegistry.instance().addMapLayer(self.output_layer)
+                QgsProject.instance().addMapLayer(self.output_layer)
                 iface.zoomToActiveLayer()
 
         if (self.keyword_wizard_checkbox.isChecked() and
@@ -297,7 +297,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         if not input_path:
             input_path = os.path.expanduser('~')
         # noinspection PyCallByClass,PyTypeChecker
-        filename = QFileDialog.getOpenFileName(
+        filename, __ = QFileDialog.getOpenFileName(
             self, tr('Input file'), input_path, tr('Raw grid file (*.xml)'))
         if filename:
             self.input_path.setText(filename)
@@ -310,7 +310,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         if not output_path:
             output_path = os.path.expanduser('~')
         # noinspection PyCallByClass,PyTypeChecker
-        filename = QFileDialog.getSaveFileName(
+        filename, __ = QFileDialog.getSaveFileName(
             self, tr('Output file'), output_path, tr('Raster file (*.tif)'))
         if filename:
             self.output_path.setText(filename)
@@ -320,7 +320,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         input_place = self.input_place.text()
         if not input_place:
             input_place = os.path.expanduser('~')
-        filename = QFileDialog.getOpenFileName(
+        filename, __ = QFileDialog.getOpenFileName(
             self, tr('Input place layer'), input_place, tr('All Files (*.*)'))
         if filename:
             self.input_place.setText(filename)

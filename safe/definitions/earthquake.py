@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Definitions about earthquake."""
+from builtins import range
 
 import numpy
 
@@ -43,7 +44,7 @@ def itb_fatality_rates():
     """
     # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
     # a fatality rate of 0 - Tim
-    mmi_range = range(2, 11)
+    mmi_range = list(range(2, 11))
     # Model coefficients
     x = 0.62275231
     y = 8.03314466
@@ -81,7 +82,7 @@ def pager_fatality_rates():
     # Model coefficients
     theta = 13.249
     beta = 0.151
-    mmi_range = range(2, 11)
+    mmi_range = list(range(2, 11))
     fatality_rate = {mmi: 0 if mmi < 4 else log_normal_cdf(
         mmi, median=theta, sigma=beta) for mmi in mmi_range}
     return fatality_rate

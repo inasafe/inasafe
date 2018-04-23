@@ -9,6 +9,9 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
+from builtins import range
+from builtins import object
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -30,7 +33,7 @@ DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
-class ConsoleView():
+class ConsoleView(object):
 
     """A simple console based message queue mockup."""
 
@@ -63,7 +66,8 @@ class ConsoleView():
         for message in self.dynamic_messages:
             string += message.to_text()
 
-        print string
+        # fix_print_with_import
+        print(string)
 
 
 class ImpactFunction1(object):

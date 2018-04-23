@@ -4,7 +4,7 @@
 
 from math import isnan
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
@@ -116,7 +116,7 @@ def analysis_summary(aggregate_hazard, analysis):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = area[field]
             if value == '' or isinstance(value, QPyNullVariant):
                 value = 0
@@ -151,7 +151,7 @@ def analysis_summary(aggregate_hazard, analysis):
 
     # Summarization
     summary_values = {}
-    for key, summary_rule in summary_rules.items():
+    for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
         case_field = summary_rule['case_field']
         if aggregate_hazard.fieldNameIndex(input_field['field_name']) == -1:
@@ -209,7 +209,7 @@ def analysis_summary(aggregate_hazard, analysis):
             area.id(), shift + len(unique_hazard) + 4, total)
 
         # Any absolute postprocessors
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 all='all'
             )
@@ -217,7 +217,7 @@ def analysis_summary(aggregate_hazard, analysis):
                 area.id(), shift + len(unique_hazard) + 5 + i, value)
 
         # Summarizer of custom attributes
-        for key, summary_value in summary_values.items():
+        for key, summary_value in list(summary_values.items()):
             summary_field = summary_rules[key]['summary_field']
             field = create_field_from_definition(summary_field)
             analysis.addAttribute(field)

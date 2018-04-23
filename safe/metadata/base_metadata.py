@@ -1,5 +1,6 @@
 # coding=utf-8
 """This module base metadata implementation."""
+from builtins import object
 
 import abc
 import json
@@ -18,6 +19,7 @@ from safe.metadata.utilities import (
     reading_ancillary_files
 )
 from safe.utilities.i18n import tr
+from future.utils import with_metaclass
 
 # using this approach:
 # http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
@@ -28,7 +30,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class BaseMetadata(object):
+class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
 
     """
     Abstract Metadata class, this has to be subclassed.
@@ -45,9 +47,6 @@ class BaseMetadata(object):
 
     .. versionadded:: 3.2
     """
-
-    # define as Abstract base class
-    __metaclass__ = abc.ABCMeta
 
     # paths in xml files for standard properties these are the ones we try
     # to read from an xml file
@@ -238,7 +237,7 @@ class BaseMetadata(object):
         self._properties = {}
 
         # initialise the properties
-        for name, path in self._standard_properties.iteritems():
+        for name, path in self._standard_properties.items():
             self.set(name, None, path)
 
         self._last_update = datetime.now()
@@ -258,7 +257,7 @@ class BaseMetadata(object):
         """
         metadata = {}
         properties = {}
-        for name, prop in self.properties.iteritems():
+        for name, prop in self.properties.items():
             properties[name] = prop.dict
         metadata['properties'] = properties
         return metadata
@@ -274,7 +273,7 @@ class BaseMetadata(object):
         tree = ElementTree.parse(METADATA_XML_TEMPLATE)
         root = tree.getroot()
 
-        for name, prop in self.properties.iteritems():
+        for name, prop in self.properties.items():
             path = prop.xml_path
             elem = root.find(path, XML_NS)
             if elem is None:
@@ -319,7 +318,7 @@ class BaseMetadata(object):
             else:
                 metadata = self._read_json_file()
             if 'properties' in metadata:
-                for name, prop in metadata['properties'].iteritems():
+                for name, prop in metadata['properties'].items():
                     try:
                         self.set(prop['name'], prop['value'], prop['xml_path'])
                     except KeyError:
@@ -378,7 +377,7 @@ class BaseMetadata(object):
         else:
             root = self._read_xml_file()
         if root is not None:
-            for name, path in self._standard_properties.iteritems():
+            for name, path in self._standard_properties.items():
                 value = read_property_from_xml(root, path)
                 if value is not None:
                     # this calls the default setters
@@ -676,5 +675,5 @@ class BaseMetadata(object):
         :type keywords: dict
 
         """
-        for key, value in keywords.iteritems():
+        for key, value in keywords.items():
             setattr(self, key, value)

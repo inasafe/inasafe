@@ -205,7 +205,7 @@ class TestShakeGrid(unittest.TestCase):
         self.assertTrue(os.path.exists(expected_keywords))
         # Check that extra_keywords exists
         keywords = read_iso19115_metadata(raster_path)
-        self.assertIn('extra_keywords', keywords.keys())
+        self.assertIn('extra_keywords', list(keywords.keys()))
 
     def test_mmi_to_shapefile(self):
         """Check we can convert the shake event to a shapefile."""
@@ -295,8 +295,8 @@ class TestShakeGrid(unittest.TestCase):
         tif_file = load_layer(result)[0]
         keywords = tif_file.keywords
         self.assertEqual(keywords['hazard'], hazard_earthquake['key'])
-        population_classification = keywords['thresholds'][
-            exposure_population['key']].keys()[0]
+        population_classification = list(keywords['thresholds'][
+            exposure_population['key']].keys())[0]
         self.assertEqual(
             population_classification, earthquake_mmi_scale['key'])
 

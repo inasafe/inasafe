@@ -1,5 +1,6 @@
 # coding=utf-8
 """Reporting 101."""
+from __future__ import print_function
 
 import os
 import unittest
@@ -23,7 +24,8 @@ from safe.utilities.i18n import tr
 
 # first step
 def hello_world_extractor(impact_report, component):
-    print 'Component key: {component_key}'.format(component_key=component.key)
+    # fix_print_with_import
+    print('Component key: {component_key}'.format(component_key=component.key))
     context = dict()
     context['hello_world'] = "Hello World!"
     return context

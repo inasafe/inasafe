@@ -111,8 +111,8 @@ test: clean flake8 pylint dependency_test unwanted_strings run_data_audit testda
 # Run the test suite for gui only
 guitest: flake8 disabled_tests dependency_test unwanted_strings testdata_errorcheck gui_test_suite
 
-# Run the test suite followed by style checking includes realtime and requires QGIS 2.0
-qgis2test: clean flake8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations qgis2_test_suite
+# Run the test suite followed by style checking includes realtime and requires QGIS 3.0
+qgis2test: clean flake8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations qgis3_test_suite
 
 quicktest: flake8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
 
@@ -170,8 +170,8 @@ safe_test_suite: testdata
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id \
 	--with-coverage --cover-package=safe safe  3>&1 1>&2 2>&3 3>&- || true
 
-# This one includes safe and realtime and runs against QGIS v2
-qgis2_test_suite: testdata
+# This one includes safe and realtime and runs against QGIS v3
+qgis3_test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"

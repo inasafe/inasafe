@@ -1,5 +1,8 @@
 # coding=utf-8
 """Create contour from shakemap raster layer."""
+from builtins import zip
+from builtins import str
+from builtins import range
 
 import logging
 import os
@@ -154,8 +157,8 @@ def convolve(input, weights, mask=None, slow=False):
 
     # Now do convolution on central array.
     # Iterate over tiled_input.
-    for i, io in zip(range(rows, rows * 2), range(rows)):
-        for j, jo in zip(range(cols, cols * 2), range(cols)):
+    for i, io in zip(list(range(rows, rows * 2)), list(range(rows))):
+        for j, jo in zip(list(range(cols, cols * 2)), list(range(cols))):
             # The current central pixel is at (i, j)
 
             # Skip masked points.
@@ -393,7 +396,7 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
             layer,
             id_field,
             elevation_field)
-    except Exception, e:
+    except Exception as e:
         LOGGER.exception('Contour creation failed')
         raise ContourCreationError(str(e))
     finally:

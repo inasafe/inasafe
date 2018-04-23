@@ -2,8 +2,8 @@
 """InaSAFE Wizard Step Layer Mode."""
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe import messaging as m
 from safe.common.exceptions import InvalidWizardStep

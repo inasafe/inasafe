@@ -1,13 +1,14 @@
 # coding=utf-8
 
 """Memory checker."""
+from builtins import str
 
 import logging
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication
 from pydispatch import dispatcher
 
 from safe import messaging as m

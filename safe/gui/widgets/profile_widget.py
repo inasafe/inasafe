@@ -1,16 +1,12 @@
 # coding=utf-8
 """InaSAFE Profile Widget."""
+from builtins import range
 
 from collections import OrderedDict
 
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import (
-    QTreeWidget,
-    QTreeWidgetItem,
-    QCheckBox,
-    QFont,
-    QHeaderView,
-)
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QTreeWidget, QTreeWidgetItem, QCheckBox, QHeaderView
+from qgis.PyQt.QtGui import QFont
 
 from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox)
@@ -122,7 +118,7 @@ class ProfileWidget(QTreeWidget, object):
                     0, Qt.UserRole, classification)
                 classification_widget_item.setText(0, get_name(classification))
                 hazard_widget_item.addChild(classification_widget_item)
-                for the_class, the_value in classes.items():
+                for the_class, the_value in list(classes.items()):
                     the_class_widget_item = QTreeWidgetItem()
                     the_class_widget_item.setData(0, Qt.UserRole, the_class)
                     the_class_widget_item.setText(

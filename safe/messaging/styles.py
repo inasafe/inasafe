@@ -17,9 +17,11 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
+from future import standard_library
+standard_library.install_aliases()
 import os
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -120,5 +122,5 @@ def logo_element():
     """
 
     path = os.path.join(resources_path(), 'img', 'logos', 'inasafe-logo.png')
-    url = urlparse.urljoin('file:', urllib.pathname2url(path))
+    url = urllib.parse.urljoin('file:', urllib.request.pathname2url(path))
     return url

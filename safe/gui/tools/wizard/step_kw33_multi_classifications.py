@@ -1,17 +1,17 @@
 # coding=utf-8
 """InaSAFE Wizard Step Multi Classifications."""
+from builtins import str
+from builtins import range
 
 import logging
 from collections import OrderedDict
 from functools import partial
 
 import numpy
-from PyQt4.QtCore import Qt, QPyNullVariant
-from PyQt4.QtGui import (
-    QLabel, QHBoxLayout, QComboBox, QPushButton,
-    QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView,
-    QListWidgetItem, QFont, QTreeWidgetItem, QSizePolicy)
-from PyQt4.QtWebKit import QWebView
+from qgis.PyQt.QtCore import Qt, QPyNullVariant
+from qgis.PyQt.QtWidgets import QLabel, QHBoxLayout, QComboBox, QPushButton, QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView, QListWidgetItem, QTreeWidgetItem, QSizePolicy
+from qgis.PyQt.QtGui import QFont
+from qgis.PyQt.QtWebKitWidgets import QWebView
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 from qgis.core import QgsRasterBandStats
@@ -509,7 +509,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             :rtype: dict
             """
             clean_dictionary = {
-                k: v for k, v in dictionary.items()
+                k: v for k, v in list(dictionary.items())
                 if isinstance(v, dict)}
 
             return clean_dictionary
@@ -523,9 +523,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Clean non existing hazard class key
         empty_exposure_classifications = []
-        for the_exposure, the_hazard_classifications in output[key].items():
-            for the_hazard_classification in the_hazard_classifications.\
-                    keys():
+        for the_exposure, the_hazard_classifications in list(output[key].items()):
+            for the_hazard_classification in list(the_hazard_classifications.\
+                    keys()):
                 invalid_classifications = []
                 if not definition(the_hazard_classification):
                     invalid_classifications.append(
@@ -705,23 +705,23 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             :type mode: int
             """
             if mode == MAX_VALUE_MODE:
-                current_max_value = self.threshold_classes.values()[
+                current_max_value = list(self.threshold_classes.values())[
                     double_spin_index][1]
-                target_min_value = self.threshold_classes.values()[
+                target_min_value = list(self.threshold_classes.values())[
                     double_spin_index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif mode == MIN_VALUE_MODE:
-                current_min_value = self.threshold_classes.values()[
+                current_min_value = list(self.threshold_classes.values())[
                     double_spin_index][0]
-                target_max_value = self.threshold_classes.values()[
+                target_max_value = list(self.threshold_classes.values())[
                     double_spin_index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
         # Set behaviour
-        for k, v in self.threshold_classes.items():
-            index = self.threshold_classes.keys().index(k)
+        for k, v in list(self.threshold_classes.items()):
+            index = list(self.threshold_classes.keys()).index(k)
             if index < len(self.threshold_classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
@@ -851,7 +851,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 # Don't classify features with NULL value
                 continue
             # Capitalization of the value and removing '_' (raw OSM data).
-            value_as_string = unicode(unique_value).upper().replace('_', ' ')
+            value_as_string = str(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
                 if 'string_defaults' in default_class:
@@ -910,7 +910,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 continue
             # check in value map
             assigned = False
-            for key, value_list in current_value_map.items():
+            for key, value_list in list(current_value_map.items()):
                 if unique_value in value_list and key in assigned_values:
                     assigned_values[key] += [unique_value]
                     assigned = True
@@ -970,7 +970,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         list_unique_values.setSelectionMode(
             QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
-            value_as_string = value is not None and unicode(value) or 'NULL'
+            value_as_string = value is not None and str(value) or 'NULL'
             list_item = QListWidgetItem(list_unique_values)
             list_item.setFlags(
                 Qt.ItemIsEnabled |
@@ -1004,7 +1004,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['key']]:
-                string_value = value is not None and unicode(value) or 'NULL'
+                string_value = value is not None and str(value) or 'NULL'
                 tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
                     Qt.ItemIsEnabled |
@@ -1054,8 +1054,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             }
             if self.thresholds.get(self.active_exposure['key']):
                 # Set other class to not active
-                for current_classification in self.thresholds.get(
-                        self.active_exposure['key']).values():
+                for current_classification in list(self.thresholds.get(
+                        self.active_exposure['key']).values()):
                     current_classification['active'] = False
             else:
                 self.thresholds[self.active_exposure['key']] = {}
@@ -1070,8 +1070,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             }
             if self.value_maps.get(self.active_exposure['key']):
                 # Set other class to not active
-                for current_classification in self.value_maps.get(
-                        self.active_exposure['key']).values():
+                for current_classification in list(self.value_maps.get(
+                        self.active_exposure['key']).values()):
                     current_classification['active'] = False
             else:
                 self.value_maps[self.active_exposure['key']] = {}
@@ -1097,14 +1097,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 'numeric_default_max': the_class['numeric_default_max'],
             }
         # Set for all threshold
-        for key, value in self.threshold_classes.items():
+        for key, value in list(self.threshold_classes.items()):
             value[0].setValue(class_dict[key]['numeric_default_min'])
             value[1].setValue(class_dict[key]['numeric_default_max'])
 
     def get_threshold(self):
         """Return threshold based on current state."""
         value_map = dict()
-        for key, value in self.threshold_classes.items():
+        for key, value in list(self.threshold_classes.items()):
             value_map[key] = [
                 value[0].value(),
                 value[1].value(),
@@ -1204,7 +1204,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                     }
                 return
 
-        for classification_key, value in target.items():
+        for classification_key, value in list(target.items()):
             if classification is None:
                 value['active'] = False
                 continue

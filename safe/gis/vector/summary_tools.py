@@ -2,7 +2,7 @@
 
 """Some helpers about the summary calculation."""
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import count_fields
@@ -105,7 +105,7 @@ def add_fields(
             static_field['field_name'])
 
     # For each absolute values
-    for absolute_field in absolute_values.iterkeys():
+    for absolute_field in absolute_values.keys():
         field_definition = definition(absolute_values[absolute_field][1])
         field = create_field_from_definition(field_definition)
         layer.addAttribute(field)

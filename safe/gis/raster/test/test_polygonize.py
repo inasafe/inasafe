@@ -59,7 +59,7 @@ class TestPolygonizeRaster(unittest.TestCase):
         inasafe_fields = polygonized.keywords.get('inasafe_fields')
         field_name = inasafe_fields.get(hazard_value_field['key'])
 
-        for value, count in expected_count.iteritems():
+        for value, count in expected_count.items():
             expression = '"%s" = \'%s\'' % (field_name, value)
             request = QgsFeatureRequest().setFilterExpression(expression)
             self.assertEqual(

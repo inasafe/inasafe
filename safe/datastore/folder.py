@@ -4,7 +4,7 @@
 
 from itertools import product
 
-from PyQt4.QtCore import QFileInfo, QDir, QFile
+from qgis.PyQt.QtCore import QFileInfo, QDir, QFile
 from qgis.core import (
     QgsVectorFileWriter,
     QgsRasterPipe,
@@ -50,7 +50,7 @@ class Folder(DataStore):
 
         if isinstance(uri, QDir):
             self._uri = uri
-        elif isinstance(uri, basestring):
+        elif isinstance(uri, str):
             self._uri = QDir(uri)
         else:
             raise ErrorDataStore('Unknown type')

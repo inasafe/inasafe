@@ -1,5 +1,8 @@
 # coding=utf-8
 """Helper module for gui test suite."""
+from builtins import str
+from builtins import range
+from builtins import object
 
 import codecs
 import hashlib
@@ -9,12 +12,12 @@ import os
 import re
 import shutil
 import sys
-from itertools import izip
+
 from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
-from PyQt4 import QtGui  # pylint: disable=W0621
-from PyQt4.QtCore import QTranslator, pyqtWrapperType
+from qgis.PyQt import QtGui  # pylint: disable=W0621
+from qgis.PyQt.QtCore import QTranslator, pyqtWrapperType
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -102,9 +105,9 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
+        from qgis.PyQt import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
-        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.PyQt.QtCore import QCoreApplication, QSettings
         from safe.test.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
@@ -840,7 +843,7 @@ def setup_scenario(
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
 
-    for key in expected_state.keys():
+    for key in list(expected_state.keys()):
         message += 'Expected %s: %s\n' % (key, expected_state[key])
         message += 'Actual   %s: %s\n' % (key, state[key])
         message += '----\n'
@@ -960,7 +963,7 @@ def compare_wkt(a, b, tol=0.000001):
     if len(a0) != len(b0):
         return False
 
-    for (a1, b1) in izip(a0, b0):
+    for (a1, b1) in zip(a0, b0):
         if abs(float(a1) - float(b1)) > tol:
             return False
 
@@ -986,7 +989,7 @@ def load_layers(
     # First unload any layers that may already be loaded
     if clear_flag:
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        QgsProject.instance().removeAllMapLayers()
 
     # Now go ahead and load our layers
     exposure_layer_count = 0
@@ -1008,7 +1011,7 @@ def load_layers(
         map_layer_list.append(layer)
 
     # noinspection PyArgumentList
-    QgsMapLayerRegistry.instance().addMapLayers(map_layer_list)
+    QgsProject.instance().addMapLayers(map_layer_list)
 
     if dock is not None:
         dock.get_layers()

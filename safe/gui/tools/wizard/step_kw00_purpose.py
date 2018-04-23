@@ -1,10 +1,12 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Purpose."""
+from builtins import range
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem, QPixmap
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap
 
 from safe import messaging as m
 from safe.definitions.layer_purposes import layer_purpose_aggregation
@@ -141,7 +143,7 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         # Set values based on existing keywords or parent mode
         if purpose_keyword:
             purposes = []
-            for index in xrange(self.lstCategories.count()):
+            for index in range(self.lstCategories.count()):
                 item = self.lstCategories.item(index)
                 purposes.append(item.data(QtCore.Qt.UserRole))
             if purpose_keyword in purposes:

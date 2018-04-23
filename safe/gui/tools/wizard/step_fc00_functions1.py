@@ -1,10 +1,12 @@
 # coding=utf-8
 """InaSAFE Wizard Step for Choosing Exposure and Hazard."""
+from builtins import range
 
 from copy import deepcopy
 
-from PyQt4.QtCore import pyqtSignature, Qt
-from PyQt4.QtGui import QIcon, QTableWidgetItem, QBrush, QHeaderView
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtGui import QIcon, QBrush
+from qgis.PyQt.QtWidgets import QTableWidgetItem, QHeaderView
 
 from safe import messaging as m
 from safe.definitions.exposure import exposure_all

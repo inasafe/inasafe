@@ -1,10 +1,12 @@
 # coding=utf-8
 """InaSAFE Wizard Step Exposure Layer Canvas."""
+from builtins import range
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, Qt
+from qgis.PyQt.QtCore import Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem, QPixmap, QFont
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap, QFont
 from qgis.core import QgsMapLayerRegistry
 
 from safe import messaging as m
@@ -85,7 +87,7 @@ class StepFcExpLayerFromCanvas(WizardStep, FORM_CLASS):
             layer_id = None
 
         # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        layer = QgsProject.instance().mapLayer(layer_id)
         return layer
 
     def list_compatible_canvas_layers(self):
@@ -118,7 +120,7 @@ class StepFcExpLayerFromCanvas(WizardStep, FORM_CLASS):
         # Try to select the last_layer, if found:
         if last_layer:
             layers = []
-            for indx in xrange(self.lstCanvasExpLayers.count()):
+            for indx in range(self.lstCanvasExpLayers.count()):
                 item = self.lstCanvasExpLayers.item(indx)
                 layers += [item.data(Qt.UserRole)]
             if last_layer in layers:

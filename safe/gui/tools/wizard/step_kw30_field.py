@@ -1,12 +1,14 @@
 # coding=utf-8
 """InaSAFE Wizard Step Field."""
+from builtins import str
+from builtins import range
 
 import logging
 import re
 from copy import deepcopy
 
-from PyQt4.QtCore import QVariant, Qt
-from PyQt4.QtGui import QListWidgetItem, QAbstractItemView
+from qgis.PyQt.QtCore import QVariant, Qt
+from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView
 
 from safe import messaging as m
 from safe.definitions.fields import population_count_field
@@ -153,7 +155,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             field_index = layer_fields.indexFromName(field_name)
             unique_values = self.parent.layer.uniqueValues(field_index)
             unique_values_str = [
-                i is not None and unicode(i) or 'NULL'
+                i is not None and str(i) or 'NULL'
                 for i in unique_values[0:48]]
             unique_values_str = ', '.join(unique_values_str)
             field_descriptions += tr('<b>Field name</b>: {field_name}').format(
@@ -285,11 +287,11 @@ class StepKwField(WizardStep, FORM_CLASS):
             'inasafe_fields')
         if inasafe_field_keywords:
             fields = inasafe_field_keywords.get(field_keyword)
-            if isinstance(fields, basestring):
+            if isinstance(fields, str):
                 fields = [fields]
             if fields:
                 option_fields = []
-                for index in xrange(self.lstFields.count()):
+                for index in range(self.lstFields.count()):
                     option_fields.append(
                         str(self.lstFields.item(index).text()))
                 for field in fields:

@@ -1,9 +1,10 @@
 # coding=utf-8
 
 """Postprocessors."""
+from builtins import str
 
 # noinspection PyUnresolvedReferences
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.minimum_needs import minimum_needs_parameter
@@ -23,6 +24,7 @@ from safe.processors import (
 )
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
+from functools import reduce
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -42,7 +44,7 @@ def evaluate_formula(formula, variables):
     :returns: The result of the formula execution.
     :rtype: float, int
     """
-    for key, value in variables.items():
+    for key, value in list(variables.items()):
         if isinstance(value, QPyNullVariant) or value is None:
             # If one value is null, we return null.
             return value
@@ -76,7 +78,7 @@ def run_single_post_processor(layer, post_processor):
 
     # Calculate based on formula
     # Iterate all possible output and create the correct field.
-    for output_key, output_value in post_processor['output'].items():
+    for output_key, output_value in list(post_processor['output'].items()):
 
         # Get output attribute name
         key = output_value['value']['key']
@@ -122,7 +124,7 @@ def run_single_post_processor(layer, post_processor):
         msg = None
 
         # Iterate over every inputs.
-        for key, values in post_processor['input'].items():
+        for key, values in list(post_processor['input'].items()):
             values = values if isinstance(values, list) else [values]
             for value in values:
                 is_constant_input = (
@@ -221,7 +223,7 @@ def run_single_post_processor(layer, post_processor):
 
         # Create iterator for feature
         request = QgsFeatureRequest().setSubsetOfAttributes(
-            input_indexes.values())
+            list(input_indexes.values()))
         iterator = layer.getFeatures(request)
 
         inputs = input_indexes.copy()
@@ -236,7 +238,7 @@ def run_single_post_processor(layer, post_processor):
             parameters.update(default_parameters)
 
             # Fill up the input from fields
-            for key, value in inputs.items():
+            for key, value in list(inputs.items()):
                 if value == geometry_property_input_type['key']:
                     parameters[key] = feature.geometry()
                 else:
@@ -256,7 +258,7 @@ def run_single_post_processor(layer, post_processor):
 
             # The affected postprocessor returns a boolean.
             if isinstance(post_processor_result, bool):
-                post_processor_result = tr(unicode(post_processor_result))
+                post_processor_result = tr(str(post_processor_result))
 
             layer.changeAttributeValue(
                 feature.id(),
@@ -281,8 +283,8 @@ def enough_input(layer, post_processor_input):
     :returns: Tuple with True if success, else False with an error message.
     :rtype: (bool, str)
     """
-    impact_fields = layer.keywords['inasafe_fields'].keys()
-    for input_key, input_values in post_processor_input.items():
+    impact_fields = list(layer.keywords['inasafe_fields'].keys())
+    for input_key, input_values in list(post_processor_input.items()):
         input_values = (
             input_values if isinstance(input_values, list) else [input_values])
         msg = None

@@ -1,10 +1,11 @@
 # coding=utf-8
 """InaSAFE Wizard Step InaSAFE Default Fields."""
+from builtins import range
 
 # noinspection PyPackageRequirements
 import logging
 
-from PyQt4.QtGui import QLabel
+from qgis.PyQt.QtWidgets import QLabel
 
 from parameters.qt_widgets.parameter_container import ParameterContainer
 from safe import messaging as m
@@ -140,7 +141,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.is_required = False
             parameter.description = inasafe_field['description']
             parameter.help_text = inasafe_field['help_text']
-            parameter.element_type = unicode
+            parameter.element_type = str
             parameter.options_list = option_list
             parameter.value = no_field
             parameter.default_labels = get_inasafe_default_value_fields(
@@ -183,7 +184,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter_widget.widget().set_selected_radio_button()
         # Set default value from existing keywords
         if existing_inasafe_default_values:
-            for guid, default in existing_inasafe_default_values.items():
+            for guid, default in list(existing_inasafe_default_values.items()):
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
@@ -222,7 +223,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
     def clear(self):
         """Clear current state."""
         # Adapted from http://stackoverflow.com/a/13103617/1198772
-        for i in reversed(range(self.kwExtraKeywordsGridLayout.count())):
+        for i in reversed(list(range(self.kwExtraKeywordsGridLayout.count()))):
             self.kwExtraKeywordsGridLayout.itemAt(i).widget().setParent(None)
         self.parameters = []
         self.parameter_container = ParameterContainer()

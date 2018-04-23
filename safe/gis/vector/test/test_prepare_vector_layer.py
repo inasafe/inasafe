@@ -1,5 +1,6 @@
 # coding=utf-8
 """Unit Test for Prepare Vector Layer."""
+from builtins import range
 
 import unittest
 from osgeo import gdal
@@ -200,7 +201,7 @@ class TestPrepareLayer(unittest.TestCase):
         self.assertNotEqual(-1, field)
         unique_values_automatic = layer.uniqueValues(field)
         self.assertNotEqual(unique_values_automatic, unique_values_before)
-        self.assertEqual(unique_values_automatic, range(layer.featureCount()))
+        self.assertEqual(unique_values_automatic, list(range(layer.featureCount())))
 
     def test_sum_fields(self):
         """Test sum_fields method."""

@@ -10,8 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 
-from PyQt4.QtCore import QFileInfo
+from qgis.PyQt.QtCore import QFileInfo
 from osgeo import ogr, osr, gdal
 from qgis.core import (
     QgsVectorLayer,
@@ -44,7 +45,7 @@ class GeoPackage(DataStore):
 
         if isinstance(uri, QFileInfo):
             self._uri = uri
-        elif isinstance(uri, basestring):
+        elif isinstance(uri, str):
             self._uri = QFileInfo(uri)
         else:
             raise ErrorDataStore('Unknown type')

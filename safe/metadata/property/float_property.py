@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Float property."""
+from builtins import str
 
 from types import NoneType
 

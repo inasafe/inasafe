@@ -4,8 +4,9 @@
 
 Tim Sutton, 2016
 """
-from safe.gui.tools.help_dialog import HelpDialog
-from safe.gui.tools.help import definitions_help
+from __future__ import absolute_import
+from .safe.gui.tools.help_dialog import HelpDialog
+from .safe.gui.tools.help import definitions_help
 
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

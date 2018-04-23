@@ -5,7 +5,7 @@ import logging
 from collections import OrderedDict
 from functools import partial
 
-from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
+from qgis.PyQt.QtWidgets import QDoubleSpinBox, QHBoxLayout, QLabel
 from qgis.core import QgsRasterBandStats
 
 from safe import messaging as m
@@ -199,19 +199,19 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             :type the_string: str
             """
             if the_string == 'Max value':
-                current_max_value = self.classes.values()[index][1]
-                target_min_value = self.classes.values()[index + 1][0]
+                current_max_value = list(self.classes.values())[index][1]
+                target_min_value = list(self.classes.values())[index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif the_string == 'Min value':
-                current_min_value = self.classes.values()[index][0]
-                target_max_value = self.classes.values()[index - 1][1]
+                current_min_value = list(self.classes.values())[index][0]
+                target_max_value = list(self.classes.values())[index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
         # Set behaviour
-        for k, v in self.classes.items():
-            index = self.classes.keys().index(k)
+        for k, v in list(self.classes.items()):
+            index = list(self.classes.keys()).index(k)
             if index < len(self.classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
@@ -224,7 +224,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
     def get_threshold(self):
         """Return threshold based on current state."""
         value_map = dict()
-        for key, value in self.classes.items():
+        for key, value in list(self.classes.items()):
             value_map[key] = [
                 value[0].value(),
                 value[1].value(),

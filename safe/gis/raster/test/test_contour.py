@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test Contour."""
+from __future__ import print_function
 
 import os
 
@@ -68,7 +69,8 @@ class TestContour(unittest.TestCase):
             'grid-use_ascii.tif')
         contour_path = shakemap_contour(shakemap_layer_path)
         self.assertTrue(os.path.exists(contour_path))
-        print contour_path
+        # fix_print_with_import
+        print(contour_path)
 
 
 if __name__ == '__main__':

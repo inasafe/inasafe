@@ -11,6 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 
 __author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -21,19 +25,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import os
 import sys
-from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
-from StringIO import StringIO
+from configparser import ConfigParser, MissingSectionHeaderError, ParsingError
+from io import StringIO
 from datetime import datetime
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, Qt
-from PyQt4.QtGui import (
-    QAbstractItemView,
-    QDialog,
-    QFileDialog,
-    QTableWidgetItem,
-    QPushButton,
-    QDialogButtonBox)
+from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt.QtCore import pyqtSlot, Qt
+from qgis.PyQt.QtWidgets import QAbstractItemView, QDialog, QFileDialog, QTableWidgetItem, QPushButton, QDialogButtonBox
 from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
@@ -82,7 +80,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """Constructor for the dialog.
 
         :param parent: Widget to use as parent.
-        :type parent: PyQt4.QtGui.QWidget
+        :type parent: PyQt5.QtWidgets.QWidget
 
         :param iface: A QGisAppInterface instance we use to access QGIS via.
         :type iface: QgsAppInterface
@@ -234,7 +232,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 try:
                     scenarios = read_scenarios(absolute_path)
                     validate_scenario(scenarios, scenario_directory)
-                    for key, value in scenarios.iteritems():
+                    for key, value in scenarios.items():
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
                 except ParsingError:
@@ -265,7 +263,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # run entry function
         function = script.runScript
-        if function.func_code.co_argcount == 1:
+        if function.__code__.co_argcount == 1:
             function(self.iface)
         else:
             function()
@@ -489,11 +487,11 @@ class BatchDialog(QDialog, FORM_CLASS):
                             parameters[layer_purpose_hazard['key']],
                             parameters[layer_purpose_exposure['key']],
                             parameters[layer_purpose_aggregation['key']]]
-                        QgsMapLayerRegistry.instance().addMapLayers(
+                        QgsProject.instance().addMapLayers(
                             layer_list, False)
                         for layer in layer_list:
                             self.layer_group.addLayer(layer)
-                        map_canvas = QgsMapLayerRegistry.instance().mapLayers()
+                        map_canvas = QgsProject.instance().mapLayers()
                         for layer in map_canvas:
                             # turn of layer visibility if not impact layer
                             if map_canvas[layer].id() == impact_layer.id():
@@ -611,7 +609,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 else:
                     report.append('F: %s\n' % name_item)
                     fail_count += 1
-            except Exception, e:  # pylint: disable=W0703
+            except Exception as e:  # pylint: disable=W0703
                 LOGGER.exception('Batch execution failed. The exception: ' +
                                  str(e))
                 report.append('F: %s\n' % name_item)
@@ -896,7 +894,7 @@ def validate_scenario(blocks, scenario_directory):
     """
     # dictionary to temporary contain status message
     blocks_update = {}
-    for section, section_item in blocks.iteritems():
+    for section, section_item in blocks.items():
         ready = True
         for item in section_item:
             if item in ['hazard', 'exposure', 'aggregation']:
@@ -913,7 +911,7 @@ def validate_scenario(blocks, scenario_directory):
         if ready:
             blocks_update[section] = {'status': 'Scenario ready'}
             # LOGGER.info(section + " scenario is ready")
-    for section, section_item in blocks_update.iteritems():
+    for section, section_item in blocks_update.items():
         blocks[section]['status'] = blocks_update[section]['status']
 
 

@@ -5,7 +5,7 @@
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QLabel
+from qgis.PyQt.QtWidgets import QLabel
 
 from parameters.qt_widgets.float_parameter_widget import FloatParameterWidget
 

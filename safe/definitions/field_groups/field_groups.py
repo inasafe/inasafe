@@ -1,6 +1,7 @@
 # coding=utf-8
 
 """Definitions relating to group of fields."""
+from builtins import range
 
 from safe.definitions.concepts import concepts
 from safe.definitions.field_groups.age_field_group import (

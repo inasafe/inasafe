@@ -60,7 +60,7 @@ def from_counts_to_ratios(layer):
         layer_purpose_exposure['key'], exposure['key'])
     for count_field in non_compulsory_fields:
         exists = count_field['key'] in inasafe_fields
-        if count_field['key'] in count_ratio_mapping.keys() and exists:
+        if count_field['key'] in list(count_ratio_mapping.keys()) and exists:
             ratio_field = definition(count_ratio_mapping[count_field['key']])
 
             field = create_field_from_definition(ratio_field)
@@ -88,7 +88,7 @@ def from_counts_to_ratios(layer):
     for feature in layer.getFeatures():
         total_count = feature[inasafe_fields[population_count_field['key']]]
 
-        for count_field, index in mapping.iteritems():
+        for count_field, index in mapping.items():
             count = feature[count_field]
             try:
                 # For #4669, fix always get 0

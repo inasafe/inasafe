@@ -8,7 +8,7 @@ from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
-from PyQt4.QtGui import QApplication, QWidget, QGridLayout  # NOQA
+from qgis.PyQt.QtWidgets import QApplication, QWidget, QGridLayout  # NOQA
 
 from parameters.qt_widgets.parameter_container import (
     ParameterContainer)  # NOQA

@@ -1,11 +1,12 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Band Selector."""
+from builtins import range
 
 import logging
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 from qgis.core import QgsRasterBandStats
 
 from safe.gui.tools.wizard.wizard_step import (

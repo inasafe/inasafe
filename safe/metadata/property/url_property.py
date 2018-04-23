@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from types import NoneType
 
-from PyQt4.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty

@@ -60,7 +60,7 @@ def general_report_extractor(impact_report, component_metadata):
     # find hazard class
     summary = []
 
-    analysis_feature = analysis_layer.getFeatures().next()
+    analysis_feature = next(analysis_layer.getFeatures())
     analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
 
     exposure_unit = exposure_type['units'][0]
@@ -258,7 +258,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
         if is_population:
             population_exist = True
 
-        analysis_feature = analysis_layer.getFeatures().next()
+        analysis_feature = next(analysis_layer.getFeatures())
         analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
 
         exposure_unit = exposure_type['units'][0]
@@ -368,7 +368,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
         total_value = classification_result[total_exposed_field['key']]
         total_values.append(total_value)
 
-    classifications = hazard_classifications.values()
+    classifications = list(hazard_classifications.values())
     is_item_identical = (
         classifications.count(
             classifications[0]) == len(classifications))
@@ -405,7 +405,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
     else:
         hazard_classification_groups = {}
         for exposure_key, hazard_classification in (
-                hazard_classifications.iteritems()):
+                iter(hazard_classifications.items())):
             exposure_type = definition(exposure_key)
             if hazard_classification['key'] not in (
                     hazard_classification_groups):
@@ -416,7 +416,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
                     hazard_classification['key']].append(exposure_type)
 
         for hazard_classification_key, exposures in (
-                hazard_classification_groups.iteritems()):
+                iter(hazard_classification_groups.items())):
             custom_headers = []
             custom_total_values = []
             # find total value and labels for each exposure

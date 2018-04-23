@@ -11,26 +11,21 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 import logging
 import os
 import time
 from shutil import copy
 
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
-from PyQt4.QtCore import QVariant, Qt
+from qgis.PyQt.QtCore import QSettings, QRegExp, pyqtSlot
+from qgis.PyQt.QtCore import QVariant, Qt
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QDialog,
-    QProgressDialog,
-    QMessageBox,
-    QFileDialog,
-    QRegExpValidator,
-    QButtonGroup)
-from PyQt4.QtNetwork import QNetworkReply
+from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog, QButtonGroup
+from qgis.PyQt.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -281,8 +276,8 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             disable_busy_cursor()
         else:
             # add the layer to the map
-            registry = QgsMapLayerRegistry.instance()
-            registry.addMapLayer(layer)
+            project = QgsProject.instance()
+            project.addMapLayer(layer)
             disable_busy_cursor()
             self.done(QDialog.Accepted)
 

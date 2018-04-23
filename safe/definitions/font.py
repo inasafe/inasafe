@@ -1,7 +1,7 @@
 # coding=utf-8
 """Fonts which are used in InaSAFE."""
 
-from PyQt4.QtGui import QFont
+from qgis.PyQt.QtGui import QFont
 
 big_font = QFont()
 big_font.setPointSize(80)

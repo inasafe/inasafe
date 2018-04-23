@@ -124,10 +124,10 @@ class StepKwFieldsMapping(WizardStep, FORM_CLASS):
         :rtype: dict
         """
         field_mapping = self.field_mapping_widget.get_field_mapping()
-        for k, v in field_mapping['values'].items():
+        for k, v in list(field_mapping['values'].items()):
             if not v:
                 field_mapping['values'].pop(k)
-        for k, v in field_mapping['fields'].items():
+        for k, v in list(field_mapping['fields'].items()):
             if not v:
                 field_mapping['fields'].pop(k)
         return field_mapping

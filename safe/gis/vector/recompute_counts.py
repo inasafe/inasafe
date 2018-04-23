@@ -51,7 +51,7 @@ def recompute_counts(layer):
 
     indexes = []
     absolute_field_keys = [f['key'] for f in count_fields]
-    for field, field_name in fields.iteritems():
+    for field, field_name in fields.items():
         if field in absolute_field_keys and field != size_field['key']:
             indexes.append(layer.fieldNameIndex(field_name))
             LOGGER.info(

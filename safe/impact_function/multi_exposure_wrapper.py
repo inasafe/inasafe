@@ -5,6 +5,8 @@ Multi-exposure wrapper.
 
 This class will manage how to launch and optimize a multi exposure analysis.
 """
+from builtins import zip
+from builtins import object
 
 import getpass
 import logging
@@ -15,7 +17,7 @@ from os.path import join, exists
 from socket import gethostname
 
 from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QDir, QT_VERSION_STR
+from qgis.PyQt.QtCore import QDir
 from osgeo import gdal
 from qgis.core import (
     QgsGeometry,
@@ -126,7 +128,7 @@ from safe.utilities.metadata import (
     append_ISO19115_keywords,
 )
 from safe.utilities.settings import setting
-from safe.utilities.unicode import get_unicode, byteify
+from safe.utilities.str import get_unicode, byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     readable_os_version,
@@ -1294,11 +1296,12 @@ class MultiExposureImpactFunction(object):
                     # We need to check if the population analysis summary
                     # layer is on the layer registry and selected or not.
                     population_analysis_summary = None
-                    layer_registry = QgsMapLayerRegistry.instance()
+                    project = QgsProject.instance()
                     for layer_id, layer in (
-                            layer_registry.mapLayers().iteritems()):
+                            iter(project.mapLayers().items())):
                         if layer_id == impact_function.analysis_impacted.id():
                             population_analysis_summary = layer
+                    # FIXME: add_layer_to_canvas() requires a layer AND a name
                     if not population_analysis_summary:
                         population_analysis_summary = (
                             impact_function.analysis_impacted)
@@ -1353,7 +1356,7 @@ class MultiExposureImpactFunction(object):
                 break
 
         if map_overview_layer:
-            QgsMapLayerRegistry.instance().removeMapLayer(map_overview_layer)
+            QgsProject.instance().removeMapLayer(map_overview_layer)
 
         # Create json file for report urls
         report_path = self._impact_report.output_folder
@@ -1454,7 +1457,7 @@ class MultiExposureImpactFunction(object):
         dict_of_analysis_summary_id = {}
 
         for exposure_key, exposure_summary in (
-                dict_of_exposure_summary.iteritems()):
+                iter(dict_of_exposure_summary.items())):
             layer = load_layer_from_registry(exposure_summary)
             keywords = KeywordIO.read_keywords(layer)
 

@@ -1,12 +1,13 @@
 # coding=utf-8
 """Keyword IO implementation."""
+from builtins import str
 
 import logging
 from ast import literal_eval
 from datetime import datetime
 
-from PyQt4.QtCore import QObject
-from PyQt4.QtCore import QUrl, QDateTime
+from qgis.PyQt.QtCore import QObject
+from qgis.PyQt.QtCore import QUrl, QDateTime
 from qgis.core import QgsMapLayer
 
 from safe import messaging as m
@@ -16,7 +17,7 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata, read_iso19115_metadata)
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 
 __copyright__ = "Copyright 2011, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -365,16 +366,16 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(thresholds_keyword, basestring):
+        if isinstance(thresholds_keyword, str):
             thresholds_keyword = literal_eval(thresholds_keyword)
 
-        for k, v in thresholds_keyword.items():
+        for k, v in list(thresholds_keyword.items()):
             # If the v is not dictionary, it should be the old value maps.
             # To handle thresholds in the Impact Function.
             if not isinstance(v, dict):
                 table = m.Table(style_class='table table-condensed')
 
-                for key, value in thresholds_keyword.items():
+                for key, value in list(thresholds_keyword.items()):
                     row = m.Row()
                     name = definition(key)['name'] if definition(key) else key
                     row.add(m.Cell(m.ImportantText(name)))
@@ -387,7 +388,7 @@ class KeywordIO(QObject):
         table = m.Table(style_class='table table-condensed table-striped')
 
         i = 0
-        for exposure_key, classifications in thresholds_keyword.items():
+        for exposure_key, classifications in list(thresholds_keyword.items()):
             i += 1
             exposure = definition(exposure_key)
             exposure_row = m.Row()
@@ -400,7 +401,7 @@ class KeywordIO(QObject):
             classification_row = m.Row()
             classification_row.add(m.Cell(m.ImportantText(tr(
                 'Classification'))))
-            for classification, value in classifications.items():
+            for classification, value in list(classifications.items()):
                 if value.get('active'):
                     active_classification = definition(classification)
                     classification_row.add(
@@ -472,7 +473,7 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(keyword_value, basestring):
+        if isinstance(keyword_value, str):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
         # Sorting the key
@@ -586,13 +587,13 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(value_maps_keyword, basestring):
+        if isinstance(value_maps_keyword, str):
             value_maps_keyword = literal_eval(value_maps_keyword)
 
         table = m.Table(style_class='table table-condensed table-striped')
 
         i = 0
-        for exposure_key, classifications in value_maps_keyword.items():
+        for exposure_key, classifications in list(value_maps_keyword.items()):
             i += 1
             exposure = definition(exposure_key)
             exposure_row = m.Row()
@@ -604,7 +605,7 @@ class KeywordIO(QObject):
             classification_row.add(m.Cell(m.ImportantText(tr(
                 'Classification'))))
             active_classification = None
-            for classification, value in classifications.items():
+            for classification, value in list(classifications.items()):
                 if value.get('active'):
                     active_classification = definition(classification)
                     if active_classification.get('name'):

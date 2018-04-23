@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 
 import unittest
 
@@ -17,7 +18,7 @@ from tempfile import mkdtemp
 from os.path import join, normpath, normcase, exists, isfile
 
 from safe.test.utilities import qgis_iface
-from PyQt4.QtCore import QDir, QVariant
+from qgis.PyQt.QtCore import QDir, QVariant
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsField,
@@ -70,7 +71,7 @@ class TestFolder(unittest.TestCase):
 
         # Check if we have the correct URI.
         # self.assertIsNone(data_store.layer_uri(layer_name))
-        expected = unicode(
+        expected = str(
             normcase(normpath(join(path, vector_layer_name + '.shp'))))
         self.assertEquals(
             normcase(normpath(

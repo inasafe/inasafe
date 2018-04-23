@@ -1,12 +1,13 @@
 # coding=utf-8
 """Metadata utilities."""
+from builtins import range
 
 from contextlib import contextmanager
 from datetime import datetime, date
 from xml.dom.minidom import parseString
 from xml.etree import ElementTree
 
-from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
+from qgis.PyQt.QtCore import QUrl, QDate, QDateTime, Qt
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -132,7 +133,7 @@ def serialize_dictionary(dictionary):
     :rtype: basestring
     """
     string_value = {}
-    for k, v in dictionary.items():
+    for k, v in list(dictionary.items()):
         if isinstance(v, QUrl):
             string_value[k] = v.toString()
         elif isinstance(v, (QDate, QDateTime)):

@@ -4,7 +4,7 @@
 import sys
 import qgis  # NOQA
 
-from PyQt4.QtGui import QWidget, QGridLayout, QPushButton
+from qgis.PyQt.QtWidgets import QWidget, QGridLayout, QPushButton
 
 from functools import partial
 

@@ -1,5 +1,6 @@
 # coding=utf-8
 """InaSAFE Options Dialog."""
+from builtins import range
 
 import logging
 import os
@@ -8,10 +9,9 @@ from functools import partial
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant, QSettings, Qt
-from PyQt4.QtGui import (
-    QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout, QIcon,
-    QScrollArea, QWidget, QPixmap, QLabel, QPushButton, QMessageBox)
+from qgis.PyQt.QtCore import pyqtSlot, QVariant, QSettings, Qt
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout, QScrollArea, QWidget, QLabel, QPushButton, QMessageBox
+from qgis.PyQt.QtGui import QIcon, QPixmap
 
 from parameters.float_parameter import FloatParameter
 from parameters.integer_parameter import IntegerParameter
@@ -249,7 +249,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         :type key: str
 
         :param check_box: Check box to show and set the setting.
-        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
+        :type check_box: PyQt5.QtWidgets.QCheckBox.QCheckBox
         """
         set_setting(key, check_box.isChecked(), qsettings=self.settings)
 
@@ -260,7 +260,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         :type key: str
 
         :param check_box: Check box to show and set the setting.
-        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
+        :type check_box: PyQt5.QtWidgets.QCheckBox.QCheckBox
         """
         flag = setting(key, expected_type=bool, qsettings=self.settings)
         check_box.setChecked(flag)
@@ -272,7 +272,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         :type key: str
 
         :param line_edit: Line edit for user to edit the setting
-        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        :type line_edit: PyQt5.QtWidgets.QLineEdit.QLineEdit
         """
         set_setting(key, line_edit.text(), self.settings)
 
@@ -283,7 +283,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         :type key: str
 
         :param line_edit: Line edit for user to edit the setting
-        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        :type line_edit: PyQt5.QtWidgets.QLineEdit.QLineEdit
         """
         value = setting(key, expected_type=str, qsettings=self.settings)
         line_edit.setText(value)
@@ -291,11 +291,11 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def restore_state(self):
         """Reinstate the options based on the user's stored session info."""
         # Restore boolean setting as check box.
-        for key, check_box in self.boolean_settings.items():
+        for key, check_box in list(self.boolean_settings.items()):
             self.restore_boolean_setting(key, check_box)
 
         # Restore text setting as line edit.
-        for key, line_edit in self.text_settings.items():
+        for key, line_edit in list(self.text_settings.items()):
             self.restore_text_setting(key, line_edit)
 
         # User Directory
@@ -400,10 +400,10 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def save_state(self):
         """Store the options into the user's stored session info."""
         # Save boolean settings
-        for key, check_box in self.boolean_settings.items():
+        for key, check_box in list(self.boolean_settings.items()):
             self.save_boolean_setting(key, check_box)
         # Save text settings
-        for key, line_edit in self.text_settings.items():
+        for key, line_edit in list(self.text_settings.items()):
             self.save_text_setting(key, line_edit)
 
         set_setting(
@@ -476,7 +476,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def open_keyword_cache_path(self):
         """Open File dialog to choose the keyword cache path."""
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QFileDialog.getSaveFileName(
+        file_name, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
             self.leKeywordCachePath.text(),
@@ -498,7 +498,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def open_north_arrow_path(self):
         """Open File dialog to choose the north arrow path."""
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QFileDialog.getOpenFileName(
+        file_name, __ = QFileDialog.getOpenFileName(
             self,
             self.tr('Set north arrow image file'),
             self.leNorthArrowPath.text(),
@@ -513,7 +513,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
     def open_organisation_logo_path(self):
         """Open File dialog to choose the organisation logo path."""
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QFileDialog.getOpenFileName(
+        file_name, __ = QFileDialog.getOpenFileName(
             self,
             self.tr('Set organisation logo file'),
             self.organisation_logo_path_line_edit.text(),
@@ -688,7 +688,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         if self.default_value_parameter_containers:
             self.default_value_parameter_containers = []
 
-        for i in reversed(range(self.container_layout.count())):
+        for i in reversed(list(range(self.container_layout.count()))):
             widget = self.container_layout.itemAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
@@ -837,7 +837,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         # Set the flag to true because user ask to.
         self.is_restore_default = True
         # remove current default ratio
-        for i in reversed(range(self.container_layout.count())):
+        for i in reversed(list(range(self.container_layout.count()))):
             widget = self.container_layout.itemAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
@@ -934,7 +934,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         LOGGER.debug('Export button clicked')
         home_directory = os.path.expanduser('~')
         file_name = self.organisation_line_edit.text().replace(' ', '_')
-        file_path = QFileDialog.getSaveFileName(
+        file_path, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Export InaSAFE settings'),
             os.path.join(home_directory, file_name + '.json'),
@@ -947,7 +947,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         """Import setting to a file."""
         LOGGER.debug('Import button clicked')
         home_directory = os.path.expanduser('~')
-        file_path = QFileDialog.getOpenFileName(
+        file_path, __ = QFileDialog.getOpenFileName(
             self,
             self.tr('Import InaSAFE settings'),
             home_directory,

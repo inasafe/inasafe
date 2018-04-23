@@ -4,7 +4,7 @@
 
 from numbers import Number
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
 from safe.definitions.fields import (
@@ -120,7 +120,7 @@ def exposure_summary_table(
             )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = area[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -202,7 +202,7 @@ def exposure_summary_table(
     # classification
     if not summarization_dicts:
         # For each absolute values
-        for absolute_field in absolute_values.iterkeys():
+        for absolute_field in absolute_values.keys():
             field_definition = definition(absolute_values[absolute_field][1])
             field = create_field_from_definition(field_definition)
             tabular.addAttribute(field)
@@ -245,7 +245,7 @@ def exposure_summary_table(
                 attributes.append(summarization_dicts[key].get(
                     exposure_type, 0))
         else:
-            for i, field in enumerate(absolute_values.itervalues()):
+            for i, field in enumerate(absolute_values.values()):
                 value = field[0].get_value(
                     all='all'
                 )
@@ -291,7 +291,7 @@ def summarize_result(exposure_summary):
     summarizer_flags = {}
 
     # for summarizer_field in summarizer_fields:
-    for key, summary_rule in summary_rules.items():
+    for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
         if exposure_summary.fieldNameIndex(
                 input_field['field_name']) == -1:
@@ -303,7 +303,7 @@ def summarize_result(exposure_summary):
     for feature in exposure_summary.getFeatures():
         exposure_class_name = feature[exposure_class_field['field_name']]
         # for summarizer_field in summarizer_fields:
-        for key, summary_rule in summary_rules.items():
+        for key, summary_rule in list(summary_rules.items()):
             input_field = summary_rule['input_field']
             case_field = summary_rule['case_field']
             case_value = feature[case_field['field_name']]

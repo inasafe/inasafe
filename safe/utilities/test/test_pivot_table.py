@@ -1,5 +1,6 @@
 # coding=utf-8
 """Tests for pivot table implementation."""
+from builtins import range
 import unittest
 import json
 

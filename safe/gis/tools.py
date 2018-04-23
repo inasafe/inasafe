@@ -5,7 +5,7 @@
 import logging
 import os
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
@@ -79,8 +79,8 @@ def load_layer_from_registry(layer_path):
     """
     # reload the layer in case the layer path has no provider information
     the_layer = load_layer(layer_path)[0]
-    layers = QgsMapLayerRegistry.instance().mapLayers()
-    for _, layer in layers.items():
+    layers = QgsProject.instance().mapLayers()
+    for _, layer in list(layers.items()):
         if full_layer_uri(layer) == full_layer_uri(the_layer):
             monkey_patch_keywords(layer)
             return layer
@@ -106,7 +106,7 @@ def reclassify_value(one_value, ranges):
             one_value, QPyNullVariant):
         return None
 
-    for threshold_id, threshold in ranges.iteritems():
+    for threshold_id, threshold in ranges.items():
         value_min = threshold[0]
         value_max = threshold[1]
 

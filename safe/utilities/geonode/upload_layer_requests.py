@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Upload a layer to Geonode using the web scrapping."""
+from __future__ import print_function
 
 import re
 import os
@@ -67,8 +68,8 @@ def siblings_files(path):
     file_basename, extension = splitext(path)
     main_extension = extension.lower()
     files = {}
-    if extension.lower() in extension_siblings.keys():
-        for text_extension in extension_siblings[main_extension].keys():
+    if extension.lower() in list(extension_siblings.keys()):
+        for text_extension in list(extension_siblings[main_extension].keys()):
             if isfile(file_basename + text_extension):
                 files[file_basename + text_extension] = (
                     extension_siblings[main_extension][text_extension])
@@ -90,7 +91,7 @@ def pretty_print_post(req):
     print('{}\n{}\n{}\n\n{}'.format(
         '-----------START-----------',
         req.method + ' ' + req.url,
-        '\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+        '\n'.join('{}: {}'.format(k, v) for k, v in list(req.headers.items())),
         req.body,
     ))
 
@@ -199,7 +200,7 @@ def upload(server, session, base_file, charset='UTF-8'):
     multiple_files = [
         ('base_file', (name_file, open(base_file, 'rb'), mime)),
     ]
-    for sibling, mime in files.iteritems():
+    for sibling, mime in files.items():
         if sibling != base_file:
             name_param = splitext(sibling)[1][1:]
             name_file = split(sibling)[1]

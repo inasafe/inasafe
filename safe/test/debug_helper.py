@@ -9,10 +9,14 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
+from __future__ import print_function
+from builtins import zip
+from builtins import str
+from builtins import range
 
 from tempfile import mkdtemp
 
-from PyQt4.QtCore import QVariant, Qt
+from qgis.PyQt.QtCore import QVariant, Qt
 from qgis.core import (
     QgsMapLayerRegistry,
     QGis,
@@ -84,7 +88,7 @@ def show_qgis_layer(layer):
     :param layer: The layer to show.
     :type layer: QgsMapLayer
     """
-    QgsMapLayerRegistry.instance().addMapLayer(layer)
+    QgsProject.instance().addMapLayer(layer)
 
 
 def save_layer_to_file(layer):
@@ -156,7 +160,8 @@ def print_attribute_table(layer, limit=-1):
         attributes.extend(feature.attributes())
         data.append(attributes)
 
-    print pretty_table(data, headers)
+    # fix_print_with_import
+    print(pretty_table(data, headers))
 
 
 def print_combobox(combo, role=Qt.UserRole):
@@ -181,4 +186,5 @@ def print_combobox(combo, role=Qt.UserRole):
         attributes = [combo.itemText(i), selected]
         attributes.extend([str(combo.itemData(i, j)) for j in role])
         data.append(attributes)
-    print pretty_table(data, headers)
+    # fix_print_with_import
+    print(pretty_table(data, headers))

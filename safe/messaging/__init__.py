@@ -1,5 +1,6 @@
 # coding=utf-8
 """Messaging init file."""
+from __future__ import absolute_import
 
 # pylint: disable=unused-import
 from .item.brand import Brand
@@ -19,9 +20,9 @@ from .item.bulleted_list import BulletedList
 from .item.cell import Cell
 from .item.row import Row
 from .item.table import Table
-from message import Message
-from error_message import ErrorMessage
-from styles import PROGRESS_UPDATE_STYLE
+from .message import Message
+from .error_message import ErrorMessage
+from .styles import PROGRESS_UPDATE_STYLE
 # pylint: enable=unused-import
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

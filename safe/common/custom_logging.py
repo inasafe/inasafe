@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
 import logging
 import os
 import socket
@@ -27,7 +28,7 @@ if safe_extras_dir not in sys.path:
 # We add "# NOQA" because imports are not done at top of file.
 
 from qgis.core import QgsMessageLog  # NOQA
-from PyQt4.QtCore import QT_VERSION_STR, QSettings  # NOQA We can't move to
+from qgis.PyQt.QtCore import QT_VERSION_STR, QSettings  # NOQA We can't move to
 # our settings class.
 
 from raven.handlers.logging import SentryHandler  # NOQA
@@ -72,7 +73,8 @@ class QgsLogHandler(logging.Handler):
             message = tr(
                 'Due to memory limitations on this machine, InaSAFE can not '
                 'handle the full log')
-            print message
+            # fix_print_with_import
+            print(message)
             QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 

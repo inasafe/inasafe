@@ -1,10 +1,11 @@
 # coding=utf-8
 """Field Mapping Dialog Implementation."""
+from builtins import range
 import logging
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
-from PyQt4.QtGui import (
-    QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox, QIcon)
+from qgis.PyQt.QtCore import pyqtSlot, QSettings
+from qgis.PyQt.QtWidgets import QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox
+from qgis.PyQt.QtGui import QIcon
 from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
 
 from parameters.parameter_exceptions import InvalidValidationException
@@ -25,7 +26,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.resources import (
     get_ui_class, html_footer, html_header, resources_path)
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 from safe.utilities.utilities import get_error_message
 
 FORM_CLASS = get_ui_class('field_mapping_dialog_base.ui')
@@ -236,7 +237,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
     def save_metadata(self):
         """Save metadata based on the field mapping state."""
         metadata = self.field_mapping_widget.get_field_mapping()
-        for key, value in metadata['fields'].items():
+        for key, value in list(metadata['fields'].items()):
             # Delete the key if it's set to None
             if key in self.metadata['inasafe_default_values']:
                 self.metadata['inasafe_default_values'].pop(key)
@@ -246,7 +247,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             else:
                 self.metadata['inasafe_fields'][key] = value
 
-        for key, value in metadata['values'].items():
+        for key, value in list(metadata['values'].items()):
             # Delete the key if it's set to None
             if key in self.metadata['inasafe_fields']:
                 self.metadata['inasafe_fields'].pop(key)
@@ -260,7 +261,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=self.metadata)
-        except InaSAFEError, e:
+        except InaSAFEError as e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(
@@ -272,7 +273,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         # Update setting fir recent value
         if self.metadata.get('inasafe_default_values'):
             for key, value in \
-                    self.metadata['inasafe_default_values'].items():
+                    list(self.metadata['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(
                     self.setting, key, RECENT, value)
 

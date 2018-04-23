@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from builtins import range
+from builtins import object
 
 import json
 
@@ -86,7 +88,7 @@ class FlatTable(object):
         :rtype: dict
         """
         list_data = []
-        for key, value in self.data.items():
+        for key, value in list(self.data.items()):
             row = list(key)
             row.append(value)
             list_data.append(row)
@@ -217,7 +219,7 @@ class PivotTable(object):
 
         sums = {}  # key = (row, column), value = sum
         sums_affected = {}  # key = row, value = sum
-        for flat_key, flat_value in flat_table.data.iteritems():
+        for flat_key, flat_value in flat_table.data.items():
             # apply filtering
             if filter_field is not None:
                 if flat_key[flat_filter_index] != filter_value:
@@ -231,7 +233,7 @@ class PivotTable(object):
                     else:
                         row_key = ''
 
-                    if row_key not in sums_affected.keys():
+                    if row_key not in list(sums_affected.keys()):
                         sums_affected[row_key] = 0
                     sums_affected[row_key] += flat_value
 
@@ -271,11 +273,11 @@ class PivotTable(object):
         self.total = 0.0
         self.total_rows = [0.0] * len(self.rows)
         self.total_columns = [0.0] * len(self.columns)
-        self.data = [[] for i in xrange(len(self.rows))]
-        for i in xrange(len(self.rows)):
+        self.data = [[] for i in range(len(self.rows))]
+        for i in range(len(self.rows)):
             self.data[i] = [0.0] * len(self.columns)
 
-        for (sum_row, sum_column), sum_value in sums.iteritems():
+        for (sum_row, sum_column), sum_value in sums.items():
             sum_row_index = self.rows.index(sum_row)
             sum_column_index = self.columns.index(sum_column)
             self.data[sum_row_index][sum_column_index] = sum_value
@@ -286,7 +288,7 @@ class PivotTable(object):
 
         self.total_rows_affected = [0.0] * len(self.rows)
         self.total_affected = 0.0
-        for row, value in sums_affected.iteritems():
+        for row, value in sums_affected.items():
             self.total_affected += value
             sum_row_index = self.rows.index(row)
             self.total_rows_affected[sum_row_index] = value

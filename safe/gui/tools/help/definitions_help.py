@@ -1,12 +1,13 @@
 # coding=utf-8
 """Help text for the dock widget."""
+from builtins import str
 
 import copy
 import logging
 import re
 from os.path import exists
 
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 import safe.definitions as definitions
 import safe.processors
@@ -170,7 +171,7 @@ def content():
 
     last_group = None
     table = None
-    for key, value in definitions.concepts.iteritems():
+    for key, value in definitions.concepts.items():
         current_group = value['group']
         if current_group != last_group:
             if last_group is not None:
@@ -376,7 +377,7 @@ def content():
         'analysis-progress-reporting',
         tr('Progress reporting steps'),
         heading_level=2)
-    steps = definitions.analysis_steps.values()
+    steps = list(definitions.analysis_steps.values())
     for step in steps:
         definition_to_message(
             step, message, table_of_contents, heading_level=3)
@@ -719,12 +720,12 @@ def content():
         row.add(m.Cell(post_processor['name']))
         # Input fields
         bullets = m.BulletedList()
-        for key, value in sorted(post_processor['input'].iteritems()):
+        for key, value in sorted(post_processor['input'].items()):
             bullets.add(key)
         row.add(m.Cell(bullets))
         # Output fields
         bullets = m.BulletedList()
-        for key, value in sorted(post_processor['output'].iteritems()):
+        for key, value in sorted(post_processor['output'].items()):
             name = value['value']['name']
             formula_type = value['type']['key']
             if formula_type == 'formula':
@@ -825,7 +826,7 @@ def content():
     row.add(m.Cell(tr('Name'), header=True))
     row.add(m.Cell(tr('Description'), header=True))
     table.add(row)
-    for expression_name, expression in sorted(qgis_expressions().iteritems()):
+    for expression_name, expression in sorted(qgis_expressions().items()):
         row = m.Row()
         row.add(m.Cell(expression_name))
         help = expression.helptext()
@@ -908,7 +909,7 @@ def _create_section_header(
     # Reset the heading counts for headings below this level
     # Also calculate the index of the TOC entry
     index_number = ''
-    for key in HEADING_COUNTS.keys():
+    for key in list(HEADING_COUNTS.keys()):
         if key > heading_level:
             HEADING_COUNTS[key] = 0
         else:
@@ -1262,7 +1263,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_min'], dict):
                         bullets = m.BulletedList()
                         minima = inasafe_class['numeric_default_min']
-                        for key, value in sorted(minima.iteritems()):
+                        for key, value in sorted(minima.items()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
@@ -1277,7 +1278,7 @@ def definition_to_message(
                     if isinstance(inasafe_class['numeric_default_max'], dict):
                         bullets = m.BulletedList()
                         maxima = inasafe_class['numeric_default_max']
-                        for key, value in sorted(maxima.iteritems()):
+                        for key, value in sorted(maxima.items()):
                             bullets.add(u'%s : %s' % (key, value))
                         row.add(m.Cell(bullets))
                     else:
@@ -1405,9 +1406,9 @@ def _add_field_to_table(field, table):
         # now iterate the unque list and write to a sentence
         for field_type in unique_list:
             if field_types:
-                field_types += ', %s' % unicode(field_type)
+                field_types += ', %s' % str(field_type)
             else:
-                field_types = unicode(field_type)
+                field_types = str(field_type)
     row.add(m.Cell(field_types))
     row.add(m.Cell(field['precision']))
     table.add(row)

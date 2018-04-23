@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from PyQt4.QtGui import QSortFilterProxyModel
+from qgis.PyQt.QtCore import QSortFilterProxyModel
 
 
 class LayerBrowserProxyModel(QSortFilterProxyModel):
