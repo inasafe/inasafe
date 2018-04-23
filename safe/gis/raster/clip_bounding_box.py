@@ -1,7 +1,6 @@
 # coding=utf-8
 
 """Clip a raster by bounding box."""
-from builtins import str
 
 import logging
 

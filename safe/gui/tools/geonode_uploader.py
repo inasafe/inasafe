@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Geonode uploader."""
-from builtins import str
+
 
 from requests.compat import urljoin
 
@@ -119,7 +119,7 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
         """Fill layer combobox."""
         project = QgsProject.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = project.mapLayers().values()
+        layers = list(project.mapLayers().values())
 
         extensions = tuple(extension_siblings.keys())
         for layer in layers:

@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Functions to translate a word or to get the locale."""
-from builtins import str
+
 
 import logging
 

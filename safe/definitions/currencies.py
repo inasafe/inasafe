@@ -11,35 +11,35 @@ idr = {
     'key': 'IDR',
     'name': 'Indonesia Rupiah',
     'short name': 'Rupiah',
-    'symbol': u'Rp'
+    'symbol': 'Rp'
 }
 
 aud = {
     'key': 'AUD',
     'name': 'Australian Dollar',
     'short name': 'Dollar',
-    'symbol': u'AU$'
+    'symbol': 'AU$'
 }
 
 usd = {
     'key': 'USD',
     'name': 'United States Dollar',
     'short name': 'Dollar',
-    'symbol': u'US$'
+    'symbol': 'US$'
 }
 
 eur = {
     'key': 'EUR',
     'name': 'Euro',
     'short name': 'Euro',
-    'symbol': u'€'
+    'symbol': '€'
 }
 
 zar = {
     'key': 'ZAR',
     'name': 'South African Rand',
     'short name': 'Rand',
-    'symbol': u'R'
+    'symbol': 'R'
 }
 
 currencies = [

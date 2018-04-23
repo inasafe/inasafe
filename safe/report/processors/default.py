@@ -6,8 +6,8 @@ Module for basic renderer we support. Currently we have:
 - Jinja2 Templating renderer
 - QGIS Composition templating renderer
 """
-from builtins import str
-from builtins import range
+
+
 
 import io
 import logging
@@ -353,7 +353,7 @@ def qgis_composer_html_renderer(impact_report, component):
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
-        for key, each_format in output_format.items():
+        for key, each_format in list(output_format.items()):
             each_path = component_output_path[key]
 
             if each_format in doc_format:
@@ -642,7 +642,7 @@ def qgis_composer_renderer(impact_report, component):
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
-        for key, each_format in output_format.items():
+        for key, each_format in list(output_format.items()):
             each_path = component_output_path[key]
 
             if each_format in doc_format:

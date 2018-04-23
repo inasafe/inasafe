@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Utilities module."""
-from builtins import str
+
 
 import codecs
 import json
@@ -194,7 +194,7 @@ def generate_expression_help(description, examples, extra_information=None):
         :rtype: Message
         """
         bullets = m.BulletedList()
-        for key, item in information.items():
+        for key, item in list(information.items()):
             if item:
                 bullets.add(
                     m.Text(m.ImportantText(key), m.Text('→'), m.Text(item)))

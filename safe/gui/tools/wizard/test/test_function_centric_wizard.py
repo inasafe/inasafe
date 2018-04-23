@@ -1,6 +1,6 @@
 # coding=utf-8
 """Tests for the Impact Function Centric Wizard."""
-from builtins import range
+
 
 import unittest
 import sys

@@ -2,17 +2,17 @@
 raven.events
 ~~~~~~~~~~~~
 
-:copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
+:copyright: (c) 2010-2012 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
+
 """
+from __future__ import absolute_import
 
 import logging
 import sys
 
-from raven.utils import varmap
-from raven.utils.encoding import shorten, to_unicode
-from raven.utils.stacks import get_stack_info, iter_traceback_frames, \
-                               get_culprit
+from raven.utils.encoding import to_unicode
+from raven.utils.stacks import get_stack_info, iter_traceback_frames
 
 __all__ = ('BaseEvent', 'Exception', 'Message', 'Query')
 
@@ -29,6 +29,44 @@ class BaseEvent(object):
         return {
         }
 
+    def transform(self, value):
+        return self.client.transform(value)
+
+
+# The __suppress_context__ attribute was added in Python 3.3.
+# See PEP 415 for details:
+# https://www.python.org/dev/peps/pep-0415/
+if hasattr(Exception, '__suppress_context__'):
+    def _chained_exceptions(exc_info):
+        """
+        Return a generator iterator over an exception's chain.
+
+        The exceptions are yielded from outermost to innermost (i.e. last to
+        first when viewing a stack trace).
+
+        """
+        yield exc_info
+        exc_type, exc, exc_traceback = exc_info
+
+        context = set()
+        context.add(exc)
+        while True:
+            if exc.__suppress_context__:
+                # Then __cause__ should be used instead.
+                exc = exc.__cause__
+            else:
+                exc = exc.__context__
+            if exc in context:
+                break
+            context.add(exc)
+            if exc is None:
+                break
+            yield type(exc), exc, exc.__traceback__
+else:
+    # Then we do not support reporting exception chains.
+    def _chained_exceptions(exc_info):
+        yield exc_info
+
 
 class Exception(BaseEvent):
     """
@@ -38,61 +76,54 @@ class Exception(BaseEvent):
     - type: 'ClassName'
     - module '__builtin__' (i.e. __builtin__.TypeError)
     - frames: a list of serialized frames (see _get_traceback_frames)
+
     """
 
+    name = 'exception'
+
     def to_string(self, data):
-        exc = data['sentry.interfaces.Exception']
+        exc = data[self.name]['values'][-1]
         if exc['value']:
             return '%s: %s' % (exc['type'], exc['value'])
         return exc['type']
 
-    def get_hash(self, data):
-        exc = data['sentry.interfaces.Exception']
-        output = [exc['type']]
-        for frame in data['sentry.interfaces.Stacktrace']['frames']:
-            output.append(frame['module'])
-            output.append(frame['function'])
-        return output
+    def _get_value(self, exc_type, exc_value, exc_traceback):
+        """
+        Convert exception info to a value for the values list.
+        """
+        stack_info = get_stack_info(
+            iter_traceback_frames(exc_traceback),
+            transformer=self.transform,
+            capture_locals=self.client.capture_locals,
+        )
+
+        exc_module = getattr(exc_type, '__module__', None)
+        if exc_module:
+            exc_module = str(exc_module)
+        exc_type = getattr(exc_type, '__name__', '<unknown>')
+
+        return {
+            'value': to_unicode(exc_value),
+            'type': str(exc_type),
+            'module': to_unicode(exc_module),
+            'stacktrace': stack_info,
+        }
 
     def capture(self, exc_info=None, **kwargs):
-        new_exc_info = False
         if not exc_info or exc_info is True:
-            new_exc_info = True
             exc_info = sys.exc_info()
 
         if not exc_info:
             raise ValueError('No exception found')
 
-        try:
-            exc_type, exc_value, exc_traceback = exc_info
-
-            frames = varmap(lambda k, v: shorten(v,
-                string_length=self.client.string_max_length, list_length=self.client.list_max_length),
-            get_stack_info(iter_traceback_frames(exc_traceback)))
-
-            culprit = get_culprit(frames, self.client.include_paths, self.client.exclude_paths)
-
-            exc_module = getattr(exc_type, '__module__', None)
-            exc_type = getattr(exc_type, '__name__', '<unknown>')
-        finally:
-            if new_exc_info:
-                try:
-                    del exc_info
-                    del exc_traceback
-                except Exception, e:
-                    self.logger.exception(e)
+        values = []
+        for exc_info in _chained_exceptions(exc_info):
+            value = self._get_value(*exc_info)
+            values.insert(0, value)
 
         return {
-            'level': logging.ERROR,
-            'culprit': culprit,
-            'sentry.interfaces.Exception': {
-                'value': to_unicode(exc_value),
-                'type': str(exc_type),
-                'module': str(exc_module),
-            },
-            'sentry.interfaces.Stacktrace': {
-                'frames': frames
-            },
+            'level': kwargs.get('level', logging.ERROR),
+            self.name: {'values': values},
         }
 
 
@@ -104,23 +135,22 @@ class Message(BaseEvent):
     - params: ('foo', 'bar')
     """
 
+    name = 'sentry.interfaces.Message'
+
     def to_string(self, data):
-        msg = data['sentry.interfaces.Message']
-        if msg.get('params'):
-            return msg['message'] % msg['params']
-        return msg['message']
+        return data[self.name]['message']
 
-    def get_hash(self, data):
-        msg = data['sentry.interfaces.Message']
-        return [msg['message']]
-
-    def capture(self, message, params=(), **kwargs):
+    def capture(self, message, params=(), formatted=None, **kwargs):
+        message = to_unicode(message)
         data = {
-            'sentry.interfaces.Message': {
+            self.name: {
                 'message': message,
-                'params': params,
-            }
+                'params': self.transform(params),
+                'formatted': formatted,
+            },
         }
+        if 'message' not in data:
+            data['message'] = formatted or message
         return data
 
 
@@ -131,18 +161,17 @@ class Query(BaseEvent):
     - query: 'SELECT * FROM table'
     - engine: 'postgesql_psycopg2'
     """
-    def to_string(self, data):
-        sql = data['sentry.interfaces.Query']
-        return sql['query']
 
-    def get_hash(self, data):
-        sql = data['sentry.interfaces.Query']
-        return [sql['query'], sql['engine']]
+    name = 'sentry.interfaces.Query'
+
+    def to_string(self, data):
+        sql = data[self.name]
+        return sql['query']
 
     def capture(self, query, engine, **kwargs):
         return {
-            'sentry.interfaces.Query': {
-                'query': query,
-                'engine': engine,
+            self.name: {
+                'query': to_unicode(query),
+                'engine': str(engine),
             }
         }

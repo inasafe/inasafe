@@ -1,7 +1,7 @@
 # coding=utf-8
 """InaSAFE Wizard Step Multi Classifications."""
-from builtins import str
-from builtins import range
+
+
 
 import logging
 from collections import OrderedDict

@@ -1,6 +1,6 @@
 # coding=utf-8
 """Module used to generate context for analysis provenance details."""
-from __future__ import absolute_import
+
 
 from collections import OrderedDict
 
@@ -361,7 +361,7 @@ def analysis_provenance_details_report_extractor(
 
     context['brand_logo'] = resource_url(
         resources_path('img', 'logos', 'inasafe-logo-white.png'))
-    for key, component in components_list.items():
+    for key, component in list(components_list.items()):
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 
@@ -430,7 +430,7 @@ def headerize(provenances):
         'Gdal': 'GDAL',
         'Maps': 'Map'
     }
-    for key, value in provenances.items():
+    for key, value in list(provenances.items()):
         if '_' in key:
             header = key.replace('_', ' ').title()
         else:
@@ -505,7 +505,7 @@ def sorted_keywords_by_order(keywords, order):
     """
 
     # we need to delete item with no value
-    for key, value in keywords.items():
+    for key, value in list(keywords.items()):
         if value is None:
             del keywords[key]
 

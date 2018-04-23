@@ -2,9 +2,10 @@
 raven.contrib.async
 ~~~~~~~~~~~~~~~~~~~
 
-:copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
+:copyright: (c) 2010-2012 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
+from __future__ import absolute_import
 
 import warnings
 
@@ -16,6 +17,7 @@ class AsyncClient(Client):
     """
     This client uses a single background thread to dispatch errors.
     """
+
     def __init__(self, worker=None, *args, **kwargs):
         warnings.warn('AsyncClient is deprecated. Use the threaded+http transport instead.', DeprecationWarning)
         self.worker = worker or AsyncWorker()
@@ -25,4 +27,4 @@ class AsyncClient(Client):
         super(AsyncClient, self).send(**kwargs)
 
     def send(self, **kwargs):
-        self.worker.queue(self.send_sync, kwargs)
+        self.worker.queue(self.send_sync, **kwargs)

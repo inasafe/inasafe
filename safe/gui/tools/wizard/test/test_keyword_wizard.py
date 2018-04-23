@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Tests for the keyword wizard."""
-from builtins import range
+
 
 import shutil
 import unittest
@@ -63,12 +63,12 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 # Some default values for testing
-source = u'Source'
-source_scale = u'Source Scale'
-source_url = u'Source Url'
+source = 'Source'
+source_scale = 'Source Scale'
+source_url = 'Source Url'
 source_date = datetime.strptime('06-12-2015', '%d-%m-%Y')
-source_license = u'Source License'
-layer_title = u'Layer Title'
+source_license = 'Source License'
+layer_title = 'Layer Title'
 
 
 # noinspection PyTypeChecker
@@ -291,7 +291,7 @@ class TestKeywordWizard(unittest.TestCase):
             'title': layer_title,
             'hazard': hazard_earthquake['key'],
             'inasafe_fields':
-                {hazard_value_field['key']: u'h_zone'},
+                {hazard_value_field['key']: 'h_zone'},
             'value_maps': layer.keywords['value_maps'],
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -496,17 +496,17 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_volcano['key'],
             'inasafe_fields':
                 {
-                    hazard_value_field['key']: u'KRB',
-                    hazard_name_field['key']: u'volcano',
+                    hazard_value_field['key']: 'KRB',
+                    hazard_name_field['key']: 'volcano',
                  },
             'value_maps': {
                 exposure_land_cover['key']: {
                     volcano_hazard_classes['key']: {
                         'active': True,
                         'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 }
@@ -526,44 +526,44 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard', 'volcano_krb.shp', clone=True)
 
         default_classes = {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
         keywords = {
             'hazard': hazard_volcano['key'],
             'hazard_category': hazard_category_multiple_event['key'],
             'inasafe_fields': {
-                hazard_name_field['key']: u'volcano',
-                hazard_value_field['key']: u'KRB'
+                hazard_name_field['key']: 'volcano',
+                hazard_value_field['key']: 'KRB'
             },
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_mode': layer_mode_classified['key'],
             'layer_purpose': layer_purpose_hazard['key'],
-            'title': u'Volcano KRB',
+            'title': 'Volcano KRB',
             'value_maps': {
                 exposure_land_cover['key']: {
                     volcano_hazard_classes['key']: {
-                        u'active': True,
-                        u'classes': default_classes
+                        'active': True,
+                        'classes': default_classes
                     }
                 },
-                u'population': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': default_classes
+                'population': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': default_classes
                     }
                 },
-                u'road': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': default_classes
+                'road': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': default_classes
                     }
                 },
-                u'structure': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': default_classes
+                'structure': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': default_classes
                     }
                 }
             }
@@ -768,17 +768,17 @@ class TestKeywordWizard(unittest.TestCase):
         default_classes = generic_structure_classes['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            u'residential': [u'Residential'],
-            u'education': [u'School'],
-            u'health': [u'Clinic/Doctor'],
-            u'transport': [],
-            u'place of worship': [u'Place of Worship - Islam'],
-            u'government': [u'Government'],
-            u'commercial': [u'Commercial', u'Industrial'],
-            u'recreation': [],
-            u'public facility': [],
-            u'evacuation centre': [],
-            u'other': []
+            'residential': ['Residential'],
+            'education': ['School'],
+            'health': ['Clinic/Doctor'],
+            'transport': [],
+            'place of worship': ['Place of Worship - Islam'],
+            'government': ['Government'],
+            'commercial': ['Commercial', 'Industrial'],
+            'recreation': [],
+            'public facility': [],
+            'evacuation centre': [],
+            'other': []
         }
         dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
@@ -837,7 +837,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure': exposure_structure['key'],
             'inasafe_fields':
                 {
-                    exposure_type_field['key']: u'TYPE',
+                    exposure_type_field['key']: 'TYPE',
                 },
             'value_map': dict((k, v) for k, v in list(assigned_values.items()) if v),
             'date': source_date,
@@ -1262,7 +1262,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure_unit': count_exposure_unit['key'],
             'inasafe_fields':
                 {
-                    population_count_field['key']: [u'population'],
+                    population_count_field['key']: ['population'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1289,7 +1289,7 @@ class TestKeywordWizard(unittest.TestCase):
             'inasafe_fields':
                 {
                     # Dummy, select more than fields to show we can do it.
-                    population_count_field['key']: [u'population', u'id'],
+                    population_count_field['key']: ['population', 'id'],
                 },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
@@ -1595,17 +1595,17 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_volcano['key'],
             'inasafe_fields':
                 {
-                    hazard_value_field['key']: u'KRB',
-                    hazard_name_field['key']: u'volcano',
+                    hazard_value_field['key']: 'KRB',
+                    hazard_name_field['key']: 'volcano',
                 },
             'value_maps': {
                 exposure_land_cover['key']: {
                     volcano_hazard_classes['key']: {
                         'active': True,
                         'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 }
@@ -2673,7 +2673,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose exposure
-        self.assertEquals(
+        self.assertEqual(
             dialog.step_kw_subcategory.lstSubcategories.currentRow(), 2)
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         dialog.close()

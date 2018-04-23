@@ -136,7 +136,7 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
             impact_function.prepare()[0] == PREPARE_SUCCESS)
 
         expected_layers = {
-            u'Generic Hazard Polygon On Population Polygon': [
+            'Generic Hazard Polygon On Population Polygon': [
                 layer_purpose_exposure_summary['key'],
                 layer_purpose_aggregate_hazard_impacted['key'],
                 layer_purpose_aggregation_summary['key'],
@@ -147,7 +147,7 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
                 layer_purpose_aggregation_summary['key'],
                 layer_purpose_analysis_impacted['key']
             ],
-            u'Generic Hazard Polygon On Roads Line': [
+            'Generic Hazard Polygon On Roads Line': [
                 layer_purpose_exposure_summary['key'],
                 layer_purpose_aggregate_hazard_impacted['key'],
                 layer_purpose_aggregation_summary['key'],

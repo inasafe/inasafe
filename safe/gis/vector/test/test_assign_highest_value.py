@@ -58,7 +58,7 @@ class TestAssignHighestValueVector(unittest.TestCase):
         inasafe_fields = layer.keywords['inasafe_fields']
         expected_field = inasafe_fields[hazard_class_field['key']]
 
-        for value, count in expected_count.items():
+        for value, count in list(expected_count.items()):
             if value:
                 expression = '"%s" = \'%s\'' % (expected_field, value)
             else:

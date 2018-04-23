@@ -1,7 +1,7 @@
 # coding=utf-8
 """Wizard Dialog."""
-from __future__ import absolute_import
-from builtins import str
+
+
 
 import logging
 from sqlite3 import OperationalError

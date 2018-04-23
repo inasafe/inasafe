@@ -1,8 +1,8 @@
 # coding=utf-8
 """Helper module for gui test suite."""
-from builtins import str
-from builtins import range
-from builtins import object
+
+
+
 
 import codecs
 import hashlib
@@ -555,7 +555,7 @@ def compare_two_vector_layers(control_layer, test_layer):
         return True, None
 
 
-class RedirectStreams(object):
+class RedirectStreams():
     """Context manager for redirection of stdout and stderr.
 
     This is from
@@ -655,7 +655,7 @@ def combos_to_string(dock):
     :rtype: unicode
     """
 
-    string = u'Hazard Layers\n'
+    string = 'Hazard Layers\n'
     string += '-------------------------\n'
     current_id = dock.hazard_layer_combo.currentIndex()
     for count in range(0, dock.hazard_layer_combo.count()):
@@ -1088,7 +1088,7 @@ def remove_vector_temp_file(file_path):
             os.remove(file_path + ext)
 
 
-class FakeLayer(object):
+class FakeLayer():
 
     """A Mock layer.
 

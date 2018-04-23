@@ -1,6 +1,6 @@
 # coding=utf-8
 """Keyword IO implementation."""
-from builtins import str
+
 
 import logging
 from ast import literal_eval

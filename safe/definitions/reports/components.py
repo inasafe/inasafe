@@ -2,7 +2,7 @@
 """Contains definitions about Report components.
 
 """
-from __future__ import absolute_import
+
 
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import (
@@ -157,7 +157,7 @@ general_report_component = {
             'general_concepts': [
                 concepts['affected']
             ],
-            'note_format': u'{name}: {description}'
+            'note_format': '{name}: {description}'
         }
     }
 }
@@ -453,16 +453,16 @@ analysis_provenance_details_simplified_component = {
         },
         'provenance_format': {
             'hazard_header': tr('Hazard source'),
-            'hazard_format': u'{layer_name} - {source} - ',
+            'hazard_format': '{layer_name} - {source} - ',
 
             'exposure_header': tr('Exposure source'),
-            'exposure_format': u'{layer_name} - {source} - ',
+            'exposure_format': '{layer_name} - {source} - ',
 
             'aggregation_header': tr('Aggregation source'),
-            'aggregation_format': u'{layer_name} - {source} - ',
+            'aggregation_format': '{layer_name} - {source} - ',
 
             'impact_function_header': tr('Impact Function'),
-            'impact_function_format': u'{impact_function_name}',
+            'impact_function_format': '{impact_function_name}',
         }
     }
 }

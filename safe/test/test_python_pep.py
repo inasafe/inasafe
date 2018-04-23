@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from __future__ import print_function
+
 import unittest
 import os
 import sys
@@ -41,7 +41,7 @@ class TestPythonPep(unittest.TestCase):
         # fix_print_with_import
         print(output)
         message = 'Hey mate, go back to your keyboard :)'
-        self.assertEquals(lines, 0, message)
+        self.assertEqual(lines, 0, message)
 
     @unittest.skipIf(
         not os.environ.get('WITH_PYTHON_PEP', True),
@@ -86,4 +86,4 @@ class TestPythonPep(unittest.TestCase):
         message = (
             'Hey mate, go back to your keyboard :) I got %s '
             'errors from PEP257.)' % lines)
-        self.assertEquals(lines, 0, message)
+        self.assertEqual(lines, 0, message)

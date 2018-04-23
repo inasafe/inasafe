@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Impact Function."""
-from builtins import object
+
 
 import getpass
 import logging
@@ -229,7 +229,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class ImpactFunction(object):
+class ImpactFunction():
 
     """Impact Function."""
 
@@ -619,7 +619,7 @@ class ImpactFunction(object):
         # Extra layers produced by pre-processing
         layers.update(self._preprocessors_layers)
 
-        for expected_purpose, layer in layers.items():
+        for expected_purpose, layer in list(layers.items()):
             if layer:
                 purpose = layer.keywords.get('layer_purpose')
                 if purpose != expected_purpose:
@@ -1895,7 +1895,7 @@ class ImpactFunction(object):
             self.debug_layer(layer, add_to_datastore=False)
 
             self.set_state_process('pre_processor', pre_processor['name'])
-            LOGGER.info(u'{name} : Running'.format(name=pre_processor['name']))
+            LOGGER.info('{name} : Running'.format(name=pre_processor['name']))
 
     @profile
     def aggregation_preparation(self):
@@ -2416,7 +2416,7 @@ class ImpactFunction(object):
                     layer, post_processor)
                 if valid:
                     self.set_state_process('post_processor', name)
-                    message = u'{name} : Running'.format(name=name)
+                    message = '{name} : Running'.format(name=name)
                     LOGGER.info(message)
 
             else:

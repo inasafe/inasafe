@@ -1,6 +1,6 @@
 # coding=utf-8
 """Module used to generate context for MMI detail section."""
-from builtins import range
+
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.layer_geometry import (

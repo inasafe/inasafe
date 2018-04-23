@@ -220,7 +220,7 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
 
     # dictionary comprehension
     keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()
+        x[0]: x[1]['value'] for x in list(metadata.dict['properties'].items())
         if x[1]['value'] is not None}
     if 'keyword_version' not in list(keywords.keys()) and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
@@ -228,13 +228,13 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
         message += 'Keywords file: %s\n' % os.path.exists(
             os.path.splitext(layer_uri)[0] + '.xml')
         message += 'keywords:\n'
-        for k, v in keywords.items():
+        for k, v in list(keywords.items()):
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
 
     # Get dictionary keywords that has value != None
     keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()
+        x[0]: x[1]['value'] for x in list(metadata.dict['properties'].items())
         if x[1]['value'] is not None}
 
     if keyword:

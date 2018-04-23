@@ -3,7 +3,7 @@
 This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings.
 """
-from builtins import str
+
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -107,7 +107,7 @@ class NeedsProfile(MinimumNeeds):
         """
         self.minimum_needs = self.settings.value('MinimumNeeds')
 
-        if not self.minimum_needs or self.minimum_needs == u'':
+        if not self.minimum_needs or self.minimum_needs == '':
             # Load the most relevant minimum needs
             # If more than one profile exists, just use defaults so
             # the user doesn't get confused.

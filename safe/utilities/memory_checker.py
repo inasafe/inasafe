@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Memory checker."""
-from builtins import str
+
 
 import logging
 

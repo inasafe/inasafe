@@ -120,7 +120,7 @@ def exposure_summary_table(
             )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.items():
+        for field, field_definition in list(absolute_values.items()):
             value = area[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -202,7 +202,7 @@ def exposure_summary_table(
     # classification
     if not summarization_dicts:
         # For each absolute values
-        for absolute_field in absolute_values.keys():
+        for absolute_field in list(absolute_values.keys()):
             field_definition = definition(absolute_values[absolute_field][1])
             field = create_field_from_definition(field_definition)
             tabular.addAttribute(field)

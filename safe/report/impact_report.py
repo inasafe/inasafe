@@ -5,7 +5,7 @@ Enable dynamic report generation based on report metadata.
 Easily customize map report or document based report.
 
 """
-from builtins import object
+
 
 import imp
 import logging
@@ -27,6 +27,7 @@ from safe.messaging import styles
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import get_error_message
+import collections
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -39,7 +40,7 @@ WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class InaSAFEReportContext(object):
+class InaSAFEReportContext():
 
     """A class to compile all InaSAFE related context for reporting uses.
 
@@ -156,7 +157,7 @@ class InaSAFEReportContext(object):
             self._disclaimer = text
 
 
-class QGISCompositionContext(object):
+class QGISCompositionContext():
 
     """A class to hold the value for QGISComposition object.
 
@@ -251,7 +252,7 @@ class QGISCompositionContext(object):
         return self._save_as_raster
 
 
-class ImpactReport(object):
+class ImpactReport():
 
     """A class for creating and generating report.
 
@@ -423,7 +424,7 @@ class ImpactReport(object):
                 return output_list
             elif isinstance(output_path, dict):
                 output_dict = {}
-                for key, path in output_path.items():
+                for key, path in list(output_path.items()):
                     output_dict[key] = os.path.abspath(
                         os.path.join(output_folder, path))
                 return output_dict
@@ -752,7 +753,7 @@ class ImpactReport(object):
             # load extractors
             try:
                 if not component.context:
-                    if callable(component.extractor):
+                    if isinstance(component.extractor, collections.Callable):
                         _extractor_method = component.extractor
                     else:
                         _package_name = (
@@ -804,7 +805,7 @@ class ImpactReport(object):
 
             try:
                 # load processor
-                if callable(component.processor):
+                if isinstance(component.processor, collections.Callable):
                     _renderer = component.processor
                 else:
                     _package_name = '%(report-key)s.renderer.%(component-key)s'

@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step InaSAFE Default Fields."""
-from builtins import range
+
 
 # noinspection PyPackageRequirements
 import logging

@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Module used to generate context for analysis detail section."""
-from builtins import range
+
 
 import logging
 from copy import deepcopy
@@ -150,7 +150,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             'total': []
         }
     }
-    for key, group in header_hazard_group.items():
+    for key, group in list(header_hazard_group.items()):
         if key in hazard_class_header_mapping:
             header_hazard_group[key].update(hazard_class_header_mapping[key])
 
@@ -230,7 +230,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 hazard_class['key'], )
 
             group_key = None
-            for key, group in header_hazard_group.items():
+            for key, group in list(header_hazard_group.items()):
                 if hazard_class['name'] in group['hazards']:
                     group_key = key
                     break
@@ -264,7 +264,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
         for field in report_fields:
             group_key = None
-            for key, group in header_hazard_group.items():
+            for key, group in list(header_hazard_group.items()):
                 if field['name'] in group['total']:
                     group_key = key
                     break
@@ -362,7 +362,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             save_total_affected_field = True
 
         group_key = None
-        for key, group in header_hazard_group.items():
+        for key, group in list(header_hazard_group.items()):
             if hazard_class['name'] in group['hazards']:
                 group_key = key
                 break
@@ -417,7 +417,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 field['field_name'], analysis_layer)
 
         group_key = None
-        for key, group in header_hazard_group.items():
+        for key, group in list(header_hazard_group.items()):
             if field['name'] in group['total']:
                 group_key = key
                 break
@@ -476,7 +476,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     for i in range(breakdown_header_index, total_header_index):
         hazard_class_name = headers[i]
         group_key = None
-        for key, group in header_hazard_group.items():
+        for key, group in list(header_hazard_group.items()):
             if hazard_class_name in group['hazards'] or (
                     hazard_class_name in group['total']):
                 group_key = key

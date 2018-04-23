@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Test Minimum Needs Tools."""
-from builtins import zip
+
 
 import unittest
 import os
@@ -41,7 +41,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
         # Set selected layer and displaced field
         dialog.layer.setLayer(layer)
-        dialog.displaced.setField(u'displaced')
+        dialog.displaced.setField('displaced')
 
         # run minimum needs function
         dialog.accept()
@@ -83,7 +83,7 @@ class MinimumNeedsTest(unittest.TestCase):
         # Test Ok button with layer and displaced field
         # selected in the combo box
         dialog.layer.setLayer(input_layer)
-        dialog.displaced.setField(u'displaced')
+        dialog.displaced.setField('displaced')
 
         self.assertTrue(ok_button.isEnabled())
 

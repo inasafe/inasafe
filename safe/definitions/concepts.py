@@ -56,7 +56,7 @@ concepts['analysis'] = {
         {
             'text': tr(
                 ''),
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -74,7 +74,7 @@ concepts['hazard'] = {
         {
             'text': tr(
                 'UNISDR (2009) Terminology on disaster risk reduction.'),
-            'link': u'https://www.unisdr.org/we/inform/terminology'
+            'link': 'https://www.unisdr.org/we/inform/terminology'
         }
     ],
 }
@@ -91,7 +91,7 @@ concepts['generic_hazard'] = {
         {
             'text': tr(
                 ''),
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -107,7 +107,7 @@ concepts['exposure'] = {
         {
             'text': tr(
                 'UNISDR (2009) Terminology on disaster risk reduction.'),
-            'link': u'https://www.unisdr.org/we/inform/terminology'
+            'link': 'https://www.unisdr.org/we/inform/terminology'
         }
     ],
 }
@@ -125,8 +125,8 @@ concepts['affected'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -142,7 +142,7 @@ concepts['exposed_people'] = {
         {
             'text': tr(
                 'UNISDR (2009)Terminology on Disaster'),
-            'link': u'https://www.unisdr.org/we/inform/terminology'
+            'link': 'https://www.unisdr.org/we/inform/terminology'
         }
     ],
 }
@@ -162,8 +162,8 @@ concepts['affected_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -181,8 +181,8 @@ concepts['directly_affected_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -201,8 +201,8 @@ concepts['indirectly_affected_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -220,8 +220,8 @@ concepts['displaced_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -234,7 +234,7 @@ concepts['displacement_rate'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -256,8 +256,8 @@ concepts['evacuated_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -273,8 +273,8 @@ concepts['relocated_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -290,8 +290,8 @@ concepts['injured_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -306,8 +306,8 @@ concepts['killed_people'] = {
             'text': tr(
                 'UNISDR (2015)Proposed Updated Terminology on Disaster '
                 'Risk Reduction: A Technical Review'),
-            'link': u'http://www.preventionweb.net/files/'
-                    u'45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
 }
@@ -321,7 +321,7 @@ concepts['female'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/female'
+            'link': 'https://en.oxforddictionaries.com/definition/female'
         }
     ],
 }
@@ -334,7 +334,7 @@ concepts['male'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/male'
+            'link': 'https://en.oxforddictionaries.com/definition/male'
         }
     ],
 }
@@ -347,7 +347,7 @@ concepts['people'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/people'
+            'link': 'https://en.oxforddictionaries.com/definition/people'
         }
     ],
 }
@@ -360,13 +360,13 @@ concepts['infant'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/infant'
+            'link': 'https://en.oxforddictionaries.com/definition/infant'
         },
         {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -380,13 +380,13 @@ concepts['child'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/child'
+            'link': 'https://en.oxforddictionaries.com/definition/child'
         },
         {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -400,7 +400,7 @@ concepts['youth'] = {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -414,7 +414,7 @@ concepts['adult'] = {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -428,7 +428,7 @@ concepts['elderly'] = {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -442,14 +442,14 @@ concepts['disabled'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/'
-                    u'disabled'
+            'link': 'https://en.oxforddictionaries.com/definition/'
+                    'disabled'
         },
         {
             'text': tr(
                 'World Report on Disability.'),
-            'link': u'http://www.who.int/disabilities/world_report/2011/'
-                    u'report.pdf'
+            'link': 'http://www.who.int/disabilities/world_report/2011/'
+                    'report.pdf'
         }
     ],
 }
@@ -463,7 +463,7 @@ concepts['under_5'] = {
             'text': tr(
                 'World Population Dashboard. '
                 'ICPD Goals and Demographic Indicators 2016.'),
-            'link': u'http://www.unfpa.org/world-population-dashboard'
+            'link': 'http://www.unfpa.org/world-population-dashboard'
         }
     ],
 }
@@ -475,8 +475,8 @@ concepts['over_60'] = {
     'citations': [
         {
             'text': tr('World Population Aging 2013'),
-            'link': u'http://www.un.org/en/development/desa/population/'
-                    u'publications/pdf/ageing/WorldPopulationAgeing2013.pdf'
+            'link': 'http://www.un.org/en/development/desa/population/'
+                    'publications/pdf/ageing/WorldPopulationAgeing2013.pdf'
         }
     ],
 }
@@ -490,8 +490,8 @@ concepts['child_bearing_age'] = {
     'citations': [
         {
             'text': tr('UNFPA One Voice'),
-            'link': u'https://onevoice.unfpa.org/'
-                    u'index.unfpa?method=article&id=66'
+            'link': 'https://onevoice.unfpa.org/'
+                    'index.unfpa?method=article&id=66'
         }
     ],
 }
@@ -504,8 +504,8 @@ concepts['pregnant'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/'
-                    u'pregnant'
+            'link': 'https://en.oxforddictionaries.com/definition/'
+                    'pregnant'
         }
     ],
 }
@@ -518,8 +518,8 @@ concepts['lactating'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/'
-                    u'lactate'
+            'link': 'https://en.oxforddictionaries.com/definition/'
+                    'lactate'
         }
     ],
 }
@@ -533,7 +533,7 @@ concepts['rice'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/rice'
+            'link': 'https://en.oxforddictionaries.com/definition/rice'
         }
     ],
 }
@@ -546,8 +546,8 @@ concepts['drinking_water'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/'
-                    u'drinking_water'
+            'link': 'https://en.oxforddictionaries.com/definition/'
+                    'drinking_water'
         }
     ],
 }
@@ -561,7 +561,7 @@ concepts['clean_water'] = {
         {
             'text': tr(
                 ''),
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -574,7 +574,7 @@ concepts['family_kit'] = {
         {
             'text': tr(
                 'BNPB Perka 7/2008'),
-            'link': u'http://tinyurl.com/BNPB-Perka-7-2008'
+            'link': 'http://tinyurl.com/BNPB-Perka-7-2008'
         }
     ],
 }
@@ -588,7 +588,7 @@ concepts['hygiene_pack'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/hygiene'
+            'link': 'https://en.oxforddictionaries.com/definition/hygiene'
         }
     ],
 }
@@ -602,8 +602,8 @@ concepts['toilet'] = {
         {
             'text': tr(
                 'Oxford Dictionary.'),
-            'link': u'https://en.oxforddictionaries.com/definition/'
-                    u'toilet'
+            'link': 'https://en.oxforddictionaries.com/definition/'
+                    'toilet'
         }
     ],
 }
@@ -618,7 +618,7 @@ concepts['thresholds'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -637,7 +637,7 @@ concepts['value_maps'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -653,7 +653,7 @@ concepts['rounding_methodology'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -667,7 +667,7 @@ concepts['productivity_rate'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -681,7 +681,7 @@ concepts['productivity'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -696,7 +696,7 @@ concepts['production_cost_rate'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -710,7 +710,7 @@ concepts['production_cost'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -724,7 +724,7 @@ concepts['production_value_rate'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }
@@ -738,7 +738,7 @@ concepts['production_value'] = {
     'citations': [
         {
             'text': '',
-            'link': u''
+            'link': ''
         }
     ],
 }

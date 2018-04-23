@@ -240,7 +240,7 @@ def xml2object(xml, verbose=False):
 
     try:
         dom = parse(fid)
-    except Exception, e:
+    except Exception as e:
         # Throw filename into dom exception
         msg = 'XML file "%s" could not be parsed.\n' %fid.name
         msg += 'Error message from parser: "%s"' %str(e)
@@ -248,7 +248,7 @@ def xml2object(xml, verbose=False):
 
     try:
         xml_object = dom2object(dom)
-    except Exception, e:
+    except Exception as e:
         msg = 'Could not convert %s into XML object.\n' %fid.name
         msg += str(e)
         raise Exception, msg

@@ -1,8 +1,8 @@
 # coding=utf-8
 
 """Prepare layers for InaSAFE."""
-from builtins import next
-from builtins import str
+
+
 
 import logging
 
@@ -175,7 +175,7 @@ def _check_value_mapping(layer, exposure_key=None):
         other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
-    for group in value_map.values():
+    for group in list(value_map.values()):
         exposure_mapped.extend(group)
 
     diff = list(set(unique_exposure) - set(exposure_mapped))
@@ -230,7 +230,7 @@ def clean_inasafe_fields(layer):
 
     # Convert the field name and sum up if needed
     new_keywords = {}
-    for key, val in layer.keywords.get('inasafe_fields').items():
+    for key, val in list(layer.keywords.get('inasafe_fields').items()):
         if key in expected_fields:
             if isinstance(val, str):
                 val = [val]
@@ -383,7 +383,7 @@ def _add_id_column(layer):
     }
 
     has_id_column = False
-    for layer_type, field in mapping.items():
+    for layer_type, field in list(mapping.items()):
         if layer_purpose == layer_type:
             safe_id = field
             if layer.keywords['inasafe_fields'].get(field['key']):

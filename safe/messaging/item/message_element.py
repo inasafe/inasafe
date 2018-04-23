@@ -1,8 +1,8 @@
 # coding=utf-8
 
 """Message Element class for the Messaging package."""
-from builtins import str
-from builtins import object
+
+
 
 import json
 
@@ -12,7 +12,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class MessageElement(object):
+class MessageElement():
 
     """Message Element class for the Messaging package."""
 

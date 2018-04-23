@@ -5,7 +5,7 @@
 This code was taken from http://stackoverflow.com/a/3620972
 
 """
-from builtins import object
+
 
 
 import inspect
@@ -21,7 +21,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class Tree(object):
+class Tree():
     """Internal representation of the tree."""
 
     def __init__(self, key):

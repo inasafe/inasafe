@@ -131,7 +131,7 @@ def minimum_needs_unit(field, feature, parent):
                 field_definition['key'] in once_frequency_field_keys):
             return unit_abbreviation.lower()
 
-        unit_format = u'{unit_abbreviation}/{frequency}'
+        unit_format = '{unit_abbreviation}/{frequency}'
         return unit_format.format(
             unit_abbreviation=unit_abbreviation, frequency=frequency).lower()
 

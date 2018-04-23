@@ -1,7 +1,7 @@
 # coding=utf-8
 """Field Mapping Widget Implementation."""
-from builtins import str
-from builtins import range
+
+
 
 import logging
 from collections import OrderedDict

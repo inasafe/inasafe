@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Value Mapping."""
-from builtins import str
+
 
 import json
 from copy import deepcopy

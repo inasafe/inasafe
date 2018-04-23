@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
+
 
 import unittest
 import os
@@ -38,12 +38,12 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test."""
-        if 'LANG' in iter(os.environ.keys()):
+        if 'LANG' in iter(list(os.environ.keys())):
             os.environ.__delitem__('LANG')
 
     def tearDown(self):
         """Runs after each test."""
-        if 'LANG' in iter(os.environ.keys()):
+        if 'LANG' in iter(list(os.environ.keys())):
             os.environ.__delitem__('LANG')
 
     # Skipped because it's not easy to unload qt translation

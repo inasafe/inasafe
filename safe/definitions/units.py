@@ -164,9 +164,9 @@ unit_hectares = {
     'measure': tr('Area'),
     'abbreviation': 'ha',
     'description': tr(
-        u'<b>Hectare</b> is an SI accepted metric system unit of area equal '
-        u'to 100 ares (10,000 m²) and primarily used in the measurement of '
-        u'land'),
+        '<b>Hectare</b> is an SI accepted metric system unit of area equal '
+        'to 100 ares (10,000 m²) and primarily used in the measurement of '
+        'land'),
     'citations': [
         {
             'text': 'Wikipedia',
@@ -182,8 +182,8 @@ unit_hundred_kilograms = {
     'measure': tr('Weight'),
     'abbreviation': 'hundreds kg',
     'description': tr(
-        u'<b>A hundred kilograms</b> is a unit of weight equal to 100 '
-        u'kilograms.'),
+        '<b>A hundred kilograms</b> is a unit of weight equal to 100 '
+        'kilograms.'),
     'citations': [],
 }
 unit_square_metres = {
@@ -191,7 +191,7 @@ unit_square_metres = {
     'name': tr('Square Metres'),
     'plural_name': tr('square metres'),
     'measure': tr('Area'),
-    'abbreviation': tr(u'm²'),
+    'abbreviation': tr('m²'),
     'description': tr(
         '<b>Square Metres</b> are a metric unit of measure.'),
     'citations': [

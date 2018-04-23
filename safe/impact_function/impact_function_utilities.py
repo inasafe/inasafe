@@ -178,7 +178,7 @@ def report_urls(impact_function):
                     if p.endswith(suffix) and exists(p):
                         paths[product.key] = p
             elif isinstance(path, dict):
-                for p in path.values():
+                for p in list(path.values()):
                     if p.endswith(suffix) and exists(p):
                         paths[product.key] = p
             elif exists(path):

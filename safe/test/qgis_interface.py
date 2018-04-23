@@ -128,7 +128,7 @@ class QgisInterface(QObject):
         # It's for processing module
         return self
 
-    def next(self):
+    def __next__(self):
         # It's for processing module
         raise StopIteration
 

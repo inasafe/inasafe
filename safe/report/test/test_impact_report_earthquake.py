@@ -61,7 +61,7 @@ class TestEarthquakeReport(unittest.TestCase):
 
         with io.open(actual_path, encoding='utf-8') as actual_file:
             actual_string = actual_file.read().strip()
-            self.assertEquals(control_string, actual_string)
+            self.assertEqual(control_string, actual_string)
 
     def test_earthquake_population_without_aggregation(self):
         """Testing Earthquake in Population without aggregation.
@@ -110,75 +110,75 @@ class TestEarthquakeReport(unittest.TestCase):
 
         expected_context = {
             'table_header': (
-                u'Estimated Number of people affected per MMI intensity'),
-            'header': u'General Report',
+                'Estimated Number of people affected per MMI intensity'),
+            'header': 'General Report',
             'summary': [
                 {
-                    'header_label': u'Hazard Zone',
+                    'header_label': 'Hazard Zone',
                     'rows': [
-                        {'numbers': ['0'], 'name': u'X', 'key': 'X'},
-                        {'numbers': ['0'], 'name': u'IX', 'key': 'IX'},
-                        {'numbers': ['200'], 'name': u'VIII', 'key': 'VIII'},
-                        {'numbers': ['0'], 'name': u'VII', 'key': 'VII'},
-                        {'numbers': ['0'], 'name': u'VI', 'key': 'VI'},
-                        {'numbers': ['0'], 'name': u'V', 'key': 'V'},
-                        {'numbers': ['0'], 'name': u'IV', 'key': 'IV'},
-                        {'numbers': ['0'], 'name': u'III', 'key': 'III'},
-                        {'numbers': ['0'], 'name': u'II', 'key': 'II'},
-                        {'numbers': ['0'], 'name': u'I', 'key': 'I'},
+                        {'numbers': ['0'], 'name': 'X', 'key': 'X'},
+                        {'numbers': ['0'], 'name': 'IX', 'key': 'IX'},
+                        {'numbers': ['200'], 'name': 'VIII', 'key': 'VIII'},
+                        {'numbers': ['0'], 'name': 'VII', 'key': 'VII'},
+                        {'numbers': ['0'], 'name': 'VI', 'key': 'VI'},
+                        {'numbers': ['0'], 'name': 'V', 'key': 'V'},
+                        {'numbers': ['0'], 'name': 'IV', 'key': 'IV'},
+                        {'numbers': ['0'], 'name': 'III', 'key': 'III'},
+                        {'numbers': ['0'], 'name': 'II', 'key': 'II'},
+                        {'numbers': ['0'], 'name': 'I', 'key': 'I'},
                         {
                             'as_header': True,
                             'key': 'total_exposed_field',
-                            'name': u'Total Exposed',
+                            'name': 'Total Exposed',
                             'numbers': ['200']
                         }
                     ],
-                    'value_labels': [u'Count']
+                    'value_labels': ['Count']
                 },
                 {
-                    'header_label': u'Population',
+                    'header_label': 'Population',
                     'rows': [
                         {
                             'numbers': ['200'],
-                            'name': u'Affected',
+                            'name': 'Affected',
                             'key': 'total_affected_field',
                         }, {
                             'key': 'total_not_affected_field',
-                            'name': u'Not Affected',
+                            'name': 'Not Affected',
                             'numbers': ['0']
                         }, {
                             'key': 'total_not_exposed_field',
-                            'name': u'Not Exposed',
+                            'name': 'Not Exposed',
                             'numbers': ['0']},
                         {
                             'numbers': ['200'],
-                            'name': u'Displaced',
+                            'name': 'Displaced',
                             'key': 'displaced_field'
                         }, {
                             'numbers': ['0 - 100'],
-                            'name': u'Fatalities',
+                            'name': 'Fatalities',
                             'key': 'fatalities_field'
                         }],
-                    'value_labels': [u'Count']
+                    'value_labels': ['Count']
                 }
             ],
             'notes': [
-                u'Exposed People: People who are present in hazard zones and '
-                u'are thereby subject to potential losses. In InaSAFE, people '
-                u'who are exposed are those people who are within the extent '
-                u'of the hazard.',
-                u'Affected People: People who are affected by a hazardous '
-                u'event. People can be affected directly or indirectly. '
-                u'Affected people may experience short-term or long-term '
-                u'consequences to their lives, livelihoods or health and in '
-                u'the economic, physical, social, cultural and environmental '
-                u'assets. In InaSAFE, people who are killed during the event '
-                u'are also considered affected.',
-                u'Displaced People: Displaced people are people who, for '
-                u'different reasons and circumstances because of risk or '
-                u'disaster, have to leave their place of residence. '
-                u'In InaSAFE, demographic and minimum needs reports are based '
-                u'on displaced / evacuated people.'
+                'Exposed People: People who are present in hazard zones and '
+                'are thereby subject to potential losses. In InaSAFE, people '
+                'who are exposed are those people who are within the extent '
+                'of the hazard.',
+                'Affected People: People who are affected by a hazardous '
+                'event. People can be affected directly or indirectly. '
+                'Affected people may experience short-term or long-term '
+                'consequences to their lives, livelihoods or health and in '
+                'the economic, physical, social, cultural and environmental '
+                'assets. In InaSAFE, people who are killed during the event '
+                'are also considered affected.',
+                'Displaced People: Displaced people are people who, for '
+                'different reasons and circumstances because of risk or '
+                'disaster, have to leave their place of residence. '
+                'In InaSAFE, demographic and minimum needs reports are based '
+                'on displaced / evacuated people.'
             ]
         }
         actual_context = analysis_summary.context
@@ -216,10 +216,10 @@ class TestEarthquakeReport(unittest.TestCase):
                         '0.000000,256.000000l-0.000000,-64.000000a64.000000,'
                         '64.000000 0 0 0 0.000000,-128.000000Z',
                 'percentage': 100,
-                'label': u'VIII',
-                'stroke': u'#ff7000',
+                'label': 'VIII',
+                'stroke': '#ff7000',
                 'label_position': (256, 0),
-                'fill': u'#ff7000'
+                'fill': '#ff7000'
             }, {
                 'value': 100,
                 'show_label': False,
@@ -230,9 +230,9 @@ class TestEarthquakeReport(unittest.TestCase):
                         '64.000000 0 0 0 0.000000,128.000000Z',
                 'percentage': 50.0,
                 'label': '',
-                'stroke': u'#ff7000',
+                'stroke': '#ff7000',
                 'label_position': (256, 0),
-                'fill': u'#ff7000'
+                'fill': '#ff7000'
             }, {
                 'value': 0,
                 'show_label': False,
@@ -242,10 +242,10 @@ class TestEarthquakeReport(unittest.TestCase):
                         '0.000000,0.000000l-0.000000,-64.000000a64.000000,'
                         '64.000000 0 0 0 0.000000,0.000000Z',
                 'percentage': 0.0,
-                'label': u'Total Not Affected',
+                'label': 'Total Not Affected',
                 'stroke': '#fff',
                 'label_position': (256, 0),
-                'fill': u'#1a9641'
+                'fill': '#1a9641'
             }]
 
         actual_context = population_chart_svg.context['context']

@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
 
 import unittest
 
@@ -73,7 +72,7 @@ class TestFolder(unittest.TestCase):
         # self.assertIsNone(data_store.layer_uri(layer_name))
         expected = str(
             normcase(normpath(join(path, vector_layer_name + '.shp'))))
-        self.assertEquals(
+        self.assertEqual(
             normcase(normpath(
                 data_store.layer_uri(vector_layer_name))), expected)
 

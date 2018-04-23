@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Upload a layer to Geonode using the web scrapping."""
-from __future__ import print_function
+
 
 import re
 import json
@@ -164,7 +164,7 @@ def upload(server, session, base_file, charset='UTF-8'):
     multiple_files = [
         ('base_file', (name_file, open(base_file, 'rb'), mime)),
     ]
-    for sibling, mime in files.items():
+    for sibling, mime in list(files.items()):
         if sibling != base_file:
             name_param = splitext(sibling)[1][1:]
             name_file = split(sibling)[1]

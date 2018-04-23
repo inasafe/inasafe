@@ -51,10 +51,10 @@ class BatchDialogTest(unittest.TestCase):
         dialog.source_directory.setText(scenarios_dir)
         dialog.source_directory.textChanged.emit(scenarios_dir)
         number_row = dialog.table.rowCount()
-        self.assertEquals(
+        self.assertEqual(
             number_row, 2, 'Num scenario should be 2, but got %s' % number_row)
         out_path = dialog.output_directory.text()
-        self.assertEquals(out_path, scenarios_dir)
+        self.assertEqual(out_path, scenarios_dir)
         dialog.scenario_directory_radio.setChecked(False)
         dialog.output_directory.setText('not a dir')
         out_path = dialog.output_directory.text()
@@ -96,8 +96,8 @@ class BatchDialogTest(unittest.TestCase):
         button.click()
         status0 = dialog.table.item(0, 1).text()
         status1 = dialog.table.item(1, 1).text()
-        self.assertEquals(status0, 'Analysis Fail')
-        self.assertEquals(status1, 'Report Ok')
+        self.assertEqual(status0, 'Analysis Fail')
+        self.assertEqual(status1, 'Report Ok')
 
 
 if __name__ == '__main__':

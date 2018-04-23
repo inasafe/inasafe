@@ -114,11 +114,11 @@ class TestOptionsDialog(unittest.TestCase):
         # Next two lines a hack because windows qsettings returns a string
         # rather than a bool...TS
         value = self.qsetting.value('inasafe/visibleLayersOnlyFlag')
-        if value == u'false':
+        if value == 'false':
             value = False
-        if value == u'true':
+        if value == 'true':
             value = True
-        self.assertEquals(
+        self.assertEqual(
             new_state, value)
         self.assertEqual(
             new_organization,

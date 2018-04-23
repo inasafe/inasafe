@@ -1,6 +1,6 @@
 # coding=utf-8
 """Example usage of group select parameter."""
-from __future__ import print_function
+
 
 import sys
 from collections import OrderedDict

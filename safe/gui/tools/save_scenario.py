@@ -3,7 +3,7 @@
 """Save Scenario Dialog."""
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
+
 
 import logging
 import os

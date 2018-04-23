@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Options Dialog."""
-from builtins import range
+
 
 import logging
 import os

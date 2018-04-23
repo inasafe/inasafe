@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Layer Purpose Type."""
-from builtins import range
+
 
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QListWidgetItem

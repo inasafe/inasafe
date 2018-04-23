@@ -27,7 +27,7 @@ def safeRef(target, onDelete = None):
 	else:
 		return weakref.ref( target )
 
-class BoundMethodWeakref(object):
+class BoundMethodWeakref():
 	"""'Safe' and reusable weak references to instance methods
 
 	BoundMethodWeakref objects provide a mechanism for
@@ -109,7 +109,7 @@ class BoundMethodWeakref(object):
 				try:
 					if callable( function ):
 						function( self )
-				except Exception, e:
+				except Exception as e:
 					try:
 						traceback.print_exc()
 					except AttributeError, err:

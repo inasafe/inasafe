@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from builtins import str
+
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '02/24/15'
@@ -75,7 +75,7 @@ def byteify(input_object):
     """
     if isinstance(input_object, dict):
         return {byteify(key): byteify(value)
-                for key, value in input_object.items()}
+                for key, value in list(input_object.items())}
     elif isinstance(input_object, list):
         return [byteify(element) for element in input_object]
     elif isinstance(input_object, str):

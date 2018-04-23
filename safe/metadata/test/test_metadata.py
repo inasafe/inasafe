@@ -46,4 +46,4 @@ class TestMetadata(TestCase):
         element.text = 'TESTtext'
         result_xml = ElementTree.tostring(root)
 
-        self.assertEquals(expected_xml, result_xml)
+        self.assertEqual(expected_xml, result_xml)

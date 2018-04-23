@@ -10,8 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from builtins import str
-from builtins import object
+
+
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -24,7 +24,7 @@ from safe.metadata35.provenance import ProvenanceStep
 from safe.metadata35.provenance import IFProvenanceStep
 
 
-class Provenance(object):
+class Provenance():
     """
     Class to store a list of provenance steps.
 

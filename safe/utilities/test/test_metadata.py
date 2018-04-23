@@ -294,32 +294,32 @@ class TestMetadataUtilities(unittest.TestCase):
         """Test convert_metadata method."""
         # Not convertible hazard
         new_keywords = {
-            'hazard': u'earthquake',
-            'hazard_category': u'multiple_event',
-            'inasafe_fields': {u'hazard_value_field': u'h_zone'},
-            'keyword_version': u'4.0',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'classified',
-            'layer_purpose': u'hazard',
-            'title': u'Earthquake Polygon',
+            'hazard': 'earthquake',
+            'hazard_category': 'multiple_event',
+            'inasafe_fields': {'hazard_value_field': 'h_zone'},
+            'keyword_version': '4.0',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'hazard',
+            'title': 'Earthquake Polygon',
             'value_maps': {
-                u'road': {
-                    u'earthquake_mmi_scale': {
-                        u'active': True,
-                        u'classes': {
-                            u'IX': [u'Low Hazard Zone'],
-                            u'VIII': [u'Medium Hazard Zone'],
-                            u'X': [u'High Hazard Zone']
+                'road': {
+                    'earthquake_mmi_scale': {
+                        'active': True,
+                        'classes': {
+                            'IX': ['Low Hazard Zone'],
+                            'VIII': ['Medium Hazard Zone'],
+                            'X': ['High Hazard Zone']
                         }
                     }
                 },
-                u'structure': {
-                    u'earthquake_mmi_scale': {
-                        u'active': True,
-                        u'classes': {
-                            u'IX': [u'Low Hazard Zone'],
-                            u'VIII': [u'Medium Hazard Zone'],
-                            u'X': [u'High Hazard Zone']
+                'structure': {
+                    'earthquake_mmi_scale': {
+                        'active': True,
+                        'classes': {
+                            'IX': ['Low Hazard Zone'],
+                            'VIII': ['Medium Hazard Zone'],
+                            'X': ['High Hazard Zone']
                         }
                     }
                 }
@@ -331,51 +331,51 @@ class TestMetadataUtilities(unittest.TestCase):
         # Aggregation keyword with field mapping and default values
         new_keywords = {
             'inasafe_default_values': {
-                u'adult_ratio_field': 0.659,
-                u'elderly_ratio_field': 0.087,
-                u'youth_ratio_field': 0.254
+                'adult_ratio_field': 0.659,
+                'elderly_ratio_field': 0.087,
+                'youth_ratio_field': 0.254
             },
-            'inasafe_fields': {u'aggregation_name_field': u'KAB_NAME'},
-            'keyword_version': u'4.0',
-            'layer_geometry': u'polygon',
-            'layer_purpose': u'aggregation',
-            'title': u"D\xedstr\xedct's of Jakarta"
+            'inasafe_fields': {'aggregation_name_field': 'KAB_NAME'},
+            'keyword_version': '4.0',
+            'layer_geometry': 'polygon',
+            'layer_purpose': 'aggregation',
+            'title': "D\xedstr\xedct's of Jakarta"
         }
         expected_keyword = {
             'adult ratio default': 0.659,
-            'aggregation attribute': u'KAB_NAME',
+            'aggregation attribute': 'KAB_NAME',
             'elderly ratio default': 0.087,
             'keyword_version': '3.5',
-            'layer_geometry': u'polygon',
-            'layer_purpose': u'aggregation',
-            'title': u"D\xedstr\xedct's of Jakarta",
+            'layer_geometry': 'polygon',
+            'layer_purpose': 'aggregation',
+            'title': "D\xedstr\xedct's of Jakarta",
             'youth ratio default': 0.254}
         old_keyword = convert_metadata(new_keywords)
         self.assertDictEqual(old_keyword, expected_keyword)
 
         new_keywords = {
             'inasafe_default_values': {
-                u'lactating_ratio_field': 0.03,
-                u'pregnant_ratio_field': 0.02
+                'lactating_ratio_field': 0.03,
+                'pregnant_ratio_field': 0.02
             },
             'inasafe_fields': {
-                u'aggregation_id_field': u'area_id',
-                u'aggregation_name_field': u'area_name',
-                u'female_ratio_field': [u'ratio_female']},
-            'keyword_version': u'4.1',
-            'layer_geometry': u'polygon',
-            'layer_purpose': u'aggregation',
-            'source': u'InaSAFE v4 GeoJSON test layer',
-            'title': u'small grid'
+                'aggregation_id_field': 'area_id',
+                'aggregation_name_field': 'area_name',
+                'female_ratio_field': ['ratio_female']},
+            'keyword_version': '4.1',
+            'layer_geometry': 'polygon',
+            'layer_purpose': 'aggregation',
+            'source': 'InaSAFE v4 GeoJSON test layer',
+            'title': 'small grid'
         }
         expected_keyword = {
-            'aggregation attribute': u'area_name',
-            'female ratio attribute': u'ratio_female',
+            'aggregation attribute': 'area_name',
+            'female ratio attribute': 'ratio_female',
             'keyword_version': '3.5',
-            'layer_geometry': u'polygon',
-            'layer_purpose': u'aggregation',
-            'source': u'InaSAFE v4 GeoJSON test layer',
-            'title': u'small grid'
+            'layer_geometry': 'polygon',
+            'layer_purpose': 'aggregation',
+            'source': 'InaSAFE v4 GeoJSON test layer',
+            'title': 'small grid'
         }
 
         old_keyword = convert_metadata(new_keywords)
@@ -383,65 +383,65 @@ class TestMetadataUtilities(unittest.TestCase):
 
         # Convertible hazard
         new_keywords = {
-            'hazard': u'volcano',
-            'hazard_category': u'multiple_event',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
             'inasafe_fields': {
-                u'hazard_name_field': u'volcano',
-                u'hazard_value_field': u'KRB'
+                'hazard_name_field': 'volcano',
+                'hazard_value_field': 'KRB'
             },
-            'keyword_version': u'4.0',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'classified',
-            'layer_purpose': u'hazard',
-            'title': u'Volcano KRB',
+            'keyword_version': '4.0',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'hazard',
+            'title': 'Volcano KRB',
             'value_maps': {
-                u'land_cover': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                'land_cover': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 },
-                u'place': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                'place': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 },
-                u'population': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                'population': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 },
-                u'road': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                'road': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 },
-                u'structure': {
-                    u'volcano_hazard_classes': {
-                        u'active': True,
-                        u'classes': {
-                            u'high': [u'Kawasan Rawan Bencana III'],
-                            u'low': [u'Kawasan Rawan Bencana I'],
-                            u'medium': [u'Kawasan Rawan Bencana II']
+                'structure': {
+                    'volcano_hazard_classes': {
+                        'active': True,
+                        'classes': {
+                            'high': ['Kawasan Rawan Bencana III'],
+                            'low': ['Kawasan Rawan Bencana I'],
+                            'medium': ['Kawasan Rawan Bencana II']
                         }
                     }
                 }
@@ -452,167 +452,167 @@ class TestMetadataUtilities(unittest.TestCase):
             convert_metadata(new_keywords)
         # With exposure target
         expected_keyword = {
-            'field': u'KRB',
-            'hazard': u'volcano',
-            'hazard_category': u'multiple_event',
+            'field': 'KRB',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
             'keyword_version': '3.5',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'classified',
-            'layer_purpose': u'hazard',
-            'title': u'Volcano KRB',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'hazard',
+            'title': 'Volcano KRB',
             'value_map': {
-                u'high': [u'Kawasan Rawan Bencana III'],
-                u'low': [u'Kawasan Rawan Bencana I'],
-                u'medium': [u'Kawasan Rawan Bencana II']},
+                'high': ['Kawasan Rawan Bencana III'],
+                'low': ['Kawasan Rawan Bencana I'],
+                'medium': ['Kawasan Rawan Bencana II']},
             'vector_hazard_classification': 'volcano_vector_hazard_classes',
-            'volcano_name_field': u'volcano'
+            'volcano_name_field': 'volcano'
         }
         old_keyword = convert_metadata(new_keywords, exposure='structure')
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Exposure structure
         new_keywords = {
-            'classification': u'generic_structure_classes',
-            'exposure': u'structure',
-            'inasafe_fields': {u'exposure_type_field': u'TYPE'},
-            'keyword_version': u'4.0',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'classified',
-            'layer_purpose': u'exposure',
-            'license': u'Open Data Commons Open Database License (ODbL)',
-            'source': u'OpenStreetMap - www.openstreetmap.org',
-            'title': u'Buildings',
+            'classification': 'generic_structure_classes',
+            'exposure': 'structure',
+            'inasafe_fields': {'exposure_type_field': 'TYPE'},
+            'keyword_version': '4.0',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'title': 'Buildings',
             'value_map': {
-                u'commercial': [u'Commercial', u'Industrial'],
-                u'education': [u'School'],
-                u'government': [u'Government'],
-                u'health': [u'Clinic/Doctor'],
-                u'place of worship': [u'Place of Worship - Islam'],
-                u'residential': [u'Residential']
+                'commercial': ['Commercial', 'Industrial'],
+                'education': ['School'],
+                'government': ['Government'],
+                'health': ['Clinic/Doctor'],
+                'place of worship': ['Place of Worship - Islam'],
+                'residential': ['Residential']
             }
         }
         expected_keyword = {
-            'exposure': u'structure',
+            'exposure': 'structure',
             'keyword_version': '3.5',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'classified',
-            'layer_purpose': u'exposure',
-            'license': u'Open Data Commons Open Database License (ODbL)',
-            'source': u'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': u'TYPE',
-            'title': u'Buildings',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings',
             'value_mapping': {
-                u'commercial': [u'Commercial', u'Industrial'],
-                u'education': [u'School'],
-                u'government': [u'Government'],
-                u'health': [u'Clinic/Doctor'],
-                u'place of worship': [u'Place of Worship - Islam'],
-                u'residential': [u'Residential']
+                'commercial': ['Commercial', 'Industrial'],
+                'education': ['School'],
+                'government': ['Government'],
+                'health': ['Clinic/Doctor'],
+                'place of worship': ['Place of Worship - Islam'],
+                'residential': ['Residential']
             }
         }
         old_keyword = convert_metadata(new_keywords)
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Exposure population polygon
-        new_keywords = {'exposure': u'population',
-         'exposure_unit': u'count',
-         'inasafe_fields': {u'population_count_field': u'population'},
-         'keyword_version': u'4.0',
-         'layer_geometry': u'polygon',
-         'layer_mode': u'continuous',
-         'layer_purpose': u'exposure',
-         'source': u'NBS',
-         'title': u'Census',
-         'url': u'http://nbs.go.tz'}
+        new_keywords = {'exposure': 'population',
+         'exposure_unit': 'count',
+         'inasafe_fields': {'population_count_field': 'population'},
+         'keyword_version': '4.0',
+         'layer_geometry': 'polygon',
+         'layer_mode': 'continuous',
+         'layer_purpose': 'exposure',
+         'source': 'NBS',
+         'title': 'Census',
+         'url': 'http://nbs.go.tz'}
         expected_keyword = {
-            'exposure': u'population',
-            'exposure_unit': u'count',
+            'exposure': 'population',
+            'exposure_unit': 'count',
             'keyword_version': '3.5',
-            'layer_geometry': u'polygon',
-            'layer_mode': u'continuous',
-            'layer_purpose': u'exposure',
-            'population_field': u'population',
-            'source': u'NBS',
-            'title': u'Census',
-            'url': u'http://nbs.go.tz'
+            'layer_geometry': 'polygon',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'exposure',
+            'population_field': 'population',
+            'source': 'NBS',
+            'title': 'Census',
+            'url': 'http://nbs.go.tz'
         }
         old_keyword = convert_metadata(new_keywords)
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Exposure population raster
         new_keywords = {
-            'exposure': u'population',
-            'exposure_unit': u'count',
+            'exposure': 'population',
+            'exposure_unit': 'count',
             'inasafe_fields': {},
-            'keyword_version': u'4.2',
-            'layer_geometry': u'raster',
-            'layer_mode': u'continuous',
-            'layer_purpose': u'exposure',
-            'source': u'HKV',
-            'title': u'People allow resampling'
+            'keyword_version': '4.2',
+            'layer_geometry': 'raster',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'exposure',
+            'source': 'HKV',
+            'title': 'People allow resampling'
         }
         expected_keyword = {
             'datatype': 'count',
-            'exposure': u'population',
-            'exposure_unit': u'count',
+            'exposure': 'population',
+            'exposure_unit': 'count',
             'keyword_version': '3.5',
-            'layer_geometry': u'raster',
-            'layer_mode': u'continuous',
-            'layer_purpose': u'exposure',
-            'source': u'HKV',
-            'title': u'People allow resampling'
+            'layer_geometry': 'raster',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'exposure',
+            'source': 'HKV',
+            'title': 'People allow resampling'
         }
         old_keyword = convert_metadata(new_keywords)
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Exposure place
         new_keywords = {
-            'classification': u'generic_place_classes',
-            'exposure': u'place',
+            'classification': 'generic_place_classes',
+            'exposure': 'place',
             'inasafe_fields': {
-                u'exposure_name_field': u'Name',
-                u'exposure_type_field': u'Type',
-                u'female_count_field': [u'Female'],
-                u'male_count_field': [u'Male'],
-                u'population_count_field': u'Population'
+                'exposure_name_field': 'Name',
+                'exposure_type_field': 'Type',
+                'female_count_field': ['Female'],
+                'male_count_field': ['Male'],
+                'population_count_field': 'Population'
             },
-            'keyword_version': u'4.3',
-            'layer_geometry': u'point',
-            'layer_mode': u'classified',
-            'layer_purpose': u'exposure',
-            'license': u'Open Data Commons Open Database License (ODbL)',
-            'source': u'Fictional Places',
-            'title': u'Places',
+            'keyword_version': '4.3',
+            'layer_geometry': 'point',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'Fictional Places',
+            'title': 'Places',
             'value_map': {
-                u'Village': [u'Village'],
-                u'city': [u'Capital City', u'City'],
-                u'other': [
-                    u'Bus stop',
-                    u'Commercial',
-                    u'Public Area',
-                    u'Train Station']
+                'Village': ['Village'],
+                'city': ['Capital City', 'City'],
+                'other': [
+                    'Bus stop',
+                    'Commercial',
+                    'Public Area',
+                    'Train Station']
             }
         }
         expected_keyword = {
-            'exposure': u'place',
-            'structure_class_field': u'Type',
+            'exposure': 'place',
+            'structure_class_field': 'Type',
             'keyword_version': '3.5',
-            'layer_geometry': u'point',
-            'layer_mode': u'classified',
-            'layer_purpose': u'exposure',
-            'license': u'Open Data Commons Open Database License (ODbL)',
-            'name_field': u'Name',
-            'population_field': u'Population',
-            'source': u'Fictional Places',
-            'title': u'Places',
+            'layer_geometry': 'point',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'name_field': 'Name',
+            'population_field': 'Population',
+            'source': 'Fictional Places',
+            'title': 'Places',
             'value_mapping': {
-                u'Village': [u'Village'],
-                u'city': [u'Capital City', u'City'],
-                u'other': [
-                    u'Bus stop',
-                    u'Commercial',
-                    u'Public Area',
-                    u'Train Station']
+                'Village': ['Village'],
+                'city': ['Capital City', 'City'],
+                'other': [
+                    'Bus stop',
+                    'Commercial',
+                    'Public Area',
+                    'Train Station']
             }
         }
         old_keyword = convert_metadata(new_keywords)

@@ -1,7 +1,7 @@
 # coding=utf-8
 """Definitions for basic report.
 """
-from __future__ import absolute_import
+
 
 from safe.utilities.i18n import tr
 

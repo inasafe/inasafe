@@ -1,8 +1,8 @@
 # coding=utf-8
 
 """Tools for vector layers."""
-from builtins import str
-from builtins import object
+
+
 
 import logging
 from math import isnan
@@ -414,14 +414,14 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
     black_list = [field['key'] for field in black_list]
 
     unique_exposure = []
-    for field_key, name_field in inasafe_fields.items():
+    for field_key, name_field in list(inasafe_fields.items()):
         if field_key.endswith(pattern) and field_key not in black_list:
             unique_exposure.append(field_key.replace(pattern, ''))
 
     return unique_exposure
 
 
-class SizeCalculator(object):
+class SizeCalculator():
 
     """Special object to handle size calculation with an output unit."""
 

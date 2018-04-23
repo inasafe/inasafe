@@ -223,7 +223,7 @@ def action_checklist_report_extractor(impact_report, component_metadata):
 
     context['brand_logo'] = resource_url(
         resources_path('img', 'logos', 'inasafe-logo-white.png'))
-    for key, component in components_list.items():
+    for key, component in list(components_list.items()):
         context[key] = jinja2_output_as_string(
             impact_report, component['key'])
 

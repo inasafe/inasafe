@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Classifications."""
-from builtins import range
+
 
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore

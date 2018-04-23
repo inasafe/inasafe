@@ -1,7 +1,6 @@
 # coding=utf-8
 
 """Datastore implementation."""
-from builtins import object
 
 import logging
 from abc import ABCMeta, abstractmethod
@@ -122,7 +121,7 @@ class DataStore(with_metaclass(ABCMeta, object)):
 
         if result[0]:
             LOGGER.info(
-                u'Layer saved {layer_name}'.format(layer_name=result[1]))
+                'Layer saved {layer_name}'.format(layer_name=result[1]))
 
         try:
             layer.keywords

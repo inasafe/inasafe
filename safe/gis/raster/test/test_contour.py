@@ -1,6 +1,6 @@
 # coding=utf-8
 """Test Contour."""
-from __future__ import print_function
+
 
 import os
 from safe.test.utilities import (

@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Wizard Step Extra Keywords."""
-from builtins import range
+
 
 from collections import OrderedDict
 from datetime import datetime
