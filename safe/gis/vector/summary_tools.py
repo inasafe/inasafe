@@ -2,8 +2,6 @@
 
 """Some helpers about the summary calculation."""
 
-from qgis.PyQt.QtCore import QPyNullVariant
-
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitions.fields import count_fields
 from safe.definitions.utilities import definition
@@ -89,7 +87,7 @@ def add_fields(
         field_definition = new_dynamic_field[0]
         unique_values = new_dynamic_field[1]
         for column in unique_values:
-            if column == '' or isinstance(column, QPyNullVariant):
+            if column == '' or column is None:
                 column = 'NULL'
             field = create_field_from_definition(field_definition, column)
             layer.addAttribute(field)

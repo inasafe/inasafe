@@ -4,7 +4,6 @@
 
 from math import isnan
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
@@ -105,10 +104,10 @@ def analysis_summary(aggregate_hazard, analysis):
     for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         value = area[total]
-        if value == '' or isinstance(value, QPyNullVariant) or isnan(value):
+        if value == '' or value is None or isnan(value):
             # For isnan, see ticket #3812
             value = 0
-        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or hazard_value is None:
             hazard_value = 'NULL'
         flat_table.add_value(
             value,
@@ -118,7 +117,7 @@ def analysis_summary(aggregate_hazard, analysis):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = area[field]
-            if value == '' or isinstance(value, QPyNullVariant):
+            if value == '' or value is None:
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -170,7 +169,7 @@ def analysis_summary(aggregate_hazard, analysis):
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
-            if val == '' or isinstance(val, QPyNullVariant):
+            if val == '' or val is None:
                 val = 'NULL'
             sum = flat_table.get_value(hazard_class=val)
             total += sum

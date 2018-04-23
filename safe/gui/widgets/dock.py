@@ -10,7 +10,7 @@ import shutil
 from datetime import datetime
 from numbers import Number
 
-from qgis.PyQt.QtCore import Qt, pyqtSlot, QPyNullVariant, QUrl
+from qgis.PyQt.QtCore import Qt, pyqtSlot, QUrl
 from qgis.PyQt.QtWidgets import QAction, qApp, QApplication, QDockWidget, QMenu, QMessageBox
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
 from qgis.core import (
@@ -1650,10 +1650,10 @@ def remove_provenance_project_variables():
     for variable in will_be_removed:
         existing_variables.pop(variable)
 
-    # Need to change QPyNullVariant to None, to be able to store it back.
+    # Need to change to None, to be able to store it back.
     non_null_existing_variables = {}
     for k, v in list(existing_variables.items()):
-        if not isinstance(v, QPyNullVariant):
+        if v is not None:
             non_null_existing_variables[k] = v
         else:
             non_null_existing_variables[k] = None
