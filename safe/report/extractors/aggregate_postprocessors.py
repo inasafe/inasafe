@@ -5,7 +5,6 @@
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
-from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.exposure import exposure_population
@@ -509,7 +508,7 @@ def create_section_with_aggregation(
         aggregation_name = feature[aggregation_name_index]
         total_displaced = feature[displaced_field_index]
 
-        if not total_displaced or isinstance(total_displaced, QPyNullVariant):
+        if not total_displaced or total_displaced is None:
             # skip if total displaced null
             continue
 

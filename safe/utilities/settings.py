@@ -4,7 +4,7 @@
 import json
 import logging
 
-from qgis.PyQt.QtCore import QSettings, QPyNullVariant
+from qgis.PyQt.QtCore import QSettings
 
 from safe.definitions import APPLICATION_NAME
 from safe.definitions.default_settings import inasafe_default_settings
@@ -173,7 +173,7 @@ def export_setting(file_path, qsettings=None):
         inasafe_settings[key] = setting(key, qsettings=qsettings)
 
     def custom_default(obj):
-        if isinstance(obj, QPyNullVariant):
+        if obj is None:
             return ''
         raise TypeError
 

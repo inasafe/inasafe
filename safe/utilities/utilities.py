@@ -14,7 +14,6 @@ import unicodedata
 import webbrowser
 from os.path import join, isdir
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsApplication
 
 from safe import messaging as m
@@ -322,7 +321,7 @@ def write_json(data, filename):
     """
 
     def custom_default(obj):
-        if isinstance(obj, QPyNullVariant):
+        if obj is None:
             return ''
         raise TypeError
 

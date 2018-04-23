@@ -9,7 +9,6 @@ from math import isnan
 from uuid import uuid4
 
 import ogr
-from qgis.PyQt.QtCore import QPyNullVariant, QVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
@@ -340,10 +339,10 @@ def create_field_from_definition(field_definition, name=None, sub_name=None):
     """
     field = QgsField()
 
-    if isinstance(name, QPyNullVariant):
+    if name is None:
         name = 'NULL'
 
-    if isinstance(sub_name, QPyNullVariant):
+    if sub_name is None:
         sub_name = 'NULL'
 
     if name and not sub_name:

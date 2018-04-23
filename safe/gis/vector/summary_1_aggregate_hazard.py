@@ -5,7 +5,6 @@
 
 import logging
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
 from safe.definitions.fields import (
@@ -134,10 +133,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = feature[aggregation_id]
         hazard_value = feature[hazard_id]
-        if hazard_value == '' or isinstance(hazard_value, QPyNullVariant):
+        if hazard_value == '' or hazard_value is None:
             hazard_value = not_exposed_class['key']
         exposure_value = feature[exposure_class]
-        if exposure_value == '' or isinstance(exposure_value, QPyNullVariant):
+        if exposure_value == '' or exposure_value is None:
             exposure_value = 'NULL'
 
         flat_table.add_value(
@@ -150,7 +149,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = feature[field]
-            if value == '' or isinstance(value, QPyNullVariant):
+            if value == '' or value is None :
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -168,8 +167,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
-        if feature_hazard_id == '' or isinstance(
-                feature_hazard_id, QPyNullVariant):
+        if feature_hazard_id == '' or feature_hazard_id is None:
             feature_hazard_id = not_exposed_class['key']
         feature_hazard_value = area[hazard_class]
         total = 0

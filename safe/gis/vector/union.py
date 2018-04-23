@@ -4,7 +4,6 @@
 
 import logging
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
@@ -298,7 +297,7 @@ def _write_feature(attributes, geometry, writer, not_null_field_index):
         return
 
     compulsary_field = attributes[not_null_field_index]
-    if not compulsary_field or isinstance(compulsary_field, QPyNullVariant):
+    if not compulsary_field:
         # We don't want feature without a compulsary field.
         # I think this a bug from the union algorithm.
         return

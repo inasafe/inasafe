@@ -2,7 +2,6 @@
 
 """Aggregate the aggregate hazard to the aggregation layer."""
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.fields import (
@@ -114,7 +113,7 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = area[field]
-            if value == '' or isinstance(value, QPyNullVariant):
+            if value == '' or value is None:
                 value = 0
             field_definition[0].add_value(
                 value,
