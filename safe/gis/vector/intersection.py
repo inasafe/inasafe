@@ -8,7 +8,7 @@ import logging
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
-    QgsWKBTypes,
+    QgsWkbTypes,
     QgsFeature,
 )
 
@@ -95,10 +95,10 @@ def intersection(source, mask, callback=None):
             if geom.intersects(tmp_geom):
                 mask_attributes = feature_mask.attributes()
                 int_geom = QgsGeometry(geom.intersection(tmp_geom))
-                if int_geom.wkbType() == QgsWKBTypes.Unknown\
-                        or QgsWKBTypes.flatType(
+                if int_geom.wkbType() == QgsWkbTypes.Unknown\
+                        or QgsWkbTypes.flatType(
                         int_geom.geometry().wkbType()) ==\
-                        QgsWKBTypes.GeometryCollection:
+                        QgsWkbTypes.GeometryCollection:
                     int_com = geom.combine(tmp_geom)
                     int_geom = QgsGeometry()
                     if int_com:

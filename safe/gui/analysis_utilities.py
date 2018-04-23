@@ -23,7 +23,6 @@ from safe.impact_function.style import hazard_class_style
 from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import active_classification
 from safe.utilities.settings import setting
-from safe.utilities.str import get_string
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -170,7 +169,7 @@ def add_layers_to_canvas_with_custom_orders(
     for layer_definition in order:
         if layer_definition[0] == FROM_CANVAS['key']:
             style = QDomDocument()
-            style.setContent(get_string(layer_definition[3]))
+            style.setContent(layer_definition[3])
             layer = load_layer(layer_definition[2], layer_definition[1])[0]
             layer.importNamedStyle(style)
             QgsProject.instance().addMapLayer(layer, False)

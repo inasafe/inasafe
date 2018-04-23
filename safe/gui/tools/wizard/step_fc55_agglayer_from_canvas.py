@@ -5,7 +5,7 @@
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QListWidgetItem
 from qgis.PyQt.QtGui import QPixmap

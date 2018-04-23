@@ -5,7 +5,7 @@ import logging
 import os
 
 from qgis.PyQt import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSignature
 from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem)

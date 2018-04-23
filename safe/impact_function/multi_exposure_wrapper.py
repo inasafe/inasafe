@@ -16,7 +16,7 @@ from os import makedirs
 from os.path import join, exists
 from socket import gethostname
 
-from PyQt4.Qt import PYQT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QDir
 from osgeo import gdal
 from qgis.core import (

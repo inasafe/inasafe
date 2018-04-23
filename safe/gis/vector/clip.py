@@ -7,7 +7,7 @@ import logging
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
-    QgsWKBTypes,
+    QgsWkbTypes,
     QgsFeature,
 )
 
@@ -121,10 +121,10 @@ def clip(layer_to_clip, mask_layer, callback=None):
             if not engine.contains(in_feat.geometry().geometry()):
                 cur_geom = in_feat.geometry()
                 new_geom = combined_clip_geom.intersection(cur_geom)
-                if new_geom.wkbType() == QgsWKBTypes.Unknown \
-                        or QgsWKBTypes.flatType(
+                if new_geom.wkbType() == QgsWkbTypes.Unknown \
+                        or QgsWkbTypes.flatType(
                         new_geom.geometry().wkbType()) == \
-                        QgsWKBTypes.GeometryCollection:
+                        QgsWkbTypes.GeometryCollection:
                     int_com = in_feat.geometry().combine(new_geom)
                     int_sym = in_feat.geometry().symDifference(new_geom)
                     if not int_com or not int_sym:

@@ -7,7 +7,7 @@ import logging
 from qgis.core import (
     QgsGeometry,
     QgsFeatureRequest,
-    QgsWKBTypes,
+    QgsWkbTypes,
     QgsFeature,
 )
 
@@ -145,10 +145,10 @@ def union(union_a, union_b, callback=None):
                     else:
                         int_geom = QgsGeometry(int_geom)
 
-                    if int_geom.wkbType() == QgsWKBTypes.Unknown\
-                            or QgsWKBTypes.flatType(
+                    if int_geom.wkbType() == QgsWkbTypes.Unknown\
+                            or QgsWkbTypes.flatType(
                             int_geom.geometry().wkbType()) == \
-                            QgsWKBTypes.GeometryCollection:
+                            QgsWkbTypes.GeometryCollection:
                         # Intersection produced different geometry types
                         temp_list = int_geom.asGeometryCollection()
                         for i in temp_list:
@@ -200,9 +200,9 @@ def union(union_a, union_b, callback=None):
                     pass
 
             if diff_geom is not None and (
-                diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
+                diff_geom.wkbType() == 0 or QgsWkbTypes.flatType(
                     diff_geom.geometry().wkbType()) ==
-                    QgsWKBTypes.GeometryCollection):
+                    QgsWkbTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()
                 for i in temp_list:
                     if i.type() == geom.type():

@@ -99,8 +99,8 @@ from qgis.core import (
     QgsGeometry,
     Qgis)
 from osgeo import gdal
-from PyQt4.QtCore import QT_VERSION_STR
-from PyQt4.Qt import PYQT_VERSION_STR
+from qgis.PyQt.QtCore import QT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR
 from safe.processors import post_processor_size
 from safe.processors.population_post_processors import (
     post_processor_female,
@@ -114,7 +114,7 @@ from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
 )
 from safe.gis.sanity_check import check_inasafe_fields
-from safe.utilities.str import byteify
+from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction

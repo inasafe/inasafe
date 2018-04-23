@@ -112,10 +112,10 @@ class BoundMethodWeakref():
 				except Exception as e:
 					try:
 						traceback.print_exc()
-					except AttributeError, err:
-						print '''Exception during saferef %s cleanup function %s: %s'''%(
+					except AttributeError as err:
+						print ('''Exception during saferef %s cleanup function %s: %s'''%(
 							self, function, e
-						)
+						))
 		self.deletionMethods = [onDelete]
 		self.key = self.calculateKey( target )
 		self.weakSelf = weakref.ref(target.im_self, remove)
