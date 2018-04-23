@@ -4,7 +4,6 @@
 
 
 # noinspection PyUnresolvedReferences
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
 from safe.definitions.minimum_needs import minimum_needs_parameter
@@ -45,7 +44,7 @@ def evaluate_formula(formula, variables):
     :rtype: float, int
     """
     for key, value in list(variables.items()):
-        if isinstance(value, QPyNullVariant) or value is None:
+        if value is None or value is None:
             # If one value is null, we return null.
             return value
         formula = formula.replace(key, str(value))

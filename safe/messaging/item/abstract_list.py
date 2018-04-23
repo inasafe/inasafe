@@ -19,8 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from .exceptions import InvalidMessageItemError
 
-from qgis.PyQt.QtCore import QPyNullVariant
-
 from .message_element import MessageElement
 from safe.utilities.i18n import tr
 from .text import PlainText
@@ -63,9 +61,9 @@ class AbstractList(MessageElement):
             self.items.append(PlainText(item))
         elif isinstance(item, MessageElement):
             self.items.append(item)
-        elif isinstance(item, QPyNullVariant):
+        elif item is None:
             self.items.append(PlainText(
-                tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
+                tr('Null (None) found from the data.')))
         elif isinstance(item, tuple) or isinstance(item, list):
             for i in item:
                 # Recursive call

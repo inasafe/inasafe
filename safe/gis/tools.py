@@ -5,7 +5,6 @@
 import logging
 import os
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
@@ -102,8 +101,7 @@ def reclassify_value(one_value, ranges):
     :return: The classified value or None.
     :rtype: float or None
     """
-    if one_value is None or one_value == '' or isinstance(
-            one_value, QPyNullVariant):
+    if one_value is None or one_value == '':
         return None
 
     for threshold_id, threshold in list(ranges.items()):

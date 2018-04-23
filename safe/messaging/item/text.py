@@ -20,8 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 from .exceptions import InvalidMessageItemError
 
-from qgis.PyQt.QtCore import QPyNullVariant
-
 from .message_element import MessageElement
 from safe.utilities.i18n import tr
 from safe.utilities.str import get_unicode
@@ -65,9 +63,6 @@ class Text(MessageElement):
             self.text.append(PlainText(text))
         elif isinstance(text, Text):
             self.text.append(text)
-        elif isinstance(text, QPyNullVariant):
-            self.text.append(PlainText(
-                tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
         elif text is None:
             self.text.append(PlainText(
                 tr('None or Null found from the data.')))

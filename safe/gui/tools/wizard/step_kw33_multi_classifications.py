@@ -8,7 +8,6 @@ from collections import OrderedDict
 from functools import partial
 
 import numpy
-from qgis.PyQt.QtCore import Qt, QPyNullVariant
 from qgis.PyQt.QtWidgets import QLabel, QHBoxLayout, QComboBox, QPushButton, QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView, QListWidgetItem, QTreeWidgetItem, QSizePolicy
 from qgis.PyQt.QtGui import QFont
 from qgis.PyQt.QtWebKitWidgets import QWebView
@@ -846,8 +845,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or isinstance(
-                    unique_value, QPyNullVariant):
+            if unique_value is None:
                 # Don't classify features with NULL value
                 continue
             # Capitalization of the value and removing '_' (raw OSM data).
@@ -904,8 +902,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or isinstance(
-                    unique_value, QPyNullVariant):
+            if unique_value is None:
                 # Don't classify features with NULL value
                 continue
             # check in value map

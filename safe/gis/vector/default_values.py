@@ -4,8 +4,6 @@
 
 import logging
 
-from qgis.PyQt.QtCore import QPyNullVariant
-
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm)
 from safe.definitions.processing_steps import assign_default_values_steps
@@ -99,7 +97,7 @@ def add_default_values(layer):
             index = layer.fieldNameIndex(field)
 
             for feature in layer.getFeatures():
-                if isinstance(feature.attributes()[index], QPyNullVariant):
+                if feature.attributes()[index] is None:
                     layer.changeAttributeValue(
                         feature.id(), index, defaults[default])
                     continue

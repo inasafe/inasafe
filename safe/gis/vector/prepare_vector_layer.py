@@ -6,7 +6,6 @@
 
 import logging
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsField,
     QgsFeatureRequest,
@@ -314,7 +313,7 @@ def _remove_features(layer):
         layer.startEditing()
         i = 0
         for feature in layer.getFeatures(request):
-            if isinstance(feature.attributes()[index], QPyNullVariant):
+            if feature.attributes()[index] is None:
                 if layer_purpose == 'hazard':
                     # Remove the feature if the hazard is null.
                     layer.deleteFeature(feature.id())

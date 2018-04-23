@@ -5,7 +5,6 @@
 from math import floor
 
 # noinspection PyUnresolvedReferences
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QgsPoint
 
 from safe.definitions.exposure import exposure_population
@@ -38,7 +37,7 @@ def multiply(**kwargs):
     """
     result = 1
     for i in list(kwargs.values()):
-        if isinstance(i, QPyNullVariant) or not i:
+        if not i:
             # If one value is null, we return null.
             return i
         result *= i

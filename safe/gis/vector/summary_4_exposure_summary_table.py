@@ -4,7 +4,6 @@
 
 from numbers import Number
 
-from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
 from safe.definitions.fields import (
@@ -109,8 +108,7 @@ def exposure_summary_table(
             key_name = exposure_count_field['key'] % exposure
             field_name = source_fields[key_name]
             exposure_count = area[field_name]
-            if not exposure_count or isinstance(
-                    exposure_count, QPyNullVariant):
+            if not exposure_count:
                 exposure_count = 0
 
             flat_table.add_value(
@@ -122,7 +120,7 @@ def exposure_summary_table(
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = area[field]
-            if not value or isinstance(value, QPyNullVariant):
+            if not value or value is None:
                 value = 0
             field_definition[0].add_value(
                 value,
@@ -146,7 +144,7 @@ def exposure_summary_table(
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
-        if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
+        if hazard_class == '' or hazard_class is None:
             hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)
@@ -218,7 +216,7 @@ def exposure_summary_table(
         total_not_exposed = 0
         total = 0
         for hazard_class in unique_hazard:
-            if hazard_class == '' or isinstance(hazard_class, QPyNullVariant):
+            if hazard_class == '' or hazard_class is None:
                 hazard_class = 'NULL'
             value = flat_table.get_value(
                 hazard_class=hazard_class,

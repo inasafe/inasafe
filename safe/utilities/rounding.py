@@ -5,8 +5,6 @@
 from decimal import Decimal
 from math import ceil, log
 
-from qgis.PyQt.QtCore import QPyNullVariant
-
 from safe.definitions.units import unit_mapping, nominal_mapping
 from safe.utilities.i18n import locale
 
@@ -302,7 +300,7 @@ def denomination(value, min_nominal=None):
     :return: The new value and the denomination as a unit definition.
     :rtype: list(int, safe.unit.definition)
     """
-    if isinstance(value, QPyNullVariant):
+    if value is None:
         return None
 
     if not value:

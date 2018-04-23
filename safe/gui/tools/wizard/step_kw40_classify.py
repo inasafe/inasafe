@@ -6,7 +6,6 @@ import json
 from copy import deepcopy
 
 import numpy
-from qgis.PyQt.QtCore import QPyNullVariant, Qt
 from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView, QTreeWidgetItem
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
@@ -174,8 +173,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         clean_unique_values = []
         for unique_value in unique_values:
-            if unique_value is None or isinstance(
-                    unique_value, QPyNullVariant):
+            if unique_value is None:
                 # Don't classify features with NULL value
                 continue
             clean_unique_values.append(unique_value)
