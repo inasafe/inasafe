@@ -26,11 +26,12 @@ class PivotTableTest(unittest.TestCase):
         """
         self.affected_columns = ['medium', 'high']
         self.flat_table = FlatTable("road_type", "hazard")
+        self.flat_table.add_value(0, road_type="residential", hazard="high")
+        self.flat_table.add_value(30, road_type="residential", hazard="medium")
+        self.flat_table.add_value(50, road_type="residential", hazard="low")
         self.flat_table.add_value(10, road_type="primary", hazard="high")
         self.flat_table.add_value(20, road_type="primary", hazard="medium")
-        self.flat_table.add_value(30, road_type="residential", hazard="medium")
         self.flat_table.add_value(40, road_type="secondary", hazard="low")
-        self.flat_table.add_value(50, road_type="residential", hazard="low")
 
     def test_basic(self):
         pivot_table = PivotTable(
