@@ -37,14 +37,17 @@ class FlatTable():
     """
 
     def __init__(self, *args):
-        """ Construct flat table, fields are passe"""
+        """ Construct flat table, fields are passed"""
         self.groups = args
         self.data = {}
+        # Store keys, allowing for consistent ordered
+        self.data_keys = []
 
     def add_value(self, value, **kwargs):
         key = tuple(kwargs[group] for group in self.groups)
         if key not in self.data:
             self.data[key] = 0
+        self.data_keys.append(key)
         self.data[key] += value
 
     def get_value(self, **kwargs):
@@ -57,9 +60,10 @@ class FlatTable():
     def group_values(self, group_name):
         """Return all distinct group values for given group."""
         group_index = self.groups.index(group_name)
-        values = set()
-        for key in self.data:
-            values.add(key[group_index])
+        values = []
+        for key in self.data_keys:
+            if key[group_index] not in values:
+                values.append(key[group_index])
         return values
 
     def to_json(self):
@@ -77,8 +81,8 @@ class FlatTable():
         :type json_string: str
         """
 
-        object = json.loads(json_string)
-        self.from_dict(object['groups'], object['data'])
+        obj = json.loads(json_string)
+        self.from_dict(obj['groups'], obj['data'])
 
         return self
 
@@ -255,10 +259,11 @@ class PivotTable():
         # - custom (using function)
 
         # determine rows
+        
         if row_field is None:
             self.rows = ['']
         else:
-            self.rows = list(flat_table.group_values(row_field))
+            self.rows = flat_table.group_values(row_field)
 
         # determine columns
         if columns is not None:
@@ -266,7 +271,7 @@ class PivotTable():
         elif column_field is None:
             self.columns = ['']
         else:
-            self.columns = list(flat_table.group_values(column_field))
+            self.columns = flat_table.group_values(column_field)
 
         self.affected_columns = affected_columns
 
@@ -285,7 +290,7 @@ class PivotTable():
             self.total_rows[sum_row_index] += sum_value
             self.total_columns[sum_column_index] += sum_value
             self.total += sum_value
-
+        
         self.total_rows_affected = [0.0] * len(self.rows)
         self.total_affected = 0.0
         for row, value in list(sums_affected.items()):
