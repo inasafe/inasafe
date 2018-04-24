@@ -6,7 +6,6 @@ import logging
 
 from qgis.core import (
     QgsFeature,
-    Qgis,
     QgsWkbTypes,
 )
 
@@ -143,7 +142,10 @@ def create_profile_layer(profiling):
     ]
     if setting(key='memory_profile', expected_type=bool):
         fields.append(create_field_from_definition(profiling_memory_field))
-    tabular = create_memory_layer('profiling', QgsWkbTypes.NoGeometry, fields=fields)
+    tabular = create_memory_layer(
+        'profiling',
+        QgsWkbTypes.NoGeometry,
+        fields=fields)
 
     # Generate profiling keywords
     tabular.keywords['layer_purpose'] = layer_purpose_profiling['key']

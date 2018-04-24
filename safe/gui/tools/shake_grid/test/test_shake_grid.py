@@ -180,14 +180,14 @@ class TestShakeGrid(unittest.TestCase):
         # Check CSV File
         file_path = SMOOTHED_SHAKE_GRID.mmi_to_delimited_file(
             force_flag=True)
-        delimited_file = file(file_path)
+        delimited_file = open(file_path)
         delimited_string = delimited_file.readlines()
         delimited_file.close()
         self.assertEqual(10202, len(delimited_string))
 
         # Check CSVT File
         csvt_file_path = file_path.replace('csv', 'csvt')
-        csvt_file = file(csvt_file_path)
+        csvt_file = open(csvt_file_path)
         csvt_string = csvt_file.readlines()
         csvt_file.close()
         self.assertEqual(1, len(csvt_string))
@@ -303,8 +303,8 @@ class TestShakeGrid(unittest.TestCase):
     def test_convert_grid_to_ascii(self):
         """Test converting grid.xml to raster (asc file)."""
         output_path = os.path.join(
-                NORMAL_SHAKE_GRID.output_dir,
-                '%s.asc' % NORMAL_SHAKE_GRID.output_basename)
+            NORMAL_SHAKE_GRID.output_dir,
+            '%s.asc' % NORMAL_SHAKE_GRID.output_basename)
         self.assertTrue(os.path.exists(output_path))
 
 

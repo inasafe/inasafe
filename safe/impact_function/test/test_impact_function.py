@@ -1276,6 +1276,5 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(len(impact_function.outputs), 6)
 
 
-
 if __name__ == '__main__':
     unittest.main()

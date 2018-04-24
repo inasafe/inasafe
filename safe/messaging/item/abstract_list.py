@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '24/05/2013'

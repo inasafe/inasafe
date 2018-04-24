@@ -12,7 +12,6 @@ from qgis.core import (
     QgsCategorizedSymbolRenderer,
     QgsSymbolLayerRegistry,
     QgsConditionalStyle,
-    Qgis,
     QgsWkbTypes,
 )
 

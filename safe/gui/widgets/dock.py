@@ -2,7 +2,6 @@
 """InaSAFE Dock."""
 
 
-
 import codecs
 import logging
 import os
@@ -10,111 +9,88 @@ import shutil
 from datetime import datetime
 from numbers import Number
 
-from qgis.PyQt.QtCore import Qt, pyqtSlot, QUrl
-from qgis.PyQt.QtWidgets import QAction, qApp, QApplication, QDockWidget, QMenu, QMessageBox
+from qgis.core import (QgsCoordinateReferenceSystem, QgsExpressionContextUtils,
+                       QgsGeometry, QgsLayerTreeLayer, QgsMapLayer, QgsProject,
+                       QgsRectangle)
+from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
-from qgis.core import (
-    QgsGeometry,
-    QgsMapLayer,
-    QgsCoordinateReferenceSystem,
-    QgsExpressionContextUtils,
-    QgsLayerTreeLayer
-)
+from qgis.PyQt.QtWidgets import (QAction, QApplication, QDockWidget, QMenu,
+                                 QMessageBox, qApp)
 
 from safe import messaging as m
-from safe.common.exceptions import (
-    KeywordNotFoundError,
-    NoKeywordsFoundError,
-    InvalidParameterError,
-    HashNotFoundError,
-    MetadataReadError,
-    InvalidLayerError)
-from safe.common.signals import (send_static_message, send_error_message)
+from safe.common.exceptions import (HashNotFoundError, InvalidLayerError,
+                                    InvalidParameterError,
+                                    KeywordNotFoundError, MetadataReadError,
+                                    NoKeywordsFoundError)
+from safe.common.signals import send_error_message, send_static_message
 from safe.common.version import get_version
 from safe.defaults import supporters_logo_path
-from safe.definitions.constants import (
-    inasafe_keyword_version_key,
-    EXPOSURE,
-    HAZARD_EXPOSURE_VIEW,
-    HAZARD_EXPOSURE_BOUNDINGBOX,
-    ANALYSIS_FAILED_BAD_INPUT,
-    ANALYSIS_FAILED_BAD_CODE,
-    ANALYSIS_SUCCESS,
-    PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
-    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
-    PREPARE_FAILED_BAD_LAYER,
-    PREPARE_SUCCESS,
-    entire_area_item_aggregation,
-    MULTI_EXPOSURE_ANALYSIS_FLAG)
+from safe.definitions.constants import (ANALYSIS_FAILED_BAD_CODE,
+                                        ANALYSIS_FAILED_BAD_INPUT,
+                                        ANALYSIS_SUCCESS, EXPOSURE,
+                                        HAZARD_EXPOSURE_BOUNDINGBOX,
+                                        HAZARD_EXPOSURE_VIEW,
+                                        MULTI_EXPOSURE_ANALYSIS_FLAG,
+                                        PREPARE_FAILED_BAD_INPUT,
+                                        PREPARE_FAILED_BAD_LAYER,
+                                        PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+                                        PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
+                                        PREPARE_SUCCESS,
+                                        entire_area_item_aggregation,
+                                        inasafe_keyword_version_key)
 from safe.definitions.extra_keywords import extra_keyword_analysis_type
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation,
-    layer_purpose_exposure_summary,
-    layer_purpose_aggregate_hazard_impacted,
-    layer_purpose_aggregation_summary,
-    layer_purpose_analysis_impacted,
-    layer_purpose_profiling,
-    layer_purpose_exposure_summary_table,
-)
-from safe.definitions.provenance import (
-    provenance_list, duplicated_global_variables)
-from safe.definitions.reports import (
-    final_product_tag,
-    pdf_product_tag,
-    html_product_tag,
-    qpt_product_tag)
-from safe.definitions.reports.components import (
-    standard_impact_report_metadata_pdf,
-    map_report,
-    infographic_report,
-    standard_impact_report_metadata_html)
-from safe.definitions.utilities import (
-    update_template_component,
-    get_name,
-    definition)
-from safe.gui.analysis_utilities import (
-    add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas)
-from safe.gui.gui_utilities import layer_from_combo, add_ordered_combo_item
+from safe.definitions.layer_purposes import (layer_purpose_aggregate_hazard_impacted,
+                                             layer_purpose_aggregation,
+                                             layer_purpose_aggregation_summary,
+                                             layer_purpose_analysis_impacted,
+                                             layer_purpose_exposure,
+                                             layer_purpose_exposure_summary,
+                                             layer_purpose_exposure_summary_table,
+                                             layer_purpose_hazard,
+                                             layer_purpose_profiling)
+from safe.definitions.provenance import (duplicated_global_variables,
+                                         provenance_list)
+from safe.definitions.reports import (final_product_tag, html_product_tag,
+                                      pdf_product_tag, qpt_product_tag)
+from safe.definitions.reports.components import (infographic_report,
+                                                 map_report,
+                                                 standard_impact_report_metadata_html,
+                                                 standard_impact_report_metadata_pdf)
+from safe.definitions.utilities import (definition, get_name,
+                                        update_template_component)
+from safe.gui.analysis_utilities import (add_debug_layers_to_canvas,
+                                         add_impact_layers_to_canvas)
+from safe.gui.gui_utilities import add_ordered_combo_item, layer_from_combo
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.print_report_dialog import PrintReportDialog
-from safe.gui.widgets.message import (
-    show_no_keywords_message,
-    show_keyword_version_message,
-    getting_started_message,
-    conflicting_plugin_message,
-    conflicting_plugin_string,
-    no_overlap_message,
-    ready_message,
-    enable_messaging)
+from safe.gui.widgets.message import (conflicting_plugin_message,
+                                      conflicting_plugin_string,
+                                      enable_messaging,
+                                      getting_started_message,
+                                      no_overlap_message, ready_message,
+                                      show_keyword_version_message,
+                                      show_no_keywords_message)
 from safe.impact_function.impact_function import ImpactFunction
-from safe.impact_function.multi_exposure_wrapper import (
-    MultiExposureImpactFunction)
+from safe.impact_function.multi_exposure_wrapper import \
+    MultiExposureImpactFunction
 from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.extent import Extent
-from safe.utilities.gis import wkt_to_rectangle, qgis_version, layer_icon
+from safe.utilities.gis import layer_icon, qgis_version, wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.qgis_utilities import (
-    display_critical_message_bar,
-    display_warning_message_bar,
-    display_information_message_bar)
+from safe.utilities.qgis_utilities import (display_critical_message_bar,
+                                           display_information_message_bar,
+                                           display_warning_message_bar)
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import get_ui_class
-from safe.utilities.settings import setting, set_setting
+from safe.utilities.settings import set_setting, setting
 from safe.utilities.str import get_string
-from safe.utilities.utilities import (
-    get_error_message,
-    basestring_to_message,
-    is_keyword_version_supported,
-    is_plugin_installed
-)
+from safe.utilities.utilities import (basestring_to_message, get_error_message,
+                                      is_keyword_version_supported,
+                                      is_plugin_installed)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -632,7 +608,7 @@ class Dock(QDockWidget, FORM_CLASS):
             self.debug_group_button.setStyleSheet('')
 
     # noinspection PyUnusedLocal
-    @pyqtSlot('QgsMapLayer')
+    @pyqtSlot(QgsMapLayer)
     def get_layers(self, *args):
         """Obtain a list of layers currently loaded in QGIS.
 
@@ -696,7 +672,7 @@ class Dock(QDockWidget, FORM_CLASS):
                     KeywordNotFoundError, MetadataReadError):
                 # Skip if there are no keywords at all, or missing keyword
                 continue
-            except:  # pylint: disable=W0702
+            except BaseException:  # pylint: disable=W0702
                 pass
             else:
                 # Lookup internationalised title if available
@@ -720,7 +696,7 @@ class Dock(QDockWidget, FORM_CLASS):
                     layer, inasafe_keyword_version_key))
                 if not is_keyword_version_supported(keyword_version):
                     continue
-            except:  # pylint: disable=W0702
+            except BaseException:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
 
@@ -755,7 +731,7 @@ class Dock(QDockWidget, FORM_CLASS):
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
 
-    @pyqtSlot('bool')
+    @pyqtSlot(bool)
     def toggle_rubber_bands(self, flag):
         """Disabled/enable the rendering of rubber bands.
 
@@ -923,7 +899,7 @@ class Dock(QDockWidget, FORM_CLASS):
         self.question_group.setEnabled(True)
         self.question_group.setVisible(True)
 
-    @pyqtSlot('QgsMapLayer')
+    @pyqtSlot(QgsMapLayer)
     def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
 
@@ -1198,7 +1174,7 @@ class Dock(QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QDesktopServices.openUrl(QUrl.fromLocalFile(path))
 
-    @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
+    @pyqtSlot(QgsRectangle, QgsCoordinateReferenceSystem)
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
@@ -1316,7 +1292,7 @@ class Dock(QDockWidget, FORM_CLASS):
         try:
             status, message = self.impact_function.run()
             message = basestring_to_message(message)
-        except:
+        except BaseException:
             # We have an exception only if we are in debug mode.
             # We want to display the datastore and then
             # we want to re-raise it to get the first aid plugin popup.

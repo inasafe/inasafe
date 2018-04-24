@@ -522,7 +522,11 @@ def which(name, flags=os.X_OK):
     """
     result = []
     # pylint: disable=W0141
-    extensions = [_f for _f in os.environ.get('PATHEXT', '').split(os.pathsep) if _f]
+    extensions = [
+        _f for _f in os.environ.get(
+            'PATHEXT',
+            '').split(
+            os.pathsep) if _f]
     # pylint: enable=W0141
     path = os.environ.get('PATH', None)
     # In c6c9b26 we removed this hard coding for issue #529 but I am

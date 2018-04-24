@@ -2,8 +2,6 @@
 """Date Property."""
 
 from datetime import datetime, date
-NoneType = type(None)
-
 from qgis.PyQt.QtCore import QDate, Qt, QDateTime
 
 from safe.common.exceptions import MetadataCastError
@@ -13,6 +11,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+NoneType = type(None)
 
 
 class DateProperty(BaseProperty):

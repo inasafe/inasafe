@@ -90,7 +90,7 @@ class SafeTranslationsTest(unittest.TestCase):
         dir_path = os.path.abspath(parent_path)
         file_path = os.path.abspath(os.path.join(
             dir_path, os.pardir, 'safe', 'common', 'dynamic_translations.py'))
-        translations_file = file(file_path)
+        translations_file = open(file_path)
         failure_list = []
         os.environ['LANG'] = 'id'
         line_count = 0

@@ -3,13 +3,11 @@
 """Prepare layers for InaSAFE."""
 
 
-
 import logging
 
 from qgis.core import (
     QgsField,
     QgsFeatureRequest,
-    Qgis,
     QgsWkbTypes,
     QgsExpressionContext,
     QgsExpression

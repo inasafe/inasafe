@@ -20,7 +20,9 @@ text element.
 from future import standard_library
 standard_library.install_aliases()
 import os
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import urllib.parse
 
 # This import is to enable SIP API V2

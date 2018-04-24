@@ -2,9 +2,6 @@
 """A converter for USGS shakemap grid.xml files."""
 
 
-
-
-
 import codecs
 import logging
 import os
@@ -211,7 +208,7 @@ class ShakeGrid():
                 tzinfo = pytz.utc
             else:
                 tzinfo = timezone(self.time_zone)
-        except:
+        except BaseException:
             tzinfo = pytz.utc
 
         self.time = datetime(
@@ -440,14 +437,14 @@ class ShakeGrid():
         # short circuit if the csv is already created.
         if os.path.exists(csv_path) and force_flag is not True:
             return csv_path
-        csv_file = file(csv_path, 'w')
+        csv_file = open(csv_path, 'w')
         csv_file.write(self.mmi_to_delimited_text())
         csv_file.close()
 
         # Also write the .csvt which contains metadata about field types
         csvt_path = os.path.join(
             self.output_dir, self.output_basename + '.csvt')
-        csvt_file = file(csvt_path, 'w')
+        csvt_file = open(csvt_path, 'w')
         csvt_file.write('"Real","Real","Real"')
         csvt_file.close()
 

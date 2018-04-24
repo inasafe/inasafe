@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
-
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'

@@ -1,11 +1,11 @@
 # coding=utf-8
 """InaSAFE Wizard Step Aggregation Layer Canvas."""
 
-
+from qgis.core import QgsProject
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSlot
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QListWidgetItem
 from qgis.PyQt.QtGui import QPixmap
@@ -60,7 +60,7 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_lstCanvasAggLayers_itemSelectionChanged(self):
         """Update layer description label.
 

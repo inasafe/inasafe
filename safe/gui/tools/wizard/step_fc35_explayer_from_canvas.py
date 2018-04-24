@@ -1,9 +1,9 @@
 # coding=utf-8
 """InaSAFE Wizard Step Exposure Layer Canvas."""
 
-
+from qgis.core import QgsProject
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, pyqtSlot
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QListWidgetItem
 from qgis.PyQt.QtGui import QPixmap, QFont
@@ -57,7 +57,7 @@ class StepFcExpLayerFromCanvas(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_lstCanvasExpLayers_itemSelectionChanged(self):
         """Update layer description label
 

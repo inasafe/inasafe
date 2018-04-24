@@ -5,8 +5,9 @@ import logging
 import os
 
 from qgis.PyQt import QtGui, QtCore
-from qgis.PyQt.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSlot
 from qgis.core import (
+    QgsProject,
     QgsGeometry,
     QgsCoordinateReferenceSystem)
 
@@ -88,7 +89,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnReportWeb_released(self):
         """Handle the Open Report in Web Browser button release.
 
@@ -99,7 +100,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnReportPDF_released(self):
         """Handle the Generate PDF button release.
 
@@ -110,7 +111,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnReportComposer_released(self):
         """Handle the Open in composer button release.
 

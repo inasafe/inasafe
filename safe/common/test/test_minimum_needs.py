@@ -129,6 +129,7 @@ class MinimumNeedsTest(unittest.TestCase):
         )
         os.remove(file_name)
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(MinimumNeedsTest)
     runner = unittest.TextTestRunner(verbosity=2)

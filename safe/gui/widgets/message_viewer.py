@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
@@ -24,16 +23,15 @@ import time
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from qgis.PyQt import QtCore, QtGui
-
+from qgis.PyQt import QtCore, QtGui, QtWebKit
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
 from safe.messaging.message import MessageElement
 from safe.utilities.qt import qt_at_least
 from safe.utilities.resources import html_footer, html_header, resources_path
 from safe.utilities.settings import setting
-from safe.utilities.utilities import (
-    html_to_file, open_in_browser, unique_filename)
+from safe.utilities.utilities import (html_to_file, open_in_browser,
+                                      unique_filename)
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

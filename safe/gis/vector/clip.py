@@ -151,7 +151,7 @@ def clip(layer_to_clip, mask_layer, callback=None):
                 out_feat.setAttributes(in_feat.attributes())
                 if new_geom.type() == layer_to_clip.geometryType():
                     writer.addFeature(out_feat)
-            except:
+            except BaseException:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
                        'ignored due to invalid geometry.'))

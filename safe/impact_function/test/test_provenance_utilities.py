@@ -53,5 +53,6 @@ class TestProvenanceUtilities(unittest.TestCase):
                              'and what length of Roads might be affected?')
         self.assertEqual(question, expected_question)
 
+
 if __name__ == '__main__':
     unittest.main()

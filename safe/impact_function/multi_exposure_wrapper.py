@@ -7,7 +7,6 @@ This class will manage how to launch and optimize a multi exposure analysis.
 """
 
 
-
 import getpass
 import logging
 from copy import deepcopy
@@ -16,7 +15,7 @@ from os import makedirs
 from os.path import join, exists
 from socket import gethostname
 
-from qgis.PyQt.Qt import PYQT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR, QT_VERSION_STR
 from qgis.PyQt.QtCore import QDir
 from osgeo import gdal
 from qgis.core import (
@@ -127,7 +126,7 @@ from safe.utilities.metadata import (
     append_ISO19115_keywords,
 )
 from safe.utilities.settings import setting
-from safe.utilities.str import get_unicode, byteify
+from safe.utilities.unicode import byteify
 from safe.utilities.utilities import (
     replace_accentuated_characters,
     readable_os_version,
@@ -657,7 +656,7 @@ class MultiExposureImpactFunction():
             try:
                 property_a = getattr(self, if_property)
                 property_b = getattr(other, if_property)
-                if type(property_a) != type(property_b):
+                if not isinstance(property_a, type(property_b)):
                     message = (
                         'Different type of property %s.\nA: %s\nB: %s' % (
                             if_property, type(property_a), type(property_b)))

@@ -16,17 +16,18 @@ See: https://github.com/AIFDR/inasafe/issues/577 for more detailed explanation.
 
 """
 
+import logging
+
+from pydispatch import dispatcher
+
+from safe.utilities.utilities import get_error_message
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
-
-from pydispatch import dispatcher
-
-from safe.utilities.utilities import get_error_message
 
 DYNAMIC_MESSAGE_SIGNAL = 'DynamicMessage'
 STATIC_MESSAGE_SIGNAL = 'StaticMessage'

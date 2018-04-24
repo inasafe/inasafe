@@ -311,7 +311,6 @@ class TestPostProcessors(unittest.TestCase):
             self.assertAlmostEqual(
                 production_value, size_value * production_value_rate)
 
-
     def test_affected_post_processor(self):
         """Test affected  post processor."""
         impact_layer = load_test_vector_layer(

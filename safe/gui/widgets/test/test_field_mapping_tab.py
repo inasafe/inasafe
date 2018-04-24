@@ -87,7 +87,7 @@ class TestFieldMappingTab(unittest.TestCase):
         values_keys = list(parameter_values['values'].keys())
         gender_ratio_fields_keys = [
             field['key'] for field in gender_ratio_group[
-            'fields']]
+                'fields']]
         for key in fields_keys + values_keys:
             self.assertIn(key, gender_ratio_fields_keys)
 
@@ -101,6 +101,7 @@ class TestFieldMappingTab(unittest.TestCase):
             if field.type() not in qvariant_numbers:
                 continue
             self.assertIn(field.name(), labels)
+
 
 if __name__ == '__main__':
     unittest.main()

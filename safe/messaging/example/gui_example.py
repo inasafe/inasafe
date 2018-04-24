@@ -3,8 +3,6 @@
 """WebView."""
 
 
-
-
 import sys
 
 # This import is to enable SIP API V2
@@ -49,8 +47,8 @@ class WebView(QtWebKit.QWebView):
         # Read the header and footer html snippets
         header_path = resources_path('header.html')
         footer_path = resources_path('footer.html')
-        header_file = file(header_path)
-        footer_file = file(footer_path)
+        header_file = open(header_path)
+        footer_file = open(footer_path)
         header = header_file.read()
         self.footer = footer_file.read()
         header_file.close()

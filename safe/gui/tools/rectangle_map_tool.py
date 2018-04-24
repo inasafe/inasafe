@@ -13,7 +13,7 @@ by Tim Sutton, Oct 2014.
 from qgis.PyQt.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtGui import QColor
-from qgis.core import QgsPoint, QgsRectangle, Qgis, QgsWkbTypes
+from qgis.core import QgsPoint, QgsRectangle, QgsWkbTypes
 # pylint: disable=no-name-in-module
 from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
@@ -38,7 +38,8 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
-        self.rubber_band = QgsRubberBand(self.canvas, geometryType=QgsWkbTypes.LineString)
+        self.rubber_band = QgsRubberBand(
+            self.canvas, geometryType=QgsWkbTypes.LineString)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
         # Needs QGIS 2.6
         # self.rubber_band.setFillColor(QColor(0, 0, 240, 0))

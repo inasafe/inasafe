@@ -57,7 +57,7 @@ class TestGroupSelectParameter(unittest.TestCase):
              {
                  'label': 'Ratio fields',
                  'value': ['field A', 'field B', 'field C'],
-             # Taken from keywords
+                 # Taken from keywords
                  'type': MULTIPLE_DYNAMIC,
                  'constraint': {}
              })

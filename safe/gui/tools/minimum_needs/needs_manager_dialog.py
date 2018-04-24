@@ -801,8 +801,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.minimum_needs.remove_profile(profile_name)
             self.select_profile(self.profile_combo.currentIndex())
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

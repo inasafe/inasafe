@@ -31,7 +31,7 @@ class TestWizardUtil(unittest.TestCase):
         list_definitions = [hazard_all, exposure_all]
         for definitions in list_definitions:
             for definition in definitions:
-                path= get_image_path(definition)
+                path = get_image_path(definition)
                 message = 'The icon for %s is not set.' % definition['key']
                 self.assertNotEqual(path, not_set_image_path, message)
 

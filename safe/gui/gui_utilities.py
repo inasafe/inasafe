@@ -3,7 +3,7 @@
 """GUI utilities for the dock and the multi Exposure Tool."""
 from past.builtins import cmp
 
-
+from qgis.core import QgsProject
 from qgis.PyQt.QtCore import Qt
 
 from safe.utilities.i18n import tr

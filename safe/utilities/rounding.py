@@ -315,8 +315,8 @@ def denomination(value, min_nominal=None):
     if min_nominal:
         index = int(ceil(log(min_nominal, 10)))
 
-    iterator = list(zip(
-        list(nominal_mapping.keys())[index:], list(nominal_mapping.keys())[index + 1:]))
+    iterator = list(zip(list(nominal_mapping.keys())[
+                    index:], list(nominal_mapping.keys())[index + 1:]))
     for min_value, max_value in iterator:
 
         if min_value <= abs(value) < max_value:

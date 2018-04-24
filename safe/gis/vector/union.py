@@ -113,7 +113,7 @@ def union(union_a, union_b, callback=None):
         if len(intersects) < 1:
             try:
                 _write_feature(at_map_a, geom, writer, not_null_field_index)
-            except:
+            except BaseException:
                 # This really shouldn't happen, as we haven't
                 # edited the input geom at all
                 LOGGER.debug(
@@ -161,7 +161,7 @@ def union(union_a, union_b, callback=None):
                                         writer,
                                         not_null_field_index,
                                     )
-                                except:
+                                except BaseException:
                                     LOGGER.debug(
                                         tr('Feature geometry error: One or '
                                            'more output features ignored due '
@@ -179,7 +179,7 @@ def union(union_a, union_b, callback=None):
                                     int_geom,
                                     writer,
                                     not_null_field_index)
-                            except:
+                            except BaseException:
                                 LOGGER.debug(
                                     tr('Feature geometry error: One or more '
                                        'output features ignored due to '
@@ -213,7 +213,7 @@ def union(union_a, union_b, callback=None):
                     diff_geom,
                     writer,
                     not_null_field_index)
-            except:
+            except BaseException:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
                        'ignored due to invalid geometry.'))
@@ -257,7 +257,7 @@ def union(union_a, union_b, callback=None):
 
         try:
             _write_feature(atMap, res_geom, writer, not_null_field_index)
-        except:
+        except BaseException:
             # LOGGER.debug(
             #     tr('Feature geometry error: One or more output features '
             #        'ignored due to invalid geometry.'))

@@ -102,9 +102,5 @@ class TestPercentageParameterWidget(unittest.TestCase):
         self.assertAlmostEqual(spin_box.value(), 0.112)
 
 
-
-
-
-
 if __name__ == '__main__':
     unittest.main()

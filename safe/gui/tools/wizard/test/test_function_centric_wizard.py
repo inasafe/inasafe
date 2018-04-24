@@ -224,6 +224,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
         # Check in the correct step
         self.check_current_step(dialog.step_fc_analysis)
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestImpactFunctionCentricWizard)
     runner = unittest.TextTestRunner(verbosity=2)

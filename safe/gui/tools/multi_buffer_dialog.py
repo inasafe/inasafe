@@ -5,7 +5,7 @@ import logging
 import os
 from collections import OrderedDict
 from operator import itemgetter
-
+from qgis.core import QgsProject
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.QtWidgets import QFileDialog
@@ -154,7 +154,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         if self.keyword_wizard_checkbox.isChecked():
             self.launch_keyword_wizard()
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    @pyqtSlot()  # prevents actions being handled twice
     def on_directory_button_tool_clicked(self):
         """Autoconnect slot activated when directory button is clicked."""
         # noinspection PyCallByClass,PyTypeChecker
@@ -252,8 +252,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         else:
             self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

@@ -96,7 +96,7 @@ class QgisInterface(QObject):
             # FIXME: Had some weird bug in QGIS 2.18 MacOSX (KyngChaos)
             try:
                 providers = list(Processing.algs.values())
-            except:
+            except BaseException:
                 providers = list(Processing.algs().values())
 
             for provider in providers:
@@ -137,7 +137,7 @@ class QgisInterface(QObject):
         # simulate iface.legendInterface().layers()
         return list(QgsProject.instance().mapLayers().values())
 
-    @pyqtSlot('QStringList')
+    @pyqtSlot(list)
     def addLayers(self, layers):
         """Handle layers being added to the registry so they show up in canvas.
 
@@ -163,7 +163,7 @@ class QgisInterface(QObject):
         self.canvas.setLayerSet(final_layers)
         # LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
 
-    @pyqtSlot('QgsMapLayer')
+    @pyqtSlot(QgsMapLayer)
     def addLayer(self, layer):
         """Handle a layer being added to the registry so it shows up in canvas.
 

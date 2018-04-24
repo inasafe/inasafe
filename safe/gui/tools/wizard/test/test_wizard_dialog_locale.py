@@ -35,6 +35,7 @@ skipped_reason = (
 @unittest.skip(skipped_reason)
 class TestWizardDialogLocale(unittest.TestCase):
     """Test for Wizard Dialog in Locale mode."""
+
     def setUp(self):
         if 'safe.metadata' in list(sys.modules.keys()):
             del sys.modules['safe.metadata']

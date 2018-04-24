@@ -2,7 +2,6 @@
 """InaSAFE Wizard Step Field."""
 
 
-
 import logging
 import re
 from copy import deepcopy

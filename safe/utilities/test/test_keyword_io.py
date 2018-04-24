@@ -100,7 +100,7 @@ class KeywordIOTest(unittest.TestCase):
             NoKeywordsFoundError,
             self.keyword_io.read_keywords,
             self.keywordless_layer,
-            )
+        )
 
     def test_to_message(self):
         """Test we can convert keywords to a message object.

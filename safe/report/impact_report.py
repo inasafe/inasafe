@@ -169,7 +169,7 @@ class QGISCompositionContext():
         self._extent = extent
         self._map_settings = map_settings
         self._page_dpi = page_dpi
-        self._plot_style = QgsComposition.Print
+        self._plot_style = QgsLayout.Print
         self._save_as_raster = True
 
     @property
@@ -843,7 +843,7 @@ class ImpactReport():
                     if isinstance(output_path, dict):
                         try:
                             dirname = os.path.dirname(output_path.get('doc'))
-                        except:
+                        except BaseException:
                             dirname = os.path.dirname(output_path.get('map'))
                     else:
                         dirname = os.path.dirname(output_path)

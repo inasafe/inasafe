@@ -86,6 +86,7 @@ class MinimumNeedsTest(unittest.TestCase):
 
         self.assertTrue(ok_button.isEnabled())
 
+
 if __name__ == "__main__":
     # noinspection PyArgumentEqualDefault
     suite = unittest.makeSuite(MinimumNeedsTest, 'test')

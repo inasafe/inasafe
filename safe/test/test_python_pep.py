@@ -87,7 +87,6 @@ class TestPythonPep(unittest.TestCase):
         self.assertEqual(lines, 0, message)
 
 
-
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestPythonPep, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

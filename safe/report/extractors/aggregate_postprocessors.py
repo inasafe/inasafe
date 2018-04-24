@@ -414,7 +414,7 @@ def create_section_with_aggregation(
     # retrieving postprocessor
     postprocessors_fields_found = []
 
-    if type(postprocessor_fields) is dict:
+    if isinstance(postprocessor_fields, dict):
         output_fields = postprocessor_fields['fields']
     else:
         output_fields = postprocessor_fields
@@ -473,7 +473,7 @@ def create_section_with_aggregation(
             header_format = '{name}'
             header = header_format.format(name=name)
 
-        if type(postprocessor_fields) is dict:
+        if isinstance(postprocessor_fields, dict):
             try:
                 group_header = postprocessor_fields['group_header']
                 group_fields = postprocessor_fields['group']['fields']
@@ -566,7 +566,7 @@ def create_section_with_aggregation(
     default_notes = resolve_from_dictionary(
         extra_component_args, ['defaults', 'notes'])
 
-    if type(default_notes) is not list:
+    if not isinstance(default_notes, list):
         default_notes = [default_notes]
 
     try:

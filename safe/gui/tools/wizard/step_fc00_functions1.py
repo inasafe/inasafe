@@ -4,7 +4,7 @@
 
 from copy import deepcopy
 
-from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import Qt, pyqtSlot
 from qgis.PyQt.QtGui import QIcon, QBrush
 from qgis.PyQt.QtWidgets import QTableWidgetItem, QHeaderView
 
@@ -78,7 +78,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_tblFunctions1_itemSelectionChanged(self):
         """Choose selected hazard x exposure combination.
 

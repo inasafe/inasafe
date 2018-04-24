@@ -2,7 +2,6 @@
 """Field Mapping Widget Implementation."""
 
 
-
 import logging
 from collections import OrderedDict
 from functools import partial
