@@ -2,37 +2,37 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="test_translations.py" line="134"/>
+        <location filename="test_translations.py" line="115"/>
         <source>No styleInfo was found for layer %s</source>
         <translation>Pas d&apos;info de style trouvé pour la couche %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="90"/>
+        <location filename="utilities.py" line="91"/>
         <source>No details provided</source>
         <translation>Pas de détails fournis</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="152"/>
+        <location filename="utilities.py" line="153"/>
         <source>%i seconds</source>
         <translation>%i secondes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="154"/>
+        <location filename="utilities.py" line="155"/>
         <source>a minute</source>
         <translation>une minute</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="158"/>
+        <location filename="utilities.py" line="159"/>
         <source>over an hour</source>
         <translation>plus d&apos;une heure</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="160"/>
+        <location filename="utilities.py" line="161"/>
         <source>%i hours and %i minutes</source>
         <translation>%i heures et %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="163"/>
+        <location filename="utilities.py" line="164"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i jours, %i heures et %i minutes</translation>
     </message>
@@ -92,7 +92,7 @@
         <translation>Essayer de zoomer sur une zone plus petite ou d&apos;utiliser une couche matricielle (raster) avec une moindre résolution pour accélérer le processus et réduire le besoin de mémoire nécessaire.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="156"/>
+        <location filename="utilities.py" line="157"/>
         <source>%s minutes</source>
         <translation>%s minutes</translation>
     </message>
@@ -107,7 +107,7 @@
         <translation>Mémoire utilisée / disponible : %d/%d</translation>
     </message>
     <message>
-        <location filename="custom_logging.py" line="62"/>
+        <location filename="custom_logging.py" line="72"/>
         <source>Due to memory limitations on this machine, InaSAFE can not handle the full log</source>
         <translation>En raison de manque de mémoire sur la machine, InaSAFE ne peut mener à bien le journal entier</translation>
     </message>
@@ -125,11 +125,6 @@
         <location filename="dynamic_translations.py" line="117"/>
         <source>A volcano eruption</source>
         <translation>une éruption volcanique</translation>
-    </message>
-    <message>
-        <location filename="test_translations.py" line="54"/>
-        <source>Be affected</source>
-        <translation>affecté(e)s</translation>
     </message>
     <message>
         <location filename="dynamic_translations.py" line="57"/>
@@ -3110,7 +3105,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Population qui ont perdu la vie suite à un risque.</translation>
     </message>
     <message>
-        <location filename="summary_2_aggregation.py" line="98"/>
+        <location filename="summary_2_aggregation.py" line="93"/>
         <source>True</source>
         <translation>Vrai</translation>
     </message>
@@ -3130,7 +3125,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Kg additionnels hebdomadaire de Riz pour les Femmes Enceintes et Allaitantes.</translation>
     </message>
     <message>
-        <location filename="datastore.py" line="113"/>
+        <location filename="datastore.py" line="116"/>
         <source>The layer already exists in the datastore.</source>
         <translation>La couche existe déjà dans l&apos;entrepôt.</translation>
     </message>
@@ -4385,19 +4380,14 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>#</translation>
     </message>
     <message>
-        <location filename="zonal_statistics.py" line="94"/>
+        <location filename="zonal_statistics.py" line="88"/>
         <source>Zonal stats on %s : %s</source>
         <translation>Statistiques zonales sur %s : %s</translation>
     </message>
     <message>
-        <location filename="union.py" line="218"/>
+        <location filename="union.py" line="212"/>
         <source>Feature geometry error: One or more output features ignored due to invalid geometry.</source>
         <translation>Erreur de géométrie: une ou plusieurs entités sont ignorées du aux géométries invalides.</translation>
-    </message>
-    <message>
-        <location filename="prepare_vector_layer.py" line="364"/>
-        <source>Features which have been removed from %s : %s</source>
-        <translation>Entités qui ont été supprimés de %s : %s</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="109"/>
@@ -5021,7 +5011,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Zone entière</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="459"/>
+        <location filename="impact_function.py" line="464"/>
         <source>Function</source>
         <translation>Fonction</translation>
     </message>
@@ -5031,92 +5021,92 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La couche {source} doit être mise à jour vers {version}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1003"/>
+        <location filename="impact_function.py" line="1008"/>
         <source>The exposure layer is compulsory</source>
         <translation>La couche d&apos;enjeux être obligatoire</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1003"/>
+        <location filename="impact_function.py" line="1008"/>
         <source>The impact function needs an exposure layer to run. You must provide it.</source>
         <translation>La fonction d&apos;impact a besoin d&apos;une couche d&apos;enjeux pour se lancer. Vous devez vous en fournir une.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1016"/>
+        <location filename="impact_function.py" line="1021"/>
         <source>The hazard layer is compulsory</source>
         <translation>La couche d&apos;aléa est obligatoire</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1016"/>
+        <location filename="impact_function.py" line="1021"/>
         <source>The impact function needs a hazard layer to run. You must provide it.</source>
         <translation>La fonction d&apos;impact a besoin d&apos;une couche d&apos;aléa pour s&apos;exécuter. Vous devez la fournir.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1078"/>
+        <location filename="impact_function.py" line="1083"/>
         <source>Error with the requested extent</source>
         <translation>Erreur avec l&apos;emprise demandée</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1030"/>
+        <location filename="impact_function.py" line="1035"/>
         <source>Requested Extent must be null when an aggregation is provided.</source>
         <translation>L&apos;Emprise Demandée doit être nulle quand une agrégation est fournie.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1039"/>
+        <location filename="impact_function.py" line="1044"/>
         <source>Requested Extent CRS must be null when an aggregation is provided.</source>
         <translation>Le CRS de l&apos;Emprise Demandée doit être nul quand une agrégation est fournie.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1132"/>
+        <location filename="impact_function.py" line="1137"/>
         <source>need evacuation</source>
         <translation>ont besoin d&apos;évacuation</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1134"/>
+        <location filename="impact_function.py" line="1139"/>
         <source>be affected</source>
         <translation>sont affectées</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1286"/>
+        <location filename="impact_function.py" line="1291"/>
         <source>Layers need to overlap.</source>
         <translation>Les couches doivent se superposer.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1286"/>
+        <location filename="impact_function.py" line="1291"/>
         <source>The exposure and the hazard layer need to overlap.</source>
         <translation>L&apos;enjeu et l&apos;aléa doivent se recouvrir.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1305"/>
+        <location filename="impact_function.py" line="1310"/>
         <source>The bounding box need to overlap layers.</source>
         <translation>L&apos;emprise doit recouvrir les couches.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1305"/>
+        <location filename="impact_function.py" line="1310"/>
         <source>The requested analysis extent is not overlaping the exposure and the hazard.</source>
         <translation>L&apos;Emprise Demandée d&apos;Analyse ne recouvre pas l&apos;enjeu et l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1432"/>
+        <location filename="impact_function.py" line="1437"/>
         <source>You need to run `prepare` first.</source>
         <translation>Vous devez utiliser `prepare` avant.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1482"/>
+        <location filename="impact_function.py" line="1487"/>
         <source>No features in the extent</source>
         <translation>Pas d&apos;entité dans l&apos;emprise</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1488"/>
+        <location filename="impact_function.py" line="1493"/>
         <source>Try zooming in to a bigger area or check your features (geometry and attribute table). For instance, an empty geometry or an hazard without value are removed during the process.</source>
         <translation>Essayez de dézoomer sur une zone plus grande ou vérifiez vos entités (géométrie et table attributaire). Par exemple, une géométrie nulle ou un aléa sans valeur sont supprimés pendant le traitement.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1514"/>
+        <location filename="impact_function.py" line="1519"/>
         <source>Configuration issue</source>
         <translation>Problème de configuration</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1516"/>
+        <location filename="impact_function.py" line="1521"/>
         <source>There is a problem with the Processing plugin.</source>
         <translation>Il y a un problème avec le plugin Processing.</translation>
     </message>
@@ -5256,27 +5246,27 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Population totale estimée</translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="722"/>
+        <location filename="impact_report.py" line="736"/>
         <source>Report Generation issue</source>
         <translation>Problème de génération du rapport</translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="725"/>
+        <location filename="impact_report.py" line="739"/>
         <source>Failed to extract context</source>
         <translation>Erreur pour extraire le contexte.</translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="727"/>
+        <location filename="impact_report.py" line="741"/>
         <source>Failed to render context</source>
         <translation>Erreur pour générer le contexte</translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="729"/>
+        <location filename="impact_report.py" line="743"/>
         <source>Failed to load extractor method</source>
         <translation>Erreur pour charger la méthode d&apos;extraction</translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="731"/>
+        <location filename="impact_report.py" line="745"/>
         <source>Failed to load renderer method</source>
         <translation>Erreur pour charger la méthode de génération</translation>
     </message>
@@ -5546,12 +5536,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>&lt;b&gt;Le mètre carré&lt;/b&gt; est une unité de métrique de mesure.</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="107"/>
+        <location filename="prepare_vector_layer.py" line="101"/>
         <source>No feature has been found in the {purpose}</source>
         <translation>Pas d&apos;entité trouvé dans la couche {purpose}</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="151"/>
+        <location filename="prepare_vector_layer.py" line="145"/>
         <source>Hazard value mapping missing exposure key.</source>
         <translation>Clé enjeu est manquant du mappage des valeurs d&apos;aléa.</translation>
     </message>
@@ -5691,12 +5681,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt;. Veuillez sélectionner une classification d&apos;aléa pour chaque type d&apos;enjeu. Si vous souhaitez éditer les seuils, vous pouvez cliquer sur le bouton éditer et ensuite apporter des modifications aux seuils dans le panneau de droite. N&apos;oubliez pas de sauvegarder vos seuils avant de continuer à l&apos;étape suivante.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1501"/>
+        <location filename="dock.py" line="1507"/>
         <source>The requested extent is not overlapping your layers.</source>
         <translation>L&apos;emprise demandée ne se superpose pas aux couches.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1350"/>
+        <location filename="impact_function.py" line="1355"/>
         <source>There is a problem with the aggregation layer.</source>
         <translation>Il y a un problème avec la couche d&apos;agrégation.</translation>
     </message>
@@ -5826,22 +5816,22 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Un post processeur pour déterminer si une entité est affectée ou pas (selon la classification de l&apos;aléa). Cela peut-être &quot;{not_exposed_value}&quot;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1090"/>
+        <location filename="impact_function.py" line="1095"/>
         <source>Incompatible exposure/hazard</source>
         <translation>Incompatibilité enjeu/aléa</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1092"/>
+        <location filename="impact_function.py" line="1097"/>
         <source>The hazard layer is not set up for this kind of exposure. In InaSAFE, you need to define keywords in the hazard layer for each exposure type that you want to use with the hazard.</source>
         <translation>La couche d&apos;aléa n&apos;est pas définie pour ce type d&apos;enjeu. Dans InaSAFE, vous devez définir les mots-clés dans la couche d&apos;aléa pour chaque type d&apos;enjeu que vous souhaiteriez utiliser avec l&apos;aléa.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1099"/>
+        <location filename="impact_function.py" line="1104"/>
         <source>Please select the hazard layer in the legend and then run the keyword wizard to define the needed keywords for {exposure_type} exposure.</source>
         <translation>Veuillez sélectionner la couche d&apos;aléa dans la légende et relancez l&apos;assistant des mots-clés pour définir les mots-clés nécessaires pour l&apos;enjeu {exposure_type}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1520"/>
+        <location filename="impact_function.py" line="1525"/>
         <source>InaSAFE depends on the QGIS Processing plugin. This is a core plugin that ships with QGIS. It used to be possible to install the processing plugin from the QGIS Plugin Manager, however we advise you not to use these version since the Plugin Manager version may be incompatible with the version needed by InaSAFE. To resolve this issue, check in your .qgis2/python/plugins directory if you have a processing folder. If you do, remove the processing folder and then restart QGIS. If this issue persists, please report the problem to the InaSAFE team.</source>
         <translation>InaSAFE dépend sur le plugin QGIS Processing. C&apos;est un plugin core livré avec QGIS. Il a été possible d&apos;installer le plugin Processing depuis le gestionnaire d&apos;extension de QGIS, cependant nous recommandons de plus utiliser cette version car elle peut-être incompatible avec la version souhaitée par InaSAFE. Pour résoudre ce problème, vérifiez dans votre répertoire .qgis2/python/plugins si vous avez un dossier processing. Si c&apos;est le cas, supprimez ce dossier et redémarrer QGIS. Si le problème persiste, rapportez le problème à l&apos;équipe InaSAFE.</translation>
     </message>
@@ -5886,7 +5876,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La fonction d&apos;impact n&apos;a pas été capable de se préparer à cause d&apos;un bug.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1484"/>
+        <location filename="impact_function.py" line="1489"/>
         <source>There are no features in the analysis extent.</source>
         <translation>Il n&apos;y a pas d&apos;entité dans l&apos;emprise d&apos;analyse.</translation>
     </message>
@@ -6421,7 +6411,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La couche n&apos;est ni un raster ni un vecteur : {type}</translation>
     </message>
     <message>
-        <location filename="prepare_vector_layer.py" line="163"/>
+        <location filename="prepare_vector_layer.py" line="157"/>
         <source>Hazard classification is missing exposure key.</source>
         <translation>La clé exposure est manquante dans la classification de l&apos;aléa.</translation>
     </message>
@@ -6471,12 +6461,12 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b&gt; comme une couche &lt;b&gt;continue&lt;/b&gt; avec &lt;b&gt;%s&lt;/b&gt;. La valeur minimale sera exclue de l&apos;intervalle, alors que la valeur maximale sera inclue. Veuillez indiquer les valeurs minimale et maximale pour chaque classe ci-dessous. La valeur minimale de la couche est &lt;b&gt;%s&lt;/b&gt; et la valeur maximale est &lt;b&gt;%s&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1350"/>
+        <location filename="impact_function.py" line="1355"/>
         <source>The aggregation layer seems to have a problem. Some features might be invalid. You should check the validity of this layer or use a selection within this layer.</source>
         <translation>La couche d&apos;agrégation semble avoir des problèmes. Quelques entités peuvent être invalides. Vous devez vérifier la validité de votre couche ou utiliser une sélection au sein de cette couche.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1885"/>
+        <location filename="impact_function.py" line="1891"/>
         <source>Something went wrong with the datastore : {error_message}</source>
         <translation>Une erreur est survenu avec le entrepôt : {error_message}</translation>
     </message>
@@ -7026,7 +7016,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La version {layer_version} des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE ({inasafe_version}). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés en utilisant l&apos;assistant de création de mots-clés. Vous pouvez l&apos;ouvrir en cliquant sur </translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1121"/>
+        <location filename="impact_function.py" line="1126"/>
         <source>{hazard_type} {hazard_geometry} On {exposure_type} {exposure_geometry}</source>
         <translation>{hazard_type} {hazard_geometry} Sur {exposure_type} {exposure_geometry}</translation>
     </message>
@@ -7573,7 +7563,7 @@ Maintenant, sélectionnez les &lt;b&gt;types de géométrie&lt;/b&gt; pour les c
         <translation>La clé layer_purpose n&apos;a pas été trouvée dans la couche {layer_name}</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="462"/>
+        <location filename="impact_function.py" line="467"/>
         <source>Memory</source>
         <translation>Mémoire</translation>
     </message>
@@ -8352,7 +8342,7 @@ Citations:
         <translation>Vous pouvez mapper un champ à plusieurs concepts.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="485"/>
+        <location filename="impact_function.py" line="490"/>
         <source>Busy</source>
         <translation>En cours</translation>
     </message>
@@ -8578,7 +8568,7 @@ Citations:
         <translation>La couche {source} doit être mise-à-jour avec l&apos;assistant des mots-clés. Vos champs qui ont été configurés dans les mots-clés ne correspondent plus à votre couche.</translation>
     </message>
     <message>
-        <location filename="hello_world_report.py" line="46"/>
+        <location filename="hello_world_report.py" line="47"/>
         <source>Hello World!</source>
         <translation>Hello World!</translation>
     </message>
@@ -9647,12 +9637,12 @@ Citations:
         <translation>Durant cette étape: {step_name}, vous allez spécifier les seuils pour les classes de la classification que vous avez choisi à l&apos;étape précédente.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1048"/>
+        <location filename="impact_function.py" line="1053"/>
         <source>Use exposure view only can not be set to True if you use an aggregation layer.</source>
         <translation>L&apos;utilisation de l&apos;emprise de l&apos;enjeu ne peut pas être égal à vrai si vous utilisez une couche d&apos;agrégation.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1078"/>
+        <location filename="impact_function.py" line="1083"/>
         <source>Requested Extent must be null when you use the exposure view only.</source>
         <translation>L&apos;Emprise Demandée doit être nulle quand vous utilisez l&apos;emprise de l&apos;enjeu seulement.</translation>
     </message>
@@ -10077,12 +10067,7 @@ Citations:
         <translation>{unit_abbreviation}/{frequency}</translation>
     </message>
     <message>
-        <location filename="infographic.py" line="134"/>
-        <source>The total number of displaced people presented is the result of the InaSAFE population analysis. The total results has been rounded to the nearest thousand. The size of the icon does not represent the number.If there is a value of 0, then corresponding object will not be displayed on this page.</source>
-        <translation>Le nombre total de personnes déplacées présenté est le résultat de l&apos;analyse de la population InaSAFE. Les résultats totaux ont été arrondis au millier le plus proche. La taille de l&apos;icône ne représente pas le nombre. S&apos;il y a une valeur de 0, l&apos;objet correspondant ne sera pas affiché sur cette page.</translation>
-    </message>
-    <message>
-        <location filename="infographic.py" line="145"/>
+        <location filename="infographic.py" line="144"/>
         <source>Minimum needs based on Peraturan Kepala (Perka) BNPB No. 7/2008. Additional needs for vulnerable females based on Sphere Standard (http://www.spherehandbook.org/en/appendix-6/)</source>
         <translation>Besoins minimums basés sur Peraturan Kepala (Perka) BNPB N ° 7/2008. Besoins supplémentaires pour les femmes vulnérables basés sur les Standards Sphère (http://www.spherehandbook.org/en/appendix-6/)</translation>
     </message>
@@ -10457,12 +10442,12 @@ Citations:
         <translation>Conflit avec un plugin</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="760"/>
+        <location filename="multi_exposure_wrapper.py" line="764"/>
         <source>Same exposure</source>
         <translation>Même enjeu</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="760"/>
+        <location filename="multi_exposure_wrapper.py" line="764"/>
         <source>Not the same exposure</source>
         <translation>Pas le même enjeu</translation>
     </message>
@@ -10607,7 +10592,7 @@ Citations:
         <translation>Récupération du chemin complet de inasafe-logo-black.svg</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="208"/>
+        <location filename="utilities.py" line="209"/>
         <source>Examples:</source>
         <translation>Exemples:</translation>
     </message>
@@ -10662,7 +10647,7 @@ Citations:
         <translation>Y maximum</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="747"/>
+        <location filename="multi_exposure_wrapper.py" line="751"/>
         <source>You need to provide at least two exposures.</source>
         <translation>Vous devez fournir au moins deux enjeux.</translation>
     </message>
@@ -10677,12 +10662,12 @@ Citations:
         <translation>Couches de l&apos;Analyse</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1068"/>
+        <location filename="impact_function.py" line="1073"/>
         <source>Error with the requested CRS</source>
         <translation>Erreur avec le CRS souhaité</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1068"/>
+        <location filename="impact_function.py" line="1073"/>
         <source>CRS must be set when you don&apos;t use an aggregation layer. It will be used for the analysis CRS.</source>
         <translation>La projection doit être défini quand vous n&apos;utilisez pas une couche d&apos;agrégation. Elle va être utilisée pour la projection de l&apos;analyse.</translation>
     </message>
@@ -10992,7 +10977,7 @@ Citations:
         <translation>Vous pouvez retourner à ces options en allant dans Extensions -&gt; InaSAFE -&gt; Options.</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="747"/>
+        <location filename="multi_exposure_wrapper.py" line="751"/>
         <source>Not enough exposure layer</source>
         <translation>Pas assez de couches d&apos;enjeux</translation>
     </message>
@@ -11072,42 +11057,42 @@ Citations:
         <translation>Aide sur le Convertisseur des Métadonnées</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="33"/>
+        <location filename="html_report.py" line="45"/>
         <source>InaSAFE - HTML Elements</source>
         <translation>InaSAFE - Éléments HTML</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="45"/>
+        <location filename="html_report.py" line="226"/>
         <source>Retrieve an HTML table report of current selected analysis.</source>
         <translation>Récupération d&apos;un rapport au format tableau HTML de l&apos;analyse courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="68"/>
+        <location filename="html_report.py" line="541"/>
         <source>Retrieve an HTML population analysis table report from a multi exposure analysis.</source>
         <translation>Récupération d&apos;un rapport sur la population au format tableau HTML de l&apos;analyse multi-enjeux courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="90"/>
+        <location filename="html_report.py" line="563"/>
         <source>Retrieve an HTML road analysis table report from a multi exposure analysis.</source>
         <translation>Récupération d&apos;un rapport sur les routes au format tableau HTML de l&apos;analyse multi-enjeux courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="112"/>
+        <location filename="html_report.py" line="585"/>
         <source>Retrieve an HTML structure analysis table report from a multi exposure analysis.</source>
         <translation>Récupération d&apos;un rapport sur les structures au format tableau HTML de l&apos;analyse multi-enjeux courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="134"/>
+        <location filename="html_report.py" line="607"/>
         <source>Retrieve an HTML place analysis table report from a multi exposure analysis.</source>
         <translation>Récupération d&apos;un rapport sur les lieux au format tableau HTML de l&apos;analyse multi-enjeux courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="156"/>
+        <location filename="html_report.py" line="629"/>
         <source>Retrieve an HTML land cover analysis table report from a multi exposure analysis.</source>
         <translation>Récupération d&apos;un rapport sur l&apos;occupation du sol au format tableau HTML de l&apos;analyse multi-enjeux courante.</translation>
     </message>
     <message>
-        <location filename="html_report.py" line="178"/>
+        <location filename="html_report.py" line="651"/>
         <source>Retrieve an HTML multi exposure analysis table report.</source>
         <translation>Récupération d&apos;un rapport sur l&apos;analyse multi-enjeux au format tableau HTML.</translation>
     </message>
@@ -11212,12 +11197,12 @@ Citations:
         <translation>Mots-clés disponibles:</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="779"/>
+        <location filename="multi_exposure_wrapper.py" line="783"/>
         <source>Requested CRS must be null when an aggregation is provided in the multiexposure analysis.</source>
         <translation>CRS souhaité doit être nul lorsqu&apos;une couche d&apos;agrégation est fournie dans l&apos;analyse multi-enjeux.</translation>
     </message>
     <message>
-        <location filename="multi_exposure_wrapper.py" line="789"/>
+        <location filename="multi_exposure_wrapper.py" line="793"/>
         <source>CRS must be set when you don&apos;t use an aggregation layer. It will be used for the analysis CRS in the multiexposue analysis..</source>
         <translation>La projection doit être défini quand vous n&apos;utilisez pas une couche d&apos;agrégation. Elle va être utilisée pour la projection de l&apos;analyse multienjeux.</translation>
     </message>
@@ -11242,12 +11227,12 @@ Citations:
         <translation>Les enjeux dans les classes d&apos;aléas suivantes sont considérées comme affectées: {hazard_classes}</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1502"/>
+        <location filename="impact_function.py" line="1507"/>
         <source>Layer geometry issue</source>
         <translation>Erreur géométrique sur la couche</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1504"/>
+        <location filename="impact_function.py" line="1509"/>
         <source>There is a problem while creating the spatial index. Unfortunately, there is nothing you can do. Maybe try another area or another aggregation layer.</source>
         <translation>Il y a un problème lors de la création de l&apos;index spatial. Malheureusement, il n&apos;y a rien que nous puissions faire. Vous pouvez essayer une autre zone ou un autre couche d&apos;agrégation.</translation>
     </message>
@@ -11547,7 +11532,7 @@ Citations:
         <translation>L&apos;enjeu &lt;b&gt;occupation du sol&lt;/b&gt; décrit des objets à la surface de la Terre qui peuvent être affectés par des aléas. Cela peut inclure des cultures, des forêts ou des zones urbaines. </translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="1432"/>
+        <location filename="impact_function.py" line="1437"/>
         <source>In order to run the analysis, you need to call &quot;prepare&quot; before this function.</source>
         <translation>Afin de lancer l&apos;analyse, vous devez appeler &quot;prepare&quot; avant cette fonction.</translation>
     </message>
@@ -11622,7 +11607,7 @@ Citations:
         <translation>Récupération du chemin complet vers le logo de l&apos;organisation personnalisé. Si le chemin n&apos;existe pas, le chemin vers le logo par défaut sera retourné.</translation>
     </message>
     <message>
-        <location filename="contour.py" line="512"/>
+        <location filename="contour.py" line="514"/>
         <source>Earthquake Contour</source>
         <translation>Contour Sismique</translation>
     </message>
@@ -11737,7 +11722,7 @@ Citations:
         <translation>Le champ contour.</translation>
     </message>
     <message>
-        <location filename="contour.py" line="328"/>
+        <location filename="contour.py" line="330"/>
         <source>The smoothed shakemap is not created. It should be at {output_file_path}</source>
         <translation>Le shakemap lissé n&apos;a pas été créé dans {output_file_path}</translation>
     </message>
@@ -12132,7 +12117,7 @@ Citations:
         <translation>Erreur lors de l&apos;envoi de la couche.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="349"/>
+        <location filename="plugin.py" line="347"/>
         <source>Geonode Uploader</source>
         <translation>Geonode Uploader</translation>
     </message>
@@ -12195,6 +12180,91 @@ Citations:
         <location filename="generic_expressions.py" line="118"/>
         <source>Retrieve all values from a field in the exposure summary layer.</source>
         <translation>Récupération de toutes les valeurs d&apos;un champ dans la couche résumé de l&apos;enjeu.</translation>
+    </message>
+    <message>
+        <location filename="infographic.py" line="134"/>
+        <source>The total number of displaced people presented (expressed in thousands) is the result of the InaSAFE population analysis. The size of the icon does not reflect the number of people. If there is a value of 0, the corresponding object is not displayed.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="upload_layer_requests.py" line="118"/>
+        <source>Request failed to {geonode_url}, got status code {status_code} and reason {request_reason}</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="upload_layer_requests.py" line="145"/>
+        <source>Failed to login to GeoNode at {geonode_url}</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="upload_layer_requests.py" line="195"/>
+        <source>The base layer is not recognised.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="upload_layer_requests.py" line="237"/>
+        <source>Failed to upload layer. Got HTTP Status Code {status_code} and the reason is {reason}</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="172"/>
+        <source>No element match the tag or component id.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="195"/>
+        <source>Retrieve default InaSAFE HTML resources (style and script) from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="249"/>
+        <source>Retrieve the analysis question section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="278"/>
+        <source>Retrieve the general report section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="307"/>
+        <source>Retrieve the mmi detail section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="336"/>
+        <source>Retrieve the analysis detail section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="365"/>
+        <source>Retrieve the action checklist section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="394"/>
+        <source>Retrieve the notes assumptions section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="423"/>
+        <source>Retrieve the minimum needs section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="452"/>
+        <source>Retrieve the aggregation result section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="481"/>
+        <source>Retrieve the aggregation postprocessors section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="html_report.py" line="511"/>
+        <source>Retrieve the analysis provenance details section from InaSAFE analysis report of current selected analysis.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12664,22 +12734,22 @@ p, li { white-space: pre-wrap; }
         <translation>Les QPTs ont été enregistrés en tant que:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1469"/>
+        <location filename="dock.py" line="1472"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>La couche d&apos;aléa, d&apos;enjeu et votre emprise d&apos;analyse se superposent. Pressez le bouton &quot;lancer&quot; afin de continuer l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1474"/>
+        <location filename="dock.py" line="1477"/>
         <source>Analysis environment ready</source>
         <translation>Environnement d&apos;analyse prêt</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1474"/>
+        <location filename="dock.py" line="1477"/>
         <source>More info ...</source>
         <translation>Plus d&apos;informations ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1512"/>
+        <location filename="dock.py" line="1518"/>
         <source>No overlapping extents</source>
         <translation>Pas de chevauchements dans l&apos;étendue des couches</translation>
     </message>
@@ -14082,7 +14152,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="669"/>
+        <location filename="plugin.py" line="667"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -14192,132 +14262,132 @@ p, li { white-space: pre-wrap; }
         <translation>Téléchargement OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="364"/>
+        <location filename="plugin.py" line="362"/>
         <source>Add OpenStreetMap Tile Layer</source>
         <translation>Ajouter la couche OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="366"/>
+        <location filename="plugin.py" line="364"/>
         <source>Use this to add an OSM layer to your map. It needs internet access to function.</source>
         <translation>Utiliser ceci pour ajouter une couche OSM à la carte. Une connexion internet est nécessaire pour cette fonction.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="375"/>
+        <location filename="plugin.py" line="373"/>
         <source>InaSAFE Help</source>
         <translation>Aide InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="379"/>
+        <location filename="plugin.py" line="377"/>
         <source>Show InaSAFE Help</source>
         <translation>Afficher l&apos;aide InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="381"/>
+        <location filename="plugin.py" line="379"/>
         <source>Use this to show a document describing all InaSAFE concepts.</source>
         <translation>Utilisez ceci pour afficher un document décrivant tous les concepts d&apos;InaSAFE.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="443"/>
+        <location filename="plugin.py" line="441"/>
         <source>Add PetaBencana Flood Layer</source>
         <translation>Ajouter une couche d&apos;inondation PetaBencana</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="445"/>
+        <location filename="plugin.py" line="443"/>
         <source>Use this to add a PetaBencana layer to your map. It needs internet access to function.</source>
         <translation>Utiliser ceci pour ajouter une couche PetaBencana à la carte. Une connexion internet est nécessaire pour cette fonction.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="457"/>
+        <location filename="plugin.py" line="455"/>
         <source>Toggle Scenario Outlines</source>
         <translation>Afficher la présentation des scénarios</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="460"/>
+        <location filename="plugin.py" line="458"/>
         <source>Toggle rubber bands showing scenario extents.</source>
         <translation>Changer l&apos;affichage de l&apos;emprise du scénario.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="475"/>
+        <location filename="plugin.py" line="473"/>
         <source>Set Analysis Area</source>
         <translation>Définir la zone d&apos;analyse </translation>
     </message>
     <message>
-        <location filename="plugin.py" line="481"/>
+        <location filename="plugin.py" line="479"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation>Définir la zone d&apos;analyse d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="493"/>
+        <location filename="plugin.py" line="491"/>
         <source>Add Test Layers</source>
         <translation>Ajouter des couches de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="499"/>
+        <location filename="plugin.py" line="497"/>
         <source>Add test layers</source>
         <translation>Ajouter des couches de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="726"/>
+        <location filename="plugin.py" line="724"/>
         <source>Run tests in %s</source>
         <translation>Lancement des tests dans %s</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="530"/>
+        <location filename="plugin.py" line="528"/>
         <source>Select package</source>
         <translation>Sélection du package</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="534"/>
+        <location filename="plugin.py" line="532"/>
         <source>Select Test Package</source>
         <translation>Sélection du package de test</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="715"/>
+        <location filename="plugin.py" line="713"/>
         <source>Select the python test package</source>
         <translation>Sélectionnez le package python pour les tests</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="915"/>
+        <location filename="plugin.py" line="913"/>
         <source>OpenStreetMap</source>
         <translation>OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="408"/>
+        <location filename="plugin.py" line="406"/>
         <source>InaSAFE Field Mapping Tool</source>
         <translation>Outil de mappage des champs InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="412"/>
+        <location filename="plugin.py" line="410"/>
         <source>Assign field mapping to layer.</source>
         <translation>Assigner un mappage des champs pour la couche.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="414"/>
+        <location filename="plugin.py" line="412"/>
         <source>Use this tool to assign field mapping in layer.</source>
         <translation>Utiliser cet outil pour assigner un mappage des champs pour la couche.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="423"/>
+        <location filename="plugin.py" line="421"/>
         <source>InaSAFE Multi Exposure Tool</source>
         <translation>Outil Multi-Enjeux InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="429"/>
+        <location filename="plugin.py" line="427"/>
         <source>Open the multi exposure tool.</source>
         <translation>Ouvrir l&apos;outil multi enjeux.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="392"/>
+        <location filename="plugin.py" line="390"/>
         <source>InaSAFE Metadata Converter</source>
         <translation>Convertisseur de métadonnées InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="396"/>
+        <location filename="plugin.py" line="394"/>
         <source>Convert metadata from version 4.3 to version 3.5.</source>
         <translation>Convertir des métadonnées de la version 4.3 à la version 3.5.</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="398"/>
+        <location filename="plugin.py" line="396"/>
         <source>Use this tool to convert metadata 4.3 to version 3.5</source>
         <translation>Utilisez cet outil pour convertir des métadonnées de la version 4.3 à la version 3.5.</translation>
     </message>
