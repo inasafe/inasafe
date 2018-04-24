@@ -29,6 +29,7 @@ from safe.test.utilities import (
     get_dock,
     standard_data_path)
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.hazard import hazard_all, hazard_volcano
 from safe.definitions.exposure import exposure_all, exposure_structure
 from safe.definitions import (
@@ -40,7 +41,7 @@ from safe.definitions.utilities import get_allowed_geometries
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 

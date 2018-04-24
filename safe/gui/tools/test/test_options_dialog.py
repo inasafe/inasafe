@@ -4,6 +4,7 @@
 import unittest
 import logging
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
 from safe.gui.tools.options_dialog import OptionsDialog
@@ -12,7 +13,7 @@ from safe.common.utilities import temp_dir
 from safe.defaults import default_north_arrow_path, supporters_logo_path
 from PyQt4.QtCore import QSettings
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -28,7 +29,7 @@ class TestOptionsDialog(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests."""
-        self.qsetting = QSettings('InaSAFETest')
+        self.qsetting = QSettings(INASAFE_TEST)
         self.qsetting.clear()
 
     def tearDown(self):
@@ -39,7 +40,7 @@ class TestOptionsDialog(unittest.TestCase):
     def test_setup_dialog(self):
         """Test Setup Options Dialog."""
         dialog = OptionsDialog(
-            parent=PARENT, iface=IFACE, qsetting='InaSAFETest')
+            parent=PARENT, iface=IFACE, qsetting=INASAFE_TEST)
         self.assertIsNotNone(dialog)
 
         # Check default values
@@ -98,7 +99,7 @@ class TestOptionsDialog(unittest.TestCase):
         """Test update InaSAFE Option works."""
         # Create new option dialog
         dialog = OptionsDialog(
-            parent=PARENT, iface=IFACE, qsetting='InaSAFETest')
+            parent=PARENT, iface=IFACE, qsetting=INASAFE_TEST)
 
         # Update some state
         new_state = not inasafe_default_settings['visibleLayersOnlyFlag']
@@ -126,7 +127,7 @@ class TestOptionsDialog(unittest.TestCase):
 
         # Open the options dialog
         dialog = OptionsDialog(
-            iface=IFACE, parent=PARENT, qsetting='InaSAFETest')
+            iface=IFACE, parent=PARENT, qsetting=INASAFE_TEST)
 
         # Check the state of the dialog after save the settings
         self.assertEqual(new_state, dialog.cbxVisibleLayersOnly.isChecked())

@@ -63,19 +63,24 @@ def tr(text, context='@default'):
         return text
 
 
-def locale():
+def locale(qsetting=''):
     """Get the name of the currently active locale.
+
+    :param qsetting: String to specify the QSettings. By default,
+        use empty string.
+    :type qsetting: str
 
     :returns: Name of the locale e.g. 'id'
     :rtype: str
     """
-    override_flag = QSettings().value(
+    override_flag = QSettings(qsetting).value(
         'locale/overrideFlag', True, type=bool)
 
     default = 'en_US'
 
     if override_flag:
-        locale_name = QSettings().value('locale/userLocale', default, type=str)
+        locale_name = QSettings(qsetting).value(
+            'locale/userLocale', default, type=str)
     else:
         # noinspection PyArgumentList
         locale_name = QLocale.system().name()

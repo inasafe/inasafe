@@ -9,9 +9,10 @@ from parameters.unit import Unit
 from safe.common.parameters.resource_parameter_widget import (
     ResourceParameterWidget)
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

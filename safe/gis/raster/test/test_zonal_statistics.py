@@ -1,12 +1,13 @@
 # coding=utf-8
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
     load_test_raster_layer,
     load_test_vector_layer
 )
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from qgis.core import QGis, QgsCoordinateReferenceSystem
 from safe.gis.vector.reproject import reproject

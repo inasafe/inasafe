@@ -16,11 +16,11 @@ from safe.definitions.constants import (
     FIELDS,
     STATIC,
     SINGLE_DYNAMIC,
-    MULTIPLE_DYNAMIC)
+    MULTIPLE_DYNAMIC, INASAFE_TEST)
 
 from safe.test.utilities import get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -2,8 +2,8 @@
 
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import standard_data_path
-from safe.test.qgis_app import qgis_app
 from safe.gis.tools import load_layer, full_layer_uri
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -11,7 +11,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-qgis_app()
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class GisToolsTest(unittest.TestCase):

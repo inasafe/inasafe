@@ -18,11 +18,12 @@ from qgis.core import QgsVectorLayer, QgsRasterLayer
 from PyQt4.QtCore import QFileInfo
 from osgeo import gdal
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer,
     standard_data_path)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.datastore.geopackage import GeoPackage
 

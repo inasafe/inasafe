@@ -6,8 +6,9 @@ from tempfile import mkdtemp
 from os.path import join, exists, split
 import shutil
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 from PyQt4.QtCore import QSettings
 
 from safe import definitions
@@ -569,7 +570,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_get_displacement_rate_and_affected_with_qsetting(self):
         """Test for get_displacement_rate and is_affected with QSettings."""
         # Create custom qsettings
-        qsettings = QSettings('InaSAFETest')
+        qsettings = QSettings(INASAFE_TEST)
         qsettings.clear()
         # Save the default profile to qsettings
         default_profile = generate_default_profile()

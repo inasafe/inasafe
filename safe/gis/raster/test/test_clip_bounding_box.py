@@ -4,8 +4,9 @@ import unittest
 
 from qgis.core import QgsRectangle
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app, load_test_raster_layer
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gis.raster.clip_bounding_box import clip_by_extent
 

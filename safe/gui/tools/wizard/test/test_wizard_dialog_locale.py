@@ -26,6 +26,8 @@ import qgis
 # pylint: enable=unused-import
 from PyQt4.QtCore import QDateTime
 
+from safe.definitions.constants import INASAFE_TEST
+
 skipped_reason = (
     'These tests are skipped because it will make a segmentation fault. Just '
     'run it separately.')
@@ -118,7 +120,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        _, _, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
         from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
@@ -151,7 +153,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         from safe.test.utilities import get_qgis_app
         # Get QGis app handle
         # noinspection PyPep8Naming
-        _, _, IFACE, PARENT = get_qgis_app()
+        _, _, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
         from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 

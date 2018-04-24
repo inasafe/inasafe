@@ -10,11 +10,12 @@ __revision__ = '$Format:%H$'
 import os
 import unittest
 
-from safe.test.qgis_app import qgis_app
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import load_test_vector_layer, load_test_raster_layer
 from safe.utilities.geonode.upload_layer_requests import upload, login_user
 
-qgis_app()
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 LOGIN = ''
 PASSWORD = ''

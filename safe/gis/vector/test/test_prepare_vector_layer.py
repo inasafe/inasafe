@@ -4,10 +4,11 @@
 import unittest
 from osgeo import gdal
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 from safe.gis.vector.tools import create_memory_layer

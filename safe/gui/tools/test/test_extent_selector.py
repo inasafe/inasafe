@@ -25,11 +25,12 @@ from PyQt4 import QtGui
 from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt, QPoint
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
 
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
 

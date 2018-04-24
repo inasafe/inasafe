@@ -14,6 +14,7 @@ from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
 from PyQt4 import QtGui  # pylint: disable=W0621
+from PyQt4.QtCore import QTranslator, pyqtWrapperType
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -22,11 +23,14 @@ from qgis.core import (
     QgsMapLayerRegistry)
 from qgis.utils import iface
 
-from safe.common.utilities import unique_filename, temp_dir
+from safe.common.utilities import unique_filename, temp_dir, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.utilities import monkey_patch_keywords
+from safe.utilities.settings import (
+    general_setting, set_general_setting, set_setting)
+from safe.utilities.utilities import (
+    monkey_patch_keywords, reload_inasafe_modules)
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -58,8 +62,15 @@ def qgis_iface():
         return get_iface()
 
 
-def get_qgis_app():
+def get_qgis_app(requested_locale='en_US', qsetting=''):
     """ Start one QGIS application to test against.
+
+    :param locale: The locale we want the qgis to launch with.
+    :type locale: str
+
+    :param qsetting: String to specify the QSettings. By default,
+        use empty string.
+    :type qsetting: str
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
@@ -69,13 +80,22 @@ def get_qgis_app():
     """
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
-    if iface:
+    from PyQt4.QtCore import QSettings
+    if qsetting:
+        settings = QSettings(qsetting)
+    else:
+        settings = QSettings()
+
+    current_locale = general_setting(
+        'locale/userLocale', default='en_US', qsettings=settings)
+    locale_match = current_locale == requested_locale
+
+    if iface and locale_match:
         from qgis.core import QgsApplication
         QGIS_APP = QgsApplication
         CANVAS = iface.mapCanvas()
         PARENT = iface.mainWindow()
         IFACE = iface
-        return QGIS_APP, CANVAS, IFACE, PARENT
 
     try:
         from qgis.core import QgsApplication
@@ -88,17 +108,29 @@ def get_qgis_app():
     except ImportError:
         return None, None, None, None
 
-    if QGIS_APP is None:
+    if qsetting:
+        settings = QSettings(qsetting)
+    else:
+        settings = QSettings()
+
+    if not QGIS_APP:
         gui_flag = True  # All test will run qgis in gui mode
 
-        # AG: For testing purposes, we use our own configuration file instead
-        # of using the QGIS apps conf of the host
+        # AG: For testing purposes, we use our own configuration file
+        # instead of using the QGIS apps conf of the host
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setOrganizationName('QGIS')
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setOrganizationDomain('qgis.org')
         # noinspection PyCallByClass,PyArgumentList
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
+        # We disabled message bars for now for extent selector as
+        # we don't have a main window to show them in TS - version 3.2
+        set_setting('show_extent_warnings', False, settings)
+        set_setting('showRubberBands', True, settings)
+        set_setting('show_extent_confirmations', False, settings)
+        set_setting('analysis_extents_mode', HAZARD_EXPOSURE, settings)
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
@@ -111,16 +143,36 @@ def get_qgis_app():
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
+    if not locale_match:
+        """Setup internationalisation for the plugin."""
+
         # Save some settings
-        settings = QSettings()
-        settings.setValue('locale/overrideFlag', True)
-        settings.setValue('locale/userLocale', 'en_US')
-        # We disabled message bars for now for extent selector as
-        # we don't have a main window to show them in TS - version 3.2
-        settings.setValue('inasafe/show_extent_confirmations', False)
-        settings.setValue('inasafe/show_extent_warnings', False)
-        settings.setValue('inasafe/showRubberBands', True)
-        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
+        set_general_setting('locale/overrideFlag', True, settings)
+        set_general_setting('locale/userLocale', requested_locale, settings)
+
+        locale_name = str(requested_locale).split('_')[0]
+        # Also set the system locale to the user overridden local
+        # so that the inasafe library functions gettext will work
+        # .. see:: :py:func:`common.utilities`
+        os.environ['LANG'] = str(locale_name)
+
+        inasafe_translation_path = os.path.join(
+            safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
+
+        if os.path.exists(inasafe_translation_path):
+            if isinstance(QGIS_APP, pyqtWrapperType):
+                translator = QTranslator()
+            else:
+                translator = QTranslator(QGIS_APP)
+            result = translator.load(inasafe_translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                raise Exception(message)
+            # noinspection PyTypeChecker,PyCallByClass
+            QCoreApplication.installTranslator(translator)
+
+        # at the end, reload InaSAFE modules so it will get translated too
+        reload_inasafe_modules()
 
     if PARENT is None:
         # noinspection PyPep8Naming

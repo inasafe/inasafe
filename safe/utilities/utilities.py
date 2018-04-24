@@ -16,6 +16,7 @@ from os.path import join, isdir
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsApplication
 
+import safe  # noqa
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.common.utilities import unique_filename
@@ -398,3 +399,20 @@ def is_plugin_installed(name):
     """
     directory = QgsApplication.qgisSettingsDirPath()
     return isdir(join(directory, 'python', 'plugins', name))
+
+
+def reload_inasafe_modules(module_name=None):
+    """Reload python modules.
+
+    :param module_name: Specific module name.
+    :type module_name: str
+    """
+
+    if not module_name:
+        module_name = 'safe'
+    list_modules = list(sys.modules.keys())
+    for module in list_modules:
+        if not sys.modules[module]:
+            continue
+        if module.startswith(module_name):
+            del sys.modules[module]

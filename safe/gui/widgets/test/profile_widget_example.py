@@ -7,9 +7,10 @@ import qgis  # NOQA
 from PyQt4.QtGui import QWidget, QGridLayout, QPushButton
 
 from functools import partial
+
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.utilities import generate_default_profile
 from safe.gui.widgets.profile_widget import ProfileWidget
-from safe.test.qgis_app import qgis_app
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -32,7 +33,8 @@ def main():
         the_profile_widget.clear()
         the_profile_widget.data = generate_default_profile()
 
-    app, iface = qgis_app()
+    from safe.test.utilities import get_qgis_app
+    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
     default_profile = generate_default_profile()
     profile_widget = ProfileWidget(data=default_profile)
@@ -62,7 +64,7 @@ def main():
     widget.setFixedWidth(800)
     widget.show()
 
-    sys.exit(app.exec_())
+    sys.exit(QGIS_APP.exec_())
 
 
 if __name__ == '__main__':

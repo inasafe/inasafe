@@ -3,9 +3,9 @@
 
 import unittest
 
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from qgis.core import QgsCoordinateReferenceSystem
 

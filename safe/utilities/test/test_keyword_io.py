@@ -5,6 +5,7 @@ import unittest
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 from safe.common.exceptions import NoKeywordsFoundError
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
     standard_data_path,
@@ -16,7 +17,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
 class KeywordIOTest(unittest.TestCase):

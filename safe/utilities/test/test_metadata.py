@@ -6,11 +6,11 @@ from datetime import datetime
 from qgis.utils import iface  # pylint: disable=W0621
 from PyQt4.QtCore import QUrl
 
-
+from safe.definitions.constants import INASAFE_TEST
 from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import (
     standard_data_path, clone_shp_layer, get_qgis_app)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,

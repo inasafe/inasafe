@@ -7,10 +7,10 @@ from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox,
     PercentageParameterWidget,
 )
-
+from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
