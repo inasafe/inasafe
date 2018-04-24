@@ -19,7 +19,8 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsGeometry,
-    QgsPoint)
+    QgsProject,
+    QgsPointXY)
 
 from safe.common.exceptions import VerificationError
 from safe.utilities.rounding import (
@@ -290,9 +291,13 @@ def humanize_min_max(min_value, max_value, interval):
     """
     current_interval = max_value - min_value
     if interval > 1:
+        def my_round(x, d=0):
+            p = 10 ** d
+            return float(math.floor((x * p) + math.copysign(0.5, x)))/p
+
         # print 'case 1. Current interval : ', current_interval
-        humanize_min_value = add_separators(int(round(min_value)))
-        humanize_max_value = add_separators(int(round(max_value)))
+        humanize_min_value = add_separators(int(my_round(min_value)))
+        humanize_max_value = add_separators(int(my_round(max_value)))
 
     else:
         # print 'case 2. Current interval : ', current_interval
@@ -486,8 +491,8 @@ def get_utm_epsg(longitude, latitude, crs=None):
         return epsg
     else:
         epsg_4326 = QgsCoordinateReferenceSystem('EPSG:4326')
-        transform = QgsCoordinateTransform(crs, epsg_4326)
-        geom = QgsGeometry.fromPoint(QgsPoint(longitude, latitude))
+        transform = QgsCoordinateTransform(crs, epsg_4326, QgsProject.instance())
+        geom = QgsGeometry.fromPointXY(QgsPointXY(longitude, latitude))
         geom.transform(transform)
         point = geom.asPoint()
         # The point is now in 4326, we can call the function again.
@@ -580,7 +585,7 @@ def color_ramp(number_of_colour):
         light = 127.5
         saturation = -1.007905138339921
         rgb = colorsys.hls_to_rgb(hue, light, saturation)
-        hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+        hex_color = '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
         colors.append(hex_color)
     return colors
 

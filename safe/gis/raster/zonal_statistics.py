@@ -95,8 +95,8 @@ def zonal_stats(raster, vector):
             exposure_count_field, exposure)
 
         output_layer.addAttribute(field)
-        new_index = output_layer.fieldNameIndex(field.name())
-        old_index = layer.fieldNameIndex('exposure_sum')
+        new_index = output_layer.fields().lookupField(field.name())
+        old_index = layer.fields().lookupField('exposure_sum')
         for feature_input, feature_output in zip(
                 layer.getFeatures(), output_layer.getFeatures()):
             output_layer.changeAttributeValue(
@@ -123,7 +123,7 @@ def zonal_stats(raster, vector):
     expression = '\"%s\" is None' % output_field
     request.setFilterExpression(expression)
     request.setFlags(QgsFeatureRequest.NoGeometry)
-    index = layer.fieldNameIndex(output_field)
+    index = layer.fields().lookupField(output_field)
     for feature in layer.getFeatures():
         if feature[output_field] is None:
             layer.changeAttributeValue(feature.id(), index, 0)

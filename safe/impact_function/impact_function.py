@@ -1679,7 +1679,7 @@ class ImpactFunction():
             if self.hazard.keywords.get('hazard') == hazard_earthquake['key']:
                 if is_vector_layer(self._exposure_summary):
                     field = distance_field['field_name']
-                    if self._exposure_summary.fieldNameIndex(field) != -1:
+                    if self._exposure_summary.fields().lookupField(field) != -1:
                         layer = create_memory_layer(
                             'ordered',
                             self._exposure_summary.geometryType(),

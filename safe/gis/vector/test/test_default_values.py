@@ -45,7 +45,7 @@ class TestPrepareLayer(unittest.TestCase):
         }
         add_default_values(layer)
         # These keywords should add a new column female_ratio with 0.5 inside.
-        index = layer.fieldNameIndex(female_ratio_field['field_name'])
+        index = layer.fields().lookupField(female_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
         self.assertListEqual(
             layer.uniqueValues(index),
@@ -68,10 +68,10 @@ class TestPrepareLayer(unittest.TestCase):
         }
         add_default_values(layer)
         # These keywords should not add a new column female_ratio.
-        index = layer.fieldNameIndex(female_ratio_field['field_name'])
+        index = layer.fields().lookupField(female_ratio_field['field_name'])
         self.assertEqual(-1, index)
 
-        index = layer.fieldNameIndex('value_1')
+        index = layer.fields().lookupField('value_1')
         self.assertListEqual(
             sorted(layer.uniqueValues(index)),
             [0.5, 1]

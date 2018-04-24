@@ -204,7 +204,7 @@ def rename_fields(layer, fields_to_copy):
     :type fields_to_copy: dict
     """
     for field in fields_to_copy:
-        index = layer.fieldNameIndex(field)
+        index = layer.fields().lookupField(field)
         if index != -1:
             layer.startEditing()
             layer.renameAttribute(index, fields_to_copy[field])
@@ -229,7 +229,7 @@ def copy_fields(layer, fields_to_copy):
     """
     for field in fields_to_copy:
 
-        index = layer.fieldNameIndex(field)
+        index = layer.fields().lookupField(field)
         if index != -1:
 
             layer.startEditing()
@@ -240,7 +240,7 @@ def copy_fields(layer, fields_to_copy):
 
             layer.addAttribute(new_field)
 
-            new_index = layer.fieldNameIndex(fields_to_copy[field])
+            new_index = layer.fields().lookupField(fields_to_copy[field])
 
             for feature in layer.getFeatures():
                 attributes = feature.attributes()
@@ -266,7 +266,7 @@ def remove_fields(layer, fields_to_remove):
     data_provider = layer.dataProvider()
 
     for field in fields_to_remove:
-        index = layer.fieldNameIndex(field)
+        index = layer.fields().lookupField(field)
         if index != -1:
             index_to_remove.append(index)
 
@@ -386,7 +386,7 @@ def create_ogr_field_from_definition(field_definition):
 
 def field_index_from_definition(layer, field_definition):
 
-    return layer.fieldNameIndex(field_definition['field_name'])
+    return layer.fields().lookupField(field_definition['field_name'])
 
 
 def read_dynamic_inasafe_field(inasafe_fields, dynamic_field, black_list=None):
