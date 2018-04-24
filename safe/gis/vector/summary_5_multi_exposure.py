@@ -83,8 +83,8 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
             field = create_field_from_definition(
                 exposure_hazard_count_field, exposure, hazard_zone)
             analysis.addAttribute(field)
-            index = analysis.fieldNameIndex(field.name())
-            value = feature[analysis_result.fieldNameIndex(
+            index = analysis.fields().lookupField(field.name())
+            value = feature[analysis_result.fields().lookupField()(
                 hazard_count_field['field_name'] % hazard_zone)]
             analysis.changeAttributeValue(target_id, index, value)
             # keywords
@@ -94,12 +94,12 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
             analysis.keywords['inasafe_fields'][key] = value
 
         # total affected
-        source_index = analysis_result.fieldNameIndex(
+        source_index = analysis_result.fields().lookupField()(
             total_affected_field['field_name'])
         field = create_field_from_definition(
             exposure_total_affected_field, exposure)
         analysis.addAttribute(field)
-        index = analysis.fieldNameIndex(field.name())
+        index = analysis.fields().lookupField(field.name())
         analysis.changeAttributeValue(target_id, index, feature[source_index])
         # keywords
         key = exposure_total_affected_field['key'] % exposure
@@ -107,12 +107,12 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total not affected
-        source_index = analysis_result.fieldNameIndex(
+        source_index = analysis_result.fields().lookupField()(
             total_not_affected_field['field_name'])
         field = create_field_from_definition(
             exposure_total_not_affected_field, exposure)
         analysis.addAttribute(field)
-        index = analysis.fieldNameIndex(field.name())
+        index = analysis.fields().lookupField(field.name())
         analysis.changeAttributeValue(target_id, index, feature[source_index])
         # keywords
         key = exposure_total_not_affected_field['key'] % exposure
@@ -120,12 +120,12 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total exposed
-        source_index = analysis_result.fieldNameIndex(
+        source_index = analysis_result.fields().lookupField()(
             total_exposed_field['field_name'])
         field = create_field_from_definition(
             exposure_total_exposed_field, exposure)
         analysis.addAttribute(field)
-        index = analysis.fieldNameIndex(field.name())
+        index = analysis.fields().lookupField(field.name())
         analysis.changeAttributeValue(target_id, index, feature[source_index])
         # keywords
         key = exposure_total_exposed_field['key'] % exposure
@@ -133,12 +133,12 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total not exposed
-        source_index = analysis_result.fieldNameIndex(
+        source_index = analysis_result.fields().lookupField()(
             total_not_exposed_field['field_name'])
         field = create_field_from_definition(
             exposure_total_not_exposed_field, exposure)
         analysis.addAttribute(field)
-        index = analysis.fieldNameIndex(field.name())
+        index = analysis.fields().lookupField(field.name())
         analysis.changeAttributeValue(target_id, index, feature[source_index])
         # keywords
         key = exposure_total_not_exposed_field['key'] % exposure
@@ -146,12 +146,12 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total
-        source_index = analysis_result.fieldNameIndex(
+        source_index = analysis_result.fields().lookupField()(
             total_field['field_name'])
         field = create_field_from_definition(
             exposure_total_field, exposure)
         analysis.addAttribute(field)
-        index = analysis.fieldNameIndex(field.name())
+        index = analysis.fields().lookupField(field.name())
         analysis.changeAttributeValue(target_id, index, feature[source_index])
         # keywords
         key = exposure_total_field['key'] % exposure
@@ -222,23 +222,23 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
                 name=exposure, sub_name=exposure_class
             )
             aggregation.addAttribute(field)
-            source_field_index = layer.fieldNameIndex(
+            source_field_index = layer.fields().lookupField()(
                 affected_exposure_count_field['field_name'] % exposure_class)
-            target_field_index = aggregation.fieldNameIndex(field.name())
+            target_field_index = aggregation.fields().lookupField(field.name())
             field_map[source_field_index] = target_field_index
 
         # Total affected field
         field = create_field_from_definition(
             exposure_total_not_affected_field, exposure)
         aggregation.addAttribute(field)
-        source_field_index = layer.fieldNameIndex(
+        source_field_index = layer.fields().lookupField()(
             total_affected_field['field_name'])
-        target_field_index = aggregation.fieldNameIndex(field.name())
+        target_field_index = aggregation.fields().lookupField(field.name())
         field_map[source_field_index] = target_field_index
 
         # Get Aggregation ID from original feature
         index = (
-            layer.fieldNameIndex(source_fields[aggregation_id_field['key']]))
+            layer.fields().lookupField(source_fields[aggregation_id_field['key']]))
 
         for source_feature in layer.getFeatures(request):
             target_expression = QgsFeatureRequest()

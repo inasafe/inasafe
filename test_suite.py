@@ -114,11 +114,12 @@ def test_manually():
 def test_qgis3():
     """Transient function to re-enable QGIS3 ready tests on Travis selectively.
     """
-    from safe.utilities.test.test_gis import TestQGIS
-    test_suite = unittest.makeSuite(TestQGIS, 'test')
-    _run_tests(test_suite, 'QGIS3 ready tests')
-
+    test_package('safe.utilities')
+    test_package('safe.common')
+    #test_package('safe.gis')
+    #test_package('safe.gui')
 
 
 if __name__ == '__main__':
-    test_package()
+    #test_package()
+    test_qgis3()

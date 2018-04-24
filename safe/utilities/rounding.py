@@ -298,10 +298,10 @@ def denomination(value, min_nominal=None):
     :type min_nominal: int
 
     :return: The new value and the denomination as a unit definition.
-    :rtype: list(int, safe.unit.definition)
+    :rtype: tuple(int, safe.unit.definition)
     """
     if value is None:
-        return None
+        return None, None
 
     if not value:
         return value, None

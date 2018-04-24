@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import datetime, date
 from xml.dom.minidom import parseString
 from xml.etree import ElementTree
-
+from safe.utilities.unicode import get_string 
 from qgis.PyQt.QtCore import QUrl, QDate, QDateTime, Qt
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -113,11 +113,10 @@ def prettify_xml(xml_str):
     :return: the prettified XML
     :rtype: str
     """
-    parsed_xml = parseString(xml_str)
+    parsed_xml = parseString(get_string(xml_str))
     pretty_xml = '\n'.join(
-        [line for line in parsed_xml.toprettyxml(
-            indent=' ' * 2,
-            encoding='UTF-8').split('\n') if line.strip()])
+    [line for line in parsed_xml.toprettyxml(
+        indent=' ' * 2).split('\n') if line.strip()])
     if not pretty_xml.endswith('\n'):
         pretty_xml += '\n'
     return pretty_xml

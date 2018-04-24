@@ -53,7 +53,7 @@ def create_absolute_values_structure(layer, fields):
     for field in source_fields:
         if field in absolute_fields:
             field_name = source_fields[field]
-            index = layer.fieldNameIndex(field_name)
+            index = layer.fields().lookupField(field_name)
             flat_table = FlatTable(*fields)
             summaries[index] = (flat_table, field)
     return summaries

@@ -67,7 +67,7 @@ def from_counts_to_ratios(layer):
             layer.addAttribute(field)
             name = ratio_field['field_name']
             layer.keywords['inasafe_fields'][ratio_field['key']] = name
-            mapping[count_field['field_name']] = layer.fieldNameIndex(name)
+            mapping[count_field['field_name']] = layer.fields().lookupField(name)
             LOGGER.info(
                 'Count field {count_field} detected in the exposure, we are '
                 'going to create a equivalent field {ratio_field} in the '

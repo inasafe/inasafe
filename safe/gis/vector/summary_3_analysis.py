@@ -82,7 +82,7 @@ def analysis_summary(aggregate_hazard, analysis):
         aggregate_hazard, ['all'])
 
     hazard_class = source_fields[hazard_class_field['key']]
-    hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+    hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
     unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
@@ -153,9 +153,9 @@ def analysis_summary(aggregate_hazard, analysis):
     for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
         case_field = summary_rule['case_field']
-        if aggregate_hazard.fieldNameIndex(input_field['field_name']) == -1:
+        if aggregate_hazard.fields().lookupField(input_field['field_name']) == -1:
             continue
-        if aggregate_hazard.fieldNameIndex(case_field['field_name']) == -1:
+        if aggregate_hazard.fields().lookupField(case_field['field_name']) == -1:
             continue
 
         summary_value = 0
@@ -220,7 +220,7 @@ def analysis_summary(aggregate_hazard, analysis):
             summary_field = summary_rules[key]['summary_field']
             field = create_field_from_definition(summary_field)
             analysis.addAttribute(field)
-            field_index = analysis.fieldNameIndex(field.name())
+            field_index = analysis.fields().lookupField(field.name())
             # noinspection PyTypeChecker
             analysis.keywords['inasafe_fields'][summary_field['key']] = (
                 summary_field['field_name'])

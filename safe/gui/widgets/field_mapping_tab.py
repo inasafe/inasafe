@@ -330,7 +330,7 @@ class FieldMappingTab(QWidget, object):
         field_name = field_item.data(Qt.UserRole)
         field = self.layer.fields().field(field_name)
 
-        index = self.layer.fieldNameIndex(field_name)
+        index = self.layer.fields().lookupField(field_name)
         unique_values = self.layer.uniqueValues(index)
         pretty_unique_values = ', '.join([str(v) for v in unique_values[:10]])
 

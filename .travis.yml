@@ -58,22 +58,10 @@ install:
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
   - docker exec -it qgis-testing-environment sh -c "pip3 install --upgrade pep257"
   - docker exec -it qgis-testing-environment sh -c "pip3 install --upgrade flake8"
+  - docker exec -it qgis-testing-environment sh -c "pip3 install --upgrade mock"
 
 script:
 
-  # Run simple test to check for QGIS3 correct installation
-  - |
-    cat << EOF > ./test_qgis_version.py
-    import qgis
-
-    def test_me():
-      assert qgis.utils.Qgis.QGIS_VERSION.startswith('3')
-      print('Ran 1 test: OK')
-
-
-    EOF
-
-  - time docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_qgis_version.test_me"
 
   # Re-enable tests one by one as soon as they are migrated to QGI3:
   - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_qgis3"

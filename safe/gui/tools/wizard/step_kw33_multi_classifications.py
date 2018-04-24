@@ -576,7 +576,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 statistics.maximumValue)
         else:
             field_name = self.parent.step_kw_field.selected_fields()
-            field_index = self.parent.layer.fieldNameIndex(field_name)
+            field_index = self.parent.layer.fields().lookupField(field_name)
             min_value_layer = self.parent.layer.minimumValue(field_index)
             max_value_layer = self.parent.layer.maximumValue(field_index)
             description_text = continuous_vector_question % (

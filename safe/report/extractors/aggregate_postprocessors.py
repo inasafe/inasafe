@@ -499,11 +499,11 @@ def create_section_with_aggregation(
 
     for feature in aggregation_summary.getFeatures():
 
-        aggregation_name_index = aggregation_summary.fieldNameIndex(
+        aggregation_name_index = aggregation_summary.fields().lookupField()(
             aggregation_name_field['field_name'])
         displaced_field_name = aggregation_summary_fields[
             displaced_field['key']]
-        displaced_field_index = aggregation_summary.fieldNameIndex(
+        displaced_field_index = aggregation_summary.fields().lookupField()(
             displaced_field_name)
 
         aggregation_name = feature[aggregation_name_index]
@@ -528,7 +528,7 @@ def create_section_with_aggregation(
 
         for output_field in postprocessors_fields_found:
             field_name = aggregation_summary_fields[output_field['key']]
-            field_index = aggregation_summary.fieldNameIndex(field_name)
+            field_index = aggregation_summary.fields().lookupField(field_name)
             value = feature[field_index]
 
             value = format_number(
