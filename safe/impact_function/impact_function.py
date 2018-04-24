@@ -2340,8 +2340,8 @@ class ImpactFunction():
             is_divisible = exposure not in indivisible_keys
 
             if geometry in [
-                    QgsWkbTypes.LineString,
-                    QgsWkbTypes.Polygon] and is_divisible:
+                    QgsWkbTypes.LineGeometry,
+                    QgsWkbTypes.PolygonGeometry] and is_divisible:
 
                 self.set_state_process(
                     'exposure', 'Make exposure layer valid')
@@ -2481,7 +2481,7 @@ class ImpactFunction():
         hazard_class = hazard_class_field['key']
         for layer in self._outputs():
             without_geometries = [
-                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.NullGeometry,
                 QgsWkbTypes.UnknownGeometry]
             if layer.geometryType() not in without_geometries:
                 display_not_exposed = False

@@ -4,7 +4,6 @@
 import unittest
 
 from qgis.core import QgsProject
-from qgis.gui import QgsMapCanvasLayer
 
 from safe.definitions.exposure import exposure_road, exposure_population
 from safe.gui.tools.multi_exposure_dialog import (
@@ -38,8 +37,8 @@ class MultiExposureDialogTest(unittest.TestCase):
             hazard_layer, population_layer, roads_layer, aggregation_layer]
         QgsProject.instance().addMapLayers(test_layers)
 
-        qgs_map_canvas_layers = [QgsMapCanvasLayer(x) for x in test_layers]
-        self.iface.mapCanvas().setLayerSet(qgs_map_canvas_layers)
+        qgs_map_canvas_layers = test_layers
+        self.iface.mapCanvas().setLayers(qgs_map_canvas_layers)
 
         dialog = MultiExposureDialog(iface=self.iface)
         self.assertFalse(

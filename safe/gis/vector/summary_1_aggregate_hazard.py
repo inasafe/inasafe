@@ -237,9 +237,9 @@ def report_on_field(layer):
     # we do not want to report on the size.
     geometry = layer.geometryType()
     exposure = layer.keywords.get('exposure')
-    if geometry == QgsWkbTypes.Point:
+    if geometry == QgsWkbTypes.PointGeometry:
         field_index = None
-    if geometry == QgsWkbTypes.Polygon and exposure == 'structure':
+    if geometry == QgsWkbTypes.PolygonGeometry and exposure == 'structure':
         field_index = None
 
     # Special case if it's an exposure without classification. It means it's

@@ -120,7 +120,7 @@ class TestFolder(unittest.TestCase):
         """Test if we import an empty layer."""
         layer = create_memory_layer(
             'test',
-            QgsWkbTypes.Polygon,
+            QgsWkbTypes.PolygonGeometry,
             QgsCoordinateReferenceSystem(3857),
             [
                 QgsField('my_field_1', QVariant.Int),

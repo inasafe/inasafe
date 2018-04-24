@@ -103,7 +103,7 @@ def create_memory_layer(
     :type layer_name: str
 
     :param geometry: The geometry of the layer.
-    :rtype geometry: QgsWkbTypes
+    :rtype geometry: QgsWkbTypes (note: from C++ QgsWkbTypes::GeometryType enum)
 
     :param coordinate_reference_system: The CRS of the memory layer.
     :type coordinate_reference_system: QgsCoordinateReferenceSystem
@@ -115,17 +115,17 @@ def create_memory_layer(
     :rtype: QgsVectorLayer
     """
 
-    if geometry == QgsWkbTypes.Point:
+    if geometry == QgsWkbTypes.PointGeometry:
         type_string = 'MultiPoint'
-    elif geometry == QgsWkbTypes.LineString:
+    elif geometry == QgsWkbTypes.LineGeometry:
         type_string = 'MultiLineString'
-    elif geometry == QgsWkbTypes.Polygon:
+    elif geometry == QgsWkbTypes.PolygonGeometry:
         type_string = 'MultiPolygon'
-    elif geometry == QgsWkbTypes.NoGeometry:
+    elif geometry == QgsWkbTypes.NullGeometry:
         type_string = 'none'
     else:
         raise MemoryLayerCreationError(
-            'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
+            'Layer geometry must be one of: Point, Line, Polygon or Null, I got %s' % geometry)
 
     uri = '%s?index=yes&uuid=%s' % (type_string, str(uuid4()))
     if coordinate_reference_system:

@@ -8,9 +8,7 @@ from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
 from qgis.core import QgsMapLayer, QgsProject
 from qgis.gui import QgsLayerTreeMapCanvasBridge
 # pylint: disable=no-name-in-module
-from qgis.gui import (
-    QgsMapCanvasLayer,
-    QgsMessageBar)
+from qgis.gui import QgsMessageBar
 
 from safe.test.qgis_legend_interface import QgisLegend
 
@@ -35,7 +33,7 @@ class QgisInterface(QObject):
     so most methods are simply stubs.
     """
 
-    currentLayerChanged = pyqtSignal(QgsMapCanvasLayer)
+    currentLayerChanged = pyqtSignal(QgsMapLayer)
     layerSavedAs = pyqtSignal(QgsMapLayer, str)
 
     def __init__(self, canvas):
@@ -121,7 +119,7 @@ class QgisInterface(QObject):
         # It's for processing module
         def dummy(*a, **kwa):
             _ = a, kwa  # NOQA
-            return QgisInterface(self.canvas)
+            return None
         return dummy
 
     def __iter__(self):
@@ -137,7 +135,6 @@ class QgisInterface(QObject):
         # simulate iface.legendInterface().layers()
         return list(QgsProject.instance().mapLayers().values())
 
-    @pyqtSlot(list)
     def addLayers(self, layers):
         """Handle layers being added to the registry so they show up in canvas.
 
@@ -154,11 +151,11 @@ class QgisInterface(QObject):
         # We need to keep the record of the registered layers on our canvas!
         registered_layers = []
         for layer in current_layers:
-            final_layers.append(QgsMapCanvasLayer(layer))
+            final_layers.append(QgsMapLayer(layer))
             registered_layers.append(layer.id())
         for layer in layers:
             if layer.id() not in registered_layers:
-                final_layers.append(QgsMapCanvasLayer(layer))
+                final_layers.append(QgsMapLayer(layer))
 
         self.canvas.setLayerSet(final_layers)
         # LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))

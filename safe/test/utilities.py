@@ -15,6 +15,7 @@ from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
 from qgis.PyQt import QtGui  # pylint: disable=W0621
+from qgis.PyQt import QtWidgets  # pylint: disable=W0621
 from qgis.core import (
     QgsProject,
     QgsVectorLayer,
@@ -104,7 +105,7 @@ def get_qgis_app():
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
-            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+            QGIS_APP = QgsApplication([p.encode('utf-8') for p in sys.argv], gui_flag)
         else:
             QGIS_APP = QgsApplication([], gui_flag)
 
@@ -126,7 +127,7 @@ def get_qgis_app():
 
     if PARENT is None:
         # noinspection PyPep8Naming
-        PARENT = QtGui.QWidget()
+        PARENT = QtWidgets.QWidget()
 
     if CANVAS is None:
         # noinspection PyPep8Naming

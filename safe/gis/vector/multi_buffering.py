@@ -71,7 +71,7 @@ def multi_buffering(layer, radii, callback=None):
     fields.append(new_field)
 
     buffered = create_memory_layer(
-        output_layer_name, QgsWkbTypes.Polygon, input_crs, fields)
+        output_layer_name, QgsWkbTypes.PolygonGeometry, input_crs, fields)
     buffered.startEditing()
 
     # Reproject features if needed into UTM if the layer is in 4326.

@@ -70,7 +70,7 @@ def hazard_class_style(layer, classification, display_null=False):
         style.setName(hazard_class)
         style.setRule("hazard_class='%s'" % hazard_class)
         style.setBackgroundColor(transparent)
-        symbol = QgsSymbol.defaultSymbol(QgsWkbTypes.Point)
+        symbol = QgsSymbol.defaultSymbol(QgsWkbTypes.PointGeometry)
         symbol.setColor(color)
         symbol.setSize(3)
         style.setSymbol(symbol)

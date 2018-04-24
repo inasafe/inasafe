@@ -127,7 +127,7 @@ def exposure_summary_table(
                 all='all'
             )
 
-    tabular = create_memory_layer(output_layer_name, QgsWkbTypes.NoGeometry)
+    tabular = create_memory_layer(output_layer_name, QgsWkbTypes.NullGeometry)
     tabular.startEditing()
 
     field = create_field_from_definition(exposure_type_field)

@@ -16,7 +16,7 @@ from qgis.PyQt.QtGui import QIcon
 # force sip2 api
 from qgis.core import Qgis  # NOQA
 from qgis.core import (
-    QgsPoint,
+    QgsPointXY,
     QgsRectangle,
     QgsGeometry,
     QgsCoordinateReferenceSystem,
@@ -272,10 +272,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         :type: bool
         """
         try:
-            QgsPoint(
+            QgsPointXY(
                 self.x_minimum.value(),
                 self.y_maximum.value())
-            QgsPoint(
+            QgsPointXY(
                 self.x_maximum.value(),
                 self.y_minimum.value())
         except ValueError:
@@ -286,10 +286,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def _coordinates_changed(self):
         """Handle a change in the coordinate input boxes."""
         if self._are_coordinates_valid():
-            point1 = QgsPoint(
+            point1 = QgsPointXY(
                 self.x_minimum.value(),
                 self.y_maximum.value())
-            point2 = QgsPoint(
+            point2 = QgsPointXY(
                 self.x_maximum.value(),
                 self.y_minimum.value())
             rect = QgsRectangle(point1, point2)

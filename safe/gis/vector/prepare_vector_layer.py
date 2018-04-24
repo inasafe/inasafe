@@ -268,7 +268,7 @@ def _size_is_needed(layer):
         # The exposure is not divisible, We don't need to compute the size.
         return False
 
-    if layer.geometryType() == QgsWkbTypes.Point:
+    if layer.geometryType() == QgsWkbTypes.PointGeometry:
         # The exposure is a point layer. We don't need to compute the size.
         return False
 

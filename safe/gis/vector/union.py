@@ -145,7 +145,7 @@ def union(union_a, union_b, callback=None):
                     else:
                         int_geom = QgsGeometry(int_geom)
 
-                    if int_geom.wkbType() == QgsWkbTypes.Unknown\
+                    if int_geom.wkbType() == QgsWkbTypes.UnknownGeometry \
                             or QgsWkbTypes.flatType(
                             int_geom.geometry().wkbType()) == \
                             QgsWkbTypes.GeometryCollection:
