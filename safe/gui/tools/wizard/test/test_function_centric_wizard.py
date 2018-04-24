@@ -10,8 +10,8 @@ import shutil
 # Import qgis in order to set SIP API.
 # pylint: disable=unused-import
 import qgis
+from qgis.core import QgsProject
 # pylint: enable=unused-import
-from qgis.gui import QgsMapCanvasLayer
 from qgis.PyQt import QtCore
 
 # noinspection PyPackageRequirements
@@ -126,8 +126,8 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
         QgsProject.instance().addMapLayers(test_layers)
         # Need to set the layers manually to map canvas. See:
         # https://gist.github.com/ismailsunni/dd2c30a38cef0147bd0dc8d6ba1aeac6
-        qgs_map_canvas_layers = [QgsMapCanvasLayer(x) for x in test_layers]
-        CANVAS.setLayerSet(qgs_map_canvas_layers)
+        qgs_map_canvas_layers = test_layers
+        CANVAS.setLayers(qgs_map_canvas_layers)
 
         count = len(dialog.iface.mapCanvas().layers())
         self.assertEqual(count, len(test_layers))

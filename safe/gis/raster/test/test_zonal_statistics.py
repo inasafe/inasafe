@@ -9,7 +9,7 @@ from safe.test.utilities import (
 )
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
-from qgis.core import Qgis, QgsCoordinateReferenceSystem
+from qgis.core import QgsWkbTypes, QgsCoordinateReferenceSystem
 from safe.gis.vector.reproject import reproject
 from safe.gis.raster.zonal_statistics import zonal_stats
 
@@ -43,7 +43,7 @@ class TestReclassifyRaster(unittest.TestCase):
         vector = zonal_stats(raster, vector)
 
         self.assertEqual(vector.fields().count(), number_fields + 1)
-        self.assertEqual(vector.geometryType(), QgsWkbTypes.Polygon)
+        self.assertEqual(vector.geometryType(), QgsWkbTypes.PolygonGeometry)
 
         # With different projections
         raster = load_test_raster_layer(
@@ -60,7 +60,7 @@ class TestReclassifyRaster(unittest.TestCase):
         vector_b = zonal_stats(raster, vector_b)
 
         self.assertEqual(vector_b.fields().count(), number_fields + 1)
-        self.assertEqual(vector_b.geometryType(), QgsWkbTypes.Polygon)
+        self.assertEqual(vector_b.geometryType(), QgsWkbTypes.PolygonGeometry)
 
         # We compare the results between these 2 zonal stats.
         for feature_a, feature_b in zip(

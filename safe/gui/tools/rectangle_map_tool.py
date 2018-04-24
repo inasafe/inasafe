@@ -39,7 +39,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         QgsMapToolEmitPoint.__init__(self, self.canvas)
 
         self.rubber_band = QgsRubberBand(
-            self.canvas, geometryType=QgsWkbTypes.LineString)
+            self.canvas, geometryType=QgsWkbTypes.LineGeometry)
         self.rubber_band.setColor(QColor(0, 0, 240, 100))
         # Needs QGIS 2.6
         # self.rubber_band.setFillColor(QColor(0, 0, 240, 0))
@@ -53,7 +53,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         self.start_point = self.end_point = None
         self.is_emitting_point = False
-        self.rubber_band.reset(QgsWkbTypes.Polygon)
+        self.rubber_band.reset(QgsWkbTypes.PolygonGeometry)
 
     def canvasPressEvent(self, e):
         """
@@ -103,7 +103,7 @@ class RectangleMapTool(QgsMapToolEmitPoint):
 
         :return:
         """
-        self.rubber_band.reset(QgsWkbTypes.Polygon)
+        self.rubber_band.reset(QgsWkbTypes.PolygonGeometry)
         if (start_point.x() == end_point.x() or
                 start_point.y() == end_point.y()):
             return
@@ -161,6 +161,6 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         Disable the tool.
         """
-        self.rubber_band.reset(QgsWkbTypes.Polygon)
+        self.rubber_band.reset(QgsWkbTypes.PolygonGeometry)
         QgsMapTool.deactivate(self)
         self.deactivated.emit()

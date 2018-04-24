@@ -57,7 +57,7 @@ def create_virtual_aggregation(geometry, crs):
         create_field_from_definition(aggregation_name_field)
     ]
     aggregation_layer = create_memory_layer(
-        'aggregation', QgsWkbTypes.Polygon, crs, fields)
+        'aggregation', QgsWkbTypes.PolygonGeometry, crs, fields)
 
     aggregation_layer.startEditing()
 
@@ -103,7 +103,7 @@ def create_analysis_layer(analysis_extent, crs, name):
         create_field_from_definition(analysis_name_field)
     ]
     analysis_layer = create_memory_layer(
-        'analysis', QgsWkbTypes.Polygon, crs, fields)
+        'analysis', QgsWkbTypes.PolygonGeometry, crs, fields)
 
     analysis_layer.startEditing()
 
@@ -144,7 +144,7 @@ def create_profile_layer(profiling):
         fields.append(create_field_from_definition(profiling_memory_field))
     tabular = create_memory_layer(
         'profiling',
-        QgsWkbTypes.NoGeometry,
+        QgsWkbTypes.NullGeometry,
         fields=fields)
 
     # Generate profiling keywords
