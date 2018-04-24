@@ -29,6 +29,7 @@ from qgis.PyQt.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
+    QgsProject,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QgsField,
@@ -125,13 +126,12 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
-        validator = QRegExpValidator(expression, self.filename_prefix)
+        validator = QtGui.QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
         self.time_stamp = None
         self.restore_state()
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
@@ -192,7 +192,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    @pyqtSlot()  # prevents actions being handled twice
     def on_directory_button_clicked(self):
         """Show a dialog to choose directory.
 

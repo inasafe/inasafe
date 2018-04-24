@@ -198,7 +198,8 @@ class TestExpressions(unittest.TestCase):
         self.evaluate(north_arrow_path, expected_result)
 
         # organisation_logo_path
-        expected_result = inasafe_organisation_logo_path['path']  #special case
+        # special case
+        expected_result = inasafe_organisation_logo_path['path']
         self.evaluate(organisation_logo_path, expected_result)
 
     def test_infographic_expressions(self):

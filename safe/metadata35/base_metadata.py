@@ -307,11 +307,11 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         :rtype: str
         """
         json_dumps = json.dumps(
-                self.dict,
-                indent=2,
-                sort_keys=True,
-                separators=(',', ': '),
-                cls=MetadataEncoder
+            self.dict,
+            indent=2,
+            sort_keys=True,
+            separators=(',', ': '),
+            cls=MetadataEncoder
         )
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'

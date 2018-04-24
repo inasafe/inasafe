@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
-
 import json
 
 
@@ -259,7 +258,7 @@ class PivotTable():
         # - custom (using function)
 
         # determine rows
-        
+
         if row_field is None:
             self.rows = ['']
         else:
@@ -290,7 +289,7 @@ class PivotTable():
             self.total_rows[sum_row_index] += sum_value
             self.total_columns[sum_column_index] += sum_value
             self.total += sum_value
-        
+
         self.total_rows_affected = [0.0] * len(self.rows)
         self.total_affected = 0.0
         for row, value in list(sums_affected.items()):

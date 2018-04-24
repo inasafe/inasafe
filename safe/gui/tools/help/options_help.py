@@ -382,12 +382,12 @@ def content():
            'set to \'alpha\', an additional icon will be added to the '
            'toolbar to add test layers to the QGIS project.')))
     bullets.add(m.Text(
-       m.ImportantText(tr('Generate reports')),
-       tr(' - When this option is enabled, InaSAFE will generate reports. ')))
+        m.ImportantText(tr('Generate reports')),
+        tr(' - When this option is enabled, InaSAFE will generate reports. ')))
     bullets.add(m.Text(
-       m.ImportantText(tr('Show memory profile')),
-       tr(' - When this option is enabled, InaSAFE will display the memory '
-          'profile when it runs. ')))
+        m.ImportantText(tr('Show memory profile')),
+        tr(' - When this option is enabled, InaSAFE will display the memory '
+           'profile when it runs. ')))
 
     message.add(bullets)
 

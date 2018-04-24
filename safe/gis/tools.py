@@ -6,6 +6,7 @@ import logging
 import os
 
 from qgis.core import (
+    QgsProject,
     QgsRasterLayer,
     QgsVectorLayer,
     QgsDataSourceUri,

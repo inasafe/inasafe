@@ -35,6 +35,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 class FileDownloaderTest(unittest.TestCase):
     """Test FileDownloader class."""
     # noinspection PyMethodMayBeStatic
+
     def test_download(self):
         """Test download."""
 

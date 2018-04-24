@@ -2,12 +2,12 @@
 """Wizard Dialog."""
 
 
-
 import logging
 from sqlite3 import OperationalError
 
+from qgis.core import QgsProject
 from qgis.PyQt import QtGui
-from qgis.PyQt.QtCore import QSettings, pyqtSignal
+from qgis.PyQt.QtCore import QSettings, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtGui import QPixmap, QIcon
 
@@ -620,7 +620,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnNext_released(self):
         """Handle the Next button release.
 
@@ -680,7 +680,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnBack_released(self):
         """Handle the Back button release.
 
@@ -713,7 +713,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_pbnHelp_released(self):
         if self.on_help:
             self.pbnHelp.setText(tr('Show help'))

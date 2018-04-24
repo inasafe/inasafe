@@ -89,7 +89,7 @@ def calculate_distance(
     :return: distance
     :rtype: float
     """
-    _ = earthquake_hazard, place_exposure # NOQA
+    _ = earthquake_hazard, place_exposure  # NOQA
 
     epicenter = QgsPoint(longitude, latitude)
     place_point = place_geometry.asPoint()
@@ -125,7 +125,7 @@ def calculate_bearing(
     :return: Bearing angle
     :rtype: float
     """
-    _ = earthquake_hazard, place_exposure # NOQA
+    _ = earthquake_hazard, place_exposure  # NOQA
 
     epicenter = QgsPoint(longitude, latitude)
     place_point = place_geometry.asPoint()
@@ -155,7 +155,7 @@ def calculate_cardinality(
     # this method could still be improved later, since the acquisition interval
     # is a bit strange, i.e the input angle of 22.499° will return `N` even
     # though 22.5° is the direction for `NNE`
-    _ = earthquake_hazard, place_exposure # NOQA
+    _ = earthquake_hazard, place_exposure  # NOQA
 
     direction_list = tr(
         'N,NNE,NE,ENE,E,ESE,SE,SSE,S,SSW,SW,WSW,W,WNW,NW,NNW'
@@ -195,7 +195,7 @@ def post_processor_affected_function(
     """
     if exposure == exposure_population['key']:
         affected = is_affected(
-           hazard, classification, hazard_class)
+            hazard, classification, hazard_class)
     else:
         classes = None
         for hazard in hazard_classes_all:

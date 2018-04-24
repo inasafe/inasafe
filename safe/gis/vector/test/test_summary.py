@@ -64,7 +64,6 @@ class TestSummary(unittest.TestCase):
             'exposure': 'structure'
         }
 
-
         number_of_fields = aggregate_hazard.fields().count()
 
         layer = aggregate_hazard_summary(impact, aggregate_hazard)

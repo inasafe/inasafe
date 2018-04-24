@@ -1043,7 +1043,7 @@ def definition_to_message(
             tr('General notes:'), **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['notes']:
-            if type(note) is dict:
+            if isinstance(note, dict):
                 bullets = _add_dict_to_bullets(bullets, note)
             elif note:
                 bullets.add(m.Text(note))
@@ -1082,7 +1082,7 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_notes:
-                if type(note) is dict:
+                if isinstance(note, dict):
                     bullets = _add_dict_to_bullets(bullets, note)
                 elif note:
                     bullets.add(m.Text(note))
@@ -1134,7 +1134,7 @@ def definition_to_message(
         message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
         bullets = m.BulletedList()
         for note in definition['actions']:
-            if type(note) is dict:
+            if isinstance(note, dict):
                 bullets = _add_dict_to_bullets(bullets, note)
             elif note:
                 bullets.add(m.Text(note))
@@ -1148,7 +1148,7 @@ def definition_to_message(
             message.add(m.Heading(title, **DETAILS_SUBGROUP_STYLE))
             bullets = m.BulletedList()
             for note in extra_exposure_actions:
-                if type(note) is dict:
+                if isinstance(note, dict):
                     bullets = _add_dict_to_bullets(bullets, note)
                 elif note:
                     bullets.add(m.Text(note))

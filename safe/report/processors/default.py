@@ -8,7 +8,6 @@ Module for basic renderer we support. Currently we have:
 """
 
 
-
 import io
 import logging
 import os
@@ -219,7 +218,7 @@ def create_qgis_template_output(output_path, composition):
 
     :param composition: QGIS Composition object to get template.
         values
-    :type composition: qgis.core.QgsComposition
+    :type composition: qgis.core.QgsLayout
 
     :return: Generated output path.
     :rtype: str
@@ -264,7 +263,7 @@ def qgis_composer_html_renderer(impact_report, component):
     qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsComposition(qgis_composition_context.map_settings)
+    composition = QgsLayout(qgis_composition_context.map_settings)
 
     if not context.html_frame_elements:
         # if no html frame elements at all, do not generate empty report.
@@ -274,14 +273,14 @@ def qgis_composer_html_renderer(impact_report, component):
     # Add HTML Frame
     for html_el in context.html_frame_elements:
         mode = html_el.get('mode')
-        html_element = QgsComposerHtml(composition, False)
-        """:type: qgis.core.QgsComposerHtml"""
+        html_element = QgsLayoutItemHtml(composition, False)
+        """:type: qgis.core.QgsLayoutItemHtml"""
         margin_left = html_el.get('margin_left', 10)
         margin_top = html_el.get('margin_top', 10)
         width = html_el.get('width', component.page_width - 2 * margin_left)
         height = html_el.get('height', component.page_height - 2 * margin_top)
 
-        html_frame = QgsComposerFrame(
+        html_frame = QgsLayoutFrame(
             composition,
             html_element,
             margin_left,
@@ -294,16 +293,16 @@ def qgis_composer_html_renderer(impact_report, component):
             if mode == 'text':
                 text = html_el.get('text')
                 text = text if text else ''
-                html_element.setContentMode(QgsComposerHtml.ManualHtml)
+                html_element.setContentMode(QgsLayoutItemHtml.ManualHtml)
                 html_element.setResizeMode(
-                    QgsComposerHtml.RepeatUntilFinished)
+                    QgsLayoutItemHtml.RepeatUntilFinished)
                 html_element.setHtml(text)
                 html_element.loadHtml()
             elif mode == 'url':
                 url = html_el.get('url')
-                html_element.setContentMode(QgsComposerHtml.Url)
+                html_element.setContentMode(QgsLayoutItemHtml.Url)
                 html_element.setResizeMode(
-                    QgsComposerHtml.RepeatUntilFinished)
+                    QgsLayoutItemHtml.RepeatUntilFinished)
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
@@ -413,7 +412,7 @@ def qgis_composer_renderer(impact_report, component):
     qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsComposition(qgis_composition_context.map_settings)
+    composition = QgsLayout(qgis_composition_context.map_settings)
 
     # load template
     main_template_folder = impact_report.metadata.template_folder
@@ -441,8 +440,8 @@ def qgis_composer_renderer(impact_report, component):
     for img in context.image_elements:
         item_id = img.get('id')
         path = img.get('path')
-        image = composition_item(composition, item_id, QgsComposerPicture)
-        """:type: qgis.core.QgsComposerPicture"""
+        image = composition_item(composition, item_id, QgsLayoutItemPicture)
+        """:type: qgis.core.QgsLayoutItemPicture"""
         if image and path:
             image.setPicturePath(path)
 
@@ -453,19 +452,19 @@ def qgis_composer_renderer(impact_report, component):
         composer_item = composition.getComposerItemById(item_id)
         try:
             html_element = composition.getComposerHtmlByItem(composer_item)
-        except:
+        except BaseException:
             pass
-        """:type: qgis.core.QgsComposerHtml"""
+        """:type: qgis.core.QgsLayoutItemHtml"""
         if html_element:
             if mode == 'text':
                 text = html_el.get('text')
                 text = text if text else ''
-                html_element.setContentMode(QgsComposerHtml.ManualHtml)
+                html_element.setContentMode(QgsLayoutItemHtml.ManualHtml)
                 html_element.setHtml(text)
                 html_element.loadHtml()
             elif mode == 'url':
                 url = html_el.get('url')
-                html_element.setContentMode(QgsComposerHtml.Url)
+                html_element.setContentMode(QgsLayoutItemHtml.Url)
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
 
@@ -482,7 +481,7 @@ def qgis_composer_renderer(impact_report, component):
                 layer, QgsMapLayer)
         ]
         map_extent_option = map_el.get('extent')
-        composer_map = composition_item(composition, item_id, QgsComposerMap)
+        composer_map = composition_item(composition, item_id, QgsLayoutItemMap)
 
         for index, layer in enumerate(layers):
             # we need to check whether the layer is registered or not
@@ -494,7 +493,7 @@ def qgis_composer_renderer(impact_report, component):
             else:
                 QgsProject.instance().addMapLayer(layer)
 
-        """:type: qgis.core.QgsComposerMap"""
+        """:type: qgis.core.QgsLayoutItemMap"""
         if composer_map:
 
             # Search for specified map extent in the template.
@@ -574,8 +573,8 @@ def qgis_composer_renderer(impact_report, component):
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
-        legend = composition_item(composition, item_id, QgsComposerLegend)
-        """:type: qgis.core.QgsComposerLegend"""
+        legend = composition_item(composition, item_id, QgsLayoutItemLegend)
+        """:type: qgis.core.QgsLayoutItemLegend"""
         if legend:
             # set column count
             if column_count:
@@ -723,7 +722,7 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     """Extract composition using atlas generation.
 
     :param composition: QGIS Composition object used for producing the report.
-    :type composition: qgis.core.QgsComposition
+    :type composition: qgis.core.QgsLayout
 
     :param coverage_layer: Coverage Layer used for atlas map.
     :type coverage_layer: QgsMapLayer
@@ -738,9 +737,9 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     :rtype: str, list
     """
     # set the composer map to be atlas driven
-    composer_map = composition_item(composition, 'impact-map', QgsComposerMap)
+    composer_map = composition_item(composition, 'impact-map', QgsLayoutItemMap)
     composer_map.setAtlasDriven(True)
-    composer_map.setAtlasScalingMode(QgsComposerMap.Auto)
+    composer_map.setAtlasScalingMode(QgsLayoutItemMap.Auto)
 
     # setup the atlas composition and composition atlas mode
     atlas_composition = composition.atlasComposition()
@@ -748,7 +747,7 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     atlas_composition.setComposerMap(composer_map)
     atlas_composition.prepareMap(composer_map)
     atlas_on_single_file = atlas_composition.singleFile()
-    composition.setAtlasMode(QgsComposition.ExportAtlas)
+    composition.setAtlasMode(QgsLayout.ExportAtlas)
 
     if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         if not atlas_composition.filenamePattern():

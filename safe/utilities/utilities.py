@@ -14,7 +14,7 @@ import unicodedata
 import webbrowser
 from os.path import join, isdir
 
-from qgis.core import QgsApplication
+from qgis.utils import plugin_paths
 
 import safe  # noqa
 from safe import messaging as m
@@ -398,9 +398,11 @@ def is_plugin_installed(name):
     :return: If the plugin is installed.
     :rtype: bool
     """
-    directory = QgsApplication.qgisSettingsDirPath()
-    return isdir(join(directory, 'python', 'plugins', name))
-
+    for directory in plugin_paths:
+        print(join(directory, name))
+        if isdir(join(directory, name)):
+            return True
+    return False
 
 def reload_inasafe_modules(module_name=None):
     """Reload python modules.

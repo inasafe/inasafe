@@ -11,6 +11,7 @@ import os
 from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import pyqtSlot, QSettings
 from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
+from qgis.core import QgsProject
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
@@ -240,8 +241,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             [data_store.layer(self.result_layer.name())])
         self.done(QtGui.QDialog.Accepted)
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

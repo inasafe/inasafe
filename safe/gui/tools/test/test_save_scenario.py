@@ -172,6 +172,7 @@ class SaveScenarioTest(unittest.TestCase):
                 'hazard/classified_flood_20_20.asc',
                 relative_hazard)
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(SaveScenarioTest)
     runner = unittest.TextTestRunner(verbosity=2)

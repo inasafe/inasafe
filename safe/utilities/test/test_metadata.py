@@ -514,16 +514,18 @@ class TestMetadataUtilities(unittest.TestCase):
         self.assertDictEqual(old_keyword, expected_keyword)
 
         # Exposure population polygon
-        new_keywords = {'exposure': 'population',
-         'exposure_unit': 'count',
-         'inasafe_fields': {'population_count_field': 'population'},
-         'keyword_version': '4.0',
-         'layer_geometry': 'polygon',
-         'layer_mode': 'continuous',
-         'layer_purpose': 'exposure',
-         'source': 'NBS',
-         'title': 'Census',
-         'url': 'http://nbs.go.tz'}
+        new_keywords = {
+            'exposure': 'population',
+            'exposure_unit': 'count',
+            'inasafe_fields': {
+                'population_count_field': 'population'},
+            'keyword_version': '4.0',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'exposure',
+            'source': 'NBS',
+            'title': 'Census',
+            'url': 'http://nbs.go.tz'}
         expected_keyword = {
             'exposure': 'population',
             'exposure_unit': 'count',

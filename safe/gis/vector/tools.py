@@ -3,7 +3,6 @@
 """Tools for vector layers."""
 
 
-
 import logging
 from math import isnan
 from uuid import uuid4
@@ -14,7 +13,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
-    Qgis,
     QgsFeature,
     QgsField,
     QgsDistanceArea,
@@ -119,7 +117,7 @@ def create_memory_layer(
 
     if geometry == QgsWkbTypes.Point:
         type_string = 'MultiPoint'
-    elif geometry ==QgsWkbTypes.LineString:
+    elif geometry == QgsWkbTypes.LineString:
         type_string = 'MultiLineString'
     elif geometry == QgsWkbTypes.Polygon:
         type_string = 'MultiPolygon'

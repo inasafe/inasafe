@@ -6,7 +6,7 @@ import logging
 
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui
-from qgis.PyQt.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSlot
 
 from safe import messaging as m
 from safe.definitions.font import big_font
@@ -96,7 +96,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_tblFunctions2_itemSelectionChanged(self):
         """Choose selected hazard x exposure constraints combination.
 

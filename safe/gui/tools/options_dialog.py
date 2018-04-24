@@ -639,8 +639,7 @@ class OptionsDialog(QDialog, FORM_CLASS):
         self.txtDisclaimer.setPlainText(org_disclaimer)
         self.txtDisclaimer.setEnabled(is_checked)
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

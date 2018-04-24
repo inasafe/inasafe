@@ -42,7 +42,8 @@ def generate_field_table():
         print('| --- | ---- | ---------- |')
         for i in fields:
             # fix_print_with_import
-            print(('| %s | %s | %s |' % (i['key'], i['name'], i['field_name'])))
+            print(('| %s | %s | %s |' %
+                   (i['key'], i['name'], i['field_name'])))
 
 
 def check_format(field):
@@ -88,6 +89,7 @@ def check_format(field):
 
 class TestFieldDefinitions(unittest.TestCase):
     """Test for Field definitions."""
+
     def test_field_format(self):
         """Test to check all field is valid."""
         for layer, fields in list(all_fields.items()):

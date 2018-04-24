@@ -11,6 +11,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+
+from qgis.PyQt.QtCore import QUrl
+
+from safe.common.exceptions import MetadataCastError
+from safe.metadata.property import BaseProperty
+
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2015'
@@ -19,11 +26,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 NoneType = type(None)
-
-from qgis.PyQt.QtCore import QUrl
-
-from safe.common.exceptions import MetadataCastError
-from safe.metadata.property import BaseProperty
 
 
 class UrlProperty(BaseProperty):

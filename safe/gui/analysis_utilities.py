@@ -7,7 +7,6 @@ from collections import OrderedDict
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import (
-    Qgis,
     QgsWkbTypes,
     QgsMapLayer,
     QgsProject,
@@ -113,7 +112,7 @@ def add_debug_layers_to_canvas(impact_function):
         for f in reversed(classification['classes']):
             classes[f['key']] = (f['color'], f['name'])
         hazard_class = hazard_class_field['key']
-    except:
+    except BaseException:
         # We might not have a classification. But this is the debug group so
         # let's not raise a new exception.
         classification = None

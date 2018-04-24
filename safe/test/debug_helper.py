@@ -11,14 +11,11 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 """
 
 
-
-
-
 from tempfile import mkdtemp
 
 from qgis.PyQt.QtCore import QVariant, Qt
 from qgis.core import (
-    Qgis,
+    QgsProject,
     QgsWkbTypes,
     QgsFeature,
     QgsField,

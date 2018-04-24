@@ -590,7 +590,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # noinspection PyBroadException
                 try:
                     total_count = int(float(feat[field_index]))
-                except:
+                except BaseException:
                     LOGGER.debug(
                         'Field name not found: %s, field index: %s' % (
                             field['field_name'], field_index))

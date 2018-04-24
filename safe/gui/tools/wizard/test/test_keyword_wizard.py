@@ -83,7 +83,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Remove the mess that we made on each test
         try:
             shutil.rmtree(temp_dir(sub_dir='test'))
-        except:
+        except BaseException:
             pass
 
     def check_list(self, expected_list, list_widget):
@@ -498,7 +498,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     hazard_value_field['key']: 'KRB',
                     hazard_name_field['key']: 'volcano',
-                 },
+            },
             'value_maps': {
                 exposure_land_cover['key']: {
                     volcano_hazard_classes['key']: {
@@ -526,10 +526,10 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard', 'volcano_krb.shp', clone=True)
 
         default_classes = {
-                            'high': ['Kawasan Rawan Bencana III'],
-                            'low': ['Kawasan Rawan Bencana I'],
-                            'medium': ['Kawasan Rawan Bencana II']
-                        }
+            'high': ['Kawasan Rawan Bencana III'],
+            'low': ['Kawasan Rawan Bencana I'],
+            'medium': ['Kawasan Rawan Bencana II']
+        }
         keywords = {
             'hazard': hazard_volcano['key'],
             'hazard_category': hazard_category_multiple_event['key'],
@@ -835,17 +835,19 @@ class TestKeywordWizard(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'exposure': exposure_structure['key'],
-            'inasafe_fields':
-                {
-                    exposure_type_field['key']: 'TYPE',
-                },
-            'value_map': dict((k, v) for k, v in list(assigned_values.items()) if v),
+            'inasafe_fields': {
+                exposure_type_field['key']: 'TYPE',
+            },
+            'value_map': dict(
+                (k,
+                 v) for k,
+                v in list(
+                    assigned_values.items()) if v),
             'date': source_date,
             'classification': generic_structure_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
-            'layer_mode': layer_mode_classified['key']
-        }
+            'layer_mode': layer_mode_classified['key']}
 
         real_keywords = dialog.get_keywords()
 
@@ -1263,7 +1265,7 @@ class TestKeywordWizard(unittest.TestCase):
             'inasafe_fields':
                 {
                     population_count_field['key']: ['population'],
-                },
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1290,7 +1292,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     # Dummy, select more than fields to show we can do it.
                     population_count_field['key']: ['population', 'id'],
-                },
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1527,7 +1529,7 @@ class TestKeywordWizard(unittest.TestCase):
                         'F_60_100'
                     ]
 
-                },
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1597,7 +1599,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     hazard_value_field['key']: 'KRB',
                     hazard_name_field['key']: 'volcano',
-                },
+            },
             'value_maps': {
                 exposure_land_cover['key']: {
                     volcano_hazard_classes['key']: {
@@ -1687,7 +1689,7 @@ class TestKeywordWizard(unittest.TestCase):
                         'F_60_100'
                     ]
 
-                },
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1821,7 +1823,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     exposure_type_field['key']: 'Type',
                     population_count_field['key']: 'Population',
-                },
+            },
             'date': source_date,
             'layer_geometry': layer_geometry_point['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -2034,7 +2036,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Click next to finish extra keywords step and go to title step
         dialog.pbnNext.click()
-
 
         # Check if in title step
         self.check_current_step(dialog.step_kw_title)

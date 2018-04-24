@@ -4,7 +4,7 @@
 
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore
-from qgis.PyQt.QtCore import pyqtSignature
+from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe import messaging as m
@@ -63,7 +63,7 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_lstHazardCategories_itemSelectionChanged(self):
         """Update hazard category description label.
 

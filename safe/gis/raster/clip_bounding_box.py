@@ -110,8 +110,8 @@ def clip_by_extent(layer, extent):
         # exceptions with this step.
         LOGGER.exception(parameters)
         LOGGER.exception(
-           'Error from QGIS clip raster by extent. Please check the QGIS '
-           'logs too !')
+            'Error from QGIS clip raster by extent. Please check the QGIS '
+            'logs too !')
         LOGGER.info(
             'Even if we got an exception, we are continuing the analysis. The '
             'layer is not clip.')

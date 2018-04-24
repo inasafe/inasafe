@@ -117,6 +117,7 @@ class FakeQNetworkAccessManager():
     """
     # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
+
     def post(self, request_url, data=None):
         """Mock handler for post requests.
         :param request_url: Requested url.
@@ -186,6 +187,7 @@ class OsmDownloaderTest(unittest.TestCase):
     .. versionadded:: 3.2
     """
     # noinspection PyPep8Naming
+
     def setUp(self):
         """Runs before each test."""
         # provide Fake QNetworkAccessManager

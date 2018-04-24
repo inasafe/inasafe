@@ -12,7 +12,7 @@ from os import makedirs
 from os.path import join, exists, dirname
 from socket import gethostname
 
-from qgis.PyQt.Qt import PYQT_VERSION_STR
+from qgis.PyQt.Qt import PYQT_VERSION_STR, QT_VERSION_STR
 from qgis.PyQt.QtCore import QSettings, QDir
 from osgeo import gdal
 from qgis.core import (
@@ -23,6 +23,7 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer,
     Qgis,
+    QgsProject,
     QgsWkbTypes,
     QgsMapLayer,
     QgsRasterLayer,
@@ -378,7 +379,7 @@ class ImpactFunction():
             try:
                 property_a = getattr(self, if_property)
                 property_b = getattr(other, if_property)
-                if type(property_a) != type(property_b):
+                if not isinstance(property_a, type(property_b)):
                     message = (
                         'Different type of property %s.\nA: %s\nB: %s' % (
                             if_property, type(property_a), type(property_b)))
@@ -2339,7 +2340,9 @@ class ImpactFunction():
             exposure = self.exposure.keywords.get('exposure')
             is_divisible = exposure not in indivisible_keys
 
-            if geometry in [QgsWkbTypes.LineString, QgsWkbTypes.Polygon] and is_divisible:
+            if geometry in [
+                    QgsWkbTypes.LineString,
+                    QgsWkbTypes.Polygon] and is_divisible:
 
                 self.set_state_process(
                     'exposure', 'Make exposure layer valid')
@@ -2478,7 +2481,9 @@ class ImpactFunction():
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self._outputs():
-            without_geometries = [QgsWkbTypes.NoGeometry, QgsWkbTypes.UnknownGeometry]
+            without_geometries = [
+                QgsWkbTypes.NoGeometry,
+                QgsWkbTypes.UnknownGeometry]
             if layer.geometryType() not in without_geometries:
                 display_not_exposed = False
                 if layer == self.impact or self.debug_mode:

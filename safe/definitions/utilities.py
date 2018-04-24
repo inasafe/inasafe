@@ -6,7 +6,7 @@ from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, split
 
-from qgis.PyQt.QtXml import QDomDocument
+from qgis.PyQt.QtXml import QDomDocument, QDomNode
 from qgis.core import QgsApplication
 
 from safe import definitions

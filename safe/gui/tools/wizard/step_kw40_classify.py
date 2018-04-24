@@ -6,6 +6,7 @@ import json
 from copy import deepcopy
 
 import numpy
+from qgis.PyQt import Qt
 from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView, QTreeWidgetItem
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
@@ -266,7 +267,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             if not assigned:
                 unassigned_values += [unique_value]
         self.populate_classified_values(
-           unassigned_values, assigned_values, default_classes)
+            unassigned_values, assigned_values, default_classes)
 
     def populate_classified_values(
             self, unassigned_values, assigned_values, default_classes):

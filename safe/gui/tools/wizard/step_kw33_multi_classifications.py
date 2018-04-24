@@ -2,12 +2,12 @@
 """InaSAFE Wizard Step Multi Classifications."""
 
 
-
 import logging
 from collections import OrderedDict
 from functools import partial
 
 import numpy
+from qgis.PyQt import Qt
 from qgis.PyQt.QtWidgets import QLabel, QHBoxLayout, QComboBox, QPushButton, QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView, QListWidgetItem, QTreeWidgetItem, QSizePolicy
 from qgis.PyQt.QtGui import QFont
 from qgis.PyQt.QtWebKitWidgets import QWebView
@@ -522,9 +522,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         # Clean non existing hazard class key
         empty_exposure_classifications = []
-        for the_exposure, the_hazard_classifications in list(output[key].items()):
-            for the_hazard_classification in list(the_hazard_classifications.\
-                    keys()):
+        for the_exposure, the_hazard_classifications in list(
+                output[key].items()):
+            for the_hazard_classification in list(the_hazard_classifications.
+                                                  keys()):
                 invalid_classifications = []
                 if not definition(the_hazard_classification):
                     invalid_classifications.append(

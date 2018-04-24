@@ -116,7 +116,7 @@ def intersection(source, mask):
                             attrs.extend(mask_attributes)
                             out_feature.setAttributes(attrs)
                             writer.addFeature(out_feature)
-                except:
+                except BaseException:
                     LOGGER.debug(
                         tr('Feature geometry error: One or more output '
                            'features ignored due to invalid geometry.'))

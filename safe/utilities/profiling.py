@@ -7,7 +7,6 @@ This code was taken from http://stackoverflow.com/a/3620972
 """
 
 
-
 import inspect
 import time
 from functools import wraps

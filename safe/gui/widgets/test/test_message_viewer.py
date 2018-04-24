@@ -94,5 +94,6 @@ class MessageViewerTest(unittest.TestCase):
         text = self.fake_error()
         self.assertIn('****Problem', text)
 
+
 if __name__ == '__main__':
     unittest.main()
