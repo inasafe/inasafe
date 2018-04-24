@@ -75,6 +75,9 @@ script:
 
   - time docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_qgis_version.test_me"
 
+  # Re-enable tests one by one as soon as they are migrated to QGI3:
+  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_qgis3"
+  
   # The real test: disabled until migration to QGIS3 is completed
   # - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
   - make pep257

@@ -10,23 +10,26 @@ Contact : etienne at kartoza dot com
      (at your option) any later version.
 
 """
-from __future__ import print_function
-from __future__ import absolute_import
 
 import sys
 import os
 import unittest
 import qgis  # NOQA  For SIP API to V2 if run outside of QGIS
+
+try:
+    from pip import main as pipmain
+except:
+    from pip._internal import main as pipmain
+
 try:
     import coverage
 except ImportError:
-    import pip
-    pip.main(['install', 'coverage'])
+    pipmain(['install', 'coverage'])
     import coverage
 import tempfile
 from osgeo import gdal
-from qgis.PyQt.import Qt
-from .safe.utilities.gis import qgis_version
+from qgis.PyQt import Qt
+from safe.utilities.gis import qgis_version
 
 __author__ = 'etiennetrimaille'
 __revision__ = '$Format:%H$'
@@ -106,6 +109,15 @@ def test_manually():
         TestAssignHighestValueVector
     test_suite = unittest.makeSuite(TestAssignHighestValueVector, 'test')
     _run_tests(test_suite, 'custom test class')
+
+
+def test_qgis3():
+    """Transient function to re-enable QGIS3 ready tests on Travis selectively.
+    """
+    from safe.utilities.test.test_gis import TestQGIS
+    test_suite = unittest.makeSuite(TestQGIS, 'test')
+    _run_tests(test_suite, 'QGIS3 ready tests')
+
 
 
 if __name__ == '__main__':
