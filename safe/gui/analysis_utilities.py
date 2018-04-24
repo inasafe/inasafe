@@ -4,21 +4,14 @@
 
 from collections import OrderedDict
 
+from qgis.core import QgsMapLayer, QgsProject, QgsWkbTypes
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtXml import QDomDocument
-from qgis.core import (
-    QgsWkbTypes,
-    QgsMapLayer,
-    QgsProject,
-)
-
 from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.utilities import definition
 from safe.gis.tools import load_layer
-from safe.impact_function.impact_function_utilities import (
-    FROM_CANVAS,
-)
+from safe.impact_function.impact_function_utilities import FROM_CANVAS
 from safe.impact_function.style import hazard_class_style
 from safe.utilities.gis import qgis_version
 from safe.utilities.metadata import active_classification
@@ -131,7 +124,8 @@ def add_debug_layers_to_canvas(impact_function):
         # Let's style layers which have a geometry and have
         # hazard_class
         if qgis_layer.type() == QgsMapLayer.VectorLayer:
-            if qgis_layer.geometryType() != QgsWkbTypes.NoGeometry and classification:
+            if qgis_layer.geometryType() not in [QgsWkbTypes.NullGeometry, 
+                QgsWkbTypes.UnknownGeometry] and classification:
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
 

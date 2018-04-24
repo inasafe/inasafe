@@ -7,7 +7,7 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsLayerItem,
     QgsMapLayer,
-    QgsPoint,
+    QgsPointXY,
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
@@ -261,7 +261,7 @@ def is_point_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QgsWkbTypes.Point)
+            layer.geometryType() == QgsWkbTypes.PointGeometry)
     except AttributeError:
         return False
 
@@ -278,7 +278,7 @@ def is_line_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QgsWkbTypes.LineString)
+            layer.geometryType() == QgsWkbTypes.LineGeometry)
     except AttributeError:
         return False
 
@@ -295,7 +295,7 @@ def is_polygon_layer(layer):
     """
     try:
         return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QgsWkbTypes.Polygon)
+            layer.geometryType() == QgsWkbTypes.PolygonGeometry)
     except AttributeError:
         return False
 
@@ -345,8 +345,8 @@ def wkt_to_rectangle(extent):
         return None
 
     rectangle = QgsRectangle(
-        QgsPoint(polygon[0].x(), polygon[0].y()),
-        QgsPoint(polygon[2].x(), polygon[2].y()))
+        QgsPointXY(polygon[0].x(), polygon[0].y()),
+        QgsPointXY(polygon[2].x(), polygon[2].y()))
 
     return rectangle
 

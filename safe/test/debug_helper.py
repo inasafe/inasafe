@@ -136,7 +136,7 @@ def print_attribute_table(layer, limit=-1):
     :param limit: The limit in the query.
     :type limit: integer
     """
-    if layer.wkbType() == QgsWkbTypes.WkbNoGeometry:
+    if layer.wkbType() in [QgsWkbTypes.NullGeometry, QgsWkbTypes.UnknownGeometry]:
         geometry = False
     else:
         geometry = True
