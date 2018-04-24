@@ -144,7 +144,7 @@ def _check_value_mapping(layer, exposure_key=None):
     :param exposure_key: The exposure key.
     :type exposure_key: str
     """
-    index = layer.fieldNameIndex(exposure_type_field['field_name'])
+    index = layer.fields().lookupField(exposure_type_field['field_name'])
     unique_exposure = layer.uniqueValues(index)
     if layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
         if not exposure_key:
@@ -311,7 +311,7 @@ def _remove_features(layer):
             message = 'Keyword %s is missing from %s' % (
                 compulsory_field['key'], layer_purpose)
             raise InvalidKeywordsForProcessingAlgorithm(message)
-        index = layer.fieldNameIndex(field_name)
+        index = layer.fields().lookupField(field_name)
 
         request = QgsFeatureRequest()
         request.setSubsetOfAttributes([field_name], layer.pendingFields())
@@ -406,7 +406,7 @@ def _add_id_column(layer):
 
         layer.addAttribute(id_field)
 
-        new_index = layer.fieldNameIndex(id_field.name())
+        new_index = layer.fields().lookupField(id_field.name())
 
         for feature in layer.getFeatures():
             layer.changeAttributeValue(
@@ -432,7 +432,7 @@ def _add_default_exposure_class(layer):
         exposure_class_field['field_name'])
     layer.addAttribute(field)
 
-    index = layer.fieldNameIndex(exposure_class_field['field_name'])
+    index = layer.fields().lookupField(exposure_class_field['field_name'])
 
     exposure = layer.keywords['exposure']
 
@@ -483,14 +483,14 @@ def sum_fields(layer, output_field_key, input_fields):
         sum_expression.prepare(context)
 
         # Get the output field index
-        output_idx = layer.fieldNameIndex(output_field_name)
+        output_idx = layer.fields().lookupField(output_field_name)
         # Output index is not found
         if output_idx == -1:
             output_field = create_field_from_definition(field_definition)
             layer.startEditing()
             layer.addAttribute(output_field)
             layer.commitChanges()
-            output_idx = layer.fieldNameIndex(output_field_name)
+            output_idx = layer.fields().lookupField(output_field_name)
 
         layer.startEditing()
         # Iterate to all features

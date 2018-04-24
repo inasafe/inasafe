@@ -508,7 +508,7 @@ def qgis_composer_renderer(impact_report, component):
 
             composer_map.setKeepLayerSet(True)
             layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
-            composer_map.setLayerSet(layer_set)
+            composer_map.setLayers(layer_set)
             map_overview_extent = None
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):

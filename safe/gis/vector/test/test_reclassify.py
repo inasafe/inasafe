@@ -58,7 +58,7 @@ class TestReclassifyVector(unittest.TestCase):
         self.assertEqual(layer.featureCount(), 375)
 
         expected_field = hazard_class_field['field_name']
-        self.assertEqual(classified.fieldNameIndex(expected_field), 1)
+        self.assertEqual(classified.fields().lookupField(expected_field), 1)
 
         self.assertEqual(
             layer.keywords['inasafe_fields'][hazard_class_field['key']],

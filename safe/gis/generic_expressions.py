@@ -65,7 +65,7 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
     if not layer:
         return None
 
-    index = layer.fieldNameIndex(field)
+    index = layer.fields().lookupField(field)
     if index < 0:
         return None
 
@@ -106,7 +106,7 @@ def inasafe_sub_analysis_summary_field_value(
     if not analysis_summary_layer:
         return None
 
-    index = analysis_summary_layer.fieldNameIndex(field)
+    index = analysis_summary_layer.fields().lookupField(field)
     if index < 0:
         return None
 
@@ -134,7 +134,7 @@ def inasafe_exposure_summary_field_values(field, feature, parent):
     if not layer:
         return None
 
-    index = layer.fieldNameIndex(field)
+    index = layer.fields().lookupField(field)
     if index < 0:
         return None
 

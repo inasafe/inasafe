@@ -59,7 +59,7 @@ def recompute_counts(layer, callback=None):
     absolute_field_keys = [f['key'] for f in count_fields]
     for field, field_name in list(fields.items()):
         if field in absolute_field_keys and field != size_field['key']:
-            indexes.append(layer.fieldNameIndex(field_name))
+            indexes.append(layer.fields().lookupField(field_name))
             LOGGER.info(
                 'We detected the count {field_name}, we will recompute the '
                 'count according to the new size.'.format(
@@ -71,7 +71,7 @@ def recompute_counts(layer, callback=None):
         raise InvalidKeywordsForProcessingAlgorithm(msg)
 
     size_field_name = fields[size_field['key']]
-    size_field_index = layer.fieldNameIndex(size_field_name)
+    size_field_index = layer.fields().lookupField(size_field_name)
 
     layer.startEditing()
 

@@ -23,6 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 def __if_not_basestring(text_object):
+    """Convert to str"""
     converted_str = text_object
     if not isinstance(text_object, str):
         converted_str = str(text_object)
@@ -30,7 +31,7 @@ def __if_not_basestring(text_object):
 
 
 def get_unicode(input_text, encoding='utf-8'):
-    """Get the unicode representation of an object.
+    """Get the unicode (str) representation of an object.
 
     :param input_text: The input text.
     :type input_text: unicode, str, float, int
@@ -39,9 +40,8 @@ def get_unicode(input_text, encoding='utf-8'):
     :type encoding: str
 
     :returns: Unicode representation of the input.
-    :rtype: unicode
+    :rtype: str
     """
-    input_text = __if_not_basestring(input_text)
     if isinstance(input_text, str):
         return input_text
     return str(input_text, encoding, errors='ignore')
@@ -57,9 +57,8 @@ def get_string(input_text, encoding='utf-8'):
     :type encoding: str
 
     :returns: Byte string representation of the input.
-    :rtype: str
+    :rtype: bytes
     """
-    input_text = __if_not_basestring(input_text)
     if isinstance(input_text, str):
         return input_text.encode(encoding)
     return input_text

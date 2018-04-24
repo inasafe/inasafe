@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from past.builtins import cmp
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
@@ -25,6 +24,9 @@ import json
 from collections import OrderedDict
 from safe.common.minimum_needs import MinimumNeeds
 
+def cmp(d1, d2):
+    """Compare 2 dicts, return 0 if equals"""
+    return 0 if list(d1.items()) == list(d2.items()) else 1
 
 class MinimumNeedsTest(unittest.TestCase):
     """Test the SAFE Table."""
@@ -117,7 +119,7 @@ class MinimumNeedsTest(unittest.TestCase):
             '"Resource name": "Test Resource File", '
             '"Unit abbreviation": "T"}]}')
         (fd, file_name) = tempfile.mkstemp()
-        os.write(fd, json_needs)
+        os.write(fd, json_needs.encode('utf-8'))
         os.close(fd)
         self.minimum_needs.read_from_file(file_name)
         loaded_needs = self.minimum_needs.get_full_needs()

@@ -98,7 +98,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     hazard_class = target_fields[hazard_class_field['key']]
 
     exposure_class = source_fields[exposure_class_field['key']]
-    exposure_class_index = impact.fieldNameIndex(exposure_class)
+    exposure_class_index = impact.fields().lookupField(exposure_class)
     unique_exposure = impact.uniqueValues(exposure_class_index)
 
     fields = ['aggregation_id', 'hazard_id']
@@ -229,7 +229,7 @@ def report_on_field(layer):
     source_fields = layer.keywords['inasafe_fields']
     if source_fields.get(size_field['key']):
         field_size = source_fields[size_field['key']]
-        field_index = layer.fieldNameIndex(field_size)
+        field_index = layer.fields().lookupField(field_size)
     else:
         field_index = None
 
@@ -251,6 +251,6 @@ def report_on_field(layer):
         # with many fields. AFAIK we don't have this case yet.
         field = exposure_definitions['compulsory_fields'][0]
         field_name = source_fields[field['key']]
-        field_index = layer.fieldNameIndex(field_name)
+        field_index = layer.fields().lookupField(field_name)
 
     return field_index

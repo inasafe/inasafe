@@ -84,7 +84,7 @@ def add_default_values(layer, callback=None):
 
             layer.addAttribute(new_field)
 
-            new_index = layer.fieldNameIndex(new_field.name())
+            new_index = layer.fields().lookupField(new_field.name())
 
             for feature in layer.getFeatures():
                 layer.changeAttributeValue(
@@ -100,7 +100,7 @@ def add_default_values(layer, callback=None):
                 'default for {field}, we MUST do nothing.'.format(
                     field=target_field['key'], value=defaults[default]))
 
-            index = layer.fieldNameIndex(field)
+            index = layer.fields().lookupField(field)
 
             for feature in layer.getFeatures():
                 if feature.attributes()[index] is None:

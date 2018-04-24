@@ -79,7 +79,7 @@ def reclassify(layer, exposure_key=None, callback=None):
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
 
-    continuous_index = layer.fieldNameIndex(continuous_column)
+    continuous_index = layer.fields().lookupField(continuous_column)
 
     classified_field = QgsField()
     classified_field.setType(hazard_class_field['type'])
@@ -90,7 +90,7 @@ def reclassify(layer, exposure_key=None, callback=None):
     layer.startEditing()
     layer.addAttribute(classified_field)
 
-    classified_field_index = layer.fieldNameIndex(classified_field.name())
+    classified_field_index = layer.fields().lookupField(classified_field.name())
 
     for feature in layer.getFeatures():
         attributes = feature.attributes()

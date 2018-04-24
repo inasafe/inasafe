@@ -81,7 +81,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
         value_map = keywords.get('value_map')
 
     unclassified_column = inasafe_fields[old_field['key']]
-    unclassified_index = layer.fieldNameIndex(unclassified_column)
+    unclassified_index = layer.fields().lookupField(unclassified_column)
 
     reversed_value_map = {}
     for inasafe_class, values in list(value_map.items()):
@@ -97,7 +97,7 @@ def update_value_map(layer, exposure_key=None, callback=None):
     layer.startEditing()
     layer.addAttribute(classified_field)
 
-    classified_field_index = layer.fieldNameIndex(classified_field.name())
+    classified_field_index = layer.fields().lookupField(classified_field.name())
 
     for feature in layer.getFeatures():
         attributes = feature.attributes()

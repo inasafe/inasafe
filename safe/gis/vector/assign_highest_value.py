@@ -73,7 +73,7 @@ def assign_highest_value(exposure, hazard, callback=None):
     exposure.startEditing()
     for field in hazard.fields():
         exposure.addAttribute(field)
-        indices.append(exposure.fieldNameIndex(field.name()))
+        indices.append(exposure.fields().lookupField(field.name()))
     exposure.commitChanges()
     provider = exposure.dataProvider()
 

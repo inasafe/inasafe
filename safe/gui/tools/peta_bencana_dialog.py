@@ -310,7 +310,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         layer.addAttribute(flood_class_field)
         layer.commitChanges()
         layer.startEditing()
-        flood_class_idx = layer.fieldNameIndex('floodclass')
+        flood_class_idx = layer.fields().lookupField('floodclass')
         flood_class_expression = QgsExpression('to_int(state)')
         context = QgsExpressionContext()
         context.setFields(layer.pendingFields())
@@ -322,7 +322,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         layer.dataProvider().addAttributes([flooded_field])
         layer.commitChanges()
         layer.startEditing()
-        flooded_idx = layer.fieldNameIndex('flooded')
+        flooded_idx = layer.fields().lookupField('flooded')
         flood_flag_expression = QgsExpression('state > 0')
         flood_flag_expression.prepare(context)
         for feature in layer.getFeatures():

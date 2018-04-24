@@ -85,7 +85,7 @@ def run_single_post_processor(layer, post_processor):
         layer.keywords['inasafe_fields'][key] = output_field_name
 
         # If there is already the output field, don't proceed
-        if layer.fieldNameIndex(output_field_name) > -1:
+        if layer.fields().lookupField(output_field_name) > -1:
             msg = tr(
                 'The field name %s already exists.'
                 % output_field_name)
@@ -103,9 +103,9 @@ def run_single_post_processor(layer, post_processor):
             return False, msg
 
         # Get the index of output attribute
-        output_field_index = layer.fieldNameIndex(output_field_name)
+        output_field_index = layer.fields().lookupField(output_field_name)
 
-        if layer.fieldNameIndex(output_field_name) == -1:
+        if layer.fields().lookupField(output_field_name) == -1:
             msg = tr(
                 'The field name %s has not been created.'
                 % output_field_name)
@@ -161,7 +161,7 @@ def run_single_post_processor(layer, post_processor):
                             % value['value']['key'])
                         continue
 
-                    index = layer.fieldNameIndex(name_field)
+                    index = layer.fields().lookupField(name_field)
 
                     if index == -1:
                         fields = layer.fields().toList()

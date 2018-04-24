@@ -87,7 +87,7 @@ def union(union_a, union_b, callback=None):
     writer.keywords['hazard_keywords'] = keywords_union_1.copy()
     writer.keywords['aggregation_keywords'] = keywords_union_2.copy()
     skip_field = inasafe_fields_union_2[aggregation_id_field['key']]
-    not_null_field_index = writer.fieldNameIndex(skip_field)
+    not_null_field_index = writer.fields().lookupField(skip_field)
 
     writer.startEditing()
 
@@ -323,7 +323,7 @@ def fill_hazard_class(layer):
     hazard_field = layer.keywords['inasafe_fields'][hazard_class_field['key']]
 
     expression = '"%s" is NULL OR  "%s" = \'\'' % (hazard_field, hazard_field)
-    index = layer.fieldNameIndex(hazard_field)
+    index = layer.fields().lookupField(hazard_field)
     request = QgsFeatureRequest().setFilterExpression(expression)
     layer.startEditing()
 

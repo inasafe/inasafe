@@ -92,7 +92,7 @@ def exposure_summary_table(
         aggregate_hazard, ['all'])
 
     hazard_class = source_fields[hazard_class_field['key']]
-    hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+    hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
     unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     unique_exposure = read_dynamic_inasafe_field(
@@ -296,7 +296,7 @@ def summarize_result(exposure_summary, callback=None):
     # for summarizer_field in summarizer_fields:
     for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
-        if exposure_summary.fieldNameIndex(
+        if exposure_summary.fields().lookupField()(
                 input_field['field_name']) == -1:
             summarizer_flags[key] = False
         else:

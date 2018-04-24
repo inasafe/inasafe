@@ -121,7 +121,7 @@ def value_from_field_name(field_name, analysis_layer):
 
     .. versionadded:: 4.0
     """
-    field_index = analysis_layer.fieldNameIndex(field_name)
+    field_index = analysis_layer.fields().lookupField(field_name)
     if field_index < 0:
         return None
     else:

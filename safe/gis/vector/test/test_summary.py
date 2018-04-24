@@ -73,7 +73,7 @@ class TestSummary(unittest.TestCase):
 
         fields = impact.keywords['inasafe_fields']
         exposure_class = fields[exposure_class_field['key']]
-        exposure_class_index = impact.fieldNameIndex(exposure_class)
+        exposure_class_index = impact.fields().lookupField(exposure_class)
         unique_exposure = impact.uniqueValues(exposure_class_index)
 
         # One field per exposure type
@@ -149,7 +149,7 @@ class TestSummary(unittest.TestCase):
 
         fields = aggregate_hazard.keywords['inasafe_fields']
         hazard_class = fields[hazard_class_field['key']]
-        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
         # expected number of fields:
@@ -185,7 +185,7 @@ class TestSummary(unittest.TestCase):
         # I need the number of unique hazard
         fields = aggregate_hazard.keywords['inasafe_fields']
         hazard_class = fields[hazard_class_field['key']]
-        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
         layer = exposure_summary_table(aggregate_hazard, None)
@@ -235,7 +235,7 @@ class TestSummary(unittest.TestCase):
         # I need the number of unique hazard
         fields = aggregate_hazard.keywords['inasafe_fields']
         hazard_class = fields[hazard_class_field['key']]
-        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
         layer = exposure_summary_table(aggregate_hazard, exposure_summary)

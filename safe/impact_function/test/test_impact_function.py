@@ -473,7 +473,7 @@ class TestImpactFunction(unittest.TestCase):
         impact = impact_function.impact
 
         # We check the field exist after the IF with only one value.
-        field = impact.fieldNameIndex(
+        field = impact.fields().lookupField()(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -508,14 +508,14 @@ class TestImpactFunction(unittest.TestCase):
         impact = impact_function.impact
 
         # We check the field exist after the IF with only original values.
-        field = impact.fieldNameIndex(
+        field = impact.fields().lookupField()(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
         self.assertEqual(3, len(unique_ratio), unique_ratio)
 
         # We check the field exist after the IF with only one value.
-        field = impact.fieldNameIndex(
+        field = impact.fields().lookupField()(
             elderly_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -547,7 +547,7 @@ class TestImpactFunction(unittest.TestCase):
         # Check that we have don't have only one unique value since the ratio
         # depends on the "population / female count" and we should have at
         # least different ratios.
-        field = impact.fieldNameIndex(
+        field = impact.fields().lookupField()(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -591,7 +591,7 @@ class TestImpactFunction(unittest.TestCase):
 
         # We check in the impact layer if we have :
         # female default ratio with the default value
-        index = impact.fieldNameIndex(female_ratio_field['field_name'])
+        index = impact.fields().lookupField(female_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
         unique_values = impact.uniqueValues(index)
         self.assertEqual(1, len(unique_values))
@@ -599,27 +599,27 @@ class TestImpactFunction(unittest.TestCase):
 
         # female displaced count and youth displaced count
         self.assertNotEqual(
-            -1, impact.fieldNameIndex(
+            -1, impact.fields().lookupField()(
                 female_displaced_count_field['field_name']))
         self.assertNotEqual(
-            -1, impact.fieldNameIndex(
+            -1, impact.fields().lookupField()(
                 youth_displaced_count_field['field_name']))
 
         # Check that we have more than 0 female displaced in the analysis layer
-        index = analysis.fieldNameIndex(
+        index = analysis.fields().lookupField()(
             female_displaced_count_field['field_name'])
         female_displaced = analysis.uniqueValues(index)[0]
         self.assertGreater(female_displaced, 0)
 
         # Let's check computation
-        index = analysis.fieldNameIndex(
+        index = analysis.fields().lookupField()(
             displaced_field['field_name'])
         displaced_population = analysis.uniqueValues(index)[0]
         self.assertEqual(
             int(displaced_population * female_ratio), female_displaced)
 
         # Check that we have more than 0 youth displaced in the analysis layer
-        index = analysis.fieldNameIndex(
+        index = analysis.fields().lookupField()(
             female_displaced_count_field['field_name'])
         value = analysis.uniqueValues(index)[0]
         self.assertGreater(value, 0)
@@ -652,23 +652,23 @@ class TestImpactFunction(unittest.TestCase):
         impact = impact_function.impact
 
         # We should have a female_ratio with many values
-        index = impact.fieldNameIndex(female_ratio_field['field_name'])
+        index = impact.fields().lookupField(female_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
         values = impact.uniqueValues(index)
         self.assertEqual(3, len(values))
 
         # We should have a youth_ratio with global default
-        index = impact.fieldNameIndex(youth_ratio_field['field_name'])
+        index = impact.fields().lookupField(youth_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
         values = impact.uniqueValues(index)
         self.assertEqual(1, len(values))
 
         # We should not have an adult_ratio
-        index = impact.fieldNameIndex(adult_ratio_field['field_name'])
+        index = impact.fields().lookupField(adult_ratio_field['field_name'])
         self.assertEqual(-1, index)
 
         # We should have a elderly_ratio = 0.75
-        index = impact.fieldNameIndex(elderly_ratio_field['field_name'])
+        index = impact.fields().lookupField(elderly_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
         values = impact.uniqueValues(index)
         self.assertEqual(1, len(values))
@@ -841,7 +841,7 @@ class TestImpactFunction(unittest.TestCase):
         # Now, we remove one field
         exposure_layer.startEditing()
         field = list(exposure_layer.keywords['inasafe_fields'].values())[0]
-        index = exposure_layer.fieldNameIndex(field)
+        index = exposure_layer.fields().lookupField(field)
         exposure_layer.deleteAttribute(index)
         exposure_layer.commitChanges()
 
@@ -1209,7 +1209,7 @@ class TestImpactFunction(unittest.TestCase):
         inasafe_fields = analysis_impacted.keywords['inasafe_fields']
         for field in minimum_needs_fields:
             field_name = inasafe_fields[field['key']]
-            field_index = analysis_impacted.fieldNameIndex(field_name)
+            field_index = analysis_impacted.fields().lookupField(field_name)
             value = float(feature[field_index])
             expected = expected_value[field_name]
             self.assertEqual(expected, value)

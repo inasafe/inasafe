@@ -58,17 +58,17 @@ class TestPrepareLayer(unittest.TestCase):
         copy_fields(new_layer, new_fields)
         self.assertEqual(
             len(new_layer.fields().toList()), expected)
-        self.assertGreater(new_layer.fieldNameIndex('my_new_field'), -1)
+        self.assertGreater(new_layer.fields().lookupField('my_new_field'), -1)
 
         remove_fields(new_layer, ['STRUCTURE', 'OSM_TYPE'])
         self.assertEqual(
             len(new_layer.fields().toList()), expected - 2)
-        self.assertEqual(new_layer.fieldNameIndex('STRUCTURE'), -1)
-        self.assertEqual(new_layer.fieldNameIndex('OSM_TYPE'), -1)
+        self.assertEqual(new_layer.fields().lookupField('STRUCTURE'), -1)
+        self.assertEqual(new_layer.fields().lookupField('OSM_TYPE'), -1)
 
         _add_id_column(new_layer)
         field_name = exposure_id_field['field_name']
-        self.assertGreater(new_layer.fieldNameIndex(field_name), -1)
+        self.assertGreater(new_layer.fields().lookupField(field_name), -1)
 
     @unittest.skipIf(
         int(gdal.VersionInfo('VERSION_NUM')) < 2010000,
@@ -92,11 +92,11 @@ class TestPrepareLayer(unittest.TestCase):
 
         # ET : I should check later the order.
         self.assertIn(
-            cleaned.fieldNameIndex(exposure_id_field['field_name']),
+            cleaned.fields().lookupField(exposure_id_field['field_name']),
             [0, 1, 2])
 
         self.assertIn(
-            cleaned.fieldNameIndex(exposure_type_field['field_name']),
+            cleaned.fields().lookupField(exposure_type_field['field_name']),
             [0, 1, 2])
 
     def test_size_needed(self):
@@ -181,14 +181,14 @@ class TestPrepareLayer(unittest.TestCase):
             'gisv4', 'exposure', 'buildings.geojson', clone=True)
         # This layer is set to use custom ID column. We should have the values
         # after preparing the vector layer.
-        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        field = layer.fields().lookupField(exposure_id_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_values_before = layer.uniqueValues(field)
         self.assertEqual(
             unique_values_before,
             [10, 11, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
         _add_id_column(layer)
-        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        field = layer.fields().lookupField(exposure_id_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_values_after = layer.uniqueValues(field)
         self.assertEqual(unique_values_after, unique_values_before)
@@ -196,7 +196,7 @@ class TestPrepareLayer(unittest.TestCase):
         # Let's remove the keyword now to use the auto-increment ID
         del layer.keywords['inasafe_fields'][exposure_id_field['key']]
         _add_id_column(layer)
-        field = layer.fieldNameIndex(exposure_id_field['field_name'])
+        field = layer.fields().lookupField(exposure_id_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_values_automatic = layer.uniqueValues(field)
         self.assertNotEqual(unique_values_automatic, unique_values_before)
@@ -211,22 +211,22 @@ class TestPrepareLayer(unittest.TestCase):
             'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
         sum_fields(
             layer, exposure_id_field['key'], ['F_0_4', 'F_5_9', 'F_9_15'])
-        exposure_id__idx = layer.fieldNameIndex(
+        exposure_id__idx = layer.fields().lookupField()(
             exposure_id_field['field_name'])
-        F_0_4__idx = layer.fieldNameIndex('F_0_4')
-        F_5_9__idx = layer.fieldNameIndex('F_5_9')
-        F_9_15__idx = layer.fieldNameIndex('F_9_15')
+        F_0_4__idx = layer.fields().lookupField('F_0_4')
+        F_5_9__idx = layer.fields().lookupField('F_5_9')
+        F_9_15__idx = layer.fields().lookupField('F_9_15')
         for feature in layer.getFeatures():
             sum_value = (
                 feature[F_0_4__idx] + feature[F_5_9__idx] + feature[
                     F_9_15__idx])
             self.assertEqual(feature[exposure_id__idx], sum_value)
 
-        new_field__idx = layer.fieldNameIndex(female_count_field['field_name'])
+        new_field__idx = layer.fields().lookupField(female_count_field['field_name'])
         # Check if the new field doesn't exist
         self.assertEqual(new_field__idx, -1)
         sum_fields(layer, female_count_field['key'], ['F_0_4', 'F_5_9'])
-        new_field__idx = layer.fieldNameIndex(female_count_field['field_name'])
+        new_field__idx = layer.fields().lookupField(female_count_field['field_name'])
         for feature in layer.getFeatures():
             sum_value = (feature[F_0_4__idx] + feature[F_5_9__idx])
             self.assertEqual(feature[new_field__idx], sum_value)
@@ -255,7 +255,7 @@ class TestPrepareLayer(unittest.TestCase):
         clean_inasafe_fields(layer)
 
         # Check if the female count name does exist
-        female_count_field_idx = layer.fieldNameIndex(
+        female_count_field_idx = layer.fields().lookupField()(
             female_count_field['field_name'])
         self.assertGreater(female_count_field_idx, -1)
 
@@ -271,7 +271,7 @@ class TestPrepareLayer(unittest.TestCase):
 
         # Check if the original fields are gone
         for original_female_field in original_female_fields:
-            self.assertEqual(layer.fieldNameIndex(original_female_field), -1)
+            self.assertEqual(layer.fields().lookupField(original_female_field), -1)
 
 
 if __name__ == '__main__':
