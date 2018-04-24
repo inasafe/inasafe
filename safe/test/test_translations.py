@@ -98,8 +98,8 @@ class SafeTranslationsTest(unittest.TestCase):
         # check for bahasa translation
         expected_message = (
             'Tidak ada informasi gaya yang ditemukan pada lapisan %s')
-        real_message = QCoreApplication.translate(
-            '@default', 'No styleInfo was found for layer %s')
+        real_message = tr(
+            'No styleInfo was found for layer %s')
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 
@@ -112,8 +112,8 @@ class SafeTranslationsTest(unittest.TestCase):
         # check for english translation
         expected_message = (
             'No styleInfo was found for layer %s')
-        real_message = QCoreApplication.translate(
-            '@default', 'No styleInfo was found for layer %s')
+        real_message = tr(
+            'No styleInfo was found for layer %s')
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 
