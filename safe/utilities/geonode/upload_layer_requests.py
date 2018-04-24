@@ -183,10 +183,8 @@ def upload(server, session, base_file, charset='UTF-8'):
     # For debug
     # pretty_print_post(prepared_request)
     result = session.send(prepared_request)
-
-    try:
+    if result.status_code == 200:
         result = json.loads(result.content)
-    except ValueError:
-        raise RuntimeError(
-            'Error while importing the layer. It\'s not a JSON file')
-    return result
+        return result
+    else:
+        raise requests.RequestException(result)
