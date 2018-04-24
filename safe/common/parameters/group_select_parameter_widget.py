@@ -4,13 +4,16 @@
 import logging
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QVBoxLayout, QRadioButton, QButtonGroup, QWidget, QLabel, QSizePolicy, QListWidget, QGridLayout, QAbstractItemView, QListWidgetItem
+from qgis.PyQt.QtWidgets import (QAbstractItemView, QButtonGroup, QGridLayout,
+                                 QLabel, QListWidget, QListWidgetItem,
+                                 QRadioButton, QSizePolicy, QVBoxLayout,
+                                 QWidget)
 
-from parameters.qt_widgets.generic_parameter_widget import (
-    GenericParameterWidget)
-from safe.common.parameters.percentage_parameter_widget import (
-    PercentageSpinBox)
-from safe.definitions.constants import STATIC, SINGLE_DYNAMIC, MULTIPLE_DYNAMIC
+from parameters.qt_widgets.generic_parameter_widget import \
+    GenericParameterWidget
+from safe.common.parameters.percentage_parameter_widget import \
+    PercentageSpinBox
+from safe.definitions.constants import MULTIPLE_DYNAMIC, SINGLE_DYNAMIC, STATIC
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
 __license__ = "GPL version 3"

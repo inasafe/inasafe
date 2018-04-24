@@ -110,8 +110,8 @@ class StepKwSummary(WizardStep, FORM_CLASS):
 
         header_path = resources_path('header.html')
         footer_path = resources_path('footer.html')
-        header_file = file(header_path)
-        footer_file = file(footer_path)
+        header_file = open(header_path)
+        footer_file = open(footer_path)
         header = header_file.read()
         footer = footer_file.read()
         header_file.close()

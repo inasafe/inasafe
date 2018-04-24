@@ -11,17 +11,17 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+import abc
+
 from future.utils import with_metaclass
+
+from safe.common.exceptions import MetadataCastError, MetadataInvalidPathError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-import abc
-
-from safe.common.exceptions import MetadataInvalidPathError, MetadataCastError
 
 
 class BaseProperty(with_metaclass(abc.ABCMeta, object)):
@@ -85,7 +85,7 @@ class BaseProperty(with_metaclass(abc.ABCMeta, object)):
             self._value = value
             return True
         # pylint: disable=unidiomatic-typecheck
-        elif type(value) == str:
+        elif isinstance(value, str):
             try:
                 casted_value = self.cast_from_str(value)
                 self.is_allowed_type(casted_value)

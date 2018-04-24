@@ -5,6 +5,7 @@
 
 from requests.compat import urljoin
 
+from qgis.core import QgsProject
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox
 from qgis.PyQt.QtGui import QIcon
 

@@ -133,7 +133,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.cancel_button.clicked.connect(self.reject)
 
         # The bug is fixed in QT 5.4
-        if QT_VERSION < 0x050400:
+        if Qt.QT_VERSION < 0x050400:
             self.resized.connect(self.after_resize)
 
     def set_layer(self, layer=None):

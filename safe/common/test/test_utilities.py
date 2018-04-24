@@ -286,6 +286,7 @@ class TestUtilities(unittest.TestCase):
         colors = color_ramp(number_of_colours)
         self.assertEqual(colors, expected_colors)
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)
     runner = unittest.TextTestRunner(verbosity=2)

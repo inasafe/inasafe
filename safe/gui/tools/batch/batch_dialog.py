@@ -11,50 +11,34 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from future import standard_library
-standard_library.install_aliases()
-
-
-
-__author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '01/10/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import logging
 import os
 import sys
 from configparser import ConfigParser, MissingSectionHeaderError, ParsingError
-from io import StringIO
 from datetime import datetime
+from importlib import reload
+from io import StringIO
 
-from qgis.PyQt import QtGui, QtCore
-from qgis.PyQt.QtCore import pyqtSlot, Qt
-from qgis.PyQt.QtWidgets import QAbstractItemView, QDialog, QFileDialog, QTableWidgetItem, QPushButton, QDialogButtonBox
-from qgis.core import (
-    QgsRectangle,
-    QgsCoordinateReferenceSystem,
-    QgsProject,
-    QgsVectorLayer,
-    QgsRasterLayer)
+from future import standard_library
+from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
+                       QgsRasterLayer, QgsRectangle, QgsVectorLayer)
+from qgis.PyQt import QtCore, QtGui
+from qgis.PyQt.QtCore import Qt, pyqtSlot
+from qgis.PyQt.QtWidgets import (QAbstractItemView, QDialog, QDialogButtonBox,
+                                 QFileDialog, QPushButton, QTableWidgetItem)
 
 from safe.common.signals import send_error_message
 from safe.common.utilities import temp_dir
 from safe.datastore.folder import Folder
-from safe.definitions.constants import (
-    ANALYSIS_SUCCESS,
-    PREPARE_SUCCESS,
-    ANALYSIS_FAILED_BAD_CODE,
-    ANALYSIS_FAILED_BAD_INPUT)
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
-    layer_purpose_aggregation)
-from safe.definitions.reports.components import (
-    standard_impact_report_metadata_pdf,
-    map_report,
-    all_default_report_components)
+from safe.definitions.constants import (ANALYSIS_FAILED_BAD_CODE,
+                                        ANALYSIS_FAILED_BAD_INPUT,
+                                        ANALYSIS_SUCCESS, PREPARE_SUCCESS)
+from safe.definitions.layer_purposes import (layer_purpose_aggregation,
+                                             layer_purpose_exposure,
+                                             layer_purpose_hazard)
+from safe.definitions.reports.components import (all_default_report_components,
+                                                 map_report,
+                                                 standard_impact_report_metadata_pdf)
 from safe.definitions.utilities import update_template_component
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
@@ -63,9 +47,16 @@ from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.gis import extent_string_to_array
 from safe.utilities.qgis_utilities import display_critical_message_box
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class)
-from safe.utilities.settings import setting, set_setting
+from safe.utilities.resources import get_ui_class, html_footer, html_header
+from safe.utilities.settings import set_setting, setting
+
+standard_library.install_aliases()
+
+__author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '01/10/2012'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -517,7 +508,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                                     all_default_report_components,
                                     report_directory))
 
-                        except:
+                        except BaseException:
                             status_item.setText(
                                 self.tr('Report failed to generate.'))
                     else:
@@ -567,7 +558,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             unparsed_message + unparsed_contents)
         return full_messages
 
-    @pyqtSignature('')
+    @pyqtSlot()
     def run_selected_clicked(self):
         """Run the selected scenario."""
         # get all selected rows
@@ -582,7 +573,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.run_task(item, status_item)
         self.disable_busy_cursor()
 
-    @pyqtSignature('')
+    @pyqtSlot()
     def run_all_clicked(self):
         """Run all scenario when pbRunAll is clicked."""
         self.reset_status()
@@ -652,7 +643,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         path = os.path.join(output_path, report_path)
 
         try:
-            report_file = file(path, 'w')
+            report_file = open(path, 'w')
             report_file.write('InaSAFE Batch Report File\n')
             report_file.write(separator)
             for myLine in report:
@@ -746,7 +737,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """Disable the hourglass cursor."""
         QtGui.qApp.restoreOverrideCursor()
 
-    @pyqtSignature('bool')
+    @pyqtSlot(bool)
     def on_scenario_directory_radio_toggled(self, flag):
         """Autoconnect slot activated when scenario_directory_radio is checked.
 
@@ -758,14 +749,14 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.output_directory.setText(self.source_directory.text())
         self.output_directory_chooser.setEnabled(not flag)
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    @pyqtSlot()  # prevents actions being handled twice
     def on_source_directory_chooser_clicked(self):
         """Autoconnect slot activated when tbSourceDir is clicked."""
 
         title = self.tr('Set the source directory for script and scenario')
         self.choose_directory(self.source_directory, title)
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    @pyqtSlot()  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
         """Auto  connect slot activated when tbOutputDiris clicked."""
         title = self.tr('Set the output directory for pdf report files')
@@ -777,8 +768,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         else:
             self.start_in_new_project = True
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the main stacked widget.
 

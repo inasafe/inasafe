@@ -12,6 +12,19 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import logging
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
+# noinspection PyPackageRequirements
+from qgis.PyQt.QtCore import QByteArray, QCoreApplication, QFile, QUrl
+# noinspection PyPackageRequirements
+from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
+
+from safe.common.utilities import humanize_file_size
+from safe.utilities.i18n import tr
+
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -19,18 +32,6 @@ __date__ = '16/03/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
-
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-# noinspection PyPackageRequirements
-from qgis.PyQt.QtCore import QCoreApplication, QFile, QUrl, QByteArray
-# noinspection PyPackageRequirements
-from qgis.PyQt.QtNetwork import QNetworkRequest, QNetworkReply
-
-from safe.common.utilities import humanize_file_size
-from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 

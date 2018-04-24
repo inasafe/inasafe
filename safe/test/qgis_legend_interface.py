@@ -2,6 +2,8 @@
 
 """Mock like implementation for the QgsLegendInterface - used for testing."""
 
+from qgis.core import QgsProject
+
 
 class QgisLegend():
 

@@ -3,7 +3,6 @@
 """Multi Exposure Tool."""
 
 
-
 import logging
 
 from qgis.PyQt.QtCore import Qt
@@ -387,7 +386,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     layer, inasafe_keyword_version_key))
                 if not is_keyword_version_supported(keyword_version):
                     continue
-            except:  # pylint: disable=W0702
+            except BaseException:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
 
@@ -400,7 +399,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                     KeywordNotFoundError, MetadataReadError):
                 # Skip if there are no keywords at all, or missing keyword
                 continue
-            except:  # pylint: disable=W0702
+            except BaseException:  # pylint: disable=W0702
                 pass
             else:
                 # Lookup internationalised title if available
@@ -446,7 +445,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 try:
                     exposure_type = self.keyword_io.read_keywords(
                         layer, layer_purpose_exposure['key'])
-                except:  # pylint: disable=W0702
+                except BaseException:  # pylint: disable=W0702
                     # continue ignoring this layer
                     continue
 

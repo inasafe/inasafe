@@ -63,5 +63,6 @@ class TestInit(unittest.TestCase):
                 expectation, file_path))
             self.assertIn(expectation, dict(metadata), message)
 
+
 if __name__ == '__main__':
     unittest.main()

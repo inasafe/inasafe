@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
-
 import json
 import logging
 import os
@@ -98,7 +97,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
-        validator = QRegExpValidator(expression, self.filename_prefix)
+        validator = QtGui.QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
 
         # Advanced panel
@@ -160,9 +159,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Set current index to admin_level 8, the most common one
         self.admin_level_comboBox.setCurrentIndex(7)
 
-        list_countries = [
-            self.tr(country) for country in list(self.countries.keys())]
-        list_countries.sort()
+        list_countries = sorted([
+            self.tr(country) for country in list(self.countries.keys())])
         for country in list_countries:
             self.country_comboBox.addItem(country)
 

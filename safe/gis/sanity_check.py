@@ -2,7 +2,7 @@
 
 """Sanity check module."""
 
-from qgis.core import Qgis, QgsWkbTypes
+from qgis.core import QgsWkbTypes
 
 from safe.common.exceptions import InvalidLayerError
 from safe.utilities.gis import is_vector_layer, is_raster_layer

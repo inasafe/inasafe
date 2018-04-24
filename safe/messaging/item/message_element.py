@@ -3,7 +3,6 @@
 """Message Element class for the Messaging package."""
 
 
-
 import json
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

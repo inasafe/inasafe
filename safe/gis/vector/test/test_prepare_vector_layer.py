@@ -201,7 +201,10 @@ class TestPrepareLayer(unittest.TestCase):
         self.assertNotEqual(-1, field)
         unique_values_automatic = layer.uniqueValues(field)
         self.assertNotEqual(unique_values_automatic, unique_values_before)
-        self.assertEqual(unique_values_automatic, list(range(layer.featureCount())))
+        self.assertEqual(
+            unique_values_automatic, list(
+                range(
+                    layer.featureCount())))
 
     def test_sum_fields(self):
         """Test sum_fields method."""

@@ -11,6 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+import json
+from safe.common.exceptions import MetadataCastError
+from safe.metadata.property import BaseProperty
+
+
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/12/15'
@@ -18,15 +23,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-import json
 NoneType = type(None)
-
-from safe.common.exceptions import MetadataCastError
-from safe.metadata.property import BaseProperty
 
 
 class ListProperty(BaseProperty):
-
     """A property that accepts list input."""
 
     # if you edit this you need to adapt accordingly xml_value and is_valid

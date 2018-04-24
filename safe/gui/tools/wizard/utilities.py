@@ -2,7 +2,6 @@
 """Wizard Utilities Functions."""
 
 
-
 import logging
 import os
 import sys

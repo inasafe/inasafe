@@ -51,5 +51,6 @@ class TestResources(unittest.TestCase):
             'file://' in url,
             url + ' is not valid')
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -157,8 +157,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.show_confirmations.setChecked(
             setting('show_extent_confirmations', True, bool))
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the main stacked widget.
 

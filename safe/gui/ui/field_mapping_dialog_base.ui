@@ -69,7 +69,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>PyQt4.QtWebKit</header>
+   <header>PyQt5.QtWebKit</header>
   </customwidget>
  </customwidgets>
  <tabstops>

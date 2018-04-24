@@ -6,6 +6,7 @@ import os
 
 from qgis.core import (
     qgsfunction,
+    QgsProject,
     QgsCoordinateReferenceSystem,
     QgsExpressionContextUtils,
 )

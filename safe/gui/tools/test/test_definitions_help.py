@@ -98,6 +98,7 @@ class TestDefinitionsHelp(unittest.TestCase):
             line = line.replace('\n', '')
             self.assertIn(line, help_text)
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDefinitionsHelp, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

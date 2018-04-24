@@ -5,7 +5,7 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
-from qgis.core import QgsRasterLayer, QgsVectorLayer, Qgis, QgsWkbTypes
+from qgis.core import QgsRasterLayer, QgsVectorLayer, QgsWkbTypes
 
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO

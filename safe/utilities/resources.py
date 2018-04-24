@@ -24,7 +24,7 @@ def html_footer():
     :rtype: str
     """
     file_path = resources_path('footer.html')
-    with file(file_path) as header_file:
+    with open(file_path) as header_file:
         content = header_file.read()
     return content
 

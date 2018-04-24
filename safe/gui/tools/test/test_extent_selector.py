@@ -41,6 +41,7 @@ class ExtentSelectorTest(unittest.TestCase):
     """Test Import Dialog widget
     """
     # noinspection PyPep8Naming
+
     def setUp(self):
         """Runs before each test."""
         self.extent = QgsRectangle(10.0, 10.0, 20.0, 20.0)
@@ -134,6 +135,7 @@ class ExtentSelectorTest(unittest.TestCase):
         # Check the extent emitted on closing teh dialog is correct
         expected_extent = QgsRectangle(10.0, 10.0, 30.0, 20.0)
         self.assertEqual(self.extent.toString(), expected_extent.toString())
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ExtentSelectorTest, 'test')

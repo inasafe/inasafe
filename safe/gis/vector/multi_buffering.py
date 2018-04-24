@@ -7,7 +7,6 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsGeometry,
     QgsFeature,
-    Qgis,
     QgsWkbTypes,
 )
 

@@ -193,8 +193,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             'attribute for {0} group.').format(pretty_group_name)
         self.header_label.setText(header_text)
 
-    @pyqtSlot()
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 

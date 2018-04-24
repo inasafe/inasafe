@@ -70,7 +70,7 @@ def content():
         tr(
             ' - There are four checkboxes available which are representing '
             'the type of report component that will be generated.'
-           )))
+        )))
     text = tr(
         ' - Here you can select desired template for your report. All '
         'templates bundled with InaSAFE are available here, plus '

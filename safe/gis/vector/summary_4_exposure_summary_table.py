@@ -4,7 +4,7 @@
 
 from numbers import Number
 
-from qgis.core import Qgis, QgsWkbTypes, QgsFeatureRequest, QgsFeature
+from qgis.core import QgsWkbTypes, QgsFeatureRequest, QgsFeature
 
 from safe.definitions.fields import (
     aggregation_id_field,

@@ -68,5 +68,6 @@ class QGISTest(unittest.TestCase):
         auth_id = layer.crs().authid()
         self.assertEqual(auth_id, expected_auth_id)
 
+
 if __name__ == '__main__':
     unittest.main()

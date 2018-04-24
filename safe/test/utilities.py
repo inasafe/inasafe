@@ -2,8 +2,6 @@
 """Helper module for gui test suite."""
 
 
-
-
 import codecs
 import hashlib
 import inspect
@@ -19,6 +17,7 @@ from tempfile import mkdtemp
 from qgis.PyQt import QtGui  # pylint: disable=W0621
 from qgis.PyQt.QtCore import QTranslator, pyqtWrapperType
 from qgis.core import (
+    QgsProject,
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
@@ -239,7 +238,7 @@ def hash_for_file(filename):
     :param filename:
     """
     path = filename
-    data = file(path, 'rb').read()
+    data = open(path, 'rb').read()
     data_hash = hashlib.md5()
     data_hash.update(data)
     data_hash = data_hash.hexdigest()

@@ -42,6 +42,7 @@ class TestNeedsProfile(NeedsProfile):
     :param test_profile: The mock replacement of Minimum Needs
     """
     # noinspection PyMissingConstructor
+
     def __init__(self, test_profile='Test Minimum Needs Settings'):
         self.settings = QSettings(test_profile)
         self.settings.clear()
