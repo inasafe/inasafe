@@ -28,7 +28,7 @@ from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import create_memory_layer, copy_layer
 from safe.utilities.settings import (
-    general_setting, set_general_setting, set_setting)
+    general_setting, set_general_setting, set_setting, setting)
 from safe.utilities.utilities import (
     monkey_patch_keywords, reload_inasafe_modules)
 
@@ -86,6 +86,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     else:
         settings = QSettings()
 
+    default_user_directory = setting('defaultUserDirectory')
     current_locale = general_setting(
         'locale/userLocale', default='en_US', qsettings=settings)
     locale_match = current_locale == requested_locale
@@ -131,6 +132,9 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         set_setting('showRubberBands', True, settings)
         set_setting('show_extent_confirmations', False, settings)
         set_setting('analysis_extents_mode', HAZARD_EXPOSURE, settings)
+        if default_user_directory:
+            set_setting(
+                'defaultUserDirectory', default_user_directory, settings)
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
