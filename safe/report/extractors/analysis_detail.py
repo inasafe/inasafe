@@ -216,7 +216,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
         # Get breakdown name
         exposure_summary_table_field_name = breakdown_field['field_name']
-        field_index = exposure_summary_table.fields().lookupField()(
+        field_index = exposure_summary_table.fields().lookupField(
             exposure_summary_table_field_name)
         class_key = feat[field_index]
 
@@ -269,7 +269,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                     group_key = key
                     break
 
-            field_index = exposure_summary_table.fields().lookupField()(
+            field_index = exposure_summary_table.fields().lookupField(
                 field['field_name'])
             total_count = int(float(feat[field_index]))
             total_count = format_number(
@@ -550,7 +550,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         current_unit = None
         currency_unit = setting('currency', expected_type=str)
         for field in extra_fields[exposure_type['key']]:
-            field_index = exposure_summary_table.fields().lookupField()(
+            field_index = exposure_summary_table.fields().lookupField(
                 field['field_name'])
             if field_index < 0:
                 LOGGER.debug(
@@ -578,14 +578,14 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
             # Get breakdown name
             exposure_summary_table_field_name = breakdown_field['field_name']
-            field_index = exposure_summary_table.fields().lookupField()(
+            field_index = exposure_summary_table.fields().lookupField(
                 exposure_summary_table_field_name)
             class_key = feat[field_index]
 
             row.append(class_key)
 
             for field in extra_fields[exposure_type['key']]:
-                field_index = exposure_summary_table.fields().lookupField()(
+                field_index = exposure_summary_table.fields().lookupField(
                     field['field_name'])
                 # noinspection PyBroadException
                 try:
