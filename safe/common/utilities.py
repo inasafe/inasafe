@@ -50,6 +50,26 @@ class MEMORYSTATUSEX(ctypes.Structure):
         super(MEMORYSTATUSEX, self).__init__()
 
 
+def python2_round(number, ndigits=0):
+    """Python 2 round function, see: http://python3porting.com/differences.html#rounding-behavior
+    The behavior of round has changed in Python 3. In Python 2, rounding of halfway cases was away from zero, and round() would always return a float.
+
+    Round a number to a given precision in decimal digits (default 0 digits).
+    This returns an int when called with one argument, otherwise the
+    same type as the number. ndigits may be negative.
+   
+
+    :param number: float value to round
+    :type number: type, float
+
+    :param ndigits: integer decimal places
+    :param ndigits: type, integer
+
+    """
+    p = 10 ** ndigits
+    return float(math.floor((number * p) + math.copysign(0.5, number)))/p
+
+
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions.
 
@@ -290,14 +310,10 @@ def humanize_min_max(min_value, max_value, interval):
     :rtype: tuple
     """
     current_interval = max_value - min_value
-    if interval > 1:
-        def my_round(x, d=0):
-            p = 10 ** d
-            return float(math.floor((x * p) + math.copysign(0.5, x)))/p
-
+    if interval > 1: 
         # print 'case 1. Current interval : ', current_interval
-        humanize_min_value = add_separators(int(my_round(min_value)))
-        humanize_max_value = add_separators(int(my_round(max_value)))
+        humanize_min_value = add_separators(int(python2_round(min_value)))
+        humanize_max_value = add_separators(int(python2_round(max_value)))
 
     else:
         # print 'case 2. Current interval : ', current_interval
