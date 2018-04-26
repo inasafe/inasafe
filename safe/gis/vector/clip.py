@@ -109,10 +109,10 @@ def clip(layer_to_clip, mask_layer):
 
             tested_feature_ids.add(in_feat.id())
 
-            if not engine.intersects(in_feat.geometry().geometry()):
+            if not engine.intersects(in_feat.geometry().constGet()):
                 continue
 
-            if not engine.contains(in_feat.geometry().geometry()):
+            if not engine.contains(in_feat.geometry().constGet()):
                 cur_geom = in_feat.geometry()
                 new_geom = combined_clip_geom.intersection(cur_geom)
                 if new_geom.wkbType() == QgsWkbTypes.Unknown \

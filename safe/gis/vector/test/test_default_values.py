@@ -47,9 +47,9 @@ class TestPrepareLayer(unittest.TestCase):
         # These keywords should add a new column female_ratio with 0.5 inside.
         index = layer.fields().lookupField(female_ratio_field['field_name'])
         self.assertNotEqual(-1, index)
-        self.assertListEqual(
+        self.assertSetEqual(
             layer.uniqueValues(index),
-            [0.5]
+            {0.5}
         )
 
         layer = load_local_vector_layer(
@@ -72,7 +72,7 @@ class TestPrepareLayer(unittest.TestCase):
         self.assertEqual(-1, index)
 
         index = layer.fields().lookupField('value_1')
-        self.assertListEqual(
-            sorted(layer.uniqueValues(index)),
-            [0.5, 1]
+        self.assertSetEqual(
+            layer.uniqueValues(index),
+            {0.5, 1}
         )

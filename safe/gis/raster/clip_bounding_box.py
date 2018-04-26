@@ -29,13 +29,13 @@ def clip_by_extent(layer, extent):
 
     Issue https://github.com/inasafe/inasafe/issues/3183
 
-    :param layer: The layer to reproject.
+    :param layer: The layer to clip.
     :type layer: QgsRasterLayer
 
     :param extent: The extent.
     :type extent: QgsRectangle
 
-    :return: Reprojected memory layer.
+    :return: Clipped layer.
     :rtype: QgsRasterLayer
 
     .. versionadded:: 4.0
@@ -53,7 +53,7 @@ def clip_by_extent(layer, extent):
         pixel_size_x = layer.rasterUnitsPerPixelX()
         pixel_size_y = layer.rasterUnitsPerPixelY()
         buffer_size = max(pixel_size_x, pixel_size_y)
-        extent = extent.buffer(buffer_size)
+        extent = extent.buffered(buffer_size)
 
         if is_raster_y_inverted(layer):
             # The raster is Y inverted. We need to switch Y min and Y max.
@@ -79,7 +79,7 @@ def clip_by_extent(layer, extent):
         parameters['INPUT'] = layer.source()
         parameters['NO_DATA'] = ''
         parameters['PROJWIN'] = ','.join(bbox)
-        parameters['RTYPE'] = 5
+        parameters['DATA_TYPE'] = 5
         parameters['COMPRESS'] = 4
         parameters['JPEGCOMPRESSION'] = 75
         parameters['ZLEVEL'] = 6
@@ -89,7 +89,7 @@ def clip_by_extent(layer, extent):
         parameters['TFW'] = False
         parameters['EXTRA'] = ''
         parameters['OUTPUT'] = output_raster
-        result = processing.runalg("gdalogr:cliprasterbyextent", parameters)
+        result = processing.run("gdal:cliprasterbyextent", parameters)
 
         if result is None:
             raise ProcessingInstallationError
@@ -114,7 +114,7 @@ def clip_by_extent(layer, extent):
             'logs too !')
         LOGGER.info(
             'Even if we got an exception, we are continuing the analysis. The '
-            'layer is not clip.')
+            'layer was not clipped.')
         LOGGER.exception(str(e))
         LOGGER.exception(get_error_message(e).to_text())
         clipped = layer

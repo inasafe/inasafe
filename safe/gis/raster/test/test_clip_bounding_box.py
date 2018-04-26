@@ -9,6 +9,7 @@ from safe.test.utilities import get_qgis_app, load_test_raster_layer
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 from safe.gis.raster.clip_bounding_box import clip_by_extent
+import processing
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -19,6 +20,12 @@ __revision__ = '$Format:%H$'
 class TestClipRaster(unittest.TestCase):
 
     """Tests for clipping a raster layer with an extent."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Initialize processing"""
+        processing.Processing.initialize()
+        
 
     def test_clip_raster(self):
         """Test we can clip a raster layer."""

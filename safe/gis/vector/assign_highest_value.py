@@ -99,7 +99,7 @@ def assign_highest_value(exposure, hazard):
         hazard_request = QgsFeatureRequest().setFilterExpression(expression)
         update_map = {}
         for area in hazard.getFeatures(hazard_request):
-            geometry = area.constGet()
+            geometry = area.geometry().constGet()
             intersects = spatial_index.intersects(geometry.boundingBox())
 
             # use prepared geometry: makes multiple intersection tests faster
@@ -112,7 +112,7 @@ def assign_highest_value(exposure, hazard):
                 building = exposure_features[i]
                 building_geometry = building.geometry()
 
-                if geometry_prepared.intersects(building_geometry.geometry()):
+                if geometry_prepared.intersects(building_geometry.constGet()):
                     update_map[building.id()] = {}
                     for index, value in zip(indices, area.attributes()):
                         update_map[building.id()][index] = value
