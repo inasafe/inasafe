@@ -117,7 +117,7 @@ def clip(layer_to_clip, mask_layer):
                 new_geom = combined_clip_geom.intersection(cur_geom)
                 if new_geom.wkbType() == QgsWkbTypes.Unknown \
                         or QgsWkbTypes.flatType(
-                        new_geom.geometry().wkbType()) == \
+                        new_geom.constGet().wkbType()) == \
                         QgsWkbTypes.GeometryCollection:
                     int_com = in_feat.geometry().combine(new_geom)
                     int_sym = in_feat.geometry().symDifference(new_geom)
