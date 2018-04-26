@@ -3,10 +3,10 @@
 """Related to the extent (with or without an aggregation layer."""
 
 
-from qgis.core import QgsCoordinateTransform, QgsGeometry, QgsWkbTypes
+from qgis.core import (QgsCoordinateTransform, QgsGeometry, QgsProject,
+                       QgsWkbTypes)
 from qgis.gui import QgsRubberBand
 from qgis.PyQt.QtCore import Qt
-
 from safe.definitions.styles import (last_analysis_color, last_analysis_width,
                                      next_analysis_color, next_analysis_width,
                                      user_analysis_color, user_analysis_width)
@@ -121,7 +121,7 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs)
+        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._user_extent = extent
         set_setting('user_extent', extent.exportToWkt())
@@ -150,7 +150,7 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs)
+        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._last_analysis_extent = extent
 
@@ -178,7 +178,7 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs)
+        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._next_analysis_extent = extent
 

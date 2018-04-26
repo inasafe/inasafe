@@ -5,6 +5,7 @@
 from qgis.core import (
     QgsCoordinateTransform,
     QgsFeature,
+    QgsProject,
 )
 
 from safe.definitions.processing_steps import reproject_steps
@@ -52,7 +53,7 @@ def reproject(layer, output_crs, callback=None):
         output_layer_name, layer.geometryType(), output_crs, input_fields)
     reprojected.startEditing()
 
-    crs_transform = QgsCoordinateTransform(input_crs, output_crs)
+    crs_transform = QgsCoordinateTransform(input_crs, output_crs, QgsProject.instance())
 
     out_feature = QgsFeature()
 

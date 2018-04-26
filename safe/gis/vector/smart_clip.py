@@ -60,7 +60,7 @@ def smart_clip(layer_to_clip, mask_layer):
 
     # use prepared geometries for faster intersection tests
     # noinspection PyArgumentList
-    engine = QgsGeometry.createGeometryEngine(geometries.geometry())
+    engine = QgsGeometry.createGeometryEngine(geometries.constGet())
     engine.prepareGeometry()
 
     extent = mask_layer.extent()

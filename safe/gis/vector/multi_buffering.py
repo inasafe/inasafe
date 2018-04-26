@@ -5,6 +5,7 @@
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
+    QgsProject,
     QgsGeometry,
     QgsFeature,
     QgsWkbTypes,
@@ -79,8 +80,8 @@ def multi_buffering(layer, radii, callback=None):
         center = layer.extent().center()
         utm = QgsCoordinateReferenceSystem(
             get_utm_epsg(center.x(), center.y(), input_crs))
-        transform = QgsCoordinateTransform(layer.crs(), utm)
-        reverse_transform = QgsCoordinateTransform(utm, layer.crs())
+        transform = QgsCoordinateTransform(layer.crs(), utm, QgsProject.instance())
+        reverse_transform = QgsCoordinateTransform(utm, layer.crs(), QgsProject.instance())
     else:
         transform = None
         reverse_transform = None
