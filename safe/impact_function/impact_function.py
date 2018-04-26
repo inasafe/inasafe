@@ -1350,7 +1350,7 @@ class ImpactFunction():
                 for ring in polygon[1:]:
                     polygon.remove(ring)
                 self._analysis_extent = QgsGeometry.fromPolygon(polygon)
-            is_empty = self._analysis_extent.isGeosEmpty()
+            is_empty = self._analysis_extent.isEmpty()
             is_invalid = not self._analysis_extent.isGeosValid()
             if is_empty or is_invalid:
                 message = generate_input_error_message(

@@ -124,7 +124,7 @@ def union(union_a, union_b):
                 at_map_b = in_feat_b.attributes()
                 tmp_geom = geometry_checker(in_feat_b.geometry())
 
-                if engine.intersects(tmp_geom.geometry()):
+                if engine.intersects(tmp_geom.constGet()):
                     int_geom = geometry_checker(geom.intersection(tmp_geom))
                     list_intersecting_b.append(QgsGeometry(tmp_geom))
 
@@ -140,7 +140,7 @@ def union(union_a, union_b):
 
                     if int_geom.wkbType() == QgsWkbTypes.UnknownGeometry \
                             or QgsWkbTypes.flatType(
-                            int_geom.geometry().wkbType()) == \
+                            int_geom.constGet().wkbType()) == \
                             QgsWkbTypes.GeometryCollection:
                         # Intersection produced different geometry types
                         temp_list = int_geom.asGeometryCollection()
@@ -186,7 +186,7 @@ def union(union_a, union_b):
                 int_b = QgsGeometry.unaryUnion(list_intersecting_b)
                 diff_geom = geometry_checker(diff_geom.difference(int_b))
                 if diff_geom is None or \
-                        diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
+                        diff_geom.isEmpty() or not diff_geom.isGeosValid():
                     # LOGGER.debug(
                     #     tr('GEOS geoprocessing error: One or more input '
                     #        'features have invalid geometry.'))
@@ -194,7 +194,7 @@ def union(union_a, union_b):
 
             if diff_geom is not None and (
                 diff_geom.wkbType() == 0 or QgsWkbTypes.flatType(
-                    diff_geom.geometry().wkbType()) ==
+                    diff_geom.constGet().wkbType()) ==
                     QgsWkbTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()
                 for i in temp_list:
@@ -242,7 +242,7 @@ def union(union_a, union_b):
                 pass
                 continue  # maybe it is better to fail like @gustry
                 # does below ....
-            if res_geom.isGeosEmpty() or not res_geom.isGeosValid():
+            if res_geom.isEmpty() or not res_geom.isGeosValid():
                 # LOGGER.debug(
                 #    tr('GEOS geoprocessing error: One or more input features '
                 #        'have invalid geometry.'))
