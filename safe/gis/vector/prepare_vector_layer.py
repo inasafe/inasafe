@@ -318,7 +318,8 @@ def _remove_features(layer):
         layer.startEditing()
         i = 0
         for feature in layer.getFeatures(request):
-            if feature.attributes()[index] is None:
+            feat_attr = feature.attributes()[index]
+            if feat_attr is None or (hasattr(feat_attr, 'isNull') and feat_attr.isNull()):
                 if layer_purpose == 'hazard':
                     # Remove the feature if the hazard is null.
                     layer.deleteFeature(feature.id())

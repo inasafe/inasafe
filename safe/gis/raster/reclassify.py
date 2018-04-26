@@ -118,11 +118,9 @@ def reclassify(layer, exposure_key=None, overwrite_input=False, callback=None):
 
         if v_min is None:
             destination[np.where(source <= v_max)] = value
-
-        if v_max is None:
+        elif v_max is None:
             destination[np.where(source > v_min)] = value
-
-        if v_min < v_max:
+        elif v_min < v_max:
             destination[np.where((v_min < source) & (source <= v_max))] = value
 
     # Tag no data cells

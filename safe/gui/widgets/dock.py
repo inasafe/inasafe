@@ -1569,16 +1569,21 @@ def set_provenance_to_project_variables(provenances):
             if 'field' in key:
                 pretty_value = get_name(value)
                 QgsExpressionContextUtils.setProjectVariable(
+                    QgsProject.instance(),
                     key, pretty_value)
             else:
-                QgsExpressionContextUtils.setProjectVariable(key, value)
+                QgsExpressionContextUtils.setProjectVariable(
+                    QgsProject.instance(), key, value)
         elif isinstance(value, type(None)):
-            QgsExpressionContextUtils.setProjectVariable(key, '')
+            QgsExpressionContextUtils.setProjectVariable(
+                QgsProject.instance(),, key, '')
         elif isinstance(value, datetime):
             QgsExpressionContextUtils.setProjectVariable(
+                QgsProject.instance(),
                 key, value.isoformat())
         elif isinstance(value, QUrl):
             QgsExpressionContextUtils.setProjectVariable(
+                QgsProject.instance(),
                 key, value.toString())
         else:
             LOGGER.warning('Not handled provenance')
@@ -1630,4 +1635,5 @@ def remove_provenance_project_variables():
     # This method will set non_null_existing_variables, and remove the
     # other variable
     QgsExpressionContextUtils.setProjectVariables(
+        QgsProject.instance(),
         non_null_existing_variables)
