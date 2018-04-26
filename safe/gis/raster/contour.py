@@ -177,17 +177,17 @@ def convolve(input, weights, mask=None, slow=False):
                 # Find the part of the tiled_input array that overlaps with the
                 # weights array.
                 overlapping = tiled_input[
-                    i - hw_row:i + hw_row + 1,
-                    j - hw_col:j + hw_col + 1]
+                    i - hw_row:i + hw_row,
+                    j - hw_col:j + hw_col]
                 assert (overlapping.shape == weights.shape)
 
-                # If any of 'overlapping' is masked then set the corrosponding
+                # If any of 'overlapping' is masked then set the corresponding
                 # points in the weights matrix to 0 and redistribute these to
                 # non-masked points.
                 if mask is not None:
                     overlapping_mask = tiled_mask[
-                        i - hw_row:i + hw_row + 1,
-                        j - hw_col:j + hw_col + 1]
+                        i - hw_row:i + hw_row,
+                        j - hw_col:j + hw_col]
                     assert (overlapping_mask.shape == weights.shape)
 
                     # Total value and number of weights clobbered by the mask.
