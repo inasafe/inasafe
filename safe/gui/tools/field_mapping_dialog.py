@@ -6,7 +6,8 @@ import logging
 from qgis.PyQt.QtCore import pyqtSlot, QSettings
 from qgis.PyQt.QtWidgets import QDialog, QHBoxLayout, QLabel, QDialogButtonBox, QMessageBox
 from qgis.PyQt.QtGui import QIcon
-from qgis.gui import QgsMapLayerComboBox, QgsMapLayerProxyModel
+from qgis.gui import QgsMapLayerComboBox
+from qgis.core import QgsMapLayerProxyModel
 
 from parameters.parameter_exceptions import InvalidValidationException
 from safe.common.exceptions import (

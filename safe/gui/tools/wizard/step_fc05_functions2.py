@@ -5,7 +5,7 @@
 import logging
 
 # noinspection PyPackageRequirements
-from qgis.PyQt import QtCore, QtGui
+from qgis.PyQt import QtCore, QtGui, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot
 
 from safe import messaging as m
@@ -155,22 +155,22 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         self.tblFunctions2.setHorizontalHeaderLabels(
             [i['name'].capitalize() for i in hazard_layer_geometries])
         for i in range(len(exposure_layer_geometries)):
-            item = QtGui.QTableWidgetItem()
+            item = QtWidgets.QTableWidgetItem()
             item.setText(exposure_layer_geometries[i]['name'].capitalize())
             item.setTextAlignment(QtCore.Qt.AlignCenter)
             self.tblFunctions2.setVerticalHeaderItem(i, item)
 
-        self.tblFunctions2.horizontalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
-        self.tblFunctions2.verticalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
+        self.tblFunctions2.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch)
+        self.tblFunctions2.verticalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch)
 
         active_items = []
         for column in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
                 hazard_geometry = hazard_layer_geometries[column]
                 exposure_geometry = exposure_layer_geometries[row]
-                item = QtGui.QTableWidgetItem()
+                item = QtWidgets.QTableWidgetItem()
 
                 hazard_geometry_allowed = hazard_geometry['key'] in hazard[
                     'allowed_geometries']

@@ -12,7 +12,6 @@ Contact : christian@kartoza.com
      (at your option) any later version.
 
 """
-from past.builtins import cmp
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '14/09/2012'
@@ -88,7 +87,7 @@ class MinimumNeedsTest(unittest.TestCase):
         """Test loading the defaults on a blank settings."""
         full_minimum_needs = self.minimum_needs.get_full_needs()['resources']
         default_minimum_needs = MinimumNeeds._defaults()['resources']
-        self.assertEqual(cmp(full_minimum_needs, default_minimum_needs), 0)
+        self.assertEqual(full_minimum_needs, default_minimum_needs)
 
     def test_02_update_minimum_needs(self):
         """Change minimum needs and verify that the result are updated."""
@@ -122,8 +121,8 @@ class MinimumNeedsTest(unittest.TestCase):
         original_new = self.minimum_needs.get_full_needs()
 
         # cmp compares dicts 0 == same, -1 == different
-        self.assertEqual(cmp(original_old, other_old), 0)
-        self.assertEqual(cmp(original_old, original_new), -1)
+        self.assertEqual(original_old, other_old)
+        self.assertNotEqual(original_old, original_new)
 
     def test_03_root_directory(self):
 

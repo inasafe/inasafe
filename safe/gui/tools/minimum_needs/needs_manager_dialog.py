@@ -5,7 +5,7 @@
 import os
 from os.path import expanduser, basename
 
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QGridLayout, QPushButton, QDialogButtonBox, QMessageBox
 from qgis.PyQt.QtGui import QIcon
@@ -55,7 +55,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         # List of parameters with the translated name.
         self.resource_parameters = {
             'Resource name': tr('Resource name'),
@@ -153,7 +153,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.save_profile_as)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -248,7 +248,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             item.setText(updated_sentence)
             self.edit_item = None
         else:
-            item = QtGui.QListWidgetItem(updated_sentence)
+            item = QtWidgets.QListWidgetItem(updated_sentence)
         item.resource_full = resource
         self.resources_list.addItem(item)
 

@@ -20,6 +20,7 @@ import os
 import sys
 import unittest
 
+from qgis.core import QgsProject
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)

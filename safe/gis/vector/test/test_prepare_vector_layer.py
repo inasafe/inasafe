@@ -8,7 +8,8 @@ from osgeo import gdal
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import (
     get_qgis_app,
-    load_test_vector_layer)
+    load_test_vector_layer,
+    dict_values_sorted)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 
@@ -38,16 +39,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-
-def _sorted_dict_values(_dict):
-    """Make sure _dict values are sorted when they are sortable"""
-    _ret = dict()
-    for _k in _dict:
-        try:
-            _ret[_k] = sorted(_dict[_k]) 
-        except:
-            _ret[_k] = _dict[_k]
-    return _ret
 
 class TestPrepareLayer(unittest.TestCase):
 
@@ -153,7 +144,7 @@ class TestPrepareLayer(unittest.TestCase):
         }
         layer.keywords['value_map'] = dict(value_map)
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(value_map, _sorted_dict_values(layer.keywords['value_map']))
+        self.assertDictEqual(value_map, dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop and unknown, the other group should be created.
         layer.keywords['value_map'] = {
@@ -168,7 +159,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, _sorted_dict_values(layer.keywords['value_map']))
+        self.assertDictEqual(expected_value_map, dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop, it should be added to the other group.
         layer.keywords['value_map'] = {
@@ -184,7 +175,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, _sorted_dict_values(layer.keywords['value_map']))
+        self.assertDictEqual(expected_value_map, dict_value_sorted(layer.keywords['value_map']))
 
     def test_own_id_column(self):
         """Test if we can re-use the column ID from the user."""

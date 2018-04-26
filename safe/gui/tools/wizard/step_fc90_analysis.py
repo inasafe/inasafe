@@ -4,12 +4,14 @@
 import logging
 import os
 
-from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt import QtGui, QtWidgets, QtCore
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.core import (
     QgsProject,
     QgsGeometry,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QgsApplication,
+    )
 
 from safe import messaging as m
 from safe.common.signals import send_static_message, send_error_message
@@ -271,7 +273,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 # This like a hack to transform a geometry to a rectangle.
                 # self.extent.user_extent is a QgsGeometry.
                 # impact_function.requested_extent needs a QgsRectangle.
-                wkt = self.extent.user_extent.exportToWkt()
+                wkt = self.extent.user_extent.asWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
 
             elif mode == HAZARD_EXPOSURE_VIEW:
@@ -303,7 +305,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.parent.pbnCancel.setEnabled(False)
         self.parent.repaint()
         enable_busy_cursor()
-        QtGui.qApp.processEvents()
+        QgsApplication.processEvents()
 
     def hide_busy(self):
         """Unlock buttons A helper function to indicate processing is done."""
@@ -339,7 +341,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         send_static_message(self, report)
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
-        QtGui.QApplication.processEvents()
+        QgsApplication.processEvents()
 
     def print_map(self):
         """Open impact report dialog used to tune report when printing."""

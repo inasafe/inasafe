@@ -4,7 +4,8 @@
 import logging
 import os
 
-from qgis.core import QgsRasterLayer, QgsVectorLayer, QgsProject
+from qgis.core import (QgsApplication, QgsProject, QgsRasterLayer,
+                       QgsVectorLayer)
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
@@ -13,7 +14,6 @@ from qgis.PyQt.QtCore import QFileInfo, pyqtSlot
 from qgis.PyQt.QtWidgets import (QDialog, QDialogButtonBox, QFileDialog,
                                  QMessageBox)
 from qgis.utils import iface
-
 from safe import messaging as m
 from safe.common.version import get_version
 from safe.definitions.constants import (NONE_SMOOTHING, NUMPY_SMOOTHING,
@@ -91,7 +91,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.load_result.clicked.connect(self.load_result_toggled)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -242,7 +242,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             smoothing_method = SCIPY_SMOOTHING
 
         # noinspection PyUnresolvedReferences
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         extra_keywords = {}
         if self.check_box_custom_shakemap_id.isChecked():
@@ -271,7 +271,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.output_layer = QgsRasterLayer(file_name, base_name)
 
         # noinspection PyUnresolvedReferences
-        QtGui.qApp.restoreOverrideCursor()
+        QgsApplication.instance().restoreOverrideCursor()
 
         if self.load_result.isChecked():
             # noinspection PyTypeChecker

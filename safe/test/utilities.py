@@ -14,7 +14,7 @@ import sys
 from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
 
-from qgis.PyQt import QtGui  # pylint: disable=W0621
+from qgis.PyQt import QtGui, QtWidgets  # pylint: disable=W0621
 from qgis.PyQt.QtCore import QTranslator, pyqtWrapperType
 from qgis.PyQt import QtWidgets  # pylint: disable=W0621
 from qgis.core import (
@@ -105,7 +105,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
-        from qgis.PyQt import QtGui, QtCore  # pylint: disable=W0621
+        from qgis.PyQt import QtGui, QtWidgets, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from qgis.PyQt.QtCore import QCoreApplication, QSettings
         from safe.test.qgis_interface import QgisInterface
@@ -210,7 +210,7 @@ def get_dock():
     # Don't move this import.
     from safe.gui.widgets.dock import Dock as DockObject
     if iface:
-        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
+        docks = iface.mainWindow().findChildren(QtWidgets.QDockWidget)
         for dock in docks:
             if isinstance(dock, DockObject):
                 return dock
@@ -516,15 +516,12 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     :type enable_projection: bool
 
     """
-    # Enable on-the-fly reprojection
-    CANVAS.mapRenderer().setProjectionsEnabled(enable_projection)
-
     # Create CRS Instance
     crs = QgsCoordinateReferenceSystem()
     crs.createFromSrid(epsg_id)
 
     # Reproject all layers to WGS84 geographic CRS
-    CANVAS.mapRenderer().setDestinationCrs(crs)
+    CANVAS.setDestinationCrs(crs)
 
 
 def set_jakarta_extent(dock=None):
@@ -1185,3 +1182,14 @@ def get_control_text(file_name):
         mode='r',
         encoding='utf-8').readlines()
     return expected_result
+
+
+def dict_values_sorted(_dict):
+    """Make sure dict values are sorted when they are sortable"""
+    _ret = dict()
+    for _k in _dict:
+        try:
+            _ret[_k] = sorted(_dict[_k]) 
+        except:
+            _ret[_k] = _dict[_k]
+    return _ret

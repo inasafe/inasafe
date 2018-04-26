@@ -111,9 +111,9 @@ class TestFolder(unittest.TestCase):
             expected + '.tif')
 
         # Check keywords files
-        data_store.uri.setNameFilters('*.xml')
+        data_store.uri.setNameFilters(['*.xml'])
         files = data_store.uri.entryList()
-        data_store.uri.setNameFilters('')
+        data_store.uri.setNameFilters([])
         self.assertIn(raster_layer_name + '.xml', files)
         self.assertIn(vector_layer_name + '.xml', files)
 

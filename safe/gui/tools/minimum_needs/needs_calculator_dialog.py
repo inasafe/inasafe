@@ -8,10 +8,9 @@
 import logging
 import os
 
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot, QSettings
-from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
-from qgis.core import QgsProject
+from qgis.core import QgsProject, QgsFieldProxyModel, QgsMapLayerProxyModel
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
@@ -42,7 +41,7 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('needs_calculator_dialog_base.ui')
 
 
-class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
+class NeedsCalculatorDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE minimum needs calculator.
     """
 
@@ -52,7 +51,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
@@ -60,7 +59,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowIcon(QtGui.QIcon(icon))
 
         self.result_layer = None
-        self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+        self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
 
         # get qgis map layer combobox object
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
@@ -86,17 +85,17 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.displaced.fieldChanged.connect(self.update_button_status)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
         # Fix for issue 1699 - cancel button does nothing
-        cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
+        cancel_button = self.button_box.button(QtWidgets.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Fix ends
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok_button = self.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
 
     def update_button_status(self):
@@ -104,9 +103,9 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         """
         # enable/disable ok button
         if len(self.displaced.currentField()) > 0:
-            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
+            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(True)
         else:
-            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
 
     def minimum_needs(self, input_layer):
         """Compute minimum needs given a layer and a column containing pop.
@@ -239,7 +238,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # noinspection PyArgumentList
         QgsProject.instance().addMapLayers(
             [data_store.layer(self.result_layer.name())])
-        self.done(QtGui.QDialog.Accepted)
+        self.done(QtWidgets.QDialog.Accepted)
 
     @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):
