@@ -17,37 +17,27 @@ import os
 import time
 from shutil import copy
 
-from qgis.PyQt import QtCore
-# noinspection PyPackageRequirements
-from qgis.PyQt import QtGui
-# noinspection PyPackageRequirements
-from qgis.PyQt.QtCore import QSettings, QRegExp, pyqtSlot
-from qgis.PyQt.QtCore import QVariant, Qt
-# noinspection PyPackageRequirements
-from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog, QButtonGroup
-from qgis.PyQt.QtNetwork import QNetworkReply
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
-from qgis.core import (
-    QgsProject,
-    QgsVectorLayer,
-    QgsVectorFileWriter,
-    QgsField,
-    QgsExpression,
-    QgsExpressionContext)
-
-from safe.common.exceptions import (
-    CanceledImportDialogError,
-    FileMissingError)
+from qgis.core import (QgsApplication, QgsCoordinateTransform, QgsExpression,
+                       QgsExpressionContext, QgsField, QgsProject,
+                       QgsVectorFileWriter, QgsVectorLayer)
+# noinspection PyPackageRequirements
+from qgis.PyQt import QtCore, QtGui, QtWidgets
+# noinspection PyPackageRequirements
+from qgis.PyQt.QtCore import QRegExp, QSettings, Qt, QVariant, pyqtSlot
+from qgis.PyQt.QtNetwork import QNetworkReply
+# noinspection PyPackageRequirements
+from qgis.PyQt.QtWidgets import (QButtonGroup, QDialog, QFileDialog,
+                                 QMessageBox, QProgressDialog)
+from safe.common.exceptions import CanceledImportDialogError, FileMissingError
 from safe.definitions.peta_bencana import development_api, production_api
 from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.qgis_utilities import (
-    display_warning_message_box,
-)
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.qt import disable_busy_cursor
-from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class, resources_path)
+from safe.utilities.resources import (get_ui_class, html_footer, html_header,
+                                      resources_path)
 from safe.utilities.settings import setting
 
 # pylint: enable=unused-import
@@ -118,7 +108,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -214,7 +204,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         except CanceledImportDialogError:
             return
 
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         source = self.define_url()
         # save the file as json first
@@ -253,7 +243,11 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             name,
             overwrite)
         QgsVectorFileWriter.writeAsVectorFormat(
-            layer, output_base_file_path, 'CP1250', None, 'ESRI Shapefile')
+            layer, 
+            output_base_file_path, 
+            'CP1250', 
+            QgsCoordinateTransform(), 
+            'ESRI Shapefile')
         # Get rid of the GeoJSON layer and rather use local shp
         del layer
 
@@ -528,11 +522,6 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
-
-        canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
-        on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
-        if canvas_srid != 4326 and not on_the_fly_projection:
-            self.canvas.setCrsTransformEnabled(True)
 
     def reject(self):
         """Redefinition of the method.

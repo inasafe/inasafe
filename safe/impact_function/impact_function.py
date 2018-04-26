@@ -406,8 +406,8 @@ class ImpactFunction():
                             return False, message
                 elif isinstance(property_a, QgsGeometry):
                     if not property_a.equals(property_b):
-                        string_a = property_a.exportToWkt()
-                        string_b = property_b.exportToWkt()
+                        string_a = property_a.asWkt()
+                        string_b = property_b.asWkt()
                         message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
@@ -1587,10 +1587,10 @@ class ImpactFunction():
         self._unique_name = self._name.replace(' ', '')
         self._unique_name = replace_accentuated_characters(self._unique_name)
         now = datetime.now()
-        date = now.strftime('%d%B%Y').decode('utf8')
+        date = now.strftime('%d%B%Y')
         # We need to add milliseconds to be sure to have a unique name.
         # Some tests are executed in less than a second.
-        time = now.strftime('%Hh%M-%S.%f').decode('utf8')
+        time = now.strftime('%Hh%M-%S.%f')
         self._unique_name = '%s_%s_%s' % (self._unique_name, date, time)
 
         if not self._datastore:
@@ -2569,7 +2569,7 @@ class ImpactFunction():
         set_provenance(
             self._provenance,
             provenance_analysis_extent,
-            self.analysis_extent.exportToWkt())
+            self.analysis_extent.asWkt())
 
         set_provenance(
             self._provenance,

@@ -20,10 +20,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import time
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # NOQA pylint: disable=unused-import
-from qgis.PyQt import QtCore, QtGui, QtWebKit
+from qgis.core import QgsApplication
+from qgis.PyQt import QtCore, QtGui, QtWebKitWidgets
+from qgis.PyQt.QtWidgets import QAction
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
 from safe.messaging.message import MessageElement
@@ -40,7 +39,7 @@ HTML_STR_MODE = 2
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class MessageViewer(QtWebKit.QWebView):
+class MessageViewer(QtWebKitWidgets.QWebView):
 
     """A simple message queue."""
 
@@ -70,17 +69,17 @@ class MessageViewer(QtWebKit.QWebView):
         self.dynamic_messages_log = []
         # self.show()
 
-        self.action_show_log = QtGui.QAction(self.tr('Show log'), None)
+        self.action_show_log = QAction(self.tr('Show log'), None)
         self.action_show_log.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.action_show_log.triggered.connect(self.show_log)
 
-        self.action_show_report = QtGui.QAction(self.tr('Show report'), None)
+        self.action_show_report = QAction(self.tr('Show report'), None)
         self.action_show_report.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.action_show_report.triggered.connect(self.show_report)
 
-        self.action_print_to_pdf = QtGui.QAction(self.tr('Save as PDF'), None)
+        self.action_print_to_pdf = QAction(self.tr('Save as PDF'), None)
         self.action_print_to_pdf.setEnabled(True)
         self.action_print_to_pdf.triggered.connect(self.generate_pdf)
 
@@ -142,7 +141,7 @@ class MessageViewer(QtWebKit.QWebView):
         context_menu.addAction(action_copy)
 
         # add show in browser
-        action_page_to_html_file = QtGui.QAction(
+        action_page_to_html_file = QAction(
             self.tr('Open in web browser'), None)
         # noinspection PyUnresolvedReferences
         action_page_to_html_file.triggered.connect(
@@ -165,7 +164,7 @@ class MessageViewer(QtWebKit.QWebView):
             context_menu.addAction(action_copy)
 
             # add view to_text if in dev mode
-            action_page_to_stdout = QtGui.QAction(self.tr('log pageToText'),
+            action_page_to_stdout = QAction(self.tr('log pageToText'),
                                                   None)
             # noinspection PyUnresolvedReferences
             action_page_to_stdout.triggered.connect(self.page_to_stdout)
@@ -423,7 +422,7 @@ class MessageViewer(QtWebKit.QWebView):
             counter += sleep_period
             time.sleep(sleep_period)
             # noinspection PyArgumentList
-            QtCore.QCoreApplication.processEvents()
+            QgsApplication.processEvents()
 
     def html_loaded_slot(self, ok):
         """Slot called when the page is loaded.

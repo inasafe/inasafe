@@ -226,7 +226,7 @@ class TestMultiExposureImpactFunction(unittest.TestCase):
 
         expected_provenance.update({
             provenance_analysis_extent['provenance_key']:
-                impact_function.analysis_extent.exportToWkt(),
+                impact_function.analysis_extent.asWkt(),
             provenance_impact_function_name['provenance_key']:
                 impact_function.name,
             # provenance_requested_extent['provenance_key']: impact_function.

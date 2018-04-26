@@ -14,9 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
+from qgis.core import QgsApplication
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import QByteArray, QCoreApplication, QFile, QUrl
 # noinspection PyPackageRequirements
@@ -101,7 +99,7 @@ class FileDownloader():
                 :type total: int
                 """
                 # noinspection PyArgumentList
-                QCoreApplication.processEvents()
+                QgsApplication.processEvents()
 
                 self.progress_dialog.adjustSize()
 
@@ -130,7 +128,7 @@ class FileDownloader():
         # are adding self.finished_flag (see #864)
         while not self.reply.isFinished() and not self.finished_flag:
             # noinspection PyArgumentList
-            QCoreApplication.processEvents()
+            QgsApplication.processEvents()
 
         result = self.reply.error()
         try:

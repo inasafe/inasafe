@@ -294,14 +294,14 @@ def qgis_composer_html_renderer(impact_report, component):
                 text = html_el.get('text')
                 text = text if text else ''
                 html_element.setContentMode(QgsLayoutItemHtml.ManualHtml)
-                html_element.setResizeMode(
+                html_element.setSectionResizeMode(
                     QgsLayoutItemHtml.RepeatUntilFinished)
                 html_element.setHtml(text)
                 html_element.loadHtml()
             elif mode == 'url':
                 url = html_el.get('url')
                 html_element.setContentMode(QgsLayoutItemHtml.Url)
-                html_element.setResizeMode(
+                html_element.setSectionResizeMode(
                     QgsLayoutItemHtml.RepeatUntilFinished)
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)

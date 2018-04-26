@@ -6,7 +6,7 @@ from copy import deepcopy
 from os import listdir
 from os.path import join, exists, splitext, dirname
 
-from qgis.PyQt import QtGui, QtCore, QtXml
+from qgis.PyQt import QtGui, QtWidgets, QtCore, QtXml
 from qgis.core import QgsApplication
 
 from safe import messaging as m
@@ -49,7 +49,7 @@ FORM_CLASS = get_ui_class('print_report_dialog.ui')
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
+class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
     """Print report dialog for the InaSAFE plugin."""
 
     def __init__(self, impact_function, iface, dock=None, parent=None):
@@ -68,7 +68,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         .. versionadded: 4.3.0
         """
 
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
 
         # Save reference to the QGIS interface and parent
@@ -166,7 +166,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         self.button_print_pdf.setToolTip(tr(
             'Write report to PDF and open it in default viewer'))
         self.button_box.addButton(
-            self.button_print_pdf, QtGui.QDialogButtonBox.ActionRole)
+            self.button_print_pdf, QtWidgets.QDialogButtonBox.ActionRole)
 
         self.template_chooser.clicked.connect(self.template_chooser_clicked)
         self.button_print_pdf.clicked.connect(self.accept)
@@ -185,7 +185,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
             self.toggle_template_selector)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -524,7 +524,7 @@ class PrintReportDialog(QtGui.QDialog, FORM_CLASS):
         except Exception:
             self.dock.hide_busy()
 
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)
 
     def template_chooser_clicked(self):
         """Slot activated when report file tool button is clicked.

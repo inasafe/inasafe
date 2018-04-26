@@ -4,7 +4,7 @@
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import Qt
 
 from safe.gui.tools.help.dock_help import dock_help
@@ -19,7 +19,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class HelpDialog(QtGui.QDialog, FORM_CLASS):
+class HelpDialog(QtWidgets.QDialog, FORM_CLASS):
     """About dialog for the InaSAFE plugin."""
 
     def __init__(self, parent=None, message=None):
@@ -32,7 +32,7 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
         :type parent: QWidget
         """
 
-        QtGui.QDialog.__init__(
+        QtWidgets.QDialog.__init__(
             self, parent,
             flags=Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint)
         self.setupUi(self)

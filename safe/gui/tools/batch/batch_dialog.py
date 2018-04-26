@@ -21,7 +21,7 @@ from io import StringIO
 
 from future import standard_library
 from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
-                       QgsRasterLayer, QgsRectangle, QgsVectorLayer)
+                       QgsRasterLayer, QgsRectangle, QgsVectorLayer, QgsApplication)
 from qgis.PyQt import QtCore, QtGui
 from qgis.PyQt.QtCore import Qt, pyqtSlot
 from qgis.PyQt.QtWidgets import (QAbstractItemView, QDialog, QDialogButtonBox,
@@ -87,8 +87,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.legend = iface.legendInterface()
 
         header_view = self.table.horizontalHeader()
-        header_view.setResizeMode(0, QtGui.QHeaderView.Stretch)
-        header_view.setResizeMode(1, QtGui.QHeaderView.Interactive)
+        header_view.setSectionResizeMode(0, QtGui.QHeaderView.Stretch)
+        header_view.setSectionResizeMode(1, QtGui.QHeaderView.Interactive)
 
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
@@ -139,7 +139,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.start_in_new_project = False
 
         # Set up context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -730,12 +730,12 @@ class BatchDialog(QDialog, FORM_CLASS):
     # noinspection PyMethodMayBeStatic
     def enable_busy_cursor(self):
         """Set the hourglass enabled."""
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     # noinspection PyMethodMayBeStatic
     def disable_busy_cursor(self):
         """Disable the hourglass cursor."""
-        QtGui.qApp.restoreOverrideCursor()
+        QgsApplication.instance().restoreOverrideCursor()
 
     @pyqtSlot(bool)
     def on_scenario_directory_radio_toggled(self, flag):

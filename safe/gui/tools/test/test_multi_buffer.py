@@ -7,7 +7,8 @@ from safe.test.utilities import (
     load_test_vector_layer,
     standard_data_path,
     get_qgis_app)
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
+from qgis.core import QgsProject
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
@@ -98,7 +99,7 @@ class MultiBufferTest(unittest.TestCase):
         dialog = MultiBufferDialog(PARENT)
         directory_button = dialog.directory_button
         add_class_button = dialog.add_class_button
-        ok_button = dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok_button = dialog.button_box.button(QtWidgets.QDialogButtonBox.Ok)
 
         # Test every button without any input in the combo box.
         self.assertFalse(directory_button.isEnabled())

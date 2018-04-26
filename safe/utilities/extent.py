@@ -124,7 +124,7 @@ class Extent():
         transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._user_extent = extent
-        set_setting('user_extent', extent.exportToWkt())
+        set_setting('user_extent', extent.asWkt())
         set_setting('user_extent_crs', crs.authid())
         if self._show_rubber_bands:
             self.display_user_extent()

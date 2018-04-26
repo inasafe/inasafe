@@ -13,7 +13,7 @@ by Tim Sutton, Oct 2014.
 from qgis.PyQt.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtGui import QColor
-from qgis.core import QgsPoint, QgsRectangle, QgsWkbTypes
+from qgis.core import QgsPointXY, QgsRectangle, QgsWkbTypes
 # pylint: disable=no-name-in-module
 from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
@@ -109,9 +109,9 @@ class RectangleMapTool(QgsMapToolEmitPoint):
             return
 
         point1 = start_point
-        point2 = QgsPoint(end_point.x(), start_point.y())
+        point2 = QgsPointXY(end_point.x(), start_point.y())
         point3 = end_point
-        point4 = QgsPoint(start_point.x(), end_point.y())
+        point4 = QgsPointXY(start_point.x(), end_point.y())
 
         update_canvas = False
         self.rubber_band.addPoint(point1, update_canvas)
@@ -150,9 +150,9 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         if rectangle is None:
             self.reset()
         else:
-            self.start_point = QgsPoint(
+            self.start_point = QgsPointXY(
                 rectangle.xMinimum(), rectangle.yMinimum())
-            self.end_point = QgsPoint(
+            self.end_point = QgsPointXY(
                 rectangle.xMaximum(), rectangle.yMaximum())
             self.show_rectangle(self.start_point, self.end_point)
         return True

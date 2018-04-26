@@ -551,7 +551,7 @@ class MultiExposureImpactFunction():
         set_provenance(
             self._provenance,
             provenance_analysis_extent,
-            self._analysis_extent.exportToWkt())
+            self._analysis_extent.asWkt())
 
         set_provenance(
             self._provenance,
@@ -668,8 +668,8 @@ class MultiExposureImpactFunction():
                         return status, message
                 elif isinstance(property_a, QgsGeometry):
                     if not property_a.equals(property_b):
-                        string_a = property_a.exportToWkt()
-                        string_b = property_b.exportToWkt()
+                        string_a = property_a.asWkt()
+                        string_b = property_b.asWkt()
                         message = (
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))

@@ -489,7 +489,7 @@ class SizeCalculator():
                 else:
                     LOGGER.debug(message.format(
                         valid=single.isGeosValid(),
-                        wkt=single.exportToWkt()))
+                        wkt=single.asWkt()))
         else:
             if self.geometry_type == QgsWkbTypes.LineGeometry:
                 geometry_size = self.calculator.measureLength(geometry)
@@ -500,7 +500,7 @@ class SizeCalculator():
             else:
                 LOGGER.debug(message.format(
                     valid=geometry.isGeosValid(),
-                    wkt=geometry.exportToWkt()))
+                    wkt=geometry.asWkt()))
 
         feature_size = round(feature_size)
 

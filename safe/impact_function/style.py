@@ -10,7 +10,7 @@ from qgis.core import (
     QgsRendererCategory,
     QgsSingleSymbolRenderer,
     QgsCategorizedSymbolRenderer,
-    QgsSymbolLayerRegistry,
+    QgsApplication,
     QgsConditionalStyle,
     QgsWkbTypes,
 )
@@ -343,7 +343,7 @@ def simple_polygon_without_brush(layer, width='0.26', color=QColor('black')):
     :param width: Width to use for the line. Default to '0.26'.
     :type width: str
     """
-    registry = QgsSymbolLayerRegistry.instance()
+    registry = QgsApplication.symbolLayerRegistry()
     line_metadata = registry.symbolLayerMetadata("SimpleLine")
     symbol = QgsSymbol.defaultSymbol(layer.geometryType())
 

@@ -8,7 +8,8 @@ from qgis.PyQt.QtCore import QFileInfo, QDir, QFile
 from qgis.core import (
     QgsVectorFileWriter,
     QgsRasterPipe,
-    QgsRasterFileWriter
+    QgsRasterFileWriter,
+    QgsCoordinateTransform
 )
 
 from safe.common.exceptions import ErrorDataStore
@@ -117,7 +118,7 @@ class Folder(DataStore):
         extensions = ['*.%s' % f for f in EXTENSIONS]
         self.uri.setNameFilters(extensions)
         files = self.uri.entryList()
-        self.uri.setNameFilters('')
+        self.uri.setNameFilters([])
         files = human_sorting([QFileInfo(f).baseName() for f in files])
         return files
 
@@ -168,7 +169,7 @@ class Folder(DataStore):
             tabular_layer,
             output.absoluteFilePath(),
             'utf-8',
-            None,
+            QgsCoordinateTransform(),
             'CSV')
 
         if save_style:
