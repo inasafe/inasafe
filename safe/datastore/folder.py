@@ -205,7 +205,7 @@ class Folder(DataStore):
             vector_layer,
             output.absoluteFilePath(),
             'utf-8',
-            vector_layer.crs(),
+            QgsCoordinateTransform(),  # No tranformation
             driver_mapping[self._default_vector_format])
 
         assert output.exists()
