@@ -81,7 +81,7 @@ def zonal_stats(raster, vector):
     input_band = layer.keywords.get('active_band', 1)
     analysis = QgsZonalStatistics(
         layer,
-        raster.source(),
+        raster,
         'exposure_',
         input_band,
         QgsZonalStatistics.Sum)
