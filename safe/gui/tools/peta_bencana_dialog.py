@@ -313,7 +313,7 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         flood_class_idx = layer.fields().lookupField('floodclass')
         flood_class_expression = QgsExpression('to_int(state)')
         context = QgsExpressionContext()
-        context.setFields(layer.pendingFields())
+        context.setFields(layer.fields())
         flood_class_expression.prepare(context)
 
         # Add field with boolean flag to say if the area is flooded
