@@ -104,7 +104,7 @@ def intersection(source, mask, callback=None):
                     if int_com:
                         int_sym = geom.symDifference(tmp_geom)
                         int_geom = QgsGeometry(int_com.difference(int_sym))
-                if int_geom.isGeosEmpty() or not int_geom.isGeosValid():
+                if int_geom.isEmpty() or not int_geom.isGeosValid():
                     # LOGGER.debug(
                     #     tr('GEOS geoprocessing error: One or more input '
                     #        'features have invalid geometry.'))
