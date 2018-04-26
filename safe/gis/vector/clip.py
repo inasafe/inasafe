@@ -82,7 +82,7 @@ def clip(layer_to_clip, mask_layer):
 
     # use prepared geometries for faster intersection tests
     # noinspection PyArgumentList
-    engine = QgsGeometry.createGeometryEngine(combined_clip_geom.geometry())
+    engine = QgsGeometry.createGeometryEngine(combined_clip_geom.constGet())
     engine.prepareGeometry()
 
     tested_feature_ids = set()

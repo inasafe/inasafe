@@ -187,7 +187,7 @@ class TestPrepareLayer(unittest.TestCase):
         unique_values_before = layer.uniqueValues(field)
         self.assertEqual(
             unique_values_before,
-            [10, 11, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110])
+            {10, 11, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110})
         _add_id_column(layer)
         field = layer.fields().lookupField(exposure_id_field['field_name'])
         self.assertNotEqual(-1, field)
@@ -202,7 +202,7 @@ class TestPrepareLayer(unittest.TestCase):
         unique_values_automatic = layer.uniqueValues(field)
         self.assertNotEqual(unique_values_automatic, unique_values_before)
         self.assertEqual(
-            unique_values_automatic, list(
+            unique_values_automatic, set(
                 range(
                     layer.featureCount())))
 

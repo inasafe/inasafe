@@ -115,8 +115,7 @@ def union(union_a, union_b):
                        'ignored due to invalid geometry.'))
         else:
             request = QgsFeatureRequest().setFilterFids(intersects)
-
-            engine = QgsGeometry.createGeometryEngine(geom.geometry())
+            engine = QgsGeometry.createGeometryEngine(geom.constGet())
             engine.prepareGeometry()
 
             for in_feat_b in union_b.getFeatures(request):

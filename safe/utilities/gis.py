@@ -11,6 +11,7 @@ from qgis.core import (
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
+    QgsProject,
     Qgis,
     QgsWkbTypes,
     QgsRectangle,
@@ -77,7 +78,8 @@ def extent_to_array(extent, source_crs, dest_crs=None):
     else:
         geo_crs = dest_crs
 
-    transform = QgsCoordinateTransform(source_crs, geo_crs)
+    transform = QgsCoordinateTransform(source_crs, geo_crs, 
+                                       QgsProject.instance())
 
     # Get the clip area in the layer's crs
     transformed_extent = transform.transformBoundingBox(extent)
