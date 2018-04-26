@@ -42,6 +42,17 @@ class TestPrepareLayer(unittest.TestCase):
 
     """Test for Prepare Vector Layer."""
 
+
+    def _sorted_dict_values(_dict):
+        """Make sure _dict values are sorted when list"""
+        _ret = dict()
+        for _k in _dict:
+            try:
+                _ret[_k] = sorted(_dict[_k]) 
+            except:
+                _ret[_k] = _dict[_k]
+        return _ret
+
     def test_copy_vector_layer(self):
         """Test we can copy a vector layer."""
         layer = load_test_vector_layer('exposure', 'buildings.shp')
@@ -142,7 +153,7 @@ class TestPrepareLayer(unittest.TestCase):
         }
         layer.keywords['value_map'] = dict(value_map)
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(value_map, layer.keywords['value_map'])
+        self.assertDictEqual(value_map, _sorted_dict_values(layer.keywords['value_map']))
 
         # Missing shop and unknown, the other group should be created.
         layer.keywords['value_map'] = {
@@ -154,10 +165,10 @@ class TestPrepareLayer(unittest.TestCase):
             'education': ['school'],
             'health': ['hospital'],
             'government': ['ministry'],
-            'other': ['unknown', 'shop']
+            'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
+        self.assertDictEqual(expected_value_map, _sorted_dict_values(layer.keywords['value_map'])
 
         # Missing shop, it should be added to the other group.
         layer.keywords['value_map'] = {
@@ -173,7 +184,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['unknown', 'shop']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
+        self.assertDictEqual(expected_value_map, _sorted_dict_values(layer.keywords['value_map']))
 
     def test_own_id_column(self):
         """Test if we can re-use the column ID from the user."""
