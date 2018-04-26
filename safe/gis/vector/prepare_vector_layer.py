@@ -314,7 +314,7 @@ def _remove_features(layer):
         index = layer.fields().lookupField(field_name)
 
         request = QgsFeatureRequest()
-        request.setSubsetOfAttributes([field_name], layer.pendingFields())
+        request.setSubsetOfAttributes([field_name], layer.fields())
         layer.startEditing()
         i = 0
         for feature in layer.getFeatures(request):
@@ -479,7 +479,7 @@ def sum_fields(layer, output_field_key, input_fields):
         string_expression = ' + '.join(input_fields)
         sum_expression = QgsExpression(string_expression)
         context = QgsExpressionContext()
-        context.setFields(layer.pendingFields())
+        context.setFields(layer.fields())
         sum_expression.prepare(context)
 
         # Get the output field index

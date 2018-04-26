@@ -49,7 +49,7 @@ class MinimumNeedsTest(unittest.TestCase):
         layer = dialog.result_layer
 
         assert layer is not None
-        field_names = [field.name() for field in layer.pendingFields()]
+        field_names = [field.name() for field in layer.fields()]
         for feature in layer.getFeatures():
             value = [attribute for attribute in feature.attributes()]
 
