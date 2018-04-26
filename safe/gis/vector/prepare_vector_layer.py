@@ -335,7 +335,7 @@ def _remove_features(layer):
                 continue
 
             # Check if the geometry is empty.
-            if geometry.isGeosEmpty():
+            if geometry.isEmpty():
                 layer.deleteFeature(feature.id())
                 i += 1
                 continue

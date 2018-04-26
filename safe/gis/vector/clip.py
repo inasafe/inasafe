@@ -128,7 +128,7 @@ def clip(layer_to_clip, mask_layer):
                         pass
                     else:
                         new_geom = int_com.difference(int_sym)
-                        if new_geom.isGeosEmpty()\
+                        if new_geom.isEmpty()\
                                 or not new_geom.isGeosValid():
                             # LOGGER.debug(
                             #     tr('GEOS geoprocessing error: One or more '

@@ -155,7 +155,7 @@ class TestPrepareLayer(unittest.TestCase):
             'education': ['school'],
             'health': ['hospital'],
             'government': ['ministry'],
-            'other': ['shop', 'unknown']
+            'other': ['unknown', 'shop']
         }
         layer = _check_value_mapping(layer)
         self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
