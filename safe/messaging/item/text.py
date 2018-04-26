@@ -146,7 +146,7 @@ class PlainText(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(PlainText, self).__init__(**kwargs)
-        self.text = text
+        self.text = str(text)
 
     def to_html(self):
         """Render as html

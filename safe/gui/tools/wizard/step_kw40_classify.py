@@ -6,7 +6,7 @@ import json
 from copy import deepcopy
 
 import numpy
-from qgis.PyQt import Qt
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView, QTreeWidgetItem
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly

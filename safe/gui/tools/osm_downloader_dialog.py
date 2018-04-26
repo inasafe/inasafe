@@ -17,7 +17,7 @@ import json
 import logging
 import os
 
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QRegExp
 from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog
 from qgis.core import QgsRectangle, QgsExpressionContextUtils
@@ -81,7 +81,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -123,14 +123,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Setup helper for admin_level
         json_file_path = resources_path('osm', 'admin_level_per_country.json')
         if os.path.isfile(json_file_path):
-            self.countries = json.load(open(json_file_path))
-            self.bbox_countries = None
-            self.populate_countries()
-            # connect
-            self.country_comboBox.currentIndexChanged.connect(
-                self.update_helper_political_level)
-            self.admin_level_comboBox.currentIndexChanged.connect(
-                self.update_helper_political_level)
+            with open(json_file_path) as f:
+                self.countries = json.load(f)
+                self.bbox_countries = None
+                self.populate_countries()
+                # connect
+                self.country_comboBox.currentIndexChanged.connect(
+                    self.update_helper_political_level)
+                self.admin_level_comboBox.currentIndexChanged.connect(
+                    self.update_helper_political_level)
 
         self.update_extent_from_map_canvas()
 
@@ -557,10 +558,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 QgsExpressionContextUtils.setLayerVariable(
                     layer, 'qgis_25d_angle', 70)
 
-        canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
-        on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
-        if canvas_srid != 4326 and not on_the_fly_projection:
-            self.canvas.setCrsTransformEnabled(True)
 
     def reject(self):
         """Redefinition of the method to remove the rectangle selection tool.

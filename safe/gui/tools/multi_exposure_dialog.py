@@ -9,7 +9,7 @@ from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QComboBox, QLabel, QApplication, QSizePolicy, QTreeWidgetItem, QListWidgetItem
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtXml import QDomDocument
-from qgis.core import QgsProject
+from qgis.core import QgsProject, QgsApplication
 from qgis.utils import iface as iface_object
 
 from safe import messaging as m
@@ -485,7 +485,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         send_static_message(self, report)
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
-        QApplication.processEvents()
+        QgsApplication.processEvents()
 
     def validate_impact_function(self):
         """Check validity of the current impact function."""

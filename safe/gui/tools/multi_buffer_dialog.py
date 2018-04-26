@@ -6,11 +6,10 @@ import os
 from collections import OrderedDict
 from operator import itemgetter
 from qgis.core import QgsProject
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot
-from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtGui import QIcon
-from qgis.gui import QgsMapLayerProxyModel
+from qgis.core import QgsMapLayerProxyModel
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.datastore.folder import Folder
@@ -29,7 +28,7 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('multi_buffer_dialog_base.ui')
 
 
-class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
+class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog implementation class for the InaSAFE multi buffer tool."""
 
     def __init__(self, parent=None, iface=None, dock_widget=None):
@@ -38,7 +37,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE Multi Buffer Tool'))
         icon = resources_path('img', 'icons', 'show-multi-buffer.svg')
@@ -87,17 +86,17 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         self.remove_class_button.clicked.connect(self.ok_button_status)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
         # Fix for issue 1699 - cancel button does nothing
-        cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
+        cancel_button = self.button_box.button(QtWidgets.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Fix ends
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok_button = self.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
 
     def accept(self):
@@ -149,7 +148,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
             [self.output_layer])
         self.iface.setActiveLayer(self.output_layer)
         self.iface.zoomToActiveLayer()
-        self.done(QtGui.QDialog.Accepted)
+        self.done(QtWidgets.QDialog.Accepted)
 
         if self.keyword_wizard_checkbox.isChecked():
             self.launch_keyword_wizard()
@@ -164,7 +163,7 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
         file_extension = os.path.splitext(self.output_filename)[1]
         self.output_filename = os.path.splitext(self.output_filename)[0]
         # show Qt file directory dialog
-        output_path, __ = QFileDialog.getSaveFileName(
+        output_path, __ = QtWidgets.QFileDialog.getSaveFileName(
             self,
             self.tr('Output file'),
             '%s_multi_buffer%s' % (
@@ -244,13 +243,13 @@ class MultiBufferDialog(QtGui.QDialog, FORM_CLASS):
     def ok_button_status(self):
         """Function to enable or disable OK button."""
         if not self.layer.currentLayer():
-            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
         elif (self.hazard_class_form.count() > 0 and
                 self.layer.currentLayer().name() and
                 len(self.output_form.text()) >= 0):
-            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
+            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(True)
         else:
-            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
 
     @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):

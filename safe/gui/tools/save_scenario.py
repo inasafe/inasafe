@@ -13,7 +13,7 @@ from configparser import ConfigParser
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QDialog, QFileDialog
 

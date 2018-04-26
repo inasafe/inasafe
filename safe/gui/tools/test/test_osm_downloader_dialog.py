@@ -47,7 +47,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.boundary_flag.setChecked(False)
         expected = []
         get = self.dialog.get_checked_features()
-        self.assertItemsEqual(expected, get)
+        self.assertEqual(expected, get)
 
         self.dialog.roads_flag.setChecked(True)
         self.dialog.buildings_flag.setChecked(True)
@@ -61,7 +61,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
             'building-points',
             'evacuation-centers']
         get = self.dialog.get_checked_features()
-        self.assertItemsEqual(expected, get)
+        self.assertEqual(expected, get)
 
         admin_level = 6
         self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
@@ -78,7 +78,7 @@ class OsmDownloaderDialogTest(unittest.TestCase):
             'evacuation-centers',
             'boundary-6']
         get = self.dialog.get_checked_features()
-        self.assertItemsEqual(expected, get)
+        self.assertEqual(expected, get)
 
     def test_detect_country(self):
         """Test if the country is well detected according to the extent."""

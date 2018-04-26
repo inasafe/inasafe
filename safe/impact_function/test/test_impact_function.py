@@ -324,7 +324,7 @@ class TestImpactFunction(unittest.TestCase):
                 '106.83456946836641066 -6.16752599999999962, '
                 '106.83456946836641066 -6.19531000000000009, '
                 '106.8080099999999959 -6.19531000000000009))',
-                impact_function.analysis_extent.exportToWkt()),
+                impact_function.analysis_extent.asWkt()),
             message
         )
 
@@ -358,7 +358,7 @@ class TestImpactFunction(unittest.TestCase):
                 '106.83456946836641066 -6.16752599999999962, '
                 '106.83456946836641066 -6.19531000000000009, '
                 '106.8080099999999959 -6.19531000000000009))',
-                impact_function.analysis_extent.exportToWkt()),
+                impact_function.analysis_extent.asWkt()),
             message
         )
 
@@ -390,7 +390,7 @@ class TestImpactFunction(unittest.TestCase):
                 '106.81348643684744104 -6.09392810187095257, '
                 '106.9033179652593617 -6.09392810187095257, '
                 '106.9033179652593617 -6.18324454090033182))',
-                impact_function.analysis_extent.exportToWkt()),
+                impact_function.analysis_extent.asWkt()),
             message
         )
 
@@ -409,7 +409,7 @@ class TestImpactFunction(unittest.TestCase):
                 '106.81348643684744104 -6.18324645462287137, '
                 '106.72365490843547775 -6.18324645462287137, '
                 '106.72365490843547775 -6.09392810187095257))',
-                impact_function.analysis_extent.exportToWkt()),
+                impact_function.analysis_extent.asWkt()),
             message
         )
 
@@ -434,7 +434,7 @@ class TestImpactFunction(unittest.TestCase):
         # self.assertTrue(
         #     compare_wkt(
         #         hazard_layer.extent().asWktPolygon(),
-        #         impact_function.analysis_extent.exportToWkt()))
+        #         impact_function.analysis_extent.asWkt()))
 
         status, message = impact_function.run()
         message = message.to_text() if message is not None else message
@@ -964,7 +964,7 @@ class TestImpactFunction(unittest.TestCase):
             provenance_action_checklist['provenance_key']:
                 impact_function.action_checklist(),
             provenance_analysis_extent['provenance_key']:
-                impact_function.analysis_extent.exportToWkt(),
+                impact_function.analysis_extent.asWkt(),
             provenance_impact_function_name['provenance_key']:
                 impact_function.name,
             provenance_impact_function_title['provenance_key']:
@@ -1071,7 +1071,7 @@ class TestImpactFunction(unittest.TestCase):
             provenance_action_checklist['provenance_key']:
                 impact_function.action_checklist(),
             provenance_analysis_extent['provenance_key']:
-                impact_function.analysis_extent.exportToWkt(),
+                impact_function.analysis_extent.asWkt(),
             provenance_impact_function_name['provenance_key']:
                 impact_function.name,
             provenance_impact_function_title['provenance_key']:

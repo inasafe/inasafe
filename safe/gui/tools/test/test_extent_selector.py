@@ -21,7 +21,7 @@ import unittest
 import logging
 
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtTest import QTest
 from qgis.PyQt.QtCore import Qt, QPoint
 
@@ -55,15 +55,15 @@ class ExtentSelectorTest(unittest.TestCase):
 
         self.dialog.extent_defined.connect(self.extent_defined)
 
-        self.widget = QtGui.QWidget()
+        self.widget = QtWidgets.QWidget()
         self.widget.setGeometry(0, 0, 500, 500)
-        layout = QtGui.QVBoxLayout(self.widget)
+        layout = QtWidgets.QVBoxLayout(self.widget)
         layout.addWidget(CANVAS)
         self.widget.show()
-        QTest.qWaitForWindowShown(self.widget)
+        QTest.qWaitForWindowExposed(self.widget)
 
         self.dialog.show()
-        QTest.qWaitForWindowShown(self.dialog)
+        QTest.qWaitForWindowExposed(self.dialog)
 
     def tearDown(self):
         """Runs after each test."""
@@ -96,7 +96,7 @@ class ExtentSelectorTest(unittest.TestCase):
         QTest.mouseClick(self.dialog.x_maximum, Qt.LeftButton)
         QTest.keyClick(self.dialog.x_maximum, '3')
         QTest.keyClick(self.dialog.x_maximum, '0')
-        ok = self.dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok = self.dialog.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         QTest.mouseClick(ok, Qt.LeftButton)
 
         expected_extent = QgsRectangle(10.0, 10.0, 30.0, 20.0)
@@ -126,9 +126,9 @@ class ExtentSelectorTest(unittest.TestCase):
             delay=-1)
 
         # on drag the extents selector windows should appear again
-        QTest.qWaitForWindowShown(self.dialog)
+        QTest.qWaitForWindowExposed(self.dialog)
         # Click ok to dispose of the window again
-        ok = self.dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok = self.dialog.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         QTest.mouseClick(ok, Qt.LeftButton)
 
         # Check the extent emitted on closing teh dialog is correct

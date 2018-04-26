@@ -5,7 +5,7 @@ import logging
 import sqlite3
 
 # noinspection PyPackageRequirements
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import pyqtSignal, pyqtSlot
 # noinspection PyPackageRequirements
@@ -94,7 +94,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             if isinstance(extent, QgsGeometry):
                 # In InaSAFE V4, the extent is a QgsGeometry.
                 # This like a hack to transform a geometry to a rectangle.
-                extent = wkt_to_rectangle(extent.exportToWkt())
+                extent = wkt_to_rectangle(extent.asWkt())
 
             # Ensure supplied extent is in current canvas crs
             transform = QgsCoordinateTransform(
@@ -116,21 +116,21 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Wire up button events
         self.capture_button.clicked.connect(self.start_capture)
         # Handle cancel
-        cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
+        cancel_button = self.button_box.button(QtWidgets.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Make sure to reshow this dialog when rectangle is captured
         self.tool.rectangle_created.connect(self.stop_capture)
         # Setup ok button
-        self.ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        self.ok_button = self.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
         # Set up context help
-        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
         # Reset / Clear button
-        clear_button = self.button_box.button(QtGui.QDialogButtonBox.Reset)
+        clear_button = self.button_box.button(QtWidgets.QDialogButtonBox.Reset)
         clear_button.setText(self.tr('Clear'))
         clear_button.clicked.connect(self.clear)
 
@@ -253,7 +253,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 self.canvas.mapSettings().destinationCrs())
             extent = QgsGeometry.fromRect(self.tool.rectangle())
             LOGGER.info(
-                'Requested extent : {wkt}'.format(wkt=extent.exportToWkt()))
+                'Requested extent : {wkt}'.format(wkt=extent.asWkt()))
         else:
             self.clear_extent.emit()
 
@@ -368,7 +368,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         # Connect to the QGIS sqlite database and check if the table exists.
         # noinspection PyArgumentList
-        db_file_path = QgsApplication.qgisUserDbFilePath()
+        db_file_path = QgsApplication.qgisUserDatabaseFilePath()
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
         cursor.execute(

@@ -5,6 +5,7 @@ import logging
 import os
 
 from qgis.PyQt.QtCore import Qt, QFile, pyqtSignal
+from qgis.PyQt.Qt import QT_VERSION
 from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
 from qgis.PyQt.QtGui import QIcon
 
@@ -133,7 +134,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.cancel_button.clicked.connect(self.reject)
 
         # The bug is fixed in QT 5.4
-        if Qt.QT_VERSION < 0x050400:
+        if QT_VERSION < 0x050400:
             self.resized.connect(self.after_resize)
 
     def set_layer(self, layer=None):

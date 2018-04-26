@@ -4,7 +4,7 @@
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtGui, QtWidgets
 
 from safe.common.version import get_version
 from safe.definitions.messages import limitations, disclaimer
@@ -18,7 +18,7 @@ __revision__ = '$Format:%H$'
 FORM_CLASS = get_ui_class('about_dialog_base.ui')
 
 
-class AboutDialog(QtGui.QDialog, FORM_CLASS):
+class AboutDialog(QtWidgets.QDialog, FORM_CLASS):
 
     """About dialog for the InaSAFE plugin."""
 
@@ -29,7 +29,7 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
         :type parent: QWidget
         """
 
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('About InaSAFE %s' % get_version()))
         self.parent = parent

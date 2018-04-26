@@ -155,7 +155,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             unique_values = self.parent.layer.uniqueValues(field_index)
             unique_values_str = [
                 i is not None and str(i) or 'NULL'
-                for i in unique_values[0:48]]
+                for i in list(unique_values)[0:48]]
             unique_values_str = ', '.join(unique_values_str)
             field_descriptions += tr('<b>Field name</b>: {field_name}').format(
                 field_name=field_name)

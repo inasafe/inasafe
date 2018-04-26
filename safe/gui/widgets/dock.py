@@ -11,7 +11,7 @@ from numbers import Number
 
 from qgis.core import (QgsCoordinateReferenceSystem, QgsExpressionContextUtils,
                        QgsGeometry, QgsLayerTreeLayer, QgsMapLayer, QgsProject,
-                       QgsRectangle)
+                       QgsRectangle, QgsApplication)
 from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
 from qgis.PyQt.QtWidgets import (QAction, QApplication, QDockWidget, QMenu,
@@ -87,7 +87,7 @@ from safe.utilities.qgis_utilities import (display_critical_message_bar,
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import get_ui_class
 from safe.utilities.settings import set_setting, setting
-from safe.utilities.str import get_string
+from safe.utilities.unicode import get_string
 from safe.utilities.utilities import (basestring_to_message, get_error_message,
                                       is_keyword_version_supported,
                                       is_plugin_installed)
@@ -178,7 +178,6 @@ class Dock(QDockWidget, FORM_CLASS):
         self._aggregation = None
 
         # Enable on the fly projection by default
-        canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
         self.question_group.setEnabled(False)
         self.question_group.setVisible(False)
@@ -607,8 +606,6 @@ class Dock(QDockWidget, FORM_CLASS):
         else:
             self.debug_group_button.setStyleSheet('')
 
-    # noinspection PyUnusedLocal
-    @pyqtSlot(QgsMapLayer)
     def get_layers(self, *args):
         """Obtain a list of layers currently loaded in QGIS.
 
@@ -768,7 +765,7 @@ class Dock(QDockWidget, FORM_CLASS):
         send_static_message(self, report)
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
-        QApplication.processEvents()
+        QgsApplication.processEvents()
 
     def show_print_dialog(self):
         """Open the print dialog"""
@@ -1418,7 +1415,7 @@ class Dock(QDockWidget, FORM_CLASS):
                 # This like a hack to transform a geometry to a rectangle.
                 # self.extent.user_extent is a QgsGeometry.
                 # impact_function.requested_extent needs a QgsRectangle.
-                wkt = self.extent.user_extent.exportToWkt()
+                wkt = self.extent.user_extent.asWkt()
                 impact_function.requested_extent = wkt_to_rectangle(wkt)
 
             elif mode == EXPOSURE:
@@ -1576,7 +1573,7 @@ def set_provenance_to_project_variables(provenances):
                     QgsProject.instance(), key, value)
         elif isinstance(value, type(None)):
             QgsExpressionContextUtils.setProjectVariable(
-                QgsProject.instance(),, key, '')
+                QgsProject.instance(), key, '')
         elif isinstance(value, datetime):
             QgsExpressionContextUtils.setProjectVariable(
                 QgsProject.instance(),

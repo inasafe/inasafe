@@ -3,6 +3,7 @@
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
+from qgis.core import QgsApplication
 from qgis.PyQt import Qt, QtGui, QtCore
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,11 +41,11 @@ def qt_at_least(needed_version, test_version=None):
 
 def enable_busy_cursor():
     """Set the hourglass enabled and stop listening for layer changes."""
-    QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
 
 def disable_busy_cursor():
     """Disable the hourglass cursor and listen for layer changes."""
-    while QtGui.qApp.overrideCursor() is not None and \
-            QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
-        QtGui.qApp.restoreOverrideCursor()
+    while QgsApplication.instance().overrideCursor() is not None and \
+            QgsApplication.instance().overrideCursor().shape() == QtCore.Qt.WaitCursor:
+        QgsApplication.instance().restoreOverrideCursor()

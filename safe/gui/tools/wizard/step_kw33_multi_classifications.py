@@ -7,7 +7,7 @@ from collections import OrderedDict
 from functools import partial
 
 import numpy
-from qgis.PyQt import Qt
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QLabel, QHBoxLayout, QComboBox, QPushButton, QDoubleSpinBox, QGridLayout, QListWidget, QTreeWidget, QAbstractItemView, QListWidgetItem, QTreeWidgetItem, QSizePolicy
 from qgis.PyQt.QtGui import QFont
 from qgis.PyQt.QtWebKitWidgets import QWebView

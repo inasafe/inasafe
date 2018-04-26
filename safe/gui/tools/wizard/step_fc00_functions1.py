@@ -158,9 +158,9 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 1 tab."""
-        self.tblFunctions1.horizontalHeader().setResizeMode(
+        self.tblFunctions1.horizontalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
-        self.tblFunctions1.verticalHeader().setResizeMode(
+        self.tblFunctions1.verticalHeader().setSectionResizeMode(
             QHeaderView.Stretch)
 
         self.populate_function_table_1()

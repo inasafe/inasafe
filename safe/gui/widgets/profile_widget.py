@@ -44,10 +44,10 @@ class ProfileWidget(QTreeWidget, object):
         self.header_tree_widget.setFont(1, header_font)
         self.header_tree_widget.setFont(2, header_font)
         self.setHeaderItem(self.header_tree_widget)
-        self.header().setResizeMode(0, QHeaderView.Stretch)
-        self.header().setResizeMode(1, QHeaderView.Fixed)
-        self.header().setResizeMode(2, QHeaderView.ResizeToContents)
-        self.header().setMovable(False)
+        self.header().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.header().setSectionResizeMode(1, QHeaderView.Fixed)
+        self.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.header().setSectionsMovable(False)
 
     @property
     def data(self):

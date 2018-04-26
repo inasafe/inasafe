@@ -59,7 +59,7 @@ class TestWizardDialogLocale(unittest.TestCase):
         for i in range(list_widget.count()):
             real_list.append(list_widget.item(i).text())
         message = ('Expected %s but I got %s' % (expected_list, real_list))
-        self.assertItemsEqual(expected_list, real_list, message)
+        self.assertEqual(expected_list, real_list, message)
 
     def check_current_step(self, expected_step, dialog):
         """Helper function to check the current step is expected_step

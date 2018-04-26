@@ -157,7 +157,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertItemsEqual(hazards, expected)
+        self.assertEqual(hazards, expected)
 
         hazards = hazards_for_layer('polygon')
         hazards = [hazard['key'] for hazard in hazards]
@@ -171,7 +171,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertItemsEqual(hazards, expected)
+        self.assertEqual(hazards, expected)
 
         hazards = hazards_for_layer('raster')
         hazards = [hazard['key'] for hazard in hazards]
@@ -184,7 +184,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertItemsEqual(hazards, expected)
+        self.assertEqual(hazards, expected)
 
     def test_exposures_for_layer(self):
         """Test for exposures_for_layer"""
@@ -194,11 +194,11 @@ class TestDefinitionsUtilities(unittest.TestCase):
             exposure_population,
             exposure_land_cover,
         ]
-        self.assertItemsEqual(exposures, expected)
+        self.assertEqual(exposures, expected)
 
         exposures = exposures_for_layer('line')
         expected = [exposure_road]
-        self.assertItemsEqual(exposures, expected)
+        self.assertEqual(exposures, expected)
 
     def test_hazard_categories_for_layer(self):
         """Test for hazard_categories_for_layer"""
@@ -211,12 +211,12 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_exposure_units(self):
         """Test for exposure_units"""
         expected = [count_exposure_unit]
-        self.assertItemsEqual(exposure_units('population'), expected)
+        self.assertEqual(exposure_units('population'), expected)
 
     def test_hazards_units(self):
         """Test for hazard_units"""
         expected = [unit_metres, unit_feet, unit_generic]
-        self.assertItemsEqual(hazard_units('flood'), expected)
+        self.assertEqual(hazard_units('flood'), expected)
 
     def test_hazards_classifications(self):
         """Test for get_hazards_classifications."""
@@ -225,7 +225,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             flood_hazard_classes,
             flood_petabencana_hazard_classes,
             generic_hazard_classes]
-        self.assertItemsEqual(
+        self.assertEqual(
             get_classifications('flood'), expected)
 
     def test_get_compulsory_field(self):

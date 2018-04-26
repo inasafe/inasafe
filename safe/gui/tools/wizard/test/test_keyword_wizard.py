@@ -3,59 +3,51 @@
 """Tests for the keyword wizard."""
 
 
+import os
 import shutil
 import unittest
-import os
+from datetime import datetime
+
 from safe.common.utilities import temp_dir
-from safe.test.utilities import (
-    clone_raster_layer,
-    clone_shp_layer,
-    get_qgis_app,
-    standard_data_path,
-    load_test_vector_layer)
+from safe.definitions.constants import big_number, no_field
+from safe.definitions.exposure import (exposure_land_cover, exposure_place,
+                                       exposure_population, exposure_structure)
+from safe.definitions.exposure_classifications import (generic_place_classes,
+                                                       generic_structure_classes)
+from safe.definitions.extra_keywords import extra_keyword_earthquake_depth
+from safe.definitions.fields import (aggregation_name_field,
+                                     exposure_type_field, female_count_field,
+                                     hazard_name_field, hazard_value_field,
+                                     population_count_field)
+from safe.definitions.hazard import (hazard_cyclone, hazard_earthquake,
+                                     hazard_flood, hazard_volcano)
+from safe.definitions.hazard_category import hazard_category_multiple_event
+from safe.definitions.hazard_classifications import (cyclone_au_bom_hazard_classes,
+                                                     earthquake_mmi_scale,
+                                                     flood_hazard_classes,
+                                                     volcano_hazard_classes)
+from safe.definitions.layer_geometry import (layer_geometry_point,
+                                             layer_geometry_polygon,
+                                             layer_geometry_raster)
+from safe.definitions.layer_modes import (layer_mode_classified,
+                                          layer_mode_continuous)
+from safe.definitions.layer_purposes import (layer_purpose_aggregation,
+                                             layer_purpose_exposure,
+                                             layer_purpose_hazard)
+from safe.definitions.units import (count_exposure_unit,
+                                    unit_kilometres_per_hour, unit_metres,
+                                    unit_mmi)
+from safe.definitions.utilities import (default_classification_thresholds,
+                                        get_compulsory_fields)
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
+from safe.test.utilities import (clone_raster_layer, clone_shp_layer,
+                                 dict_values_sorted, get_qgis_app,
+                                 load_test_vector_layer, standard_data_path)
+from safe.utilities.unicode import byteify
+
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from datetime import datetime
-from safe.definitions.constants import big_number
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
-from safe.definitions.layer_purposes import (
-    layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
-from safe.definitions.hazard import (
-    hazard_volcano, hazard_flood, hazard_earthquake, hazard_cyclone)
-from safe.definitions.exposure import (
-    exposure_structure,
-    exposure_population,
-    exposure_land_cover,
-    exposure_place,
-)
-from safe.definitions.hazard_category import hazard_category_multiple_event
-from safe.definitions.hazard_classifications import (
-    flood_hazard_classes,
-    volcano_hazard_classes,
-    cyclone_au_bom_hazard_classes,
-    earthquake_mmi_scale)
-from safe.definitions.constants import no_field
-from safe.definitions.extra_keywords import (extra_keyword_earthquake_depth)
-from safe.definitions.fields import (
-    aggregation_name_field,
-    exposure_type_field,
-    hazard_name_field,
-    hazard_value_field,
-    population_count_field,
-    female_count_field,
-)
-from safe.definitions.layer_geometry import (
-    layer_geometry_polygon, layer_geometry_raster, layer_geometry_point)
-from safe.definitions.exposure_classifications import (
-    generic_structure_classes, generic_place_classes)
-from safe.definitions.units import (
-    count_exposure_unit, unit_metres, unit_mmi, unit_kilometres_per_hour)
-from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.definitions.utilities import (
-    get_compulsory_fields, default_classification_thresholds)
-from safe.utilities.str import byteify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -98,7 +90,7 @@ class TestKeywordWizard(unittest.TestCase):
         real_list = []
         for i in range(list_widget.count()):
             real_list.append(list_widget.item(i).text())
-        self.assertItemsEqual(expected_list, real_list)
+        self.assertEqual(expected_list, real_list)
 
     def check_current_step(self, expected_step):
         """Helper function to check the current step is expected_step.
@@ -300,7 +292,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_aggregation_without_inasafe_fields(self):
         """Test keyword wizard for layer without inasafe fields."""
@@ -518,7 +510,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_hazard_volcano_polygon_existing_keywords(self):
         """Test existing keyword for hazard volcano polygon."""
@@ -851,7 +843,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_structure_polygon_existing_keywords(self):
         """Test existing keyword for exposure structure polygon."""
@@ -988,7 +980,8 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         self.assertDictEqual(
-            layer.keywords['value_map'], dialog.get_keywords()['value_map'])
+            dict_values_sorted(layer.keywords['value_map']), 
+            dict_values_sorted(dialog.get_keywords()['value_map']))
 
     def test_aggregation_keyword(self):
         """Test Aggregation Keywords."""
@@ -1066,7 +1059,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
         # Check the keywords
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), 
+                             dict_values_sorted(expected_keyword))
 
     def test_aggregation_existing_keyword(self):
         """Test Keyword wizard for aggregation layer with keywords."""
@@ -1145,7 +1139,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check the keywords
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), 
+                             dict_values_sorted(expected_keyword))
 
     def test_exposure_population_polygon_keyword(self):
         """Test exposure population polygon keyword."""
@@ -1274,7 +1269,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_population_polygon_existing_keyword(self):
         """Test existing exposure population polygon with keyword."""
@@ -1405,7 +1400,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Checking Keyword Created
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_population_raster(self):
         """Test keyword wizard for population raster."""
@@ -2078,7 +2073,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_classified_raster_existing_keywords(self):
         """Test keyword wizard for existing keywords classified raster."""
@@ -2209,7 +2204,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Checking Keyword Created
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_continuous_raster_keywords(self):
         """Test keyword wizard for continuous raster."""
@@ -2660,7 +2655,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     # @unittest.skip(
     #     'This test is hanging for a unknown reason since a few times.')
@@ -2825,7 +2820,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_earthquake_raster_dirty_keywords(self):
         """Test for Earthquake raster keyword wizard."""
@@ -3137,7 +3132,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def test_earthquake_raster_invalid_key(self):
         """Test for Earthquake raster keyword wizard."""
@@ -3294,7 +3289,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(real_keywords, expected_keyword)
+        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
 
     def check_radio_button_behaviour(self, inasafe_default_dialog):
         """Test radio button behaviour so they are disabled when user set the
