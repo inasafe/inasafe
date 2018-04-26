@@ -120,7 +120,7 @@ def exposure_summary_table(
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = area[field]
-            if not value or value is None:
+            if not value:
                 value = 0
             field_definition[0].add_value(
                 value,
