@@ -133,10 +133,10 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = feature[aggregation_id]
         hazard_value = feature[hazard_id]
-        if hazard_value == '' or hazard_value is None:
+        if not hazard_value:
             hazard_value = not_exposed_class['key']
         exposure_value = feature[exposure_class]
-        if exposure_value == '' or exposure_value is None:
+        if not exposure_value:
             exposure_value = 'NULL'
 
         flat_table.add_value(
@@ -149,7 +149,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = feature[field]
-            if value == '' or value is None:
+            if not value:
                 value = 0
             field_definition[0].add_value(
                 value,

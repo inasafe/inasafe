@@ -339,12 +339,6 @@ def create_field_from_definition(field_definition, name=None, sub_name=None):
     """
     field = QgsField()
 
-    if name is None:
-        name = 'NULL'
-
-    if sub_name is None:
-        sub_name = 'NULL'
-
     if name and not sub_name:
         field.setName(field_definition['field_name'] % name)
     elif name and sub_name:
