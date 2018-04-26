@@ -473,7 +473,7 @@ class TestImpactFunction(unittest.TestCase):
         impact = impact_function.impact
 
         # We check the field exist after the IF with only one value.
-        field = impact.fields().lookupField()(
+        field = impact.fields().lookupField(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -508,14 +508,14 @@ class TestImpactFunction(unittest.TestCase):
         impact = impact_function.impact
 
         # We check the field exist after the IF with only original values.
-        field = impact.fields().lookupField()(
+        field = impact.fields().lookupField(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
         self.assertEqual(3, len(unique_ratio), unique_ratio)
 
         # We check the field exist after the IF with only one value.
-        field = impact.fields().lookupField()(
+        field = impact.fields().lookupField(
             elderly_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -547,7 +547,7 @@ class TestImpactFunction(unittest.TestCase):
         # Check that we have don't have only one unique value since the ratio
         # depends on the "population / female count" and we should have at
         # least different ratios.
-        field = impact.fields().lookupField()(
+        field = impact.fields().lookupField(
             female_ratio_field['field_name'])
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
@@ -599,27 +599,27 @@ class TestImpactFunction(unittest.TestCase):
 
         # female displaced count and youth displaced count
         self.assertNotEqual(
-            -1, impact.fields().lookupField()(
+            -1, impact.fields().lookupField(
                 female_displaced_count_field['field_name']))
         self.assertNotEqual(
-            -1, impact.fields().lookupField()(
+            -1, impact.fields().lookupField(
                 youth_displaced_count_field['field_name']))
 
         # Check that we have more than 0 female displaced in the analysis layer
-        index = analysis.fields().lookupField()(
+        index = analysis.fields().lookupField(
             female_displaced_count_field['field_name'])
         female_displaced = analysis.uniqueValues(index)[0]
         self.assertGreater(female_displaced, 0)
 
         # Let's check computation
-        index = analysis.fields().lookupField()(
+        index = analysis.fields().lookupField(
             displaced_field['field_name'])
         displaced_population = analysis.uniqueValues(index)[0]
         self.assertEqual(
             int(displaced_population * female_ratio), female_displaced)
 
         # Check that we have more than 0 youth displaced in the analysis layer
-        index = analysis.fields().lookupField()(
+        index = analysis.fields().lookupField(
             female_displaced_count_field['field_name'])
         value = analysis.uniqueValues(index)[0]
         self.assertGreater(value, 0)

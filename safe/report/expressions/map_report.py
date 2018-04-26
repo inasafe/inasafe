@@ -165,7 +165,7 @@ def distance_to_nearest_place(feature, parent):
     if not layer:
         return None
 
-    index = layer.fields().lookupField()(
+    index = layer.fields().lookupField(
         distance_field['field_name'])
     if index < 0:
         return None
@@ -198,7 +198,7 @@ def direction_to_nearest_place(feature, parent):
     if not layer:
         return None
 
-    index = layer.fields().lookupField()(
+    index = layer.fields().lookupField(
         direction_field['field_name'])
     if index < 0:
         return None
@@ -231,7 +231,7 @@ def bearing_to_nearest_place(feature, parent):
     if not layer:
         return None
 
-    index = layer.fields().lookupField()(
+    index = layer.fields().lookupField(
         bearing_field['field_name'])
     if index < 0:
         return None
@@ -264,7 +264,7 @@ def name_of_the_nearest_place(feature, parent):
     if not layer:
         return None
 
-    index = layer.fields().lookupField()(
+    index = layer.fields().lookupField(
         exposure_name_field['field_name'])
     if index < 0:
         return None

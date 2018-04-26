@@ -211,7 +211,7 @@ class TestPrepareLayer(unittest.TestCase):
             'gisv4', 'exposure', 'population_multi_fields.geojson', clone=True)
         sum_fields(
             layer, exposure_id_field['key'], ['F_0_4', 'F_5_9', 'F_9_15'])
-        exposure_id__idx = layer.fields().lookupField()(
+        exposure_id__idx = layer.fields().lookupField(
             exposure_id_field['field_name'])
         F_0_4__idx = layer.fields().lookupField('F_0_4')
         F_5_9__idx = layer.fields().lookupField('F_5_9')
@@ -255,7 +255,7 @@ class TestPrepareLayer(unittest.TestCase):
         clean_inasafe_fields(layer)
 
         # Check if the female count name does exist
-        female_count_field_idx = layer.fields().lookupField()(
+        female_count_field_idx = layer.fields().lookupField(
             female_count_field['field_name'])
         self.assertGreater(female_count_field_idx, -1)
 

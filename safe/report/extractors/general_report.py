@@ -145,7 +145,7 @@ def general_report_extractor(impact_report, component_metadata):
         header = item['header']
         field = item['field']
         if field['key'] in analysis_inasafe_fields:
-            field_index = analysis_layer.fields().lookupField()(
+            field_index = analysis_layer.fields().lookupField(
                 field['field_name'])
             if field == fatalities_field:
                 # For fatalities field, we show a range of number

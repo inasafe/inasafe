@@ -117,9 +117,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     # generate rows of values for values of each column
     rows = []
-    aggregation_name_index = aggregation_summary.fields().lookupField()(
+    aggregation_name_index = aggregation_summary.fields().lookupField(
         aggregation_name_field['field_name'])
-    total_field_index = aggregation_summary.fields().lookupField()(
+    total_field_index = aggregation_summary.fields().lookupField(
         total_affected_field['field_name'])
 
     type_field_index = []
@@ -157,7 +157,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # calculate total values for each type. Taken from exposure summary table
     type_total_values = []
     # Get affected field index
-    affected_field_index = exposure_summary_table.fields().lookupField()(
+    affected_field_index = exposure_summary_table.fields().lookupField(
         total_affected_field['field_name'])
 
     # Get breakdown field
@@ -174,7 +174,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
             breakdown_field = field
             break
     breakdown_field_name = breakdown_field['field_name']
-    breakdown_field_index = exposure_summary_table.fields().lookupField()(
+    breakdown_field_index = exposure_summary_table.fields().lookupField(
         breakdown_field_name)
 
     # Fetch total affected for each breakdown name
@@ -213,7 +213,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     # total for affected (super total)
     analysis_feature = next(analysis_layer.getFeatures())
-    field_index = analysis_layer.fields().lookupField()(
+    field_index = analysis_layer.fields().lookupField(
         total_affected_field['field_name'])
     total_all = format_number(
         analysis_feature[field_index],

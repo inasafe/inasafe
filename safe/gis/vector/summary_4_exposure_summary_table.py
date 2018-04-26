@@ -296,7 +296,7 @@ def summarize_result(exposure_summary, callback=None):
     # for summarizer_field in summarizer_fields:
     for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
-        if exposure_summary.fields().lookupField()(
+        if exposure_summary.fields().lookupField(
                 input_field['field_name']) == -1:
             summarizer_flags[key] = False
         else:
