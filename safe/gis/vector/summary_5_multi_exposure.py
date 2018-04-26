@@ -84,7 +84,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
                 exposure_hazard_count_field, exposure, hazard_zone)
             analysis.addAttribute(field)
             index = analysis.fields().lookupField(field.name())
-            value = feature[analysis_result.fields().lookupField()(
+            value = feature[analysis_result.fields().lookupField(
                 hazard_count_field['field_name'] % hazard_zone)]
             analysis.changeAttributeValue(target_id, index, value)
             # keywords
@@ -94,7 +94,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
             analysis.keywords['inasafe_fields'][key] = value
 
         # total affected
-        source_index = analysis_result.fields().lookupField()(
+        source_index = analysis_result.fields().lookupField(
             total_affected_field['field_name'])
         field = create_field_from_definition(
             exposure_total_affected_field, exposure)
@@ -107,7 +107,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total not affected
-        source_index = analysis_result.fields().lookupField()(
+        source_index = analysis_result.fields().lookupField(
             total_not_affected_field['field_name'])
         field = create_field_from_definition(
             exposure_total_not_affected_field, exposure)
@@ -120,7 +120,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total exposed
-        source_index = analysis_result.fields().lookupField()(
+        source_index = analysis_result.fields().lookupField(
             total_exposed_field['field_name'])
         field = create_field_from_definition(
             exposure_total_exposed_field, exposure)
@@ -133,7 +133,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total not exposed
-        source_index = analysis_result.fields().lookupField()(
+        source_index = analysis_result.fields().lookupField(
             total_not_exposed_field['field_name'])
         field = create_field_from_definition(
             exposure_total_not_exposed_field, exposure)
@@ -146,7 +146,7 @@ def multi_exposure_analysis_summary(analysis, intermediate_analysis):
         analysis.keywords['inasafe_fields'][key] = value
 
         # total
-        source_index = analysis_result.fields().lookupField()(
+        source_index = analysis_result.fields().lookupField(
             total_field['field_name'])
         field = create_field_from_definition(
             exposure_total_field, exposure)
@@ -222,7 +222,7 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
                 name=exposure, sub_name=exposure_class
             )
             aggregation.addAttribute(field)
-            source_field_index = layer.fields().lookupField()(
+            source_field_index = layer.fields().lookupField(
                 affected_exposure_count_field['field_name'] % exposure_class)
             target_field_index = aggregation.fields().lookupField(field.name())
             field_map[source_field_index] = target_field_index
@@ -231,7 +231,7 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
         field = create_field_from_definition(
             exposure_total_not_affected_field, exposure)
         aggregation.addAttribute(field)
-        source_field_index = layer.fields().lookupField()(
+        source_field_index = layer.fields().lookupField(
             total_affected_field['field_name'])
         target_field_index = aggregation.fields().lookupField(field.name())
         field_map[source_field_index] = target_field_index
