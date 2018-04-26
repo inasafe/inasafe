@@ -108,7 +108,7 @@ def check_layer(layer, has_geometry=True):
                     tr('The layer has not a valid geometry type.'))
 
             if isinstance(has_geometry, bool) and layer.featureCount() != 0:
-                if layer.hasGeometryType() != has_geometry:
+                if layer.isSpatial() != has_geometry:
                     raise InvalidLayerError(
                         tr('The layer has not a correct geometry type.'))
 

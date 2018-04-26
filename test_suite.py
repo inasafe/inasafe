@@ -116,7 +116,7 @@ def test_qgis3():
     """
     test_package('safe.utilities')
     test_package('safe.common')
-    #test_package('safe.gis')
+    test_package('safe.gis')
     #test_package('safe.gui')
 
 

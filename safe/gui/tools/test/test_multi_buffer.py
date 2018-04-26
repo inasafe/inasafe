@@ -66,7 +66,7 @@ class MultiBufferTest(unittest.TestCase):
             hazard_class_field['field_name'],
             buffer_distance_field['field_name']]
 
-        actual_field_names = [field.name() for field in layer.pendingFields()]
+        actual_field_names = [field.name() for field in layer.fields()]
         new_field_names = actual_field_names[-2:]
 
         self.assertEqual(expected_fields_name, new_field_names)
