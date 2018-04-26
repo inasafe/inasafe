@@ -1279,12 +1279,12 @@ class ImpactFunction():
 
         if self.hazard.crs().authid() != analysis_crs.authid():
             crs_transform = QgsCoordinateTransform(
-                self.hazard.crs(), analysis_crs)
+                self.hazard.crs(), analysis_crs, QgsProject.instance())
             hazard_extent.transform(crs_transform)
 
         if self.exposure.crs().authid() != analysis_crs.authid():
             crs_transform = QgsCoordinateTransform(
-                self.exposure.crs(), analysis_crs)
+                self.exposure.crs(), analysis_crs, QgsProject.instance())
             exposure_extent.transform(crs_transform)
 
         # We check if the hazard and the exposure overlap.
@@ -1304,7 +1304,7 @@ class ImpactFunction():
 
                 if self._crs != self.exposure.crs():
                     crs_transform = QgsCoordinateTransform(
-                        self._crs, self.exposure.crs())
+                        self._crs, self.exposure.crs(), QgsProject.instance())
                     user_bounding_box.transform(crs_transform)
 
                 if not hazard_exposure.intersects(user_bounding_box):
@@ -2139,7 +2139,7 @@ class ImpactFunction():
             extent = self._analysis_impacted.extent()
             if not use_same_projection:
                 transform = QgsCoordinateTransform(
-                    self._crs, self.hazard.crs())
+                    self._crs, self.hazard.crs(), QgsProject.instance())
                 extent = transform.transform(extent)
 
             self.set_state_process(

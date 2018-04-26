@@ -8,7 +8,7 @@ import sys
 
 from qgis.PyQt import QtCore
 from qgis.PyQt.QtWidgets import QWidgetItem, QSpacerItem, QLayout
-from qgis.core import QgsCoordinateTransform
+from qgis.core import QgsCoordinateTransform, QgsProject
 
 import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
@@ -76,7 +76,7 @@ def layers_intersect(layer_a, layer_b):
     extent_b = layer_b.extent()
     if layer_a.crs() != layer_b.crs():
         coord_transform = QgsCoordinateTransform(
-            layer_a.crs(), layer_b.crs())
+            layer_a.crs(), layer_b.crs(), QgsProject.instance())
         extent_b = (coord_transform.transform(
             extent_b, QgsCoordinateTransform.ReverseTransform))
     return extent_a.intersects(extent_b)
