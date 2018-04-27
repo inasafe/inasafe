@@ -28,7 +28,7 @@ class TestContour(unittest.TestCase):
 
     def test_contour(self):
         """Test create contour"""
-        output_file_path = unique_filename(suffix='-contour.geojson')
+        output_file_path = unique_filename(suffix='-contour.shp')
         # Load shake map layer
         shakemap_layer = load_test_raster_layer(
             'hazard',
