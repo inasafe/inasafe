@@ -8,6 +8,7 @@ import json
 import logging
 import platform
 import re
+import os
 import sys
 import traceback
 import unicodedata
@@ -372,6 +373,32 @@ def monkey_patch_keywords(layer):
         layer.keywords['inasafe_fields'] = {}
 
 
+def _linux_os_release():
+    """This function tries to determine the name of a Linux distribution.
+    It checks for the /etc/os-release file. It takes the name from the
+    'NAME' field and the version from 'VERSION_ID'.
+    An empty string is returned if the above values cannot be determined.
+    """
+    pretty_name = ''
+    ashtray = {}
+    keys = ['NAME', 'VERSION_ID']
+    try:
+        with open(os.path.join('/etc', 'os-release')) as f:
+            for line in f:
+                for key in keys:
+                    if line.startswith(key):
+                        ashtray[key] = line.strip().split('=')[1][1:-1]
+    except OSError:
+        return pretty_name
+
+    if ashtray:
+        if 'NAME' in ashtray:
+            pretty_name = ashtray['NAME']
+        if 'VERSION_ID' in ashtray:
+            pretty_name += ' {0}'.format(ashtray['VERSION_ID'])
+
+    return pretty_name
+
 def readable_os_version():
     """Give a proper name for OS version
 
@@ -379,7 +406,7 @@ def readable_os_version():
     :rtype: str
     """
     if platform.system() == 'Linux':
-        return ' '.join(platform.dist())
+        return _linux_os_release()
     elif platform.system() == 'Darwin':
         return ' {version}'.format(version=platform.mac_ver()[0])
     elif platform.system() == 'Windows':
