@@ -39,6 +39,8 @@ def tr(text, context='@default'):
     :rtype: str, unicode
     """
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+    if type(text) != str:
+        text = str(text)
     translated_text = QCoreApplication.translate(context, text)
     # Check if there is missing container. If so, return the original text.
     # See #3164
