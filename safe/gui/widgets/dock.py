@@ -1624,10 +1624,10 @@ def remove_provenance_project_variables():
     # Need to change to None, to be able to store it back.
     non_null_existing_variables = {}
     for k, v in list(existing_variables.items()):
-        if v is not None:
-            non_null_existing_variables[k] = v
-        else:
+        if v is None or (hasattr(v, 'isNull') and v.isNull()):
             non_null_existing_variables[k] = None
+        else:
+            non_null_existing_variables[k] = v
 
     # This method will set non_null_existing_variables, and remove the
     # other variable

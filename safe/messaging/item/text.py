@@ -62,7 +62,7 @@ class Text(MessageElement):
             self.text.append(PlainText(text))
         elif isinstance(text, Text):
             self.text.append(text)
-        elif text is None:
+        elif text is None or (hasattr(text, 'isNull') and text.isNull()):
             self.text.append(PlainText(
                 tr('None or Null found from the data.')))
         else:

@@ -300,7 +300,7 @@ def denomination(value, min_nominal=None):
     :return: The new value and the denomination as a unit definition.
     :rtype: tuple(int, safe.unit.definition)
     """
-    if value is None:
+    if value is None or (hasattr(value, 'isNull') and value.isNull()):
         return None, None
 
     if not value:

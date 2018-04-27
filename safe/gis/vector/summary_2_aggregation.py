@@ -113,7 +113,8 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = area[field]
-            if not value:
+            if (value is None or value == ''
+                    or (hasattr(value, 'isNull') and value.isNull())):
                 value = 0
             field_definition[0].add_value(
                 value,

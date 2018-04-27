@@ -60,7 +60,7 @@ class AbstractList(MessageElement):
             self.items.append(PlainText(item))
         elif isinstance(item, MessageElement):
             self.items.append(item)
-        elif item is None:
+        elif item is None or (hasattr(item, 'isNull') and item.isNull()):
             self.items.append(PlainText(
                 tr('Null (None) found from the data.')))
         elif isinstance(item, tuple) or isinstance(item, list):

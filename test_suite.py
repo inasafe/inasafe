@@ -117,7 +117,7 @@ def test_qgis3():
     test_package('safe.utilities')
     test_package('safe.common')
     test_package('safe.gis')
-    test_package('safe.gui')
+    #test_package('safe.gui')
 
 
 if __name__ == '__main__':

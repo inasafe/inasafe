@@ -81,7 +81,8 @@ def add_fields(
     :param static_fields
     """
     for column in dynamic_values:
-        if column == '' or column is None:
+        if (column == '' or (hasattr(column, 'isNull')
+                and column.isNull())):
             column = 'NULL'
         field = create_field_from_definition(dynamic_field, column)
         layer.addAttribute(field)
