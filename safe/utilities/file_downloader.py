@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 
-from qgis.core import QgsApplication
+from qgis.core import QgsApplication, QgsNetworkAccessManager
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import QByteArray, QCoreApplication, QFile, QUrl
 # noinspection PyPackageRequirements
@@ -53,7 +53,7 @@ class FileDownloader():
         :type progress_dialog: QWidget
         """
         # noinspection PyArgumentList
-        self.manager = qgis.core.QgsNetworkAccessManager.instance()
+        self.manager = QgsNetworkAccessManager.instance()
         self.url = QUrl(url)
         self.output_path = output_path
         self.progress_dialog = progress_dialog
