@@ -5,7 +5,7 @@
 from math import floor
 
 # noinspection PyUnresolvedReferences
-from qgis.core import QgsPoint
+from qgis.core import QgsPointXY
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard_classifications import (
@@ -91,7 +91,7 @@ def calculate_distance(
     """
     _ = earthquake_hazard, place_exposure  # NOQA
 
-    epicenter = QgsPoint(longitude, latitude)
+    epicenter = QgsPointXY(longitude, latitude)
     place_point = place_geometry.asPoint()
     distance = distance_calculator.measure_distance(epicenter, place_point)
     return distance
@@ -127,7 +127,7 @@ def calculate_bearing(
     """
     _ = earthquake_hazard, place_exposure  # NOQA
 
-    epicenter = QgsPoint(longitude, latitude)
+    epicenter = QgsPointXY(longitude, latitude)
     place_point = place_geometry.asPoint()
     bearing = place_point.azimuth(epicenter)
     return bearing

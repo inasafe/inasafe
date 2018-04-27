@@ -1342,14 +1342,14 @@ class ImpactFunction():
                 for polygon in multi_polygon:
                     for ring in polygon[1:]:
                         polygon.remove(ring)
-                self._analysis_extent = QgsGeometry.fromMultiPolygon(
+                self._analysis_extent = QgsGeometry.fromMultiPolygonXY(
                     multi_polygon)
 
             else:
                 polygon = geometry.asPolygon()
                 for ring in polygon[1:]:
                     polygon.remove(ring)
-                self._analysis_extent = QgsGeometry.fromPolygon(polygon)
+                self._analysis_extent = QgsGeometry.fromPolygonXY(polygon)
             is_empty = self._analysis_extent.isEmpty()
             is_invalid = not self._analysis_extent.isGeosValid()
             if is_empty or is_invalid:
@@ -2283,7 +2283,7 @@ class ImpactFunction():
         exposure = self.exposure.keywords.get('exposure')
         geometry = self.exposure.geometryType()
         indivisible_keys = [f['key'] for f in indivisible_exposure]
-        if exposure not in indivisible_keys and geometry != QgsWkbTypes.Point:
+        if exposure not in indivisible_keys and geometry != QgsWkbTypes.PointGeometry:
             # We can now split features because the `prepare_vector_layer`
             # might have added the size field.
             self.set_state_process(
