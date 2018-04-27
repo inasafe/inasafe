@@ -5,7 +5,7 @@
 import logging
 
 import processing
-from qgis.core import QgsRasterLayer
+from qgis.core import QgsRasterLayer, QgsApplication
 
 from safe.common.exceptions import ProcessingInstallationError
 from safe.common.utilities import unique_filename, temp_dir
@@ -95,6 +95,11 @@ def clip_by_extent(layer, extent, callback=None):
         parameters['TFW'] = False
         parameters['EXTRA'] = ''
         parameters['OUTPUT'] = output_raster
+
+        # Fix safe.impact_function test failing
+        if not QgsApplication.processingRegistry().algorithms():
+            processing.Processing.initialize()
+
         result = processing.run("gdal:cliprasterbyextent", parameters)
 
         if result is None:

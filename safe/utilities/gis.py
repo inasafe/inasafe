@@ -78,7 +78,7 @@ def extent_to_array(extent, source_crs, dest_crs=None):
     else:
         geo_crs = dest_crs
 
-    transform = QgsCoordinateTransform(source_crs, geo_crs, 
+    transform = QgsCoordinateTransform(source_crs, geo_crs,
                                        QgsProject.instance())
 
     # Get the clip area in the layer's crs
@@ -192,7 +192,7 @@ def clone_layer(layer, keep_selection=True):
             layer.source(), layer.name(), layer.providerType())
         if keep_selection and layer.selectedFeatureCount() > 0:
             request = QgsFeatureRequest()
-            request.setFilterFids(layer.selectedFeaturesIds())
+            request.setFilterFids(layer.selectedFeatureIds())
             request.setFlags(QgsFeatureRequest.NoGeometry)
             iterator = layer.getFeatures(request)
             new_layer.setSelectedFeatures([k.id() for k in iterator])

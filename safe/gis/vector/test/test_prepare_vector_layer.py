@@ -143,7 +143,7 @@ class TestPrepareLayer(unittest.TestCase):
         }
         layer.keywords['value_map'] = dict(value_map)
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(value_map, dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(value_map), dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop and unknown, the other group should be created.
         layer.keywords['value_map'] = {
@@ -158,7 +158,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(expected_value_map), dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop, it should be added to the other group.
         layer.keywords['value_map'] = {
@@ -174,7 +174,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(expected_value_map), dict_values_sorted(layer.keywords['value_map']))
 
     def test_own_id_column(self):
         """Test if we can re-use the column ID from the user."""
