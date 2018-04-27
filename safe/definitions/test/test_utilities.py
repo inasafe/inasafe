@@ -6,7 +6,7 @@ from tempfile import mkdtemp
 from os.path import join, exists, split
 import shutil
 
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, dict_values_sorted
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.PyQt.QtCore import QSettings
 
@@ -157,7 +157,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertEqual(hazards, expected)
+        self.assertEqual(sorted(hazards), sorted(expected))
 
         hazards = hazards_for_layer('polygon')
         hazards = [hazard['key'] for hazard in hazards]
@@ -171,7 +171,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertEqual(hazards, expected)
+        self.assertEqual(sorted(hazards), sorted(expected))
 
         hazards = hazards_for_layer('raster')
         hazards = [hazard['key'] for hazard in hazards]
@@ -184,7 +184,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_generic['key'],
             hazard_dam_break['key']
         ]
-        self.assertEqual(hazards, expected)
+        self.assertEqual(sorted(hazards), sorted(expected))
 
     def test_exposures_for_layer(self):
         """Test for exposures_for_layer"""
@@ -194,7 +194,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             exposure_population,
             exposure_land_cover,
         ]
-        self.assertEqual(exposures, expected)
+        self.assertEqual(dict_values_sorted(exposures), dict_values_sorted(expected))
 
         exposures = exposures_for_layer('line')
         expected = [exposure_road]
@@ -216,7 +216,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_units(self):
         """Test for hazard_units"""
         expected = [unit_metres, unit_feet, unit_generic]
-        self.assertEqual(hazard_units('flood'), expected)
+        self.assertEqual(dict_values_sorted(hazard_units('flood')), dict_values_sorted(expected))
 
     def test_hazards_classifications(self):
         """Test for get_hazards_classifications."""

@@ -260,12 +260,11 @@ def active_classification(keywords, exposure_key):
     :returns: The active classification key. None if there is no active one.
     :rtype: str
     """
-    classifications = None
     if 'classification' in keywords:
         return keywords['classification']
     if keywords['layer_mode'] == layer_mode_continuous['key']:
         classifications = keywords['thresholds'].get(exposure_key)
-    elif 'value_maps' in keywords:
+    else:
         classifications = keywords['value_maps'].get(exposure_key)
     if classifications is None:
         return None
