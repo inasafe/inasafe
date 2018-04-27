@@ -1189,7 +1189,7 @@ def dict_values_sorted(_dict):
     _ret = dict()
     for _k in _dict:
         try:
-            _ret[_k] = sorted(_dict[_k]) 
+            _ret[_k] = sorted(_dict[_k])
         except:
             _ret[_k] = _dict[_k]
     return _ret

@@ -154,7 +154,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         self.show_current_metadata()
 
         # TODO(IS): Show only possible exposure target
-        if keywords['layer_purpose'] == layer_purpose_hazard['key']:
+        if keywords.get('layer_purpose', False) == layer_purpose_hazard['key']:
             self.target_exposure_label.setEnabled(True)
             self.target_exposure_combo_box.setEnabled(True)
             self.target_exposure_combo_box.clear()

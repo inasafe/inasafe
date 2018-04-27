@@ -164,7 +164,9 @@ class SaveScenarioDialog(QDialog):
 
         # noinspection PyBroadException
         try:
-            parser.write(open(scenario_file_path, 'a'))
+            of = open(scenario_file_path, 'a')
+            parser.write(of)
+            of.close()
         except Exception as e:
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
             QtGui.QMessageBox.warning(
@@ -173,7 +175,9 @@ class SaveScenarioDialog(QDialog):
                 tr(
                     'Failed to save scenario to {path}, exception '
                     '{exception}').format(
-                    path=scenario_file_path, exception=str(e)))
+                        path=scenario_file_path, exception=str(e)))
+        finally:
+            of.close()
 
         # Save State
         self.save_state()
