@@ -87,7 +87,8 @@ from safe.test.utilities import (
     get_qgis_app,
     standard_data_path,
     load_test_vector_layer,
-    compare_wkt
+    compare_wkt,
+    dict_values_sorted,
 )
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
@@ -140,7 +141,7 @@ def read_json_flow(json_path):
     :rtype: (dict, dict, dict)
     """
     with open(json_path) as json_data:
-        data = byteify(json.load(json_data))
+        data = json.load(json_data)
     return data['scenario'], data['expected_steps'], data['expected_outputs']
 
 
@@ -480,7 +481,7 @@ class TestImpactFunction(unittest.TestCase):
         unique_ratio = impact.uniqueValues(field)
         self.assertEqual(1, len(unique_ratio), unique_ratio)
         self.assertEqual(
-            unique_ratio[0], female_ratio_default_value['default_value'])
+            list(unique_ratio)[0], female_ratio_default_value['default_value'])
 
         # Second test, if we provide an aggregation without a default ratio 0.2
         expected_ratio = 1.0
@@ -521,7 +522,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertNotEqual(-1, field)
         unique_ratio = impact.uniqueValues(field)
         self.assertEqual(1, len(unique_ratio), unique_ratio)
-        self.assertEqual(expected_ratio, unique_ratio[0])
+        self.assertEqual(expected_ratio, list(unique_ratio)[0])
 
         # Third test, if we provide an aggregation with a ratio and the
         # exposure has a count, we should a have a ratio from the exposure
@@ -596,7 +597,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertNotEqual(-1, index)
         unique_values = impact.uniqueValues(index)
         self.assertEqual(1, len(unique_values))
-        female_ratio = unique_values[0]
+        female_ratio = list(unique_values)[0]
 
         # female displaced count and youth displaced count
         self.assertNotEqual(
@@ -609,20 +610,20 @@ class TestImpactFunction(unittest.TestCase):
         # Check that we have more than 0 female displaced in the analysis layer
         index = analysis.fields().lookupField(
             female_displaced_count_field['field_name'])
-        female_displaced = analysis.uniqueValues(index)[0]
+        female_displaced = list(analysis.uniqueValues(index))[0]
         self.assertGreater(female_displaced, 0)
 
         # Let's check computation
         index = analysis.fields().lookupField(
             displaced_field['field_name'])
-        displaced_population = analysis.uniqueValues(index)[0]
+        displaced_population = list(analysis.uniqueValues(index))[0]
         self.assertEqual(
             int(displaced_population * female_ratio), female_displaced)
 
         # Check that we have more than 0 youth displaced in the analysis layer
         index = analysis.fields().lookupField(
             female_displaced_count_field['field_name'])
-        value = analysis.uniqueValues(index)[0]
+        value = list(analysis.uniqueValues(index))[0]
         self.assertGreater(value, 0)
 
         # Let do another test with the special aggregation layer
@@ -673,7 +674,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertNotEqual(-1, index)
         values = impact.uniqueValues(index)
         self.assertEqual(1, len(values))
-        self.assertEqual(0.75, values[0])
+        self.assertEqual(0.75, list(values)[0])
 
     def test_profiling(self):
         """Test running impact function on test data."""
@@ -726,7 +727,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
-            self.assertDictEqual(byteify(expected_steps), byteify(steps))
+            self.assertEqual(dict_values_sorted(expected_steps), dict_values_sorted(steps))
         except AssertionError:
             LOGGER.info('Exception found in ' + scenario_path)
             raise
@@ -812,9 +813,7 @@ class TestImpactFunction(unittest.TestCase):
             scenario, expected_steps, expected_outputs = read_json_flow(
                 json_file)
             if scenario.get('enable', True):
-                # fix_print_with_import
                 print("Test JSON scenario : ")
-                # fix_print_with_import
                 print(json_file)
                 self.test_scenario(json_file, test_loader=True)
                 count += 1

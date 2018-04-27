@@ -170,7 +170,7 @@ def copy_layer(source, target):
         # We need to check if the user wants selected feature only and if there
         # is one minimum selected.
         if use_selected_only and source.selectedFeatureCount() > 0:
-            request.setFilterFids(source.selectedFeaturesIds())
+            request.setFilterFids(source.selectedFeatureIds())
 
         aggregation_layer = True
 
