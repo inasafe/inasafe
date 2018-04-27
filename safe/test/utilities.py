@@ -7,35 +7,23 @@ import hashlib
 import inspect
 import logging
 import os
-import json
 import re
 import shutil
 import sys
-import processing
-
-from os.path import exists, splitext, basename, join
+from os.path import basename, exists, join, splitext
 from tempfile import mkdtemp
 
-from qgis.PyQt import QtGui, QtWidgets  # pylint: disable=W0621
-from qgis.PyQt.QtCore import QTranslator, pyqtWrapperType
-from qgis.PyQt import QtWidgets  # pylint: disable=W0621
-from qgis.core import (
-    QgsProject,
-    QgsVectorLayer,
-    QgsRasterLayer,
-    QgsRectangle,
-    QgsCoordinateReferenceSystem)
-
+import processing
+from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
+                       QgsRasterLayer, QgsRectangle, QgsVectorLayer)
+from qgis.PyQt import QtWidgets  # pylint: disable=W0621; pylint: disable=W0621
+from qgis.PyQt import QtGui
 from qgis.utils import iface
-
-from safe.common.utilities import unique_filename, temp_dir, safe_dir
+from safe.common.utilities import temp_dir, unique_filename
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
-from safe.gis.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.settings import (
-    general_setting, set_general_setting, set_setting, setting)
-from safe.utilities.utilities import (
-    monkey_patch_keywords, reload_inasafe_modules)
+from safe.gis.vector.tools import copy_layer, create_memory_layer
+from safe.utilities.utilities import monkey_patch_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
