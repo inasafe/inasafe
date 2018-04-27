@@ -174,7 +174,7 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertDictEqual(expected_value_map, dict_value_sorted(layer.keywords['value_map']))
+        self.assertDictEqual(expected_value_map, dict_values_sorted(layer.keywords['value_map']))
 
     def test_own_id_column(self):
         """Test if we can re-use the column ID from the user."""
