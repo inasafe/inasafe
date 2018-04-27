@@ -1226,16 +1226,17 @@ def definition_to_message(
                     row.add(m.Cell(tr('unspecified')))
 
             if is_hazard:
-                if inasafe_class.get('fatality_rate') > 0:
+                if inasafe_class.get('fatality_rate') is None \
+                    or inasafe_class.get('fatality_rate') < 0:
+                    row.add(m.Cell(tr('unspecified')))
+                elif inasafe_class.get('fatality_rate') > 0:
                     # we want to show the rate as a scientific notation
                     rate = html_scientific_notation_rate(
                         inasafe_class['fatality_rate'])
                     rate = '%s%%' % rate
                     row.add(m.Cell(rate))
-                elif inasafe_class.get('fatality_rate') == 0:
+                else:  # == 0
                     row.add(m.Cell('0%'))
-                else:
-                    row.add(m.Cell(tr('unspecified')))
 
             if is_hazard:
                 if 'displacement_rate' in inasafe_class:
