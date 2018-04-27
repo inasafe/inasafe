@@ -322,7 +322,7 @@ def write_json(data, filename):
     """
 
     def custom_default(obj):
-        if obj is None:
+        if obj is None or (hasattr(obj, 'isNull') and obj.isNull()):
             return ''
         raise TypeError
 

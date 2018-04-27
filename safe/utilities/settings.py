@@ -173,7 +173,7 @@ def export_setting(file_path, qsettings=None):
         inasafe_settings[key] = setting(key, qsettings=qsettings)
 
     def custom_default(obj):
-        if obj is None:
+        if obj is None or (hasattr(obj, 'isNull') and obj.isNull()):
             return ''
         raise TypeError
 

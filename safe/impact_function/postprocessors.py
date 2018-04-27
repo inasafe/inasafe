@@ -44,7 +44,7 @@ def evaluate_formula(formula, variables):
     :rtype: float, int
     """
     for key, value in list(variables.items()):
-        if value is None or value is None:
+        if value is None or (hasattr(value, 'isNull') and value.isNull()):
             # If one value is null, we return null.
             return value
         formula = formula.replace(key, str(value))
