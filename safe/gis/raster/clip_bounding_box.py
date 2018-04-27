@@ -52,7 +52,7 @@ def clip_by_extent(layer, extent, callback=None):
         processing_step = quick_clip_steps['step_name']  # NOQA
         output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
-        output_raster = unique_filename(dir=temp_dir())
+        output_raster = unique_filename(suffix='.tif', dir=temp_dir())
 
         # We make one pixel size buffer on the extent to cover every pixels.
         # See https://github.com/inasafe/inasafe/issues/3655
@@ -107,6 +107,7 @@ def clip_by_extent(layer, extent, callback=None):
         clipped.keywords['title'] = output_layer_name
 
         check_layer(clipped)
+
     except Exception as e:
         # This step clip_raster_by_extent was nice to speedup the analysis.
         # As we got an exception because the layer is invalid, we are not going
