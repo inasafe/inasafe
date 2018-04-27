@@ -7,6 +7,7 @@ import hashlib
 import inspect
 import logging
 import os
+import json
 import re
 import shutil
 import sys
@@ -1185,11 +1186,9 @@ def get_control_text(file_name):
 
 
 def dict_values_sorted(_dict):
-    """Make sure dict values are sorted when they are sortable"""
-    _ret = dict()
-    for _k in _dict:
-        try:
-            _ret[_k] = sorted(_dict[_k])
-        except:
-            _ret[_k] = _dict[_k]
-    return _ret
+    """Make sure dict values are sorted when they are sortable.
+    This also works for lists of dicts"""
+    __dict = _dict
+    if isinstance(_dict, list):
+        __dict.sort(key=lambda x: ''.join([str(_x) for _x in x.values()]))
+    return json.dumps(__dict, sort_keys=True, indent=2)
