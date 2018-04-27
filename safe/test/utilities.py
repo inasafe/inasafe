@@ -11,6 +11,7 @@ import json
 import re
 import shutil
 import sys
+import processing
 
 from os.path import exists, splitext, basename, join
 from tempfile import mkdtemp
@@ -112,6 +113,10 @@ def get_qgis_app():
 
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
+
+        # Initialize processing
+        processing.Processing.initialize()
+
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
@@ -1118,17 +1123,23 @@ def get_control_text(file_name):
         'files',
         file_name
     )
-    expected_result = codecs.open(
+    with codecs.open(
         control_file_path,
         mode='r',
-        encoding='utf-8').readlines()
-    return expected_result
+        encoding='utf-8') as f:
+        return f.readlines()
+    return ''
 
-
-def dict_values_sorted(_dict):
+def dict_values_sorted(d):
     """Make sure dict values are sorted when they are sortable.
-    This also works for lists of dicts"""
-    __dict = _dict
-    if isinstance(_dict, list):
-        __dict.sort(key=lambda x: ''.join([str(_x) for _x in x.values()]))
-    return json.dumps(__dict, sort_keys=True, indent=2)
+    This also works for lists of dicts nd discts of lists"""
+    if isinstance(d, list):
+        _l = [dict_values_sorted(v) for v in d]
+        _l.sort(key=lambda x: x if not isinstance(x, dict) \
+                                else ''.join([str(_x) \
+                                    for _x in x.values()]))
+        return _l
+    elif isinstance(d, dict):
+        return {k : dict_values_sorted(v) for k,v in d.items()}
+    else:
+        return d
