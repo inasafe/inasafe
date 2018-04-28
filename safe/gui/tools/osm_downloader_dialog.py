@@ -558,7 +558,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 QgsExpressionContextUtils.setLayerVariable(
                     layer, 'qgis_25d_angle', 70)
 
-
     def reject(self):
         """Redefinition of the method to remove the rectangle selection tool.
 

@@ -145,7 +145,7 @@ flake8:
 	@echo "-----------"
 	@echo "Flake8 issues"
 	@echo "-----------"
-	@flake8 --version
+	@python3 -m flake8 --version
 	@python3 -m flake8 --ignore=E402,E501 || true
 
 
@@ -318,7 +318,7 @@ indent:
 #
 # You need to have the correct ssh configs and keys set
 # up in order for this to work.
-# 
+#
 ##########################################################
 
 build-nightlies:

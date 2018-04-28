@@ -123,6 +123,7 @@ def test_qgis3():
     test_package('safe.messaging')
     test_package('safe.metadata')
     test_package('safe.metadata35')
+    test_package('safe.test')
     #test_package('safe.gui')  # Still Failing
 
 

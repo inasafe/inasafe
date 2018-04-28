@@ -14,9 +14,7 @@ import traceback
 import unicodedata
 import webbrowser
 from os.path import join, isdir
-
 from qgis.utils import plugin_paths
-
 import safe  # noqa
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
@@ -402,6 +400,7 @@ def _linux_os_release():
 
     return pretty_name
 
+
 def readable_os_version():
     """Give a proper name for OS version
 
@@ -430,6 +429,7 @@ def is_plugin_installed(name):
         if isdir(join(directory, name)):
             return True
     return False
+
 
 def reload_inasafe_modules(module_name=None):
     """Reload python modules.

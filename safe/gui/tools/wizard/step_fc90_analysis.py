@@ -4,14 +4,14 @@
 import logging
 import os
 
-from qgis.PyQt import QtGui, QtWidgets, QtCore
+from qgis.PyQt import QtGui, QtCore
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.core import (
     QgsProject,
     QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsApplication,
-    )
+)
 
 from safe import messaging as m
 from safe.common.signals import send_static_message, send_error_message

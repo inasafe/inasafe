@@ -88,7 +88,7 @@ def add_fields(
         unique_values = new_dynamic_field[1]
         for column in unique_values:
             if (column == '' or (hasattr(column, 'isNull')
-                    and column.isNull())):
+                                 and column.isNull())):
                 column = 'NULL'
             field = create_field_from_definition(field_definition, column)
             layer.addAttribute(field)

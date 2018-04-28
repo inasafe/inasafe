@@ -170,7 +170,7 @@ class TestImpactMetadata(TestCase):
         read_tmp_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
-        # Unless we want to a specialized library, this
+        # Unless we want to add a specialized library, this
         # is the best we can do with what python offers
         self.assertEqual(sorted(expected_metadata.split('\n')), \
             sorted(read_tmp_metadata.xml.split('\n')))

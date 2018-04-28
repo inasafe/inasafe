@@ -115,8 +115,8 @@ def prettify_xml(xml_str):
     """
     parsed_xml = parseString(get_string(xml_str))
     pretty_xml = '\n'.join(
-    [line for line in parsed_xml.toprettyxml(
-        indent=' ' * 2).split('\n') if line.strip()])
+        [line for line in parsed_xml.toprettyxml(indent=' ' * 2)
+         .split('\n') if line.strip()])
     if not pretty_xml.endswith('\n'):
         pretty_xml += '\n'
     return pretty_xml

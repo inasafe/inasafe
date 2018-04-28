@@ -846,8 +846,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or (hasattr(unique_value, 'isNull')
-                    and unique_value.isNull()):
+            if unique_value is None or (hasattr(unique_value, 'isNull') and
+                                        unique_value.isNull()):
                 # Don't classify features with NULL value
                 continue
             # Capitalization of the value and removing '_' (raw OSM data).
@@ -904,8 +904,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or (hasattr(unique_value, 'isNull')
-                    and unique_value.isNull()):
+            if unique_value is None or (hasattr(unique_value, 'isNull') and
+                                        unique_value.isNull()):
                 # Don't classify features with NULL value
                 continue
             # check in value map

@@ -16,8 +16,7 @@ from tempfile import mkdtemp
 import processing
 from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
                        QgsRasterLayer, QgsRectangle, QgsVectorLayer)
-from qgis.PyQt import QtWidgets  # pylint: disable=W0621; pylint: disable=W0621
-from qgis.PyQt import QtGui
+from qgis.PyQt import QtWidgets
 from qgis.utils import iface
 from safe.common.utilities import temp_dir, unique_filename
 from safe.definitions.constants import HAZARD_EXPOSURE
@@ -95,7 +94,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
-        from qgis.PyQt import QtGui, QtWidgets, QtCore  # pylint: disable=W0621
+        from qgis.PyQt import QtWidgets, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from qgis.PyQt.QtCore import QCoreApplication, QSettings
         from safe.test.qgis_interface import QgisInterface
@@ -131,7 +130,8 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
 
         # noinspection PyPep8Naming
         if 'argv' in dir(sys):
-            QGIS_APP = QgsApplication([p.encode('utf-8') for p in sys.argv], gui_flag)
+            QGIS_APP = QgsApplication([p.encode('utf-8')
+                                       for p in sys.argv], gui_flag)
         else:
             QGIS_APP = QgsApplication([], gui_flag)
 
@@ -1172,22 +1172,25 @@ def get_control_text(file_name):
         file_name
     )
     with codecs.open(
-        control_file_path,
-        mode='r',
-        encoding='utf-8') as f:
+            control_file_path,
+            mode='r',
+            encoding='utf-8') as f:
         return f.readlines()
     return ''
 
+
 def dict_values_sorted(d):
-    """Make sure dict values are sorted when they are sortable.
-    This also works for lists of dicts nd discts of lists"""
+    """
+    Make sure dict values are sorted when they are sortable.
+    This also works for lists of dicts nd discts of lists
+    """
     if isinstance(d, list):
         _l = [dict_values_sorted(v) for v in d]
-        _l.sort(key=lambda x: x if not isinstance(x, dict) \
-                                else ''.join([str(_x) \
-                                    for _x in x.values()]))
+        _l.sort(key=lambda x: x if not isinstance(x, dict)
+                else ''.join([str(_x)
+                              for _x in x.values()]))
         return _l
     elif isinstance(d, dict):
-        return {k : dict_values_sorted(v) for k,v in d.items()}
+        return {k: dict_values_sorted(v) for k, v in d.items()}
     else:
         return d
