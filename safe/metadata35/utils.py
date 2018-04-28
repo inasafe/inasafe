@@ -158,9 +158,9 @@ def prettify_xml(xml_str):
     :rtype: str
     """
     parsed_xml = parseString(get_string(xml_str))
-    pretty_xml = '\n'.join(
+    pretty_xml = b'\n'.join(
         [line for line in parsed_xml.toprettyxml(
-            indent=' ' * 2).split('\n') if line.strip()])
-    if not pretty_xml.endswith('\n'):
-        pretty_xml += '\n'
-    return pretty_xml
+            indent=' ' * 2, encoding='UTF-8').split(b'\n') if line.strip()])
+    if not pretty_xml.endswith(b'\n'):
+        pretty_xml += b'\n'
+    return pretty_xml.decode('utf-8')
