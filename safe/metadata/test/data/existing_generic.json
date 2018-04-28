@@ -3,7 +3,6 @@
     "ISO19115_FLOAT": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -16,7 +15,6 @@
     "ISO19115_INT": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -29,20 +27,18 @@
     "ISO19115_STR": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
       ],
       "name": "ISO19115_STR",
-      "python_type": "unicode",
+      "python_type": "str",
       "value": "Random string",
       "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString"
     },
     "abstract": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -68,7 +64,6 @@
     "email": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -111,7 +106,6 @@
     "keyword_version": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -124,7 +118,6 @@
     "layer_geometry": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -137,7 +130,6 @@
     "layer_mode": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -150,7 +142,6 @@
     "layer_purpose": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -163,7 +154,6 @@
     "license": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -176,7 +166,6 @@
     "organisation": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -189,7 +178,6 @@
     "scale": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -202,7 +190,6 @@
     "source": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
@@ -215,7 +202,6 @@
     "title": {
       "allowed_python_types": [
         "str",
-        "unicode",
         "int",
         "float",
         "NoneType"
