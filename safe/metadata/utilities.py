@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import datetime, date
 from xml.dom.minidom import parseString
 from xml.etree import ElementTree
-from safe.utilities.unicode import get_string 
+from safe.utilities.unicode import get_string
 from qgis.PyQt.QtCore import QUrl, QDate, QDateTime, Qt
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

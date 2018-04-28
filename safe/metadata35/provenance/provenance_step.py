@@ -166,7 +166,7 @@ class ProvenanceStep():
         description = SubElement(provenance_step_element, 'description')
         description.text = self.description
 
-        xml_string = tostring(provenance_step_element)
+        xml_string = tostring(provenance_step_element, 'unicode')
 
         if close_tag:
             return xml_string

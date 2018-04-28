@@ -273,7 +273,7 @@ class ImpactLayerMetadata(BaseMetadata):
         xml representation of the metadata.
 
         :return: xml representation of the metadata
-        :rtype: ElementTree.Element
+        :rtype: str
         """
 
         root = super(ImpactLayerMetadata, self).xml
@@ -293,7 +293,7 @@ class ImpactLayerMetadata(BaseMetadata):
         # generate the provenance xml element
         provenance_element = ElementTree.fromstring(self.provenance.xml)
         provenance_parent.append(provenance_element)
-        return prettify_xml(ElementTree.tostring(root))
+        return prettify_xml(ElementTree.tostring(root, 'unicode'))
 
     def read_xml(self):
         """
