@@ -168,7 +168,9 @@ class TestImpactMetadata(TestCase):
         read_tmp_metadata = ImpactLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
-        self.assertEqual(expected_metadata, read_tmp_metadata.xml)
+        # Unless we want to add a specialized library, this
+        # is the best we can do with what python offers
+        self.assertEqual(sorted(expected_metadata.split('\n')), sorted(read_tmp_metadata.xml.split('\n')))
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON
