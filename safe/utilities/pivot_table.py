@@ -47,7 +47,7 @@ class FlatTable():
         if key not in self.data:
             self.data[key] = 0
         self.data_keys.append(key)
-        self.data[key] += value        
+        self.data[key] += value
 
     def get_value(self, **kwargs):
         """Return the value for a specific key."""

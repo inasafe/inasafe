@@ -21,7 +21,7 @@ import logging
 import time
 
 from qgis.core import QgsApplication
-from qgis.PyQt import QtCore, QtGui, QtWebKitWidgets
+from qgis.PyQt import QtCore, QtGui, QtWebKitWidgets, QtWebKit
 from qgis.PyQt.QtWidgets import QAction
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
@@ -165,7 +165,7 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
             # add view to_text if in dev mode
             action_page_to_stdout = QAction(self.tr('log pageToText'),
-                                                  None)
+                                            None)
             # noinspection PyUnresolvedReferences
             action_page_to_stdout.triggered.connect(self.page_to_stdout)
             context_menu.addAction(action_page_to_stdout)

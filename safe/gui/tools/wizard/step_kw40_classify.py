@@ -174,8 +174,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         clean_unique_values = []
         for unique_value in unique_values:
-            if unique_value is None or (hasattr(unique_value, 'isNull')
-                    and unique_value.isNull()):
+            if unique_value is None \
+                    or (hasattr(unique_value, 'isNull') and
+                        unique_value.isNull()):
                 # Don't classify features with NULL value
                 continue
             clean_unique_values.append(unique_value)

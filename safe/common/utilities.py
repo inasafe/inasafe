@@ -57,7 +57,7 @@ def python2_round(number, ndigits=0):
     Round a number to a given precision in decimal digits (default 0 digits).
     This returns an int when called with one argument, otherwise the
     same type as the number. ndigits may be negative.
-   
+
 
     :param number: float value to round
     :type number: type, float
@@ -67,7 +67,7 @@ def python2_round(number, ndigits=0):
 
     """
     p = 10 ** ndigits
-    return float(math.floor((number * p) + math.copysign(0.5, number)))/p
+    return float(math.floor((number * p) + math.copysign(0.5, number))) / p
 
 
 def verify(statement, message=None):
@@ -310,7 +310,7 @@ def humanize_min_max(min_value, max_value, interval):
     :rtype: tuple
     """
     current_interval = max_value - min_value
-    if interval > 1: 
+    if interval > 1:
         # print 'case 1. Current interval : ', current_interval
         humanize_min_value = add_separators(int(python2_round(min_value)))
         humanize_max_value = add_separators(int(python2_round(max_value)))
@@ -507,7 +507,8 @@ def get_utm_epsg(longitude, latitude, crs=None):
         return epsg
     else:
         epsg_4326 = QgsCoordinateReferenceSystem('EPSG:4326')
-        transform = QgsCoordinateTransform(crs, epsg_4326, QgsProject.instance())
+        transform = QgsCoordinateTransform(
+            crs, epsg_4326, QgsProject.instance())
         geom = QgsGeometry.fromPointXY(QgsPointXY(longitude, latitude))
         geom.transform(transform)
         point = geom.asPoint()

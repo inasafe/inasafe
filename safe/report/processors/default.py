@@ -470,8 +470,8 @@ def qgis_composer_renderer(impact_report, component):
 
     original_crs = impact_report.impact_function.crs
     destination_crs = qgis_composition_context.map_settings.destinationCrs()
-    coord_transform = QgsCoordinateTransform(original_crs, 
-                                             destination_crs, 
+    coord_transform = QgsCoordinateTransform(original_crs,
+                                             destination_crs,
                                              QgsProject.instance())
 
     # resize map extent
@@ -739,7 +739,8 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     :rtype: str, list
     """
     # set the composer map to be atlas driven
-    composer_map = composition_item(composition, 'impact-map', QgsLayoutItemMap)
+    composer_map = composition_item(
+        composition, 'impact-map', QgsLayoutItemMap)
     composer_map.setAtlasDriven(True)
     composer_map.setAtlasScalingMode(QgsLayoutItemMap.Auto)
 

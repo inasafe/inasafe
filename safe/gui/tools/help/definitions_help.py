@@ -1226,8 +1226,8 @@ def definition_to_message(
                     row.add(m.Cell(tr('unspecified')))
 
             if is_hazard:
-                if inasafe_class.get('fatality_rate') is None \
-                    or inasafe_class.get('fatality_rate') < 0:
+                if inasafe_class.get('fatality_rate') is None or \
+                        inasafe_class.get('fatality_rate') < 0:
                     row.add(m.Cell(tr('unspecified')))
                 elif inasafe_class.get('fatality_rate') > 0:
                     # we want to show the rate as a scientific notation

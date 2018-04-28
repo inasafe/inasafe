@@ -16,7 +16,7 @@ import logging
 
 from qgis.core import QgsApplication, QgsNetworkAccessManager
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtCore import QByteArray, QCoreApplication, QFile, QUrl
+from qgis.PyQt.QtCore import QByteArray, QFile, QUrl
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtNetwork import QNetworkReply, QNetworkRequest
 

@@ -14,7 +14,7 @@ from qgis.core import (QgsCoordinateReferenceSystem, QgsExpressionContextUtils,
                        QgsRectangle, QgsApplication)
 from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
-from qgis.PyQt.QtWidgets import (QAction, QApplication, QDockWidget, QMenu,
+from qgis.PyQt.QtWidgets import (QAction, QDockWidget, QMenu,
                                  QMessageBox, qApp)
 
 from safe import messaging as m
@@ -171,8 +171,6 @@ class Dock(QDockWidget, FORM_CLASS):
 
         self.iface.layerSavedAs.connect(self.save_auxiliary_files)
         self.iface.mapCanvas().extentsChanged.connect(self.extents_changed)
-
-        canvas = self.iface.mapCanvas()
 
         # Current aggregation layer
         self._aggregation = None
