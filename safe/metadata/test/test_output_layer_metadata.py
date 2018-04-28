@@ -131,14 +131,14 @@ class TestImpactMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertMultiLineEqual(expected_json, written_json)
+        self.assertEqual(expected_json, written_json)
 
     def test_json_read(self):
         metadata = OutputLayerMetadata(EXISTING_IMPACT_FILE)
         with open(EXISTING_IMPACT_JSON) as f:
             expected_metadata = f.read()
 
-        self.assertMultiLineEqual(expected_metadata, metadata.json)
+        self.assertEqual(expected_metadata, metadata.json)
 
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
@@ -170,7 +170,10 @@ class TestImpactMetadata(TestCase):
         read_tmp_metadata = OutputLayerMetadata(
             EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
-        self.assertMultiLineEqual(expected_metadata, read_tmp_metadata.xml)
+        # Unless we want to a specialized library, this
+        # is the best we can do with what python offers
+        self.assertEqual(sorted(expected_metadata.split('\n')), \
+            sorted(read_tmp_metadata.xml.split('\n')))
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON

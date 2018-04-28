@@ -40,7 +40,7 @@ class TestMetadata(TestCase):
         ElementTree.SubElement(b, 'c')
 
         new_element_path = 'd/e/f'
-        expected_xml = '<root><b><c /></b><d><e><f>TESTtext</f></e></d></root>'
+        expected_xml = b'<root><b><c /></b><d><e><f>TESTtext</f></e></d></root>'
 
         element = insert_xml_element(root, new_element_path)
         element.text = 'TESTtext'
