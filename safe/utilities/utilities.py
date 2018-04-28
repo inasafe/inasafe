@@ -14,9 +14,7 @@ import traceback
 import unicodedata
 import webbrowser
 from os.path import join, isdir
-
 from qgis.utils import plugin_paths
-
 from safe import messaging as m
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 from safe.common.utilities import unique_filename
@@ -398,6 +396,7 @@ def _linux_os_release():
             pretty_name += ' {0}'.format(ashtray['VERSION_ID'])
 
     return pretty_name
+
 
 def readable_os_version():
     """Give a proper name for OS version

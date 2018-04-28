@@ -6,7 +6,7 @@ import logging
 from sqlite3 import OperationalError
 
 from qgis.core import QgsProject
-from qgis.PyQt import QtGui, QtWidgets
+from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import QSettings, pyqtSignal, pyqtSlot
 from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtGui import QPixmap, QIcon

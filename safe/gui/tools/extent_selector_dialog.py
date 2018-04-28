@@ -5,7 +5,7 @@ import logging
 import sqlite3
 
 # noinspection PyPackageRequirements
-from qgis.PyQt import QtGui, QtWidgets
+from qgis.PyQt import QtWidgets
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import pyqtSignal, pyqtSlot
 # noinspection PyPackageRequirements

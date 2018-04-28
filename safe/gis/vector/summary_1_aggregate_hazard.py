@@ -133,13 +133,13 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = feature[aggregation_id]
         hazard_value = feature[hazard_id]
-        if (hazard_value is None or hazard_value == ''
-                or (hasattr(hazard_value, 'isNull') and
+        if (hazard_value is None or hazard_value == '' or
+                (hasattr(hazard_value, 'isNull') and
                     hazard_value.isNull())):
             hazard_value = not_exposed_class['key']
         exposure_value = feature[exposure_class]
-        if (exposure_value is None or exposure_value == ''
-                or (hasattr(exposure_value, 'isNull') and
+        if (exposure_value is None or exposure_value == '' or
+                (hasattr(exposure_value, 'isNull') and
                     exposure_value.isNull())):
             exposure_value = 'NULL'
 
@@ -153,8 +153,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         # We summarize every absolute values.
         for field, field_definition in list(absolute_values.items()):
             value = feature[field]
-            if (value == '' or value is None
-                    or (hasattr(value, 'isNull') and
+            if (value == '' or value is None or
+                    (hasattr(value, 'isNull') and
                         value.isNull())):
                 value = 0
             field_definition[0].add_value(
@@ -173,8 +173,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
-        if (feature_hazard_id == '' or feature_hazard_id is None
-                or (hasattr(feature_hazard_id, 'isNull') and
+        if (feature_hazard_id == '' or feature_hazard_id is None or
+                (hasattr(feature_hazard_id, 'isNull') and
                     feature_hazard_id.isNull())):
             feature_hazard_id = not_exposed_class['key']
         feature_hazard_value = area[hazard_class]

@@ -118,9 +118,9 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
                 (hasattr(value, 'isNull') and value.isNull())):
             # For isnan, see ticket #3812
             value = 0
-        if (hazard_value == '' or hazard_value is None
-                or (hasattr(hazard_value, 'isNull')
-                    and hazard_value.isNull())):
+        if (hazard_value == '' or hazard_value is None or
+                (hasattr(hazard_value, 'isNull') and
+                    hazard_value.isNull())):
             hazard_value = 'NULL'
         flat_table.add_value(
             value,
@@ -181,8 +181,8 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in analysis.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
-            if (val == '' or val is None
-                    or (hasattr(val, 'isNull') and val.isNull())):
+            if (val == '' or val is None or
+                    (hasattr(val, 'isNull') and val.isNull())):
                 val = 'NULL'
             sum = flat_table.get_value(hazard_class=val)
             total += sum

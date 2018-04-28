@@ -102,10 +102,10 @@ def add_default_values(layer, callback=None):
 
             index = layer.fields().lookupField(field)
 
-            for feature in layer.getFeatures():  
+            for feature in layer.getFeatures():
                 attr_val = feature.attributes()[index]
                 if (attr_val is None or attr_val == '' or (
-                    hasattr(attr_val, 'isNull') and attr_val.isNull())):
+                        hasattr(attr_val, 'isNull') and attr_val.isNull())):
                     layer.changeAttributeValue(
                         feature.id(), index, defaults[default])
 

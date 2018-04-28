@@ -205,7 +205,7 @@ class MetadataDbIO(QObject):
         :rtype: str
         """
         import hashlib
-        hash_value = hashlib.md5()        
+        hash_value = hashlib.md5()
         hash_value.update(data_source.encode('utf-8'))
         hash_value = hash_value.hexdigest()
         return hash_value

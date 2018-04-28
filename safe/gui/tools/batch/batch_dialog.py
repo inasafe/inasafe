@@ -139,7 +139,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.start_in_new_project = False
 
         # Set up context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)

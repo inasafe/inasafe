@@ -108,7 +108,8 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.progress_dialog.setWindowTitle(title)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -243,10 +244,10 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             name,
             overwrite)
         QgsVectorFileWriter.writeAsVectorFormat(
-            layer, 
-            output_base_file_path, 
-            'CP1250', 
-            QgsCoordinateTransform(), 
+            layer,
+            output_base_file_path,
+            'CP1250',
+            QgsCoordinateTransform(),
             'ESRI Shapefile')
         # Get rid of the GeoJSON layer and rather use local shp
         del layer
