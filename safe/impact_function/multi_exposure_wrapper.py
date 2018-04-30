@@ -14,6 +14,7 @@ from datetime import datetime
 from os import makedirs
 from os.path import join, exists
 from socket import gethostname
+from collections import OrderedDict
 
 from qgis.PyQt.Qt import PYQT_VERSION_STR, QT_VERSION_STR
 from qgis.PyQt.QtCore import QDir
@@ -490,10 +491,10 @@ class MultiExposureImpactFunction():
         }
 
         :return: Tree of expected layers.
-        :rtype: dictionary
+        :rtype: OrderedDict
         """
         if not self._is_ready:
-            return {}
+            return OrderedDict()
         else:
             return self._output_layer_expected
 
@@ -504,14 +505,11 @@ class MultiExposureImpactFunction():
         to use the public function `output_layers_expected()`.
 
         :return: List of expected layer keys.
-        :rtype: list
+        :rtype: OrderedDict
         """
-        results = {
-            self._name: [
-                layer_purpose_aggregation_summary['key'],
-                layer_purpose_analysis_impacted['key']
-            ]
-        }
+        results = OrderedDict()
+        results[self._name] = [layer_purpose_aggregation_summary['key'],
+                               layer_purpose_analysis_impacted['key']]
         for analysis in self._impact_functions:
             results[analysis.name] = analysis.output_layers_expected()
         return results
