@@ -73,7 +73,8 @@ class TestDock(unittest.TestCase):
         settings.setValue(
             'inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
-    @unittest.expectedFailure
+    @unittest.skipIf(os.environ.get('ON_TRAVIS', False),
+                    "Skip when running on Travis")
     def test_defaults(self):
         """Test the GUI in its default state."""
         self.assertEqual(self.dock.hazard_layer_combo.currentIndex(), 1)
