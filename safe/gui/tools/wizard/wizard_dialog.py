@@ -658,8 +658,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 QgsProject.instance().addMapLayers([self.layer])
 
                 # Make the layer visible. Might be hidden by default. See #2925
-                legend = self.iface.legendInterface()
-                legend.setLayerVisible(self.layer, True)
+                treeroot = QgsProject.instance().layerTreeRoot()
+                treelayer = treeroot.findLayer(self.layer.id())
+                if treelayer:
+                    treelayer.setItemVisibilityChecked(True)
+
 
         # After the extent selection, save the extent and disconnect signals
         if current_step == self.step_fc_extent:

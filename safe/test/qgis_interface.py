@@ -182,7 +182,8 @@ class QgisInterface(QObject):
             to support QgsProject.instance().removeAllLayers().
 
         """
-        self.canvas.setLayers([])
+        if self.canvas:
+            self.canvas.setLayers([])
         self.active_layer = None
 
     def newProject(self):
