@@ -74,7 +74,7 @@ class TestReclassifyVector(unittest.TestCase):
             '11': 111,
         }
 
-        for value, count in expected_count.iteritems():
+        for value, count in expected_count.items():
             expression = '"%s" = \'%s\'' % (expected_field, value)
             print expression
             request = QgsFeatureRequest().setFilterExpression(expression)
