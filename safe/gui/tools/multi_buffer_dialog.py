@@ -235,7 +235,7 @@ class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def add_class_button_status(self):
         """Function to enable or disable add class button."""
-        if self.class_form.text() and self.radius_form >= 0:
+        if self.class_form.text() and self.radius_form.value() >= 0:
             self.add_class_button.setEnabled(True)
         else:
             self.add_class_button.setEnabled(False)

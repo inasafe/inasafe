@@ -4,6 +4,7 @@
 
 
 import logging
+from collections import OrderedDict
 
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtWidgets import QDialog, QComboBox, QLabel, QSizePolicy, QTreeWidgetItem, QListWidgetItem
@@ -105,7 +106,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         icon = resources_path('img', 'icons', 'show-multi-exposure.svg')
         self.setWindowIcon(QIcon(icon))
         self.tab_widget.setCurrentIndex(0)
-        self.combos_exposures = {}
+        self.combos_exposures = OrderedDict()
         self.keyword_io = KeywordIO()
         self._create_exposure_combos()
         self._multi_exposure_if = None
@@ -357,6 +358,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
         canvas_layers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         layers = list(project.mapLayers().values())
+        # Sort by name for tests
+        layers.sort(key=lambda x: x.name())
 
         show_only_visible_layers = setting(
             'visibleLayersOnlyFlag', expected_type=bool)

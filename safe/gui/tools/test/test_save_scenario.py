@@ -70,7 +70,7 @@ class SaveScenarioTest(unittest.TestCase):
         # need to be able to react to the status changes of the other combos
         self.save_scenario_dialog = None
 
-    @unittest.expectedFailure
+
     def test_validate_input(self):
         """Test validate input."""
         # Valid Case
@@ -89,7 +89,8 @@ class SaveScenarioTest(unittest.TestCase):
         self.assertFalse(is_valid)
         self.assertIsNotNone(message)
 
-    @unittest.expectedFailure
+    @unittest.skipIf(os.environ.get('ON_TRAVIS', False),
+                     "Skip when running on Travis")
     def test_save_scenario(self):
         """Test saving Current scenario."""
         result, message = setup_scenario(
@@ -133,7 +134,8 @@ class SaveScenarioTest(unittest.TestCase):
             'extent = 106.287500, -6.380000, 107.372500, -6.070000')
         self.assertEqual(expected_extent, expected_extent)
 
-    @unittest.expectedFailure
+    @unittest.skipIf(os.environ.get('ON_TRAVIS', False),
+                     "Skip when running on Travis")
     def test_relative_path(self):
         """Test we calculate the relative paths correctly when saving scenario.
         """
