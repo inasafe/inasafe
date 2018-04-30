@@ -1248,7 +1248,7 @@ class Dock(QDockWidget, FORM_CLASS):
         :rtype: int
         """
         treeroot = QgsProject.instance().layerTreeRoot()
-        return len([lyr for lyr in treeroot.findLayers() if lyr.isVisible()]
+        return len([lyr for lyr in treeroot.findLayers() if lyr.isVisible()])
 
     def accept(self):
         """Execute analysis when run button is clicked.
