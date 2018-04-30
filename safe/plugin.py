@@ -149,16 +149,14 @@ class Plugin():
             self.toolbar.addAction(action)
         if add_to_legend:
             # The id is the action name without spaces, tabs ...
-            self.iface.legendInterface().addLegendLayerAction(
+            self.iface.addCustomActionForLayerType(
                 action,
                 self.tr('InaSAFE'),
-                ''.join(action.text().split()),
                 QgsMapLayer.VectorLayer,
                 True)
-            self.iface.legendInterface().addLegendLayerAction(
+            self.iface.addCustomActionForLayerType(
                 action,
                 self.tr('InaSAFE'),
-                ''.join(action.text().split()),
                 QgsMapLayer.RasterLayer,
                 True)
 
@@ -655,7 +653,7 @@ class Plugin():
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
-            self.iface.legendInterface().removeLegendLayerAction(myAction)
+            self.iface.removeCustomActionForLayerType(myAction)
         self.iface.mainWindow().removeDockWidget(self.dock_widget)
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dock_widget.setVisible(False)
