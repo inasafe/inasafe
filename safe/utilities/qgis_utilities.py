@@ -5,7 +5,7 @@
 from qgis.PyQt.QtWidgets import QMessageBox, QPushButton
 from qgis.gui import QgsMessageBar
 from qgis.utils import iface
-
+from qgis.core import Qgis
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -164,7 +164,7 @@ def display_warning_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, QgsMessageBar.WARNING, duration)
+    iface.messageBar().pushWidget(widget, Qgis.Warning, duration)
 
 
 def display_critical_message_box(parent=None, title=None, message=None):
