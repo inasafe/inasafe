@@ -1236,11 +1236,8 @@ class Dock(QDockWidget, FORM_CLASS):
             visibility status.
         :rtype: int
         """
-
-        legend = self.iface.legendInterface()
-        layers = legend.layers()
-        count = len(layers)
-        return count
+        treeroot = QgsProject.instance().layerTreeRoot()
+        return len(treeroot.findLayers())
 
     def _visible_layers_count(self):
         """Calculate the number of visible layers in the legend.
@@ -1250,13 +1247,8 @@ class Dock(QDockWidget, FORM_CLASS):
         :returns: Count of layers that are actually visible.
         :rtype: int
         """
-        legend = self.iface.legendInterface()
-        layers = legend.layers()
-        visible_count = 0
-        for layer in layers:
-            if legend.isLayerVisible(layer):
-                visible_count += 1
-        return visible_count
+        treeroot = QgsProject.instance().layerTreeRoot()
+        return len([lyr for lyr in treeroot.findLayers() if lyr.isVisible()]
 
     def accept(self):
         """Execute analysis when run button is clicked.
@@ -1320,8 +1312,11 @@ class Dock(QDockWidget, FORM_CLASS):
 
         qgis_exposure = layer_from_combo(self.exposure_layer_combo)
         if self.hide_exposure_flag:
-            legend = self.iface.legendInterface()
-            legend.setLayerVisible(qgis_exposure, False)
+            treeroot = QgsProject.instance().layerTreeRoot()
+            treelayer = treeroot.findLayer(qgis_exposure.id())
+            if treelayer:
+                treelayer.setItemVisibilityChecked(False)
+
 
         if setting('generate_report', True, bool):
             LOGGER.info('Reports are going to be generated the analysis.')

@@ -670,10 +670,12 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
 
             # If hide exposure layers
             if setting('setHideExposureFlag', expected_type=bool):
-                legend = self.iface.legendInterface()
+                treeroot = QgsProject.instance().layerTreeRoot()
                 for combo in list(self.combos_exposures.values()):
                     layer = layer_from_combo(combo)
-                    legend.setLayerVisible(layer, False)
+                    treelayer = treeroot.findLayer(layer.id())
+                    if treelayer:
+                        treelayer.setItemVisibilityChecked(False)
 
             # Set last analysis extent
             self._extent.set_last_analysis_extent(

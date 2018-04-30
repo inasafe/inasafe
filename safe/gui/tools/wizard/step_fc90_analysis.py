@@ -188,8 +188,10 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             QgsProject.instance().mapLayer(
                 self.parent.exposure_layer.id()))
         if self.hide_exposure_flag:
-            legend = self.iface.legendInterface()
-            legend.setLayerVisible(qgis_exposure, False)
+            treeroot = QgsProject.instance().layerTreeRoot()
+            treelayer = treeroot.findLayer(qgis_exposure.id())
+            if treelayer:
+                treelayer.setItemVisibilityChecked(False)
 
         # we only want to generate non pdf/qpt report
         html_components = [standard_impact_report_metadata_html]
