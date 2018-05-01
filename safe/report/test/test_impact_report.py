@@ -8,7 +8,7 @@ import shutil
 import unittest
 from collections import OrderedDict
 from osgeo import gdal
-from qgis.core import Qgis
+from qgis.core import Qgis, QgsProject
 
 from copy import deepcopy
 from jinja2.environment import Template
