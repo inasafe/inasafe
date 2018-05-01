@@ -594,7 +594,7 @@ class BaseMetadata(with_metaclass(abc.ABCMeta, object)):
         file_format = os.path.splitext(destination_path)[1][1:]
         metadata = self.get_writable_metadata(file_format)
 
-        with open(destination_path, 'w') as f:
+        with open(destination_path, 'w', encoding='utf-8') as f:
             f.write(metadata)
 
         return metadata

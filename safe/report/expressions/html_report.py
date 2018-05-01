@@ -2,7 +2,6 @@
 
 """QGIS Expressions which are available in the QGIS GUI interface."""
 
-import codecs
 from os.path import dirname, join, exists
 
 from qgis.core import (
@@ -293,6 +292,6 @@ def get_impact_report_as_string(analysis_dir):
 
     # We can display an impact report.
     # We need to open the file in UTF-8, the HTML may have some accents
-    with codecs.open(table_report_path, 'r', 'utf-8') as table_report_file:
+    with open(table_report_path, 'r', encoding='utf-8') as table_report_file:
         report = table_report_file.read()
         return report
