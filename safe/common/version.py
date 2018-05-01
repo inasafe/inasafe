@@ -28,7 +28,7 @@ def current_git_hash():
     """
     repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     git_show = subprocess.Popen(
-        'git rev-parse --short HEAD',
+        'git rev-parse --short=6 HEAD',
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         shell=True,
