@@ -9,32 +9,23 @@ from datetime import datetime
 import numpy as np
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
-from qgis.core import QgsVectorLayer, QgsFeatureRequest
 
-from safe.common.exceptions import (
-    ContourCreationError,
-    InvalidLayerError,
-    FileNotFoundError,
-)
-from safe.common.utilities import romanise, unique_filename, temp_dir
+from qgis.core import QgsFeatureRequest, QgsVectorLayer
+from safe.common.exceptions import (ContourCreationError, FileNotFoundError,
+                                    InvalidLayerError)
+from safe.common.utilities import (python2_round, romanise, temp_dir,
+                                   unique_filename)
 from safe.definitions.constants import NUMPY_SMOOTHING
-from safe.definitions.fields import (
-    contour_fields,
-    contour_x_field,
-    contour_y_field,
-    contour_colour_field,
-    contour_roman_field,
-    contour_halign_field,
-    contour_valign_field,
-    contour_length_field,
-    contour_mmi_field,
-
-)
+from safe.definitions.fields import (contour_colour_field, contour_fields,
+                                     contour_halign_field,
+                                     contour_length_field, contour_mmi_field,
+                                     contour_roman_field, contour_valign_field,
+                                     contour_x_field, contour_y_field)
 from safe.definitions.layer_geometry import layer_geometry_line
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
-from safe.gis.vector.tools import (
-    create_ogr_field_from_definition, field_index_from_definition)
+from safe.gis.vector.tools import (create_ogr_field_from_definition,
+                                   field_index_from_definition)
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import write_iso19115_metadata
 from safe.utilities.resources import resources_path
@@ -149,8 +140,11 @@ def convolve(input, weights, mask=None, slow=False):
     rows = input.shape[0]
     cols = input.shape[1]
     # Stands for half weights row.
-    hw_row = weights.shape[0] / 2
-    hw_col = weights.shape[1] / 2
+    hw_row = np.int(weights.shape[0] / 2)
+    hw_col = np.int(weights.shape[1] / 2)
+    # Stands for full weights row.
+    fw_row = weights.shape[0]
+    fw_col = weights.shape[0]
 
     # Now do convolution on central array.
     # Iterate over tiled_input.
@@ -177,8 +171,8 @@ def convolve(input, weights, mask=None, slow=False):
                 # Find the part of the tiled_input array that overlaps with the
                 # weights array.
                 overlapping = tiled_input[
-                    i - hw_row:i + hw_row,
-                    j - hw_col:j + hw_col]
+                    i - hw_row:i - hw_row + fw_row,
+                    j - hw_col:j - hw_col + fw_col]
                 assert (overlapping.shape == weights.shape)
 
                 # If any of 'overlapping' is masked then set the corresponding
@@ -186,8 +180,8 @@ def convolve(input, weights, mask=None, slow=False):
                 # non-masked points.
                 if mask is not None:
                     overlapping_mask = tiled_mask[
-                        i - hw_row:i + hw_row,
-                        j - hw_col:j + hw_col]
+                        i - hw_row:i - hw_row + fw_row,
+                        j - hw_col:j - hw_col + fw_row]
                     assert (overlapping_mask.shape == weights.shape)
 
                     # Total value and number of weights clobbered by the mask.
