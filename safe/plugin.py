@@ -812,7 +812,7 @@ class Plugin():
             show_message = True
 
         # Allow to disable welcome message when running automated tests
-        if os.environ.get('DISABLE_WELCOME_MESSAGE', False):
+        if os.environ.get('INASAFE_DISABLE_WELCOME_MESSAGE', False):
             show_message = False
 
         if show_message:
