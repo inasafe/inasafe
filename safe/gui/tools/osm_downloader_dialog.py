@@ -123,7 +123,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Setup helper for admin_level
         json_file_path = resources_path('osm', 'admin_level_per_country.json')
         if os.path.isfile(json_file_path):
-            with open(json_file_path) as f:
+            with open(json_file_path, encoding='utf-8') as f:
                 self.countries = json.load(f)
                 self.bbox_countries = None
                 self.populate_countries()
