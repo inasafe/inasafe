@@ -5,6 +5,7 @@ import os
 
 from jinja2.exceptions import TemplateError
 
+from qgis.core import QgsFeature
 from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.utilities import definition
 
@@ -117,7 +118,7 @@ def value_from_field_name(field_name, analysis_layer):
     :param analysis_layer: Analysis layer.
     :type analysis_layer: qgis.core.QgsVectorLayer
 
-    :return: return the valeu of a given field name of the analysis.
+    :return: return the value of a given field name of the analysis.
 
     .. versionadded:: 4.0
     """
@@ -125,7 +126,9 @@ def value_from_field_name(field_name, analysis_layer):
     if field_index < 0:
         return None
     else:
-        return analysis_layer.getFeatures().next()[field_index]
+        feat = QgsFeature()
+        analysis_layer.getFeatures().nextFeature(feat)
+        return feat[field_index]
 
 
 def resolve_from_dictionary(dictionary, key_list, default_value=None):
