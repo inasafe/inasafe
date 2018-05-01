@@ -41,19 +41,12 @@ __copyright__ = (
 def _run_tests(test_suite, package_name, with_coverage=False):
     """Core function to test a test suite."""
     count = test_suite.countTestCases()
-    # fix_print_with_import
     print('########')
-    # fix_print_with_import
     print('%s tests has been discovered in %s' % (count, package_name))
-    # fix_print_with_import
     print('QGIS : %s' % qgis_version())
-    # fix_print_with_import
     print('Python GDAL : %s' % gdal.VersionInfo('VERSION_NUM'))
-    # fix_print_with_import
     print('QT : %s' % Qt.QT_VERSION)
-    # fix_print_with_import
     print('Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False)))
-    # fix_print_with_import
     print('########')
     if with_coverage:
         cov = coverage.Coverage(
@@ -73,7 +66,6 @@ def _run_tests(test_suite, package_name, with_coverage=False):
         # cov.html_report()
         report.close()
         with open(report.name, 'r') as fin:
-            # fix_print_with_import
             print(fin.read())
 
 
@@ -114,11 +106,11 @@ def test_manually():
 def test_qgis3():
     """Transient function to re-enable QGIS3 ready tests on Travis selectively.
     """
+    test_package('safe.definitions')
     test_package('safe.utilities')
     test_package('safe.common')
     test_package('safe.gis')
     test_package('safe.datastore')
-    test_package('safe.definitions')
     test_package('safe.impact_function')
     test_package('safe.messaging')
     test_package('safe.metadata')
@@ -128,7 +120,11 @@ def test_qgis3():
     # TODO test_package('safe.report')
 
 
+def test_one():
+    """Run a single test"""
+    from safe.gui.tools.test.test_extent_selector import ExtentSelectorTest
+    unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(unittest.makeSuite(ExtentSelectorTest, 'test'))
+
 
 if __name__ == '__main__':
-    #test_package()
     test_qgis3()
