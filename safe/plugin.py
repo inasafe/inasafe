@@ -811,6 +811,10 @@ class Plugin():
             # Always show if the user installed new version
             show_message = True
 
+        # Allow to disable welcome message when running automated tests
+        if os.environ.get('DISABLE_WELCOME_MESSAGE', False):
+            show_message = False
+
         if show_message:
             dialog = OptionsDialog(
                 iface=self.iface,

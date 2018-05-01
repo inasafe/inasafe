@@ -52,3 +52,6 @@ Removed Classes
 
 General changes
 ---------------
+
+
+- added environment variable DISABLE_WELCOME_MESSAGE, when set the welcome message will not be shown
