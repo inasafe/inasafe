@@ -13,7 +13,7 @@ from osgeo.gdalconst import GA_ReadOnly
 from qgis.core import QgsFeatureRequest, QgsVectorLayer
 from safe.common.exceptions import (ContourCreationError, FileNotFoundError,
                                     InvalidLayerError)
-from safe.common.utilities import (python2_round, romanise, temp_dir,
+from safe.common.utilities import (romanise, temp_dir,
                                    unique_filename)
 from safe.definitions.constants import NUMPY_SMOOTHING
 from safe.definitions.fields import (contour_colour_field, contour_fields,
