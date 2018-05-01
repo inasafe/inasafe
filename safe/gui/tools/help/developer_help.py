@@ -240,7 +240,7 @@ def _get_definition_from_module(definitions_module, symbol):
     """Given a python module fetch the declaration of a variable."""
     path = definitions_module.__file__
     path = path.replace('.pyc', '.py')
-    source = open(path).readlines()
+    source = open(path, encoding='utf-8').readlines()
     text = None
     for line in source:
         if symbol == line.partition(' ')[0]:
