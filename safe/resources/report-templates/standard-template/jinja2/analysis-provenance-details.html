@@ -6,12 +6,12 @@
     <!--static tree starts here. ps: it would be great if we can make it dynamic (recursive tree)-->
     <div class="tree">
         <ul>
-            {% for key, value in details.iteritems() %}
+            {% for key, value in details.items() %}
                 <li>
                     <b>{{ value.header }}</b>
                     {% if value.provenances is mapping %}
                         <ul>
-                            {% for key, item in value.provenances.iteritems() %}
+                            {% for key, item in value.provenances.items() %}
                                 {% if item %}
                                 <li>
                                     <div class="row">
@@ -21,7 +21,7 @@
                                         <div class="col-sm-10">
                                             {% if item.content is mapping %}
                                                 <ul>
-                                                {% for key, html_item in item.content.iteritems() %}
+                                                {% for key, html_item in item.content.items() %}
                                                     <li>
                                                         <b>{{ key }}</b>
                                                         <div>{{ html_item }}</div>

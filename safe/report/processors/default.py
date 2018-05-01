@@ -163,7 +163,7 @@ def create_qgis_pdf_output(
 
     :param qgis_composition_context: QGIS Composition context used by renderer.
     :type qgis_composition_context: safe.report.impact_report.
-        QGISCompositionContext
+        QgsLayoutContext
 
     :param file_format: file format of map output, PDF or PNG.
     :type file_format: 'pdf', 'png'
@@ -192,8 +192,6 @@ def create_qgis_pdf_output(
     # for QGIS composer only pdf and png output are available
     elif file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         try:
-            composition.setPlotStyle(
-                qgis_composition_context.plot_style)
             composition.setPrintResolution(metadata.page_dpi)
             composition.setPaperSize(
                 metadata.page_width, metadata.page_height)
@@ -260,10 +258,10 @@ def qgis_composer_html_renderer(impact_report, component):
     """
     context = component.context
     """:type: safe.report.extractors.composer.QGISComposerContext"""
-    qgis_composition_context = impact_report.qgis_composition_context
+    #qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsLayout(qgis_composition_context.map_settings)
+    composition = QgsLayout(QgsProject.instance())
 
     if not context.html_frame_elements:
         # if no html frame elements at all, do not generate empty report.
@@ -273,8 +271,7 @@ def qgis_composer_html_renderer(impact_report, component):
     # Add HTML Frame
     for html_el in context.html_frame_elements:
         mode = html_el.get('mode')
-        html_element = QgsLayoutItemHtml(composition, False)
-        """:type: qgis.core.QgsLayoutItemHtml"""
+        html_element = QgsLayoutItemHtml(composition)
         margin_left = html_el.get('margin_left', 10)
         margin_top = html_el.get('margin_top', 10)
         width = html_el.get('width', component.page_width - 2 * margin_left)

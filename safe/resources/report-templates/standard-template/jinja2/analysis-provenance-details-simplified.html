@@ -2,7 +2,7 @@
     <h5 class="info">
         {{ header }}
     </h5>
-    {% for key, item in details.iteritems() %}
+    {% for key, item in details.items() %}
         {% if item %}
         <p>
             <b>{{ item.header }}</b> {{ item.provenance }}

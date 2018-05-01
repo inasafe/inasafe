@@ -111,7 +111,7 @@ class TestExpressions(unittest.TestCase):
         if params is None:
             params = default_params
 
-        actual_result = func.funcV2(params, feature, parent)
+        actual_result = func.func(params, feature, parent)
         self.assertEqual(actual_result, expected_result)
 
     def test_map_report_expressions(self):
