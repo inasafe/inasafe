@@ -68,7 +68,7 @@ def display_information_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, QgsMessageBar.INFO, duration)
+    iface.messageBar().pushWidget(widget, Qgis.Info, duration)
 
 
 def display_success_message_bar(
