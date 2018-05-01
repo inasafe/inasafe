@@ -4,7 +4,7 @@
         vertical-align: top;
     }
 
-    {% for key, group in detail_header.header_hazard_group.iteritems() %}
+    {% for key, group in detail_header.header_hazard_group.items() %}
     #detail-table th.{{ key }}, #detail-table td.{{ key }} {
         {% if group.color %}
         background-color: {{ group.color }};

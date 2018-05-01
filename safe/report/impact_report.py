@@ -157,24 +157,23 @@ class InaSAFEReportContext():
             self._disclaimer = text
 
 
-class QGISCompositionContext():
+class QgsLayoutContext():
 
-    """A class to hold the value for QGISComposition object.
+    """A class to hold the value for QgsLayout object.
 
     .. versionadded:: 4.0
     """
 
     def __init__(self, extent, map_settings, page_dpi):
-        """Create QGISComposition context."""
+        """Create QgsLayout context."""
         self._extent = extent
         self._map_settings = map_settings
         self._page_dpi = page_dpi
-        self._plot_style = QgsLayout.Print
         self._save_as_raster = True
 
     @property
     def page_dpi(self):
-        """The Page DPI that QGISComposition uses.
+        """The Page DPI that QgsLayout uses.
 
         Can be overriden by report metadata
 
@@ -229,19 +228,6 @@ class QGISCompositionContext():
         :type value: qgis.core.QgsMapSettings
         """
         self._map_settings = value
-
-    @property
-    def plot_style(self):
-        """Constant options for composition rendering style.
-
-        Possible values:
-        - QgsComposition.PlotStyle.Preview
-        - QgsComposition.PlotStyle.Render
-        - QgsComposition.PlotStyle.Postscript
-
-        :rtype: QgsComposition.PlotStyle
-        """
-        return self._plot_style
 
     @property
     def save_as_raster(self):
@@ -339,7 +325,7 @@ class ImpactReport():
         else:
             map_settings = QgsMapSettings()
 
-        self._qgis_composition_context = QGISCompositionContext(
+        self._qgis_composition_context = QgsLayoutContext(
             None,
             map_settings,
             ImpactReport.DEFAULT_PAGE_DPI)
@@ -357,7 +343,7 @@ class ImpactReport():
     def qgis_composition_context(self):
         """Reference to default QGIS Composition Context.
 
-        :rtype: QGISCompositionContext
+        :rtype: QgsLayoutContext
         """
         return self._qgis_composition_context
 
