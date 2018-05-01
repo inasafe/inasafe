@@ -54,4 +54,5 @@ General changes
 ---------------
 
 
-- added environment variable DISABLE_WELCOME_MESSAGE, when set the welcome message will not be shown
+- added environment variable INASAFE_DISABLE_WELCOME_MESSAGE, when set the welcome message will not be shown
+- added environment variable INASAFE_LOGGING_LEVEL (integer), default value is logging.DEBUG
