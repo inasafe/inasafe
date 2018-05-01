@@ -92,7 +92,7 @@ class ExtentSelectorTest(unittest.TestCase):
 
 
     # FIXME: This currently segfaults on Travis
-    @unittest.skipIf(os.environ('ON_TRAVIS', False), "This currently segfaults on Travis")
+    @unittest.skipIf(os.environ.get('ON_TRAVIS', False), "This currently segfaults on Travis")
     def test_spinboxes(self):
         """Test validate extent method."""
         self.dialog.x_maximum.clear()
