@@ -36,12 +36,12 @@ class TestVersion(unittest.TestCase):
                 expected_version, version)
             self.assertEqual(expected_version, version, message)
         else:
-            expected_version = '2.2.0.dev-ABCDEFG'
+            expected_version = '2.2.0.dev-ABCDEF'
             message = 'It should be %s but got %s' % (
                 expected_version[:9], version[:9])
             self.assertEqual(expected_version[:9], version[:9], message)
-            message = 'Expected version that has length %d, got %d' % (
-                len(expected_version), len(version))
+            message = 'Expected version that has length %d, got %d (%s)' % (
+                len(expected_version), len(version), version)
             self.assertEqual(len(expected_version), len(version), message)
 
         # Version tuple doesn't have length == 5
@@ -60,12 +60,7 @@ class TestVersion(unittest.TestCase):
     def test_get_current_hash(self):
         """Test for get_current_hash."""
         git_hash = current_git_hash()
-        if sys.platform in ['win32', 'darwin']:
-            # On windows we get 9 chars of the git hash back
-            # On MacOS also (IS - 27 Apr 2017)
-            self.assertEqual(len(git_hash), 9)
-        else:
-            self.assertEqual(len(git_hash), 7)
+        self.assertEqual(len(git_hash), 6)
 
     def test_compare_version(self):
         """Test comparing version in 2 places.
