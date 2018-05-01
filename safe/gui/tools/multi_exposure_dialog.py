@@ -599,14 +599,14 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             if len(self.ordered_expected_layers()) == 0:
                 group_analysis = root.insertGroup(
                     0, self._multi_exposure_if.name)
-                group_analysis.setVisible(Qt.Checked)
+                group_analysis.setItemVisibilityChecked(True)
                 group_analysis.setCustomProperty(
                     MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
                 for layer in self._multi_exposure_if.outputs:
                     QgsProject.instance().addMapLayer(layer, False)
                     layer_node = group_analysis.addLayer(layer)
-                    layer_node.setVisible(Qt.Unchecked)
+                    layer_node.setItemVisibilityChecked(False)
 
                     # set layer title if any
                     try:
@@ -621,7 +621,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 for analysis in self._multi_exposure_if.impact_functions:
                     detailed_group = group_analysis.insertGroup(
                         0, analysis.name)
-                    detailed_group.setVisible(Qt.Checked)
+                    detailed_group.setItemVisibilityChecked(True)
                     add_impact_layers_to_canvas(analysis, group=detailed_group)
 
                 if self.iface:
