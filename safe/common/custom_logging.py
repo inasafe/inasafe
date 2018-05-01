@@ -125,8 +125,9 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
     """
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
-    default_handler_level = logging.DEBUG
+    logging_level = int(os.environ.get('INASAFE_LOGGING_LEVEL', logging.DEBUG))
+    logger.setLevel(logging_level)
+    default_handler_level = logging_level
 
     # create formatter that will be added to the handlers
     formatter = logging.Formatter(
