@@ -44,7 +44,7 @@ def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
         # noinspection PyArgumentList
         root = QgsProject.instance().layerTreeRoot()
         group_analysis = root.insertGroup(0, name)
-        group_analysis.setVisible(Qt.Checked)
+        group_analysis.setItemVisibilityChecked(True)
 
     group_analysis.setExpanded(group is None)
 
@@ -69,9 +69,9 @@ def add_impact_layers_to_canvas(impact_function, group=None, iface=None):
             visible_layers.append(impact_function.aggregation_summary.id())
         # Let's enable only the more detailed layer. See #2925
         if layer.id() in visible_layers:
-            layer_node.setVisible(Qt.Checked)
+            layer_node.setItemVisibilityChecked(True)
         else:
-            layer_node.setVisible(Qt.Unchecked)
+            layer_node.setItemVisibilityChecked(False)
 
         # we need to set analysis_impacted as an active layer because we need
         # to get all qgis variables that we need from this layer for
@@ -89,7 +89,7 @@ def add_debug_layers_to_canvas(impact_function):
     name = 'DEBUG %s' % impact_function.name
     root = QgsProject.instance().layerTreeRoot()
     group_debug = root.insertGroup(0, name)
-    group_debug.setVisible(Qt.Unchecked)
+    group_debug.setItemVisibilityChecked(False)
     group_debug.setExpanded(False)
     hazard_keywords = impact_function.provenance['hazard_keywords']
     exposure_keywords = impact_function.provenance['exposure_keywords']
@@ -118,7 +118,7 @@ def add_debug_layers_to_canvas(impact_function):
         QgsProject.instance().addMapLayer(
             qgis_layer, False)
         layer_node = group_debug.insertLayer(0, qgis_layer)
-        layer_node.setVisible(Qt.Unchecked)
+        layer_node.setItemVisibilityChecked(False)
         layer_node.setExpanded(False)
 
         # Let's style layers which have a geometry and have
@@ -156,7 +156,7 @@ def add_layers_to_canvas_with_custom_orders(
     root.setVisible(False)  # Make all layers hidden.
 
     group_analysis = root.insertGroup(0, impact_function.name)
-    group_analysis.setVisible(Qt.Checked)
+    group_analysis.setItemVisibilityChecked(True)
     group_analysis.setCustomProperty(MULTI_EXPOSURE_ANALYSIS_FLAG, True)
 
     # Insert layers in the good order in the group.
@@ -168,7 +168,7 @@ def add_layers_to_canvas_with_custom_orders(
             layer.importNamedStyle(style)
             QgsProject.instance().addMapLayer(layer, False)
             layer_node = group_analysis.addLayer(layer)
-            layer_node.setVisible(Qt.Checked)
+            layer_node.setItemVisibilityChecked(True)
         else:
             if layer_definition[2] == impact_function.name:
                 for layer in impact_function.outputs:
@@ -176,7 +176,7 @@ def add_layers_to_canvas_with_custom_orders(
                         QgsProject.instance().addMapLayer(
                             layer, False)
                         layer_node = group_analysis.addLayer(layer)
-                        layer_node.setVisible(Qt.Checked)
+                        layer_node.setItemVisibilityChecked(True)
                         try:
                             title = layer.keywords['title']
                             if qgis_version() >= 21800:
@@ -198,7 +198,7 @@ def add_layers_to_canvas_with_custom_orders(
                                     layer, False)
                                 layer_node = group_analysis.addLayer(
                                     layer)
-                                layer_node.setVisible(Qt.Checked)
+                                layer_node.setItemVisibilityChecked(True)
                                 try:
                                     title = layer.keywords['title']
                                     if qgis_version() >= 21800:
