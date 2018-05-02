@@ -463,3 +463,24 @@ class MetadataConversionError(InaSAFEError):
     """When failed to convert metadata."""
 
     pass
+
+
+class GeoNodeInstanceError(InaSAFEError):
+
+    """When failed to access GeoNode instance (probably not valid)."""
+
+    pass
+
+
+class GeoNodeLoginError(InaSAFEError):
+
+    """When failed to login to GeoNode instance."""
+
+    pass
+
+
+class GeoNodeLayerUploadError(InaSAFEError):
+
+    """When failed to upload layer to GeoNode instance."""
+
+    pass

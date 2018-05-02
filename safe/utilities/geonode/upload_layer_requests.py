@@ -8,6 +8,9 @@ import requests
 from requests.compat import urljoin
 from os.path import splitext, isfile, split
 
+from safe.common.exceptions import (
+    GeoNodeLoginError, GeoNodeInstanceError, GeoNodeLayerUploadError)
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2018, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -104,6 +107,16 @@ def login_user(server, login, password):
     session = requests.session()
     result = session.get(login_url)
 
+    # Check if the request ok
+    if not result.ok:
+        message = (tr(
+            'Request failed to {geonode_url}, got status code {status_code} '
+            'and reason {request_reason}').format(
+                geonode_url=server,
+                status_code=result.status_code,
+                request_reason=result.reason))
+        raise GeoNodeInstanceError(message)
+
     # Take the CSRF token
     login_form_regexp = (
         "<input type='hidden' name='csrfmiddlewaretoken' value='(.*)' />")
@@ -118,7 +131,15 @@ def login_user(server, login, password):
     }
 
     # Make the login
-    session.post(login_url, data=payload, headers=dict(referer=login_url))
+    result = session.post(login_url, data=payload, headers=dict(
+        referer=login_url))
+
+    # Check the result url to check if the login success
+    if result.url == login_url:
+        message = tr('Failed to login to GeoNode at {geonode_url}').format(
+            geonode_url=server)
+        raise GeoNodeLoginError(message)
+
     return session
 
 
@@ -157,7 +178,7 @@ def upload(server, session, base_file, charset='UTF-8'):
 
     files, mime = siblings_files(base_file)
     if len(files) < 1:
-        raise RuntimeError('The base layer is not recognised.')
+        raise RuntimeError(tr('The base layer is not recognised.'))
 
     name_file = split(base_file)[1]
     multiple_files = [
@@ -183,8 +204,12 @@ def upload(server, session, base_file, charset='UTF-8'):
     # For debug
     # pretty_print_post(prepared_request)
     result = session.send(prepared_request)
-    if result.status_code == 200:
+    if result.ok:
         result = json.loads(result.content)
         return result
     else:
-        raise requests.RequestException(result)
+        message = (tr(
+            'Failed to upload layer. Got HTTP Status Code {status_code} and '
+            'the reason is {reason}').format(
+                status_code=result.status_code, reason=result.reason))
+        raise GeoNodeLayerUploadError(message)
