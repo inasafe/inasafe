@@ -160,10 +160,9 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     have_fatality_rate = False
     for hazard_class in hazard_classification['classes']:
         if hazard_class.get('fatality_rate', None) is not None and \
-            hazard_class.get('fatality_rate', 0) > 0:
+                hazard_class.get('fatality_rate', 0) > 0:
             have_fatality_rate = True
             break
-
 
     if have_fatality_rate and exposure_type == exposure_population:
         # add notes for fatality rate used
