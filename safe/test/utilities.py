@@ -262,10 +262,12 @@ def standard_data_path(*args):
     for item in args:
         path = os.path.abspath(os.path.join(path, item))
 
-    if os.path.exists(path):
-        return path
-    else:
-        raise OSError('File %s not found' % path)
+    # if os.path.exists(path):
+    #     return path
+    # else:
+    #     raise OSError('File %s not found' % path)
+
+    return path
 
 
 def load_local_vector_layer(test_file, **kwargs):
