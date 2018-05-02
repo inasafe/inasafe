@@ -33,6 +33,7 @@ from qgis.core import (
     QgsLayoutItemLegend,
     QgsCoordinateTransform,
     QgsProject,
+    QgsReadWriteContext,
     PROJECT_SCALES
 )
 
@@ -52,10 +53,10 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def composition_item(composer, item_id, item_class):
+def composition_item(layout, item_id, item_class):
     """Fetch a specific item according to its type in a composer.
 
-    We got some problem with Qgsomposition::getComposerItemById. Don't use it,
+    We got some problem with QgsComposition::getComposerItemById. Don't use it,
     and use this function instead.
     See https://github.com/inasafe/inasafe/issues/4271
 
@@ -72,12 +73,12 @@ def composition_item(composer, item_id, item_class):
     """
     if item_class.__name__ == 'QgsLayoutItemMap':
         # It needs this condition for Rohmat (Ubuntu)
-        item = composer.getComposerItemById(item_id)
+        item = layout.itemById(item_id)
         if isinstance(item, QgsLayoutItemMap):
             return item
 
     # Normal behaviour
-    for item in list(composer.items()):
+    for item in list(layout.items()):
         if isinstance(item, item_class):
             if item.id() == item_id:
                 return item
@@ -85,7 +86,7 @@ def composition_item(composer, item_id, item_class):
     # Note from Etienne
     # Still no item? No problem, let's try something else to fetch the map.
     if item_class.__name__ == 'QgsLayoutItemMap':
-        maps = composer.composerMapItems()
+        maps = [it for it in layout.items() if isinstance(it, QgsLayoutItemMap)]
         for composer_map in maps:
             if composer_map.displayName() == item_id:
                 return composer_map
@@ -257,8 +258,9 @@ def qgis_composer_html_renderer(impact_report, component):
     .. versionadded:: 4.0
     """
     context = component.context
-    """:type: safe.report.extractors.composer.QGISComposerContext"""
-    #qgis_composition_context = impact_report.qgis_composition_context
+
+    # QGIS3: not used
+    # qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
     composition = QgsLayout(QgsProject.instance())
@@ -405,11 +407,10 @@ def qgis_composer_renderer(impact_report, component):
     .. versionadded:: 4.0
     """
     context = component.context
-    """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsLayout(qgis_composition_context.map_settings)
+    composition = QgsLayout(QgsProject.instance())
 
     # load template
     main_template_folder = impact_report.metadata.template_folder
@@ -424,10 +425,16 @@ def qgis_composer_renderer(impact_report, component):
         template_content = template_file.read()
 
     document = QtXml.QDomDocument()
+
+    # Replace
+    for k, v in context.substitution_map.items():
+        template_content = template_content.replace(k, v)
+
     document.setContent(template_content)
 
+    rwcontext = QgsReadWriteContext()
     load_status = composition.loadFromTemplate(
-        document, context.substitution_map)
+        document, rwcontext)
 
     if not load_status:
         raise TemplateLoadingError(
@@ -438,7 +445,6 @@ def qgis_composer_renderer(impact_report, component):
         item_id = img.get('id')
         path = img.get('path')
         image = composition_item(composition, item_id, QgsLayoutItemPicture)
-        """:type: qgis.core.QgsLayoutItemPicture"""
         if image and path:
             image.setPicturePath(path)
 
@@ -446,12 +452,14 @@ def qgis_composer_renderer(impact_report, component):
     for html_el in context.html_frame_elements:
         item_id = html_el.get('id')
         mode = html_el.get('mode')
-        composer_item = composition.getComposerItemById(item_id)
-        try:
-            html_element = composition.getComposerHtmlByItem(composer_item)
-        except BaseException:
-            pass
-        """:type: qgis.core.QgsLayoutItemHtml"""
+        composer_item = composition.itemById(item_id)
+        # TODO: ABP check this code!!!
+        html_element = composer_item
+        # try:
+        #    html_element = composition.getComposerHtmlByItem(composer_item)
+        # except BaseException:
+        #    pass
+        # """:type: qgis.core.QgsLayoutItemHtml"""
         if html_element:
             if mode == 'text':
                 text = html_el.get('text')
