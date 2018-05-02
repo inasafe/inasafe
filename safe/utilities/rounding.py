@@ -39,7 +39,7 @@ def format_number(
     if use_rounding:
         x = rounding(x, is_population)
 
-    x /= coefficient
+    x //= coefficient
 
     number = add_separators(x)
     return number
