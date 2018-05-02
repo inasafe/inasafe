@@ -1317,7 +1317,6 @@ class Dock(QDockWidget, FORM_CLASS):
             if treelayer:
                 treelayer.setItemVisibilityChecked(False)
 
-
         if setting('generate_report', True, bool):
             LOGGER.info('Reports are going to be generated the analysis.')
             # we only want to generate non pdf/qpt report
