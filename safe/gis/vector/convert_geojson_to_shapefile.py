@@ -17,7 +17,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 def convert_geojson_to_shapefile(geojson_path):
     """Convert geojson file to shapefile.
-    It will create a necessary file next to the geojson file. It wil not
+
+    It will create a necessary file next to the geojson file. It will not
     affect another files (e.g. .xml, .qml, etc).
 
     :param geojson_path: The path to geojson file.
@@ -26,7 +27,7 @@ def convert_geojson_to_shapefile(geojson_path):
     :returns: True if shapefile layer created, False otherwise.
     :rtype: bool
     """
-    layer = QgsVectorLayer(geojson_path, 'vector layer', "ogr")
+    layer = QgsVectorLayer(geojson_path, 'vector layer', 'ogr')
     if not layer.isValid():
         return False
     # Construct shapefile path
