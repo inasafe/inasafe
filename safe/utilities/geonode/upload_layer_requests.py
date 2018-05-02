@@ -3,6 +3,7 @@
 """Upload a layer to Geonode using the web scrapping."""
 
 import re
+import os
 import json
 import requests
 from requests.compat import urljoin
@@ -11,6 +12,9 @@ from os.path import splitext, isfile, split
 from safe.common.exceptions import (
     GeoNodeLoginError, GeoNodeInstanceError, GeoNodeLayerUploadError)
 from safe.utilities.i18n import tr
+from safe.gis.vector.convert_geojson_to_shapefile import (
+    convert_geojson_to_shapefile
+)
 
 __copyright__ = "Copyright 2018, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -23,10 +27,11 @@ upload_url_prefix = 'layers/upload'
 # Extensions we are looking for
 extension_siblings = {
     '.asc': {
-        '.asc': 'application/octet-stream'
-        # '.qml',
-        # '.sld',
-        # '.xml',
+        '.asc': 'application/octet-stream',
+        '.prj': 'application/octet-stream',
+        '.qml': 'application/octet-stream',
+        '.sld': 'application/octet-stream',  # ?
+        '.xml': 'text/xml',
     },
     '.tif': {
         '.tif': 'application/octet-stream',
@@ -38,12 +43,12 @@ extension_siblings = {
         '.qml': 'application/octet-stream',
         '.xml': 'text/xml',
     },
-    # '.geojson': [
-    #     '.geojson',
-    #     '.qml',
-    #     '.sld',
-    #     '.xml',
-    # ],
+    '.geojson': {
+        '.geojson': 'application/vnd.geo+json',
+        '.qml': 'application/octet-stream',
+        '.sld': 'application/octet-stream',  # ?
+        '.xml': 'text/xml',
+    },
     '.shp': {
         '.dbf': 'application/x-dbase',
         '.prj': 'application/octet-stream',
@@ -51,6 +56,7 @@ extension_siblings = {
         '.shp': 'application/octet-stream',
         '.shx': 'application/octet-stream',
         '.sld': 'application/octet-stream',  # ?
+        '.qpj': 'application/octet-stream',  # ?
         '.xml': 'text/xml',
     },
 }
@@ -155,6 +161,14 @@ def upload(server, session, base_file, charset='UTF-8'):
     :param charset: The encoding to use. Default to UTF-8.
     :type charset: basestring
     """
+    is_geojson = os.path.splitext(base_file)[1] == '.geojson'
+    original_sibling_files, _ = siblings_files(base_file)
+    if is_geojson:
+        # base_file = os.path.splitext(base_file)[0]
+        # create temp shapefile
+        convert_geojson_to_shapefile(base_file)
+        base_file = os.path.splitext(base_file)[0] + '.shp'
+
     upload_url = urljoin(server, upload_url_prefix)
     result = session.get(upload_url)
 
@@ -204,6 +218,16 @@ def upload(server, session, base_file, charset='UTF-8'):
     # For debug
     # pretty_print_post(prepared_request)
     result = session.send(prepared_request)
+
+    # Clean up shapefile and its sibling friends
+    if is_geojson:
+        for filename in files.keys():
+            if filename not in original_sibling_files:
+                try:
+                    os.remove(filename)
+                except OSError:
+                    pass
+
     if result.ok:
         result = json.loads(result.content)
         full_url = server + result['url']
