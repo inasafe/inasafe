@@ -75,6 +75,7 @@ class GeonodeUploadTest(unittest.TestCase):
         # Upload a single raster layer
         result = upload(GEONODE_URL, session, ascii_layer_uri)
         self.assertTrue(result['success'])
+        self.assertTrue(result['full_url'].startswith(GEONODE_URL))
 
     @unittest.skipUnless(LOGIN, 'You need to fill LOGIN and PASSWORD above.')
     def test_upload_shapefile_layers(self):
@@ -85,6 +86,7 @@ class GeonodeUploadTest(unittest.TestCase):
         # Upload a vector layer (with many files)
         result = upload(GEONODE_URL, session, shapefile_layer_uri)
         self.assertTrue(result['success'])
+        self.assertTrue(result['full_url'].startswith(GEONODE_URL))
 
     @unittest.skipUnless(LOGIN, 'You need to fill LOGIN and PASSWORD above.')
     def test_upload_tif_layer(self):
@@ -95,3 +97,4 @@ class GeonodeUploadTest(unittest.TestCase):
         # Upload a single raster layer
         result = upload(GEONODE_URL, session, tif_layer_uri)
         self.assertTrue(result['success'])
+        self.assertTrue(result['full_url'].startswith(GEONODE_URL))
