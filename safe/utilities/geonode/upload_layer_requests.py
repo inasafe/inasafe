@@ -206,6 +206,8 @@ def upload(server, session, base_file, charset='UTF-8'):
     result = session.send(prepared_request)
     if result.ok:
         result = json.loads(result.content)
+        full_url = server + result['url']
+        result['full_url'] = full_url
         return result
     else:
         message = (tr(
