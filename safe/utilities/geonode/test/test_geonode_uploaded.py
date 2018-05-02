@@ -12,7 +12,8 @@ import unittest
 
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import standard_data_path
-from safe.utilities.geonode.upload_layer_requests import upload, login_user
+from safe.utilities.geonode.upload_layer_requests import (
+    upload, login_user, siblings_files, extension_siblings)
 from safe.common.exceptions import GeoNodeLoginError, GeoNodeInstanceError
 
 from safe.test.utilities import get_qgis_app
@@ -25,6 +26,8 @@ GEONODE_URL = ''
 shapefile_layer_uri = standard_data_path('exposure', 'airports.shp')
 ascii_layer_uri = standard_data_path('gisv4', 'hazard', 'earthquake.asc')
 tif_layer_uri = standard_data_path('hazard', 'earthquake.tif')
+geojson_layer_uri = standard_data_path(
+    'gisv4', 'hazard','classified_vector.geojson')
 
 
 class GeonodeUploadTest(unittest.TestCase):
@@ -37,6 +40,17 @@ class GeonodeUploadTest(unittest.TestCase):
     Their HTML might change and break the test. These tests are disabled
     because we use our own credentials.
     """
+
+    def test_siblings_files(self):
+        """Test for siblings_files functionality."""
+        files, mime = siblings_files(shapefile_layer_uri)
+        base_file_name = os.path.splitext(shapefile_layer_uri)[0]
+        expected_siblings = [
+            base_file_name + ext for ext in extension_siblings['.shp'].keys()
+        ]
+        for expected_sibling in expected_siblings:
+            if os.path.exists(expected_sibling):
+                self.assertIn(expected_sibling, files.keys())
 
     def test_credentials_are_not_public(self):
         """Test if we did not publish credentials on github/travis."""
@@ -96,5 +110,16 @@ class GeonodeUploadTest(unittest.TestCase):
 
         # Upload a single raster layer
         result = upload(GEONODE_URL, session, tif_layer_uri)
+        self.assertTrue(result['success'])
+        self.assertTrue(result['full_url'].startswith(GEONODE_URL))
+
+    @unittest.skipUnless(LOGIN, 'You need to fill LOGIN and PASSWORD above.')
+    def test_upload_geojson_layer(self):
+        """Test upload geojson layer."""
+        # Connection
+        session = login_user(GEONODE_URL, LOGIN, PASSWORD)
+
+        # Upload a single raster layer
+        result = upload(GEONODE_URL, session, geojson_layer_uri)
         self.assertTrue(result['success'])
         self.assertTrue(result['full_url'].startswith(GEONODE_URL))
