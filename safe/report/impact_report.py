@@ -12,7 +12,7 @@ import logging
 import os
 import shutil
 
-from qgis.core import QgsLayout, QgsRasterLayer, QgsMapSettings
+from qgis.core import QgsRasterLayer, QgsMapSettings
 
 from safe import messaging as m
 from safe.common.exceptions import (
