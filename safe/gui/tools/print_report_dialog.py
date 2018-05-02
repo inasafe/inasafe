@@ -378,7 +378,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
                 report_path=report_path,
                 suffix='.qpt'):
 
-            composer = self.iface.createNewComposer()
+            composer = self.iface.createNewPrintLayout()
 
             with open(template_path) as template_file:
                 template_content = template_file.read()
@@ -387,7 +387,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
             document.setContent(template_content)
 
             # load composition object
-            load_status = composer.composition().loadFromTemplate(document)
+            load_status = composer.currentLayout().loadFromTemplate(document)
 
             if not load_status:
                 # noinspection PyCallByClass,PyTypeChecker
