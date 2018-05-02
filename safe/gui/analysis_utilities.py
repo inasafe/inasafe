@@ -5,7 +5,6 @@
 from collections import OrderedDict
 
 from qgis.core import QgsMapLayer, QgsProject, QgsWkbTypes
-from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtXml import QDomDocument
 from safe.definitions.constants import MULTI_EXPOSURE_ANALYSIS_FLAG
 from safe.definitions.fields import hazard_class_field

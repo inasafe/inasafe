@@ -663,7 +663,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 if treelayer:
                     treelayer.setItemVisibilityChecked(True)
 
-
         # After the extent selection, save the extent and disconnect signals
         if current_step == self.step_fc_extent:
             self.step_fc_extent.write_extent()
