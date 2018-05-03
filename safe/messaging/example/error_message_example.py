@@ -105,5 +105,4 @@ if __name__ == '__main__':
         # print e
         # tb = traceback.format_exc()
         # print tb
-        # fix_print_with_import
         print((e.error_message.to_text()))
