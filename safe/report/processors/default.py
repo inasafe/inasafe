@@ -198,9 +198,10 @@ def create_qgis_pdf_output(
             exporter = QgsLayoutExporter(composition)
             settings = QgsLayoutExporter.PdfExportSettings()
             settings.dpi = metadata.page_dpi
-            settings.rasterizeWholeImage = qgis_composition_context.save_as_raster
-            #settings.forceVectorOutput = False
-            #settings.exportMetadata = True
+            settings.rasterizeWholeImage = \
+                qgis_composition_context.save_as_raster
+            # settings.forceVectorOutput = False
+            # settings.exportMetadata = True
 
             # TODO: ABP: check that page size is set on the pages
 
@@ -233,7 +234,7 @@ def create_qgis_template_output(output_path, layout):
         os.makedirs(dirname)
 
     context = QgsReadWriteContext()
-    context.setPathResolver( QgsProject.instance().pathResolver() )
+    context.setPathResolver(QgsProject.instance().pathResolver())
 
     template_document = QtXml.QDomDocument()
     elem = layout.writeXml(template_document, context)
@@ -271,7 +272,7 @@ def qgis_composer_html_renderer(impact_report, component):
 
     # load composition object
     layout = QgsPrintLayout(QgsProject.instance())
-    #layout.initializeDefaults()
+    layout.initializeDefaults()
 
     if not context.html_frame_elements:
         # if no html frame elements at all, do not generate empty report.
