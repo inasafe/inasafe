@@ -1180,7 +1180,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = minimum_needs.context
 
-        self.assertEqual(DeepDiff(expected_context, actual_context), {})
+        self.assertEqual(DeepDiff(expected_context, actual_context, ignore_order=True), {})
 
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
@@ -1317,7 +1317,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = minimum_needs.context
 
-        self.assertDictEqual(expected_context, actual_context)
+        self.assertEqual(DeepDiff(expected_context, actual_context, ignore_order=True), {})
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
