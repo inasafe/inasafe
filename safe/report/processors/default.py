@@ -14,7 +14,8 @@ import os
 from tempfile import mkdtemp
 
 from qgis.PyQt import QtXml
-from qgis.PyQt.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl, QRectF
+
 from qgis.PyQt.QtGui import QImage, QPainter
 from qgis.PyQt.QtPrintSupport import QPrinter
 from qgis.PyQt.QtSvg import QSvgRenderer
@@ -23,7 +24,8 @@ from jinja2.loaders import FileSystemLoader
 from qgis.core import (
     QgsMapLayer,
     QgsLayoutFrame,
-    QgsLayout,
+    QgsPrintLayout,
+    QgsLayoutExporter,
     QgsLayoutItemHtml,
     QgsLayoutItemPicture,
     QgsRectangle,
@@ -78,7 +80,7 @@ def composition_item(layout, item_id, item_class):
             return item
 
     # Normal behaviour
-    for item in list(layout.items()):
+    for item in layout.items():
         if isinstance(item, item_class):
             if item.id() == item_id:
                 return item
@@ -186,30 +188,33 @@ def create_qgis_pdf_output(
 
     # process atlas generation
     print_atlas = setting('print_atlas_report', False, bool)
-    if composition.atlasComposition().enabled() and (
+    if composition.atlas().enabled() and (
             print_atlas and aggregation_summary_layer):
         output_path = atlas_renderer(
             composition, aggregation_summary_layer, output_path, file_format)
     # for QGIS composer only pdf and png output are available
     elif file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         try:
-            composition.setPrintResolution(metadata.page_dpi)
-            composition.setPaperSize(
-                metadata.page_width, metadata.page_height)
-            composition.setPrintAsRaster(
-                qgis_composition_context.save_as_raster)
+            exporter = QgsLayoutExporter(composition)
+            settings = QgsLayoutExporter.PdfExportSettings()
+            settings.dpi = metadata.page_dpi
+            settings.rasterizeWholeImage = qgis_composition_context.save_as_raster
+            #settings.forceVectorOutput = False
+            #settings.exportMetadata = True
 
-            composition.exportAsPDF(output_path)
+            # TODO: ABP: check that page size is set on the pages
+
+            exporter.exportToPdf(output_path, settings)
         except Exception as exc:
             LOGGER.error(exc)
             return None
     elif file_format == QgisComposerComponentsMetadata.OutputFormat.PNG:
-        # TODO: implement PNG generations
+        # TODO: implement PNG generation
         raise Exception('Not yet supported')
     return output_path
 
 
-def create_qgis_template_output(output_path, composition):
+def create_qgis_template_output(output_path, layout):
     """Produce QGIS Template output.
 
     :param output_path: The output path.
@@ -227,12 +232,14 @@ def create_qgis_template_output(output_path, composition):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    template_document = QtXml.QDomDocument()
-    element = template_document.createElement('Composer')
-    composition.writeXML(element, template_document)
-    template_document.appendChild(element)
+    context = QgsReadWriteContext()
+    context.setPathResolver( QgsProject.instance().pathResolver() )
 
-    with open(output_path, 'w') as f:
+    template_document = QtXml.QDomDocument()
+    elem = layout.writeXml(template_document, context)
+    template_document.appendChild(elem)
+
+    with open(output_path, 'wb') as f:
         f.write(template_document.toByteArray())
 
     return output_path
@@ -263,7 +270,8 @@ def qgis_composer_html_renderer(impact_report, component):
     # qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsLayout(QgsProject.instance())
+    layout = QgsPrintLayout(QgsProject.instance())
+    #layout.initializeDefaults()
 
     if not context.html_frame_elements:
         # if no html frame elements at all, do not generate empty report.
@@ -273,19 +281,16 @@ def qgis_composer_html_renderer(impact_report, component):
     # Add HTML Frame
     for html_el in context.html_frame_elements:
         mode = html_el.get('mode')
-        html_element = QgsLayoutItemHtml(composition)
+        html_element = QgsLayoutItemHtml(layout)
         margin_left = html_el.get('margin_left', 10)
         margin_top = html_el.get('margin_top', 10)
         width = html_el.get('width', component.page_width - 2 * margin_left)
         height = html_el.get('height', component.page_height - 2 * margin_top)
 
-        html_frame = QgsLayoutFrame(
-            composition,
-            html_element,
-            margin_left,
-            margin_top,
-            width,
-            height)
+        html_frame = QgsLayoutFrame(layout, html_element)
+        html_frame.attemptSetSceneRect(QRectF(0, 0, width, height))
+        # FIXME: ABP set margins: margin_left,
+        # margin_,
         html_element.addFrame(html_frame)
 
         if html_element:
@@ -293,14 +298,14 @@ def qgis_composer_html_renderer(impact_report, component):
                 text = html_el.get('text')
                 text = text if text else ''
                 html_element.setContentMode(QgsLayoutItemHtml.ManualHtml)
-                html_element.setSectionResizeMode(
+                html_element.setResizeMode(
                     QgsLayoutItemHtml.RepeatUntilFinished)
                 html_element.setHtml(text)
                 html_element.loadHtml()
             elif mode == 'url':
                 url = html_el.get('url')
                 html_element.setContentMode(QgsLayoutItemHtml.Url)
-                html_element.setSectionResizeMode(
+                html_element.setResizeMode(
                     QgsLayoutItemHtml.RepeatUntilFinished)
                 qurl = QUrl.fromLocalFile(url)
                 html_element.setUrl(qurl)
@@ -308,14 +313,11 @@ def qgis_composer_html_renderer(impact_report, component):
     # Attempt on removing blank page. Notes: We assume that the blank page
     # will always appears in the last x page(s), not in the middle.
 
-    index = composition.numPages()
-    number_of_pages_to_be_removed = 0
-    while composition.pageIsEmpty(index):
-        number_of_pages_to_be_removed += 1
+    pc = layout.pageCollection()
+    index = pc.pageCount()
+    while pc.pageIsEmpty(index):
+        pc.deletePage(index)
         index -= 1
-
-    composition.setNumPages(
-        composition.numPages() - number_of_pages_to_be_removed)
 
     # process to output
 
@@ -340,13 +342,13 @@ def qgis_composer_html_renderer(impact_report, component):
                 result_path = create_qgis_pdf_output(
                     impact_report,
                     each_path,
-                    composition,
+                    layout,
                     each_format,
                     component)
                 component_output.append(result_path)
             elif each_format == template_format:
                 result_path = create_qgis_template_output(
-                    each_path, composition)
+                    each_path, layout)
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
@@ -357,13 +359,13 @@ def qgis_composer_html_renderer(impact_report, component):
                 result_path = create_qgis_pdf_output(
                     impact_report,
                     each_path,
-                    composition,
+                    layout,
                     each_format,
                     component)
                 component_output[key] = result_path
             elif each_format == template_format:
                 result_path = create_qgis_template_output(
-                    each_path, composition)
+                    each_path, layout)
                 component_output[key] = result_path
     elif (output_format in
             QgisComposerComponentsMetadata.OutputFormat.SUPPORTED_OUTPUT):
@@ -373,13 +375,13 @@ def qgis_composer_html_renderer(impact_report, component):
             result_path = create_qgis_pdf_output(
                 impact_report,
                 component_output_path,
-                composition,
+                layout,
                 output_format,
                 component)
             component_output = result_path
         elif output_format == template_format:
             result_path = create_qgis_template_output(
-                component_output_path, composition)
+                component_output_path, layout)
             component_output = result_path
 
     component.output = component_output
@@ -410,7 +412,7 @@ def qgis_composer_renderer(impact_report, component):
     qgis_composition_context = impact_report.qgis_composition_context
 
     # load composition object
-    composition = QgsLayout(QgsProject.instance())
+    layout = QgsPrintLayout(QgsProject.instance())
 
     # load template
     main_template_folder = impact_report.metadata.template_folder
@@ -433,7 +435,7 @@ def qgis_composer_renderer(impact_report, component):
     document.setContent(template_content)
 
     rwcontext = QgsReadWriteContext()
-    load_status = composition.loadFromTemplate(
+    load_status = layout.loadFromTemplate(
         document, rwcontext)
 
     if not load_status:
@@ -444,7 +446,7 @@ def qgis_composer_renderer(impact_report, component):
     for img in context.image_elements:
         item_id = img.get('id')
         path = img.get('path')
-        image = composition_item(composition, item_id, QgsLayoutItemPicture)
+        image = composition_item(layout, item_id, QgsLayoutItemPicture)
         if image and path:
             image.setPicturePath(path)
 
@@ -452,14 +454,7 @@ def qgis_composer_renderer(impact_report, component):
     for html_el in context.html_frame_elements:
         item_id = html_el.get('id')
         mode = html_el.get('mode')
-        composer_item = composition.itemById(item_id)
-        # TODO: ABP check this code!!!
-        html_element = composer_item
-        # try:
-        #    html_element = composition.getComposerHtmlByItem(composer_item)
-        # except BaseException:
-        #    pass
-        # """:type: qgis.core.QgsLayoutItemHtml"""
+        html_element = composition_item(layout, item_id, QgsLayoutItemHtml)
         if html_element:
             if mode == 'text':
                 text = html_el.get('text')
@@ -488,7 +483,7 @@ def qgis_composer_renderer(impact_report, component):
                 layer, QgsMapLayer)
         ]
         map_extent_option = map_el.get('extent')
-        composer_map = composition_item(composition, item_id, QgsLayoutItemMap)
+        composer_map = composition_item(layout, item_id, QgsLayoutItemMap)
 
         for index, layer in enumerate(layers):
             # we need to check whether the layer is registered or not
@@ -580,7 +575,7 @@ def qgis_composer_renderer(impact_report, component):
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
-        legend = composition_item(composition, item_id, QgsLayoutItemLegend)
+        legend = composition_item(layout, item_id, QgsLayoutItemLegend)
         """:type: qgis.core.QgsLayoutItemLegend"""
         if legend:
             # set column count
@@ -637,13 +632,13 @@ def qgis_composer_renderer(impact_report, component):
                 result_path = create_qgis_pdf_output(
                     impact_report,
                     each_path,
-                    composition,
+                    layout,
                     each_format,
                     component)
                 component_output.append(result_path)
             elif each_format == template_format:
                 result_path = create_qgis_template_output(
-                    each_path, composition)
+                    each_path, layout)
                 component_output.append(result_path)
     elif isinstance(output_format, dict):
         component_output = {}
@@ -654,13 +649,13 @@ def qgis_composer_renderer(impact_report, component):
                 result_path = create_qgis_pdf_output(
                     impact_report,
                     each_path,
-                    composition,
+                    layout,
                     each_format,
                     component)
                 component_output[key] = result_path
             elif each_format == template_format:
                 result_path = create_qgis_template_output(
-                    each_path, composition)
+                    each_path, layout)
                 component_output[key] = result_path
     elif (output_format in
             QgisComposerComponentsMetadata.OutputFormat.SUPPORTED_OUTPUT):
@@ -670,13 +665,13 @@ def qgis_composer_renderer(impact_report, component):
             result_path = create_qgis_pdf_output(
                 impact_report,
                 component_output_path,
-                composition,
+                layout,
                 output_format,
                 component)
             component_output = result_path
         elif output_format == template_format:
             result_path = create_qgis_template_output(
-                component_output_path, composition)
+                component_output_path, layout)
             component_output = result_path
 
     component.output = component_output
@@ -750,12 +745,12 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     composer_map.setAtlasScalingMode(QgsLayoutItemMap.Auto)
 
     # setup the atlas composition and composition atlas mode
-    atlas_composition = composition.atlasComposition()
+    atlas_composition = composition.atlas()
     atlas_composition.setCoverageLayer(coverage_layer)
     atlas_composition.setComposerMap(composer_map)
     atlas_composition.prepareMap(composer_map)
     atlas_on_single_file = atlas_composition.singleFile()
-    composition.setAtlasMode(QgsLayout.ExportAtlas)
+    composition.setAtlasMode(QgsPrintLayout.ExportAtlas)
 
     if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         if not atlas_composition.filenamePattern():

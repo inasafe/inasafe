@@ -3,7 +3,7 @@
 
 import unittest
 
-from qgis.core import QgsExpression
+from qgis.core import QgsExpression, QgsExpressionContext
 
 from safe.definitions.reports.infographic import (
     map_overview_header,
@@ -67,10 +67,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-default_params = []
-feature = None
-parent = None
-
 
 class TestExpressions(unittest.TestCase):
     """Test Expressions.
@@ -89,6 +85,7 @@ class TestExpressions(unittest.TestCase):
 
         .. versionadded:: 4.3
         """
+
         for func in QgsExpression.Functions():
             if func.name() == function_name:
                 return func
@@ -109,9 +106,9 @@ class TestExpressions(unittest.TestCase):
         .. versionadded:: 4.3
         """
         if params is None:
-            params = default_params
+            params = []
 
-        actual_result = func.func(params, feature, parent)
+        actual_result = func.func(params, QgsExpressionContext(), None, None)
         self.assertEqual(actual_result, expected_result)
 
     def test_map_report_expressions(self):
