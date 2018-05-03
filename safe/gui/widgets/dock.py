@@ -904,7 +904,7 @@ class Dock(QDockWidget, FORM_CLASS):
         """
         # Don't handle this event if we are already handling another layer
         # addition or removal event.
-        if self.get_layers_lock:
+        if self.get_layers_lock or layer is None:
             return
 
         # Do nothing if there is no active layer - see #1861
@@ -1001,6 +1001,7 @@ class Dock(QDockWidget, FORM_CLASS):
                 MetadataReadError,
                 AttributeError) as e:
             # Added this check in 3.2 for #1861
+
             active_layer = self.iface.activeLayer()
             if active_layer is None:
                 if self.conflicting_plugin_detected:
@@ -1068,10 +1069,10 @@ class Dock(QDockWidget, FORM_CLASS):
 
         # Get the hazard and exposure definition used in current IF
         hazard = definition(
-            QgsExpressionContextUtils.projectScope().variable(
+            QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
                 'hazard_keywords__hazard'))
         exposure = definition(
-            QgsExpressionContextUtils.projectScope().variable(
+            QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
                 'exposure_keywords__exposure'))
 
         # TODO: temporary hack until Impact Function becomes serializable
@@ -1593,7 +1594,7 @@ def set_provenance_to_project_variables(provenances):
 
 def remove_provenance_project_variables():
     """Removing variables from provenance data."""
-    project_context_scope = QgsExpressionContextUtils.projectScope()
+    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
     existing_variable_names = project_context_scope.variableNames()
 
     # Save the existing variables that's not provenance variable.
