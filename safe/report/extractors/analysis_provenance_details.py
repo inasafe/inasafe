@@ -69,7 +69,9 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
         'hazard_layer',
         'exposure_layer',
         'aggregation_layer',
-        'keywords_version']
+        'keyword_version',
+        'classification',
+        ]
 
     use_rounding = impact_report.impact_function.use_rounding
     debug_mode = impact_report.impact_function.debug_mode
