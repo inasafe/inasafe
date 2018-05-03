@@ -24,14 +24,10 @@ def print_properties():
     ]
 
     for the_metadata in metadata:
-        # fix_print_with_import
         print(('## ', the_metadata.__name__))
-        # fix_print_with_import
         print('No | Property | Type')
-        # fix_print_with_import
         print('------------ | ------------ | -------------')
         for i, item in enumerate(the_metadata._standard_properties.items()):
-            # fix_print_with_import
             print(('%s | %s | %s' % (i + 1, item[0], item[1].split(':')[-1])))
         print()
 

@@ -85,7 +85,6 @@ class WebView(QtWebKit.QWebView):
             string += message.to_html()
 
         string += self.footer
-        # fix_print_with_import
         print(string)
         self.setHtml(string)
 

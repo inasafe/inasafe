@@ -69,7 +69,6 @@ class TestContour(unittest.TestCase):
             'grid-use_ascii.tif')
         contour_path = shakemap_contour(shakemap_layer_path)
         self.assertTrue(os.path.exists(contour_path))
-        # fix_print_with_import
         print(contour_path)
 
 

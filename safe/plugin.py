@@ -627,7 +627,6 @@ class Plugin():
             del (sys.modules[module])
         for module in sys.modules:
             if 'inasafe' in module:
-                # fix_print_with_import
                 print(module)
 
         # Lets also clean up all the path additions that were made

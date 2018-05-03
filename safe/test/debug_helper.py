@@ -157,7 +157,6 @@ def print_attribute_table(layer, limit=-1):
         attributes.extend(feature.attributes())
         data.append(attributes)
 
-    # fix_print_with_import
     print((pretty_table(data, headers)))
 
 
@@ -183,5 +182,4 @@ def print_combobox(combo, role=Qt.UserRole):
         attributes = [combo.itemText(i), selected]
         attributes.extend([str(combo.itemData(i, j)) for j in role])
         data.append(attributes)
-    # fix_print_with_import
     print((pretty_table(data, headers)))

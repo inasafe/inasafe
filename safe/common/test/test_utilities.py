@@ -44,20 +44,14 @@ def print_class(array, result_class, expected_result):
     :type expected_result: list
 
     """
-    # fix_print_with_import
     print('Original Array')
     for i in range(len(array[1:])):
-        # fix_print_with_import
         print((array[i], ' - ', array[i + 1]))
-    # fix_print_with_import
     print('Classes result')
     for result in result_class:
-        # fix_print_with_import
         print((result[0], ' - ', result[1]))
-    # fix_print_with_import
     print('Expect result')
     for expect in expected_result:
-        # fix_print_with_import
         print((expect[0], ' - ', expect[1]))
 
 

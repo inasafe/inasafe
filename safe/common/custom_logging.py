@@ -73,7 +73,6 @@ class QgsLogHandler(logging.Handler):
             message = tr(
                 'Due to memory limitations on this machine, InaSAFE can not '
                 'handle the full log')
-            # fix_print_with_import
             print(message)
             QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
