@@ -376,7 +376,7 @@ def load_path_vector_layer(path, **kwargs):
         layer = QgsVectorLayer(path, name, 'ogr')
 
     if not layer.isValid():
-        raise Exception('%s is not a valid layer.' % name)
+        raise Exception('%s is not a valid layer (%s).' % (name, path))
 
     monkey_patch_keywords(layer)
 
