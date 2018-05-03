@@ -57,13 +57,6 @@ class ExtentSelectorTest(unittest.TestCase):
 
         self.dialog.extent_defined.connect(self.extent_defined)
 
-        self.widget = QtWidgets.QWidget()
-        self.widget.setGeometry(0, 0, 500, 500)
-        layout = QtWidgets.QVBoxLayout(self.widget)
-        layout.addWidget(CANVAS)
-        self.widget.show()
-        QTest.qWaitForWindowExposed(self.widget)
-
         self.dialog.show()
         QTest.qWaitForWindowExposed(self.dialog)
 
@@ -91,9 +84,6 @@ class ExtentSelectorTest(unittest.TestCase):
         """Slot for when the mouse moves on the canvas."""
         # print point.toString()
 
-
-    # FIXME: This currently segfaults on Travis
-    @unittest.skipIf(os.environ.get('ON_TRAVIS', False), "This currently segfaults on Travis")
     def test_spinboxes(self):
         """Test validate extent method."""
         self.dialog.x_maximum.clear()
