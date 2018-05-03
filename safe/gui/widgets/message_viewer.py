@@ -22,7 +22,7 @@ import time
 
 from qgis.core import QgsApplication
 from qgis.PyQt import QtCore, QtGui, QtWebKitWidgets, QtWebKit
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QMenu
 from safe import messaging as m
 from safe.common.exceptions import InvalidParameterError
 from safe.messaging.message import MessageElement
@@ -125,15 +125,15 @@ class MessageViewer(QtWebKitWidgets.QWebView):
         :param event: the event that caused the context menu to be called.
         """
 
-        context_menu = QtGui.QMenu(self)
+        context_menu = QMenu(self)
 
         # add select all
-        action_select_all = self.page().action(QtWebKit.QWebPage.SelectAll)
+        action_select_all = self.page().action(QtWebKitWidgets.QWebPage.SelectAll)
         action_select_all.setEnabled(not self.page_to_text() == '')
         context_menu.addAction(action_select_all)
 
         # add copy
-        action_copy = self.page().action(QtWebKit.QWebPage.Copy)
+        action_copy = self.page().action(QtWebKitWidgets.QWebPage.Copy)
         if qt_at_least('4.8.0'):
             action_copy.setEnabled(not self.selectedHtml() == '')
         else:
@@ -159,7 +159,7 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
         # add view source if in dev mode
         if self.dev_mode:
-            action_copy = self.page().action(QtWebKit.QWebPage.InspectElement)
+            action_copy = self.page().action(QtWebKitWidgets.QWebPage.InspectElement)
             action_copy.setEnabled(True)
             context_menu.addAction(action_copy)
 
