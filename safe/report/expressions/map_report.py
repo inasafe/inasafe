@@ -95,7 +95,7 @@ def exposure_summary_layer():
     If the analysis is multi-exposure, then it will return the exposure
     summary layer from place exposure analysis.
     """
-    project_context_scope = QgsExpressionContextUtils.projectScope()
+    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
     project = QgsProject.instance()
 
     key = provenance_layer_analysis_impacted_id['provenance_key']

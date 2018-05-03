@@ -55,7 +55,7 @@ def analysis_summary_report(feature, parent):
     """Retrieve an HTML table report of current selected analysis.
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
+    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
     key = provenance_layer_analysis_impacted['provenance_key']
     if not project_context_scope.hasVariable(key):
         return None
