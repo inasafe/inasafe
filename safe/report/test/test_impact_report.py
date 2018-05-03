@@ -2150,7 +2150,7 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_qgis_html_pdf_report(self):
-        """Test generate analysis breakdown and aggregation report.
+        """Test generate HTML PDF analysis breakdown and aggregation report.
 
         .. versionadded:: 4.0
         """

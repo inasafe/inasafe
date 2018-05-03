@@ -146,8 +146,6 @@ class Dock(QDockWidget, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self.state = None
         self.extent = Extent(self.iface)
-        self.composer = None
-        self.composition = None
         self.map_canvas = None
 
         # Flag used to prevent recursion and allow bulk loads of layers to
