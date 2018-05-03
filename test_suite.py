@@ -117,7 +117,7 @@ def test_qgis3():
     test_package('safe.metadata35')
     test_package('safe.test')
     test_package('safe.gui')
-    # TODO test_package('safe.report')
+    test_package('safe.report')
 
 
 def test_one():
