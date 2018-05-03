@@ -53,7 +53,7 @@ def inasafe_analysis_summary_field_value(field, feature, parent):
     e.g. inasafe_analysis_summary_field_value('total_not_exposed') -> 3
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
+    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
     registry = QgsProject.instance()
 
     key = provenance_layer_analysis_impacted_id['provenance_key']
@@ -91,7 +91,7 @@ def inasafe_sub_analysis_summary_field_value(
 
     """
     _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
+    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
     project = QgsProject.instance()
 
     key = ('{provenance}__{exposure}').format(
@@ -343,7 +343,7 @@ def hazard_extra_keyword(keyword, feature, parent):
         in current hazard layer's extra keywords.
     """
     _ = feature, parent  # NOQA
-    hazard_layer_path = QgsExpressionContextUtils.projectScope().variable(
+    hazard_layer_path = QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
         'hazard_layer')
     hazard_layer = load_layer(hazard_layer_path)[0]
     keywords = KeywordIO.read_keywords(hazard_layer)
