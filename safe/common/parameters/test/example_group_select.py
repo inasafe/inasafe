@@ -117,7 +117,6 @@ def main():
                 for param in a_parameter.value:
                     show_parameter_value(param)
             else:
-                # fix_print_with_import
                 print((a_parameter.guid, a_parameter.name, a_parameter.value))
 
         try:

@@ -64,7 +64,6 @@ class ConsoleView():
         for message in self.dynamic_messages:
             string += message.to_text()
 
-        # fix_print_with_import
         print(string)
 
 

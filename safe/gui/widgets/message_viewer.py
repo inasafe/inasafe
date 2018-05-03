@@ -315,7 +315,6 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
     def page_to_stdout(self):
         """Print to console the current page contents as plain text."""
-        # fix_print_with_import
         print((self.page_to_text()))
 
     def save_report_to_html(self):

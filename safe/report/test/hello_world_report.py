@@ -23,7 +23,6 @@ from safe.utilities.i18n import tr
 
 # first step
 def hello_world_extractor(impact_report, component):
-    # fix_print_with_import
     print(('Component key: {component_key}'.format(
         component_key=component.key)))
     context = dict()
