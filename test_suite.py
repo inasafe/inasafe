@@ -103,23 +103,6 @@ def test_manually():
     _run_tests(test_suite, 'custom test class')
 
 
-def test_qgis3():
-    """Transient function to re-enable QGIS3 ready tests on Travis selectively.
-    """
-    test_package('safe.definitions')
-    test_package('safe.utilities')
-    test_package('safe.common')
-    test_package('safe.gis')
-    test_package('safe.datastore')
-    test_package('safe.impact_function')
-    test_package('safe.messaging')
-    test_package('safe.metadata')
-    test_package('safe.metadata35')
-    test_package('safe.test')
-    test_package('safe.gui')
-    test_package('safe.report')
-
-
 def test_one():
     """Run a single test"""
     from safe.gui.tools.test.test_extent_selector import ExtentSelectorTest
@@ -127,4 +110,4 @@ def test_one():
 
 
 if __name__ == '__main__':
-    test_qgis3()
+    test_package()
