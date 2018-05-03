@@ -1,4 +1,2 @@
 numpy
 mock
-# For tests execution:
-deepdiff
