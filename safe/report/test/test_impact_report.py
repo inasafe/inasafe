@@ -7,63 +7,56 @@ import os
 import shutil
 import unittest
 from collections import OrderedDict
-from osgeo import gdal
-from qgis.core import Qgis, QgsProject
-
 from copy import deepcopy
-from jinja2.environment import Template
 
+from deepdiff import DeepDiff
+from jinja2.environment import Template
+from osgeo import gdal
+
+from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsProject
 from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QT_VERSION_STR
-
 from safe.common.version import get_version
 from safe.definitions.constants import ANALYSIS_SUCCESS, PREPARE_SUCCESS
-from safe.definitions.fields import (
-    total_not_affected_field,
-    total_affected_field,
-    total_not_exposed_field,
-    total_exposed_field)
-from safe.definitions.field_groups import (
-    age_displaced_count_group,
-    gender_displaced_count_group)
-from safe.definitions.hazard_classifications import flood_hazard_classes
+from safe.definitions.field_groups import (age_displaced_count_group,
+                                           gender_displaced_count_group)
+from safe.definitions.fields import (total_affected_field, total_exposed_field,
+                                     total_not_affected_field,
+                                     total_not_exposed_field)
 from safe.definitions.hazard import hazard_flood
+from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.definitions.provenance import provenance_use_rounding
+from safe.definitions.reports.components import (action_checklist_component,
+                                                 aggregation_postprocessors_component,
+                                                 aggregation_result_component,
+                                                 analysis_detail_component,
+                                                 analysis_provenance_details_component,
+                                                 analysis_provenance_details_simplified_component,
+                                                 general_report_component,
+                                                 map_report,
+                                                 minimum_needs_component,
+                                                 notes_assumptions_component,
+                                                 population_infographic_component,
+                                                 standard_impact_report_metadata_html,
+                                                 standard_impact_report_metadata_pdf,
+                                                 standard_multi_exposure_impact_report_metadata_html)
+from safe.definitions.utilities import (generate_default_profile,
+                                        get_displacement_rate, is_affected,
+                                        update_template_component)
 from safe.gis.tools import full_layer_uri
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.multi_exposure_wrapper import \
     MultiExposureImpactFunction
-from safe.report.report_metadata import ReportMetadata
-from safe.test.utilities import (
-    get_qgis_app,
-    load_test_vector_layer,
-    load_test_raster_layer)
-from safe.utilities.utilities import readable_os_version
-from safe.definitions.reports.components import (
-    map_report,
-    standard_impact_report_metadata_html,
-    standard_impact_report_metadata_pdf,
-    general_report_component,
-    action_checklist_component,
-    notes_assumptions_component,
-    analysis_detail_component,
-    aggregation_result_component,
-    minimum_needs_component,
-    aggregation_postprocessors_component,
-    population_infographic_component,
-    analysis_provenance_details_component,
-    analysis_provenance_details_simplified_component,
-    standard_multi_exposure_impact_report_metadata_html)
-from safe.definitions.utilities import update_template_component
 from safe.report.impact_report import ImpactReport
+from safe.report.report_metadata import ReportMetadata
+from safe.test.utilities import (get_qgis_app, load_test_raster_layer,
+                                 load_test_vector_layer)
 from safe.utilities.resources import resources_path
-from safe.definitions.utilities import (
-    get_displacement_rate, generate_default_profile, is_affected)
-from safe.utilities.settings import setting, set_setting, delete_setting
+from safe.utilities.settings import delete_setting, set_setting, setting
+from safe.utilities.utilities import readable_os_version
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import QgsCoordinateReferenceSystem
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -991,12 +984,12 @@ class TestImpactReport(unittest.TestCase):
                 }), ('exposure_layer', {
                     'content': exposure_layer.source(),
                     'header': 'Exposure Layer '
-                }), ('classification', {
-                    'content': 'generic_structure_classes',
-                    'header': 'Classification '
                 }), ('keyword_version', {
                     'content': '4.0',
                     'header': 'Keyword Version '
+                }), ('classification', {
+                    'content': 'generic_structure_classes',
+                    'header': 'Classification '
                 })])
             }), ('aggregation', {
                 'header': 'Aggregation',
@@ -1177,7 +1170,8 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = minimum_needs.context
 
-        self.assertDictEqual(expected_context, actual_context)
+        self.assertEqual(DeepDiff(expected_context, actual_context), {})
+
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
@@ -1292,7 +1286,7 @@ class TestImpactReport(unittest.TestCase):
                         },
                         {
                             'header': 'Clean Water [l]',
-                            'value': '970'
+                            'value': '980'
                         },
                         {
                             'header': 'Family Kits',
@@ -1523,7 +1517,7 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_aggregate_post_processors_vector(self):
-        """Test generate aggregate postprocessors sections.
+        """Test generate aggregate postprocessors vector.
 
         .. versionadded:: 4.0
         """
@@ -1570,7 +1564,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [['B', '2,600', '640', '1,700', '230'],
+                        'rows': [['B', '2,700', '660', '1,800', '240'],
                                  ['C', '6,500', '1,700', '4,300', '590'],
                                  ['F', '7,200', '1,800', '4,700', '640'],
                                  ['G', '9,500', '2,400', '6,300', '850']],
@@ -1593,7 +1587,7 @@ class TestImpactReport(unittest.TestCase):
                                     }],
                         'group_header_colspan': 3,
                         'totals': [
-                            'Total', '25,600', '6,400', '16,900', '2,400']
+                            'Total', '25,700', '6,500', '17,000', '2,400']
                     }
                 ]),
                 ('gender', [
@@ -1602,7 +1596,7 @@ class TestImpactReport(unittest.TestCase):
                                   'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
                         'rows': [
-                            ['B', '2,600', '1,300'],
+                            ['B', '2,700', '1,400'],
                             ['C', '6,500', '3,300'],
                             ['F', '7,200', '3,600'],
                             ['G', '9,500', '4,800']],
@@ -1616,7 +1610,7 @@ class TestImpactReport(unittest.TestCase):
                             }],
                         'group_header_colspan': 1,
                         'totals': [
-                            'Total', '25,600', '12,800']
+                            'Total', '25,700', '12,900']
                     }
                 ]),
                 ('vulnerability', [
@@ -1649,13 +1643,13 @@ class TestImpactReport(unittest.TestCase):
                                   'per week',
                         'notes': [],
                         'rows': [
-                            ['B', '2,600', '7,200', '44,400', '170,000',
-                             '510', '130', '1,100'],
-                            ['C', '6,500', '18,200', '114,000', '434,000',
+                            ['B', '2,700', '7,400', '46,000', '177,000',
+                             '530', '140', '1,100'],
+                            ['C', '6,500', '18,200', '114,000', '435,000',
                              '1,300', '330', '2,600'],
                             ['F', '7,200', '20,000', '125,000', '477,000',
                              '1,500', '360', '2,900'],
-                            ['G', '9,500', '26,500', '166,000', '634,000',
+                            ['G', '9,500', '26,500', '166,000', '633,000',
                              '1,900', '480', '3,800']],
                         'columns': [
                             'Aggregation area',
@@ -1693,10 +1687,10 @@ class TestImpactReport(unittest.TestCase):
                         'group_header_colspan': 6,
                         'totals': [
                             'Total',
-                            '25,600',
-                            '71,700',
-                            '448,000',
-                            '1,714,000',
+                            '25,700',
+                            '71,900',
+                            '450,000',
+                            '1,720,000',
                             '5,200',
                             '1,300',
                             '10,200']
@@ -1721,7 +1715,7 @@ class TestImpactReport(unittest.TestCase):
         shutil.rmtree(output_folder, ignore_errors=True)
 
     def test_aggregate_post_processors_raster(self):
-        """Test generate aggregate postprocessors sections.
+        """Test generate aggregate postprocessors rasters.
 
         This test is not using actual displacement rate in order to
         distinguish the result more clearly.
@@ -1769,7 +1763,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [['B', '10', '0', '0', '0'],
+                        'rows': [['B', '10', '0', '10', '0'],
                                  ['C', '10', '10', '10', '0'],
                                  ['F', '10', '0', '10', '0'],
                                  ['G', '10', '10', '10', '0'],
@@ -1847,10 +1841,10 @@ class TestImpactReport(unittest.TestCase):
                                   'per week',
                         'notes': [],
                         'rows': [
-                            ['B', '10', '10', '20', '80', '0', '0', '0'],
-                            ['C', '10', '20', '90', '340', '0', '0', '10'],
+                            ['B', '10', '10', '40', '140', '0', '0', '0'],
+                            ['C', '10', '20', '90', '340', '10', '0', '10'],
                             ['F', '10', '10', '70', '260', '0', '0', '10'],
-                            ['G', '10', '20', '110', '410', '10', '0', '10'],
+                            ['G', '10', '20', '120', '440', '10', '0', '10'],
                             ['K', '10', '10', '40', '130', '0', '0', '0']],
                         'columns': [
                             'Aggregation area',
@@ -1890,10 +1884,10 @@ class TestImpactReport(unittest.TestCase):
                             'Total',
                             '20',
                             '60',
-                            '350',
+                            '370',
                             '1,400',
                             '10',
-                            '0',
+                            '10',
                             '10']
                     }
                 ])
