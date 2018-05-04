@@ -312,7 +312,7 @@ def enable_messaging(message_viewer, sender=dispatcher.Any):
     # Set up dispatcher for dynamic messages
     # Dynamic messages will not clear the message queue so will be appended
     # to existing user messages
-
+    LOGGER.debug('enable_messaging %s %s' % (message_viewer, sender))
     # noinspection PyArgumentEqualDefault
     dispatcher.connect(
         message_viewer.dynamic_message_event,
