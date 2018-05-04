@@ -1,10 +1,12 @@
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
-</h5>
-{% for key, item in details.iteritems() %}
-    {% if item %}
-    <p>
-        <b>{{ item.header }}</b> {{ item.provenance }}
-    </p>
-    {% endif %}
-{% endfor %}
+<div id="{{ component_key }}">
+    <h5 class="info">
+        <i class="icon-info-sign icon-white"></i> {{ header }}
+    </h5>
+    {% for key, item in details.iteritems() %}
+        {% if item %}
+        <p>
+            <b>{{ item.header }}</b> {{ item.provenance }}
+        </p>
+        {% endif %}
+    {% endfor %}
+</div>

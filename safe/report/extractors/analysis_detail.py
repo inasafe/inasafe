@@ -453,6 +453,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     notes = resolve_from_dictionary(
         extra_args, 'notes')
 
+    context['component_key'] = component_metadata.key
     context['header'] = header
     context['group_border_color'] = resolve_from_dictionary(
         extra_args, 'group_border_color')

@@ -1,45 +1,47 @@
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
-</h5>
+<div id="{{ component_key }}">
+    <h5 class="info">
+        <i class="icon-info-sign icon-white"></i> {{ header }}
+    </h5>
 
-<!--static tree starts here. ps: it would be great if we can make it dynamic (recursive tree)-->
-<div class="tree">
-    <ul>
-        {% for key, value in details.iteritems() %}
-            <li>
-                <b>{{ value.header }}</b>
-                {% if value.provenances is mapping %}
-                    <ul>
-                        {% for key, item in value.provenances.iteritems() %}
-                            {% if item %}
-                            <li>
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <b>{{ item.header }}</b>
+    <!--static tree starts here. ps: it would be great if we can make it dynamic (recursive tree)-->
+    <div class="tree">
+        <ul>
+            {% for key, value in details.iteritems() %}
+                <li>
+                    <b>{{ value.header }}</b>
+                    {% if value.provenances is mapping %}
+                        <ul>
+                            {% for key, item in value.provenances.iteritems() %}
+                                {% if item %}
+                                <li>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <b>{{ item.header }}</b>
+                                        </div>
+                                        <div class="col-sm-10">
+                                            {% if item.content is mapping %}
+                                                <ul>
+                                                {% for key, html_item in item.content.iteritems() %}
+                                                    <li>
+                                                        <b>{{ key }}</b>
+                                                        <div>{{ html_item }}</div>
+                                                    </li>
+                                                {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                {{ item.content }}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    <div class="col-sm-10">
-                                        {% if item.content is mapping %}
-                                            <ul>
-                                            {% for key, html_item in item.content.iteritems() %}
-                                                <li>
-                                                    <b>{{ key }}</b>
-                                                    <div>{{ html_item }}</div>
-                                                </li>
-                                            {% endfor %}
-                                            </ul>
-                                        {% else %}
-                                            {{ item.content }}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ value.provenances|capitalize }}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ value.provenances|capitalize }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>

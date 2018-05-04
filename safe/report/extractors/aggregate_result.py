@@ -250,6 +250,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
     total_header = resolve_from_dictionary(extra_args, 'total_header')
     total_in_aggregation_header = resolve_from_dictionary(
         extra_args, 'total_in_aggregation_header')
+
+    context['component_key'] = component_metadata.key
     context['header'] = section_header
     context['notes'] = notes
     context['aggregation_result'] = {

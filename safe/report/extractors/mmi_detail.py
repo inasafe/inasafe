@@ -126,6 +126,7 @@ def mmi_detail_extractor(impact_report, component_metadata):
             is_population=True)
         total_footer.append(total)
 
+    context['component_key'] = component_metadata.key
     context['mmi'] = {
         'header': table_header,
         'rows': rows,
