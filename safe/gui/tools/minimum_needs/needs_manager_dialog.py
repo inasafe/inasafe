@@ -260,9 +260,9 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             'provided by InaSAFE. Do you want to continue ?')
         # noinspection PyCallByClass
         reply = QMessageBox.question(
-            self, title, msg, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+            self, title, msg, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
 
-        if reply == QtGui.QMessageBox.Yes:
+        if reply == QtWidgets.QMessageBox.Yes:
             self.profile_combo.clear()
             self.load_profiles(True)
             # Next 2 lines fixes issues #1388 #1389 #1390 #1391
