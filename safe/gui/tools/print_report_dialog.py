@@ -161,7 +161,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
             self.override_template_radio.setEnabled(False)
 
         # additional buttons
-        self.button_print_pdf = QtGui.QPushButton(tr('Open as PDF'))
+        self.button_print_pdf = QtWidgets.QPushButton(tr('Open as PDF'))
         self.button_print_pdf.setObjectName('button_print_pdf')
         self.button_print_pdf.setToolTip(tr(
             'Write report to PDF and open it in default viewer'))
@@ -391,7 +391,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
 
             if not load_status:
                 # noinspection PyCallByClass,PyTypeChecker
-                QtGui.QMessageBox.warning(
+                QtWidgets.QMessageBox.warning(
                     self,
                     tr('InaSAFE'),
                     tr('Error loading template: %s') % template_path)
@@ -456,7 +456,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
             selected_template_path = self.template_path.text()
             if not exists(selected_template_path):
                 # noinspection PyCallByClass,PyTypeChecker
-                QtGui.QMessageBox.warning(
+                QtWidgets.QMessageBox.warning(
                     self,
                     tr('InaSAFE'),
                     tr(

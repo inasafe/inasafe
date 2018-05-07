@@ -351,7 +351,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         impact_layer = self.parent.iface.activeLayer()
         if impact_layer is None:
             # noinspection PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self,
                 'InaSAFE',
                 tr(
