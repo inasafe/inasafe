@@ -104,7 +104,7 @@ class SaveScenarioDialog(QDialog):
         is_valid, warning_message = self.validate_input()
         if not is_valid:
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtGui.QMessageBox.warning(self, warning_title, warning_message)
+            QtWidgets.QMessageBox.warning(self, warning_title, warning_message)
             return
 
         # Make extent to look like:
@@ -169,7 +169,7 @@ class SaveScenarioDialog(QDialog):
             of.close()
         except Exception as e:
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self,
                 'InaSAFE',
                 tr(

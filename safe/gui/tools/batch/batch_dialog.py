@@ -612,7 +612,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.show_report(report_path)
         except IOError:
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.question(self, 'Error',
+            QtWidgets.QMessageBox.question(self, 'Error',
                                        'Failed to write report file.')
             self.disable_busy_cursor()
         self.disable_busy_cursor()

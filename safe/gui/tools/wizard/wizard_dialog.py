@@ -861,7 +861,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         except InaSAFEError as e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self,
                 tr('InaSAFE'),
                 tr('An error was encountered when saving the following '
