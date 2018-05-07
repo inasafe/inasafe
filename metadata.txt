@@ -15,9 +15,9 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=4.3.4
+version=5.0.0
 # alpha, beta, rc or final
-status=final
+status=alpha
 
 
 # end of mandatory metadata
@@ -25,6 +25,8 @@ status=final
 # Optional items:
 
 changelog=
+    Version 5.0.0:
+    - QGIS3 port
     Version 4.3.4:
     - Add template extent setting as a property of Impact Report.
     - Fix no expressions on infographic on multi-exposure analysis.
