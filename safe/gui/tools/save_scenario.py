@@ -15,7 +15,7 @@ import qgis  # NOQA pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtWidgets import QDialog, QFileDialog
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.gis import extent_to_array, viewport_geo_array
@@ -104,7 +104,7 @@ class SaveScenarioDialog(QDialog):
         is_valid, warning_message = self.validate_input()
         if not is_valid:
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtWidgets.QMessageBox.warning(self, warning_title, warning_message)
+            QMessageBox.warning(self, warning_title, warning_message)
             return
 
         # Make extent to look like:
@@ -169,7 +169,7 @@ class SaveScenarioDialog(QDialog):
             of.close()
         except Exception as e:
             # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-            QtWidgets.QMessageBox.warning(
+            QMessageBox.warning(
                 self,
                 'InaSAFE',
                 tr(

@@ -4,7 +4,7 @@
 import logging
 import os
 
-from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot
 from qgis.core import (
     QgsProject,
