@@ -6,9 +6,8 @@ import logging
 from sqlite3 import OperationalError
 
 from qgis.core import QgsProject
-from qgis.PyQt import QtGui
 from qgis.PyQt.QtCore import QSettings, pyqtSignal, pyqtSlot
-from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox
 from qgis.PyQt.QtGui import QPixmap, QIcon
 
 from parameters.parameter_exceptions import InvalidValidationException
@@ -861,7 +860,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         except InaSAFEError as e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QtWidgets.QMessageBox.warning(
+            QMessageBox.warning(
                 self,
                 tr('InaSAFE'),
                 tr('An error was encountered when saving the following '
