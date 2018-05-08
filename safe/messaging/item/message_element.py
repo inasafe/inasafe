@@ -55,10 +55,10 @@ class MessageElement():
 
     @staticmethod
     def _is_qstring(message):
-        """Check if its a QString without adding any dep to PyQt4."""
+        """Check if its a QString without adding any dep to PyQt5."""
         my_class = str(message.__class__)
         my_class_name = my_class.replace('<class \'', '').replace('\'>', '')
-        if my_class_name == 'PyQt4.QtCore.QString':
+        if my_class_name == 'PyQt5.QtCore.QString':
             return True
 
         return False
