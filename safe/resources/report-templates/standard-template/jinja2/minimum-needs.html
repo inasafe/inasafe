@@ -1,14 +1,14 @@
 <div id="{{ component_key }}">
     {% if zero_displaced and zero_displaced.status %}
     <h5 class="info">
-        <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
+        {{ header|capitalize }}
     </h5>
     <p>
         {{ zero_displaced.message }}
     </p>
     {% elif needs %}
         <h5 class="info">
-            <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
+            {{ header|capitalize }}
         </h5>
         <table class="table table-striped condensed">
             <tbody>

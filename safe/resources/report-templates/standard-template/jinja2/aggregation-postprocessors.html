@@ -4,7 +4,7 @@
             {% for value in values %}
                 {% if value %}
                 <h5 class="info">
-                    <i class="icon-info-sign icon-white"></i> {{ value.header|capitalize }}
+                    {{ value.header|capitalize }}
                 </h5>
                     {% if value.empty %}
                         <p>
@@ -87,7 +87,7 @@
         {% endfor %}
     {% elif sections_not_empty %}
     <h5 class="info">
-        <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
+        {{ header|capitalize }}
     </h5>
     <table class="table table-striped condensed">
         <tbody>
