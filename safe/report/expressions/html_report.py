@@ -4,7 +4,7 @@
 
 import codecs
 from os.path import dirname, join, exists
-from BeautifulSoup import BeautifulSoup
+from xml.etree import ElementTree as ET
 
 from qgis.core import (
     qgsfunction,
@@ -43,6 +43,11 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 group = tr('InaSAFE - HTML Elements')
+container_format = (
+    u'<div class="container">'
+    u'   {section_content}'
+    u'</div>'
+)
 
 
 def get_analysis_dir(exposure_key=None):
@@ -148,42 +153,31 @@ def get_impact_report_as_string(analysis_dir):
         return report
 
 
-def get_report_section(html_report, tag=None, component_id=None):
+def get_report_section(
+        html_report, component_id, container_wrapper_format=container_format):
     """Get specific report section from InaSAFE analysis summary report.
 
     :param html_report: The html report.
     :type html_report: basestring
 
-    :param tag: The HTML tag.
-    :type tag: basestring
-
     :param component_id: The component key.
     :type component_id: str
+
+    :param container_wrapper_format: A string format for wrapping the section.
+    :type container_wrapper_format: basestring
 
     :return: Requested report section as an html.
     :rtype: basestring
     """
-    no_specs_error = tr('No tag or component id given.')
     no_element_error = tr('No element match the tag or component id.')
 
-    container_format = (
-        '<div class="container">'
-        '   {section_content}'
-        '</div>'
-    )
+    root_element, dict_of_elements = ET.XMLID(html_report)
+    section_element = dict_of_elements.get(component_id)
 
-    beautiful_soup = BeautifulSoup(html_report)
-    if tag:
-        section_soup = beautiful_soup.find(tag)
-    elif component_id:
-        section_soup = beautiful_soup.find(tag, {'id': component_id})
-    else:
-        return no_specs_error
-
-    if section_soup:
-        report_section = container_format.format(
-            section_content=unicode(section_soup))
-        return unicode(report_section)
+    if section_element:
+        requested_section = container_wrapper_format.format(
+            section_content=unicode(ET.tostring(section_element)))
+        return requested_section
     else:
         return no_element_error
 
@@ -197,29 +191,6 @@ def get_report_section(html_report, tag=None, component_id=None):
 # help_text is used for QGIS 2.18 and 2.14
 # helpText is used for QGIS 3 : https://github.com/qgis/QGIS/pull/5059
 ##
-
-description = tr('Retrieve an HTML table report of current selected analysis.')
-examples = {
-    'analysis_summary_report()': None
-}
-help_message = generate_expression_help(description, examples)
-
-
-@qgsfunction(
-    args='auto', group=group, usesGeometry=False, referencedColumns=[],
-    help_text=help_message.to_html(), helpText=help_message.to_html())
-def analysis_summary_report(feature, parent):
-    """Retrieve an HTML table report of current selected analysis.
-    """
-    _ = feature, parent  # NOQA
-    project_context_scope = QgsExpressionContextUtils.projectScope()
-    key = provenance_layer_analysis_impacted['provenance_key']
-    if not project_context_scope.hasVariable(key):
-        return None
-
-    analysis_dir = dirname(project_context_scope.variable(key))
-    return get_impact_report_as_string(analysis_dir)
-
 
 description = tr('Retrieve default InaSAFE HTML resources (style and script) '
                  'from InaSAFE analysis report of current selected analysis.')
@@ -245,9 +216,34 @@ def default_inasafe_html_resources(feature, parent):
     complete_html_report = get_impact_report_as_string(analysis_dir)
 
     requested_html_report = get_report_section(
-        complete_html_report, tag='head')
+        complete_html_report,
+        component_id='inasafe-html-resources',
+        container_wrapper_format=u'{section_content}')
 
     return requested_html_report
+
+
+description = tr('Retrieve an HTML table report of current selected analysis.')
+examples = {
+    'analysis_summary_report()': None
+}
+help_message = generate_expression_help(description, examples)
+
+
+@qgsfunction(
+    args='auto', group=group, usesGeometry=False, referencedColumns=[],
+    help_text=help_message.to_html(), helpText=help_message.to_html())
+def analysis_summary_report(feature, parent):
+    """Retrieve an HTML table report of current selected analysis.
+    """
+    _ = feature, parent  # NOQA
+    project_context_scope = QgsExpressionContextUtils.projectScope()
+    key = provenance_layer_analysis_impacted['provenance_key']
+    if not project_context_scope.hasVariable(key):
+        return None
+
+    analysis_dir = dirname(project_context_scope.variable(key))
+    return get_impact_report_as_string(analysis_dir)
 
 
 description = tr('Retrieve the analysis question section from '
