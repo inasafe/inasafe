@@ -1,121 +1,123 @@
-{% if use_aggregation %}
-    {% for _, values in sections.iteritems() %}
-        {% for value in values %}
-            {% if value %}
-            <h5 class="info">
-                <i class="icon-info-sign icon-white"></i> {{ value.header|capitalize }}
-            </h5>
-                {% if value.empty %}
-                    <p>
-                        {{ value.message }}
-                    </p>
-                {% elif value.rows %}
-                    <table class="table table-striped condensed">
-                        <thead>
-                            <tr>
-                                {% for column in value.columns %}
-                                    {% if column is mapping %}
-                                        {% if column.start_group_header %}
-                                        <th class="text-center" colspan="{{ value.group_header_colspan }}">
-                                            {{ column.group_header|capitalize }}
-                                        </th>
-                                        {% endif %}
-                                    {% elif loop.first %}
-                                    <th class="text-left" rowspan="2">
-                                        {{ column|title }}
-                                    </th>
-                                    {% else %}
-                                    <th class="text-right" rowspan="2">
-                                        {{ column|capitalize }}
-                                    </th>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                            {% for column in value.columns %}
-                                {% if column is mapping %}
-                                <th class="text-right">
-                                    {{ column.name|capitalize }}
-                                </th>
-                                {% endif %}
-                            {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for row in value.rows %}
-                            <tr>
-                                {% for column in row %}
-                                    {% if loop.first %}
-                                    <th class="text-left">{{ column|title }}</th>
-                                    {% else %}
-                                    <td class="text-right">{{ column }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                            {% for column in value.totals %}
-                                {% if loop.first %}
-                                <th class="text-left">{{ column|capitalize }}</th>
-                                {% else %}
-                                <td class="text-right">{{ column }}</td>
-                                 {% endif %}
-                            {% endfor %}
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <div>
-                        <ul>
-                            {% for note in value.notes %}
-                                {% if ':' in note %}
-                                    {% set concept = note.split(':')[0] %}
-                                    {% set note = note.split(':')[1:] %}
-                                    {% set note = ':'.join(note) %}
-                                    <li colspan="100%"><b>{{ concept|capitalize }}</b>:{{ note }}</li>
-                                {% else %}
-                                    <li colspan="100%">{{ note }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-{% elif sections_not_empty %}
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
-</h5>
-<table class="table table-striped condensed">
-    <tbody>
+<div id="{{ component_key }}">
+    {% if use_aggregation %}
         {% for _, values in sections.iteritems() %}
             {% for value in values %}
-                <tr>
-                    {% for column in value.columns %}
-                        {% if loop.first %}
-                        <th class="text-left">
-                        {% else %}
-                        <th class="text-right">
-                        {% endif %}
-                            {{ column|capitalize }}
-                        </th>
-                    {% endfor %}
-                </tr>
-                {% for row in value.rows %}
-                <tr>
-                    {% for column in row %}
-                        {% if loop.first %}
-                        <td class="text-left">{{ column|capitalize }}</td>
-                        {% else %}
-                        <td class="text-right">{{ column }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
+                {% if value %}
+                <h5 class="info">
+                    {{ value.header|capitalize }}
+                </h5>
+                    {% if value.empty %}
+                        <p>
+                            {{ value.message }}
+                        </p>
+                    {% elif value.rows %}
+                        <table class="table table-striped condensed">
+                            <thead>
+                                <tr>
+                                    {% for column in value.columns %}
+                                        {% if column is mapping %}
+                                            {% if column.start_group_header %}
+                                            <th class="text-center" colspan="{{ value.group_header_colspan }}">
+                                                {{ column.group_header|capitalize }}
+                                            </th>
+                                            {% endif %}
+                                        {% elif loop.first %}
+                                        <th class="text-left" rowspan="2">
+                                            {{ column|title }}
+                                        </th>
+                                        {% else %}
+                                        <th class="text-right" rowspan="2">
+                                            {{ column|capitalize }}
+                                        </th>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                {% for column in value.columns %}
+                                    {% if column is mapping %}
+                                    <th class="text-right">
+                                        {{ column.name|capitalize }}
+                                    </th>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in value.rows %}
+                                <tr>
+                                    {% for column in row %}
+                                        {% if loop.first %}
+                                        <th class="text-left">{{ column|title }}</th>
+                                        {% else %}
+                                        <td class="text-right">{{ column }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                {% for column in value.totals %}
+                                    {% if loop.first %}
+                                    <th class="text-left">{{ column|capitalize }}</th>
+                                    {% else %}
+                                    <td class="text-right">{{ column }}</td>
+                                     {% endif %}
+                                {% endfor %}
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div>
+                            <ul>
+                                {% for note in value.notes %}
+                                    {% if ':' in note %}
+                                        {% set concept = note.split(':')[0] %}
+                                        {% set note = note.split(':')[1:] %}
+                                        {% set note = ':'.join(note) %}
+                                        <li colspan="100%"><b>{{ concept|capitalize }}</b>:{{ note }}</li>
+                                    {% else %}
+                                        <li colspan="100%">{{ note }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         {% endfor %}
-    </tbody>
-</table>
-{% endif %}
+    {% elif sections_not_empty %}
+    <h5 class="info">
+        {{ header|capitalize }}
+    </h5>
+    <table class="table table-striped condensed">
+        <tbody>
+            {% for _, values in sections.iteritems() %}
+                {% for value in values %}
+                    <tr>
+                        {% for column in value.columns %}
+                            {% if loop.first %}
+                            <th class="text-left">
+                            {% else %}
+                            <th class="text-right">
+                            {% endif %}
+                                {{ column|capitalize }}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    {% for row in value.rows %}
+                    <tr>
+                        {% for column in row %}
+                            {% if loop.first %}
+                            <td class="text-left">{{ column|capitalize }}</td>
+                            {% else %}
+                            <td class="text-right">{{ column }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>

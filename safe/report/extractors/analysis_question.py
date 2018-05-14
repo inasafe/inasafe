@@ -37,6 +37,7 @@ def analysis_question_extractor(impact_report, component_metadata):
     header = resolve_from_dictionary(extra_args, 'header')
     analysis_question = provenance['analysis_question']
 
+    context['component_key'] = component_metadata.key
     context['header'] = header
     context['analysis_questions'] = [analysis_question]
 
@@ -73,6 +74,7 @@ def multi_exposure_analysis_question_extractor(
     analysis_question = provenance['analysis_question']
     analysis_questions.append(analysis_question)
 
+    context['component_key'] = component_metadata.key
     context['header'] = header
     context['analysis_questions'] = analysis_questions
 

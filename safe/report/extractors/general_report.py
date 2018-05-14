@@ -196,6 +196,7 @@ def general_report_extractor(impact_report, component_metadata):
         note = note_format.format(**concept)
         notes.append(note)
 
+    context['component_key'] = component_metadata.key
     context['header'] = header
     context['summary'] = summary
     context['table_header'] = table_header
@@ -516,6 +517,7 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
         note = note_format.format(**concept)
         notes.append(note)
 
+    context['component_key'] = component_metadata.key
     context['header'] = header
     context['summary'] = summary
     context['table_header'] = table_header

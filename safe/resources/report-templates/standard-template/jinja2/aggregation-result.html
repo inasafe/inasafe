@@ -1,46 +1,48 @@
-{% if aggregation_result and aggregation_result.type_total_values %}
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
-</h5>
-<p>
-    <h5>{{ aggregation_result.table_header|capitalize }}</h5>
-</p>
-<table class="table table-striped condensed">
-    <thead>
-        <tr>
-            <th colspan="1">{{ aggregation_result.header_label|capitalize }}</th>
-            {% for type_header in aggregation_result.type_header_labels %}
-            <th class="text-right" colspan="1">{{ type_header|capitalize }}</th>
+<div id="{{ component_key }}">
+    {% if aggregation_result and aggregation_result.type_total_values %}
+    <h5 class="info">
+        {{ header|capitalize }}
+    </h5>
+    <p>
+        <h5>{{ aggregation_result.table_header|capitalize }}</h5>
+    </p>
+    <table class="table table-striped condensed">
+        <thead>
+            <tr>
+                <th colspan="1">{{ aggregation_result.header_label|capitalize }}</th>
+                {% for type_header in aggregation_result.type_header_labels %}
+                <th class="text-right" colspan="1">{{ type_header|capitalize }}</th>
+                {% endfor %}
+                <th class="text-right" colspan="1">{{ aggregation_result.total_in_aggregation_area_label|capitalize }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in aggregation_result.rows %}
+            <tr>
+                <th colspan="1">{{ item.name|capitalize }}</th>
+                {% for value in item.type_values %}
+                <td class="text-right" colspan=1>{{ value }}</td>
+                {% endfor %}
+                <td class="text-right" colspan=1>{{ item.total }}</td>
+            </tr>
             {% endfor %}
-            <th class="text-right" colspan="1">{{ aggregation_result.total_in_aggregation_area_label|capitalize }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in aggregation_result.rows %}
-        <tr>
-            <th colspan="1">{{ item.name|capitalize }}</th>
-            {% for value in item.type_values %}
-            <td class="text-right" colspan=1>{{ value }}</td>
-            {% endfor %}
-            <td class="text-right" colspan=1>{{ item.total }}</td>
-        </tr>
+        </tbody>
+        {% if aggregation_result.type_total_values %}
+        <tfoot>
+            <tr>
+                <th colspan="1">{{ aggregation_result.total_label|capitalize }}</th>
+                {% for value in aggregation_result.type_total_values %}
+                <th class="text-right" colspan="1">{{ value }}</th>
+                {% endfor %}
+                <th class="text-right" colspan="1">{{ aggregation_result.total_all }}</th>
+            </tr>
+        </tfoot>
+        {% endif %}
+    </table>
+    <div>
+        {% for note in notes %}
+            <li colspan="100%">{{ note }}</li>
         {% endfor %}
-    </tbody>
-    {% if aggregation_result.type_total_values %}
-    <tfoot>
-        <tr>
-            <th colspan="1">{{ aggregation_result.total_label|capitalize }}</th>
-            {% for value in aggregation_result.type_total_values %}
-            <th class="text-right" colspan="1">{{ value }}</th>
-            {% endfor %}
-            <th class="text-right" colspan="1">{{ aggregation_result.total_all }}</th>
-        </tr>
-    </tfoot>
+    </div>
     {% endif %}
-</table>
-<div>
-    {% for note in notes %}
-        <li colspan="100%">{{ note }}</li>
-    {% endfor %}
 </div>
-{% endif %}

@@ -1,20 +1,22 @@
-{% if items %}
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
-</h5>
-{% endif %}
-{% if items %}
-<ul>
-    {% for dict_item in items %}
-        {% if dict_item['item_header'] and dict_item['item_list'] %}
-        <h5 class="category">
-            <i class="icon-info-sign icon-white"></i> {{ dict_item['item_header']|capitalize }}
-        </h5>
-        <div style="background-color: #3DB2DD; height: 4px; margin-top: -8px; margin-left: -15px;" class="category"></div>
-            {% for item in dict_item['item_list'] %}
-            <li colspan="100%">{{ item }}</li>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
-</ul>
-{% endif %}
+<div id="{{ component_key }}">
+    {% if items %}
+    <h5 class="info">
+        {{ header|capitalize }}
+    </h5>
+    {% endif %}
+    {% if items %}
+    <ul>
+        {% for dict_item in items %}
+            {% if dict_item['item_header'] and dict_item['item_list'] %}
+            <h5 class="category">
+                {{ dict_item['item_header']|capitalize }}
+            </h5>
+            <div style="background-color: #3DB2DD; height: 4px; margin-top: -8px; margin-left: -15px;" class="category"></div>
+                {% for item in dict_item['item_list'] %}
+                <li colspan="100%">{{ item }}</li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>

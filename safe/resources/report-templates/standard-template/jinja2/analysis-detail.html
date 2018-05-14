@@ -1,195 +1,197 @@
-{% if detail_table %}
-<style>
-    #detail-table thead th {
-        vertical-align: top;
-    }
+<div id="{{ component_key }}">
+    {% if detail_table %}
+    <style>
+        #detail-table thead th {
+            vertical-align: top;
+        }
 
-    {% for key, group in detail_header.header_hazard_group.iteritems() %}
-    #detail-table th.{{ key }}, #detail-table td.{{ key }} {
-        {% if group.color %}
-        background-color: {{ group.color }};
-        {% endif %}
-    }
+        {% for key, group in detail_header.header_hazard_group.iteritems() %}
+        #detail-table th.{{ key }}, #detail-table td.{{ key }} {
+            {% if group.color %}
+            background-color: {{ group.color }};
+            {% endif %}
+        }
 
-    /* border top */
-    #detail-table thead tr:first-child th.{{ key }} {
-        border-top: 2px {{ group_border_color }} solid;
-    }
+        /* border top */
+        #detail-table thead tr:first-child th.{{ key }} {
+            border-top: 2px {{ group_border_color }} solid;
+        }
 
-    /* border bottom */
-    #detail-table tfoot tr:last-child th.{{ key }} {
-        border-bottom: 2px {{ group_border_color }} solid;
-    }
+        /* border bottom */
+        #detail-table tfoot tr:last-child th.{{ key }} {
+            border-bottom: 2px {{ group_border_color }} solid;
+        }
 
-    /* border left */
-    #detail-table tr th:not(.{{ key }}) + .{{ key }} {
-        border-left: 2px {{ group_border_color }} solid;
-    }
+        /* border left */
+        #detail-table tr th:not(.{{ key }}) + .{{ key }} {
+            border-left: 2px {{ group_border_color }} solid;
+        }
 
-    /* border right */
-    #detail-table tr .{{ key }} + :not(.{{key}}) {
-        border-left: 2px {{ group_border_color }} solid;
-    }
-    {% endfor %}
-</style>
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
-</h5>
-<p>
-    <h5>{{ detail_table.table_header|capitalize }}</h5>
-</p>
-<table id="detail-table" class="table table-striped condensed">
-    <thead>
-        <tr>
-            {% for header in detail_table.headers %}
-                {% if detail_header.breakdown_header_index < loop.index - 1 < detail_header.total_header_index %}
+        /* border right */
+        #detail-table tr .{{ key }} + :not(.{{key}}) {
+            border-left: 2px {{ group_border_color }} solid;
+        }
+        {% endfor %}
+    </style>
+    <h5 class="info">
+        {{ header|capitalize }}
+    </h5>
+    <p>
+        <h5>{{ detail_table.table_header|capitalize }}</h5>
+    </p>
+    <table id="detail-table" class="table table-striped condensed">
+        <thead>
+            <tr>
+                {% for header in detail_table.headers %}
+                    {% if detail_header.breakdown_header_index < loop.index - 1 < detail_header.total_header_index %}
 
-                    {% if header is mapping %}
-                        {% set group_start = header.start %}
+                        {% if header is mapping %}
+                            {% set group_start = header.start %}
+                            {% set header_name = header.name %}
+                            {% set header_group = header.header_group %}
+                            {% set header_colspan = header.colspan %}
+                            {% set group_name = detail_header.header_hazard_group[header_group].header %}
+                            {% if group_start %}
+                            <th class="text-center {{ header_group }}"
+                                colspan="{{ header_colspan }}">
+                                {{ group_name|capitalize }}
+                            </th>
+                            {% endif %}
+                        {% endif %}
+
+                    {% elif loop.first %}
+                    <th class="text-left" rowspan="2">
+                        {{ header|capitalize }}
+                    </th>
+                    {% else %}
+                    <th class="text-right" rowspan="2">
+                        {{ header|capitalize }}
+                    </th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for header in detail_table.headers[detail_header.breakdown_header_index+1:detail_header.total_header_index] %}
+                    {% if header is string %}
+                    <th class="text-right">
+                        {{ header|capitalize }}
+                    </th>
+                    {% elif header is mapping %}
                         {% set header_name = header.name %}
                         {% set header_group = header.header_group %}
                         {% set header_colspan = header.colspan %}
                         {% set group_name = detail_header.header_hazard_group[header_group].header %}
-                        {% if group_start %}
-                        <th class="text-center {{ header_group }}"
-                            colspan="{{ header_colspan }}">
-                            {{ group_name|capitalize }}
-                        </th>
-                        {% endif %}
-                    {% endif %}
-
-                {% elif loop.first %}
-                <th class="text-left" rowspan="2">
-                    {{ header|capitalize }}
-                </th>
-                {% else %}
-                <th class="text-right" rowspan="2">
-                    {{ header|capitalize }}
-                </th>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        <tr>
-            {% for header in detail_table.headers[detail_header.breakdown_header_index+1:detail_header.total_header_index] %}
-                {% if header is string %}
-                <th class="text-right">
-                    {{ header|capitalize }}
-                </th>
-                {% elif header is mapping %}
-                    {% set header_name = header.name %}
-                    {% set header_group = header.header_group %}
-                    {% set header_colspan = header.colspan %}
-                    {% set group_name = detail_header.header_hazard_group[header_group].header %}
-                    <th class="text-right {{ header_group }}">
-                        {% if header_name.isupper() %}
-                            {{ header_name }}
-                        {% else %}
-                            {{ header_name|capitalize }}
-                        {% endif %}
-                    </th>
-                {% endif %}
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in detail_table.details %}
-        <tr>
-            {% for column in row %}
-                {% if loop.first %}
-                <th class="text-left">
-                    {{ column|capitalize }}
-                </th>
-                {% else %}
-                    {% if column is mapping %}
-                        {% set value = column.value %}
-                        {% set group_name = column.header_group %}
-                        <td class="text-right {{ group_name }}">
-                            {{ value }}
-                        </td>
-                    {% else %}
-                        <td class="text-right">
-                            {{ column }}
-                        </td>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            {% for total in detail_table.footers %}
-                {% if loop.first %}
-                <th class="text-left">
-                    {{ total|capitalize }}
-                </th>
-                {% else %}
-                    {% if total is mapping %}
-                        <th class="text-right {{ total.header_group }}">
-                            {{ total.value }}
-                        </th>
-                    {% else %}
-                        <th class="text-right">
-                            {{ total }}
-                        </th>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        </tr>
-    </tfoot>
-</table>
-
-<!--extra table starts here-->
-{% if extra_table %}
-    <p>
-        <h5>
-            {{ extra_table.table_header|capitalize }}
-        </h5>
-    </p>
-    <div class="row">
-        <div class="col-sm-12">
-            <table class="table table-striped condensed">
-                <thead>
-                    <tr>
-                        {% for header in extra_table.headers %}
-                            {% if loop.first %}
-                                <th class="text-left" rowspan="2">
-                                    {{ header|capitalize }}
-                                </th>
+                        <th class="text-right {{ header_group }}">
+                            {% if header_name.isupper() %}
+                                {{ header_name }}
                             {% else %}
-                                <th class="text-right" rowspan="2">
-                                    {{ header|capitalize }}
-                                </th>
+                                {{ header_name|capitalize }}
                             {% endif %}
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in extra_table.details %}
+                        </th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in detail_table.details %}
+            <tr>
+                {% for column in row %}
+                    {% if loop.first %}
+                    <th class="text-left">
+                        {{ column|capitalize }}
+                    </th>
+                    {% else %}
+                        {% if column is mapping %}
+                            {% set value = column.value %}
+                            {% set group_name = column.header_group %}
+                            <td class="text-right {{ group_name }}">
+                                {{ value }}
+                            </td>
+                        {% else %}
+                            <td class="text-right">
+                                {{ column }}
+                            </td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                {% for total in detail_table.footers %}
+                    {% if loop.first %}
+                    <th class="text-left">
+                        {{ total|capitalize }}
+                    </th>
+                    {% else %}
+                        {% if total is mapping %}
+                            <th class="text-right {{ total.header_group }}">
+                                {{ total.value }}
+                            </th>
+                        {% else %}
+                            <th class="text-right">
+                                {{ total }}
+                            </th>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </tfoot>
+    </table>
+
+    <!--extra table starts here-->
+    {% if extra_table %}
+        <p>
+            <h5>
+                {{ extra_table.table_header|capitalize }}
+            </h5>
+        </p>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-striped condensed">
+                    <thead>
                         <tr>
-                            {% for column in row %}
+                            {% for header in extra_table.headers %}
                                 {% if loop.first %}
-                                    <th class="text-left">
-                                        {{ column|capitalize }}
+                                    <th class="text-left" rowspan="2">
+                                        {{ header|capitalize }}
                                     </th>
                                 {% else %}
-                                    <td class="text-right">
-                                        {{ column }}
-                                    </td>
+                                    <th class="text-right" rowspan="2">
+                                        {{ header|capitalize }}
+                                    </th>
                                 {% endif %}
                             {% endfor %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for row in extra_table.details %}
+                            <tr>
+                                {% for column in row %}
+                                    {% if loop.first %}
+                                        <th class="text-left">
+                                            {{ column|capitalize }}
+                                        </th>
+                                    {% else %}
+                                        <td class="text-right">
+                                            {{ column }}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-{% endif %}
-<!--extra table ends here-->
+    {% endif %}
+    <!--extra table ends here-->
 
-<div>
-    {% for note in notes %}
-        <li colspan="100%">{{ note }}</li>
-    {% endfor %}
+    <div>
+        {% for note in notes %}
+            <li colspan="100%">{{ note }}</li>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
-{% endif %}

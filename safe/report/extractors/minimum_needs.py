@@ -142,6 +142,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
             group['needs'].append(item)
         needs.append(group)
 
+    context['component_key'] = component_metadata.key
     context['needs'] = needs
 
     return context

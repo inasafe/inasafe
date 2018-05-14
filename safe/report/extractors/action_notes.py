@@ -44,6 +44,7 @@ def action_checklist_extractor(impact_report, component_metadata):
     provenance = impact_report.impact_function.provenance
     extra_args = component_metadata.extra_args
 
+    context['component_key'] = component_metadata.key
     context['header'] = resolve_from_dictionary(extra_args, 'header')
     context['items'] = provenance['action_checklist']
 
@@ -77,6 +78,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     analysis_note_dict = resolve_from_dictionary(extra_args, 'analysis_notes')
     context['items'] = [analysis_note_dict]
 
+    context['component_key'] = component_metadata.key
     context['header'] = resolve_from_dictionary(extra_args, 'header')
     context['items'] += provenance['notes']
 

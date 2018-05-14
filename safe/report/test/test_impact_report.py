@@ -276,6 +276,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'component_key': 'general-report',
             'header': u'General Report',
             'table_header': (
                 u'Estimated Number of structures affected per hazard zone'),
@@ -347,6 +348,7 @@ class TestImpactReport(unittest.TestCase):
             action_checklist_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
+            'component_key': 'action-checklist',
             'header': u'Action Checklist',
             'items': [
                 {
@@ -513,6 +515,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'component_key': 'analysis-detail',
             'header': u'Analysis Detail',
             'notes': [],
             'group_border_color': u'#36454f',
@@ -700,6 +703,8 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'component_key': 'aggregation-result',
+            'header': u'Aggregation Result',
             'notes': [],
             'aggregation_result': {
                 'table_header': u'Estimated Number of structures affected by '
@@ -732,8 +737,9 @@ class TestImpactReport(unittest.TestCase):
                 'type_total_values': ['2', '1', '1', '1', '1'],
                 'total_label': u'Total',
                 'total_all': '6',
-                'total_in_aggregation_area_label': u'Total'},
-            'header': u'Aggregation Result'}
+                'total_in_aggregation_area_label': u'Total'
+            }
+        }
         actual_context = aggregate_result.context
 
         self.assertDictEqual(
@@ -780,6 +786,7 @@ class TestImpactReport(unittest.TestCase):
             analysis_provenance_details_simplified_component['key'])
 
         expected_context = {
+            'component_key': 'analysis-provenance-details-simplified',
             'header': u'Analysis details',
             'details': OrderedDict(
                 [
@@ -852,6 +859,7 @@ class TestImpactReport(unittest.TestCase):
             analysis_provenance_details_component['key'])
 
         expected_context = {
+            'component_key': 'analysis-provenance-details',
             'header': u'Analysis details',
             'details': OrderedDict([('impact_function', {
                 'header': u'Impact Function',
@@ -1135,6 +1143,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'component_key': 'minimum-needs',
             'header': u'Minimum needs', 'needs': [
                 {
                     'header': u'Relief items to be provided single',
@@ -1270,6 +1279,7 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'component_key': 'minimum-needs',
             'header': u'Minimum needs', 'needs': [
                 {
                     'header': u'Relief items to be provided single',
@@ -1503,6 +1513,7 @@ class TestImpactReport(unittest.TestCase):
                 'total_all': '33',
                 'type_total_values': ['21', '2', '1', '4', '4', '1']
             },
+            'component_key': 'aggregation-result',
             'header': u'Aggregation Result',
             'notes': []
         }
@@ -1564,6 +1575,7 @@ class TestImpactReport(unittest.TestCase):
 
         actual_context = aggregation_postprocessors.context
         expected_context = {
+            'component_key': 'aggregation-postprocessors',
             'header': u'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [
@@ -1763,6 +1775,7 @@ class TestImpactReport(unittest.TestCase):
             aggregation_postprocessors_component['key'])
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
+            'component_key': 'aggregation-postprocessors',
             'header': u'Detailed demographic breakdown',
             'sections': OrderedDict([
                 ('age', [

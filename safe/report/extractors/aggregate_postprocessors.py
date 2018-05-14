@@ -90,6 +90,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         # let each section handled itself
         zero_displaced = False
 
+    context['component_key'] = component_metadata.key
     context['use_aggregation'] = use_aggregation
     context['header'] = resolve_from_dictionary(
         extra_args, 'header')

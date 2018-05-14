@@ -1,40 +1,42 @@
-{% if mmi %}
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header }}
-</h5>
-<table class="table table-striped condensed">
-    <thead>
-        <tr>
-            {% for h in mmi.header %}
-            <th class="text-right">
-                {{ h }}
-            </th>
+<div id="{{ component_key }}">
+    {% if mmi %}
+    <h5 class="info">
+        {{ header }}
+    </h5>
+    <table class="table table-striped condensed">
+        <thead>
+            <tr>
+                {% for h in mmi.header %}
+                <th class="text-right">
+                    {{ h }}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in mmi.rows %}
+            <tr>
+                {% for column in row %}
+                    {% if loop.first %}
+                    <th class="text-right">{{ column }}</th>
+                    {% else %}
+                    <td class="text-right">{{ column }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in mmi.rows %}
-        <tr>
-            {% for column in row %}
-                {% if loop.first %}
-                <th class="text-right">{{ column }}</th>
-                {% else %}
-                <td class="text-right">{{ column }}</td>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            {% for column in mmi.footer %}
-                {% if loop.first %}
-                <th class="text-right">{{ column }}</th>
-                {% else %}
-                <td class="text-right">{{ column }}</td>
-                {% endif %}
-            {% endfor %}
-        </tr>
-    </tfoot>
-</table>
-{% endif %}
+        </tbody>
+        <tfoot>
+            <tr>
+                {% for column in mmi.footer %}
+                    {% if loop.first %}
+                    <th class="text-right">{{ column }}</th>
+                    {% else %}
+                    <td class="text-right">{{ column }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </tfoot>
+    </table>
+    {% endif %}
+</div>

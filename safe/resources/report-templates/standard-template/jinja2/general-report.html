@@ -1,54 +1,56 @@
-<h5 class="info">
-    <i class="icon-info-sign icon-white"></i> {{ header|capitalize }}
-</h5>
-<div class="container">
-    <div class="row">
-        <h5>
-            {{ table_header|capitalize }}
-        </h5>
-    </div>
-    {% for section in summary %}
+<div id="{{ component_key }}">
+    <h5 class="info">
+        {{ header|capitalize }}
+    </h5>
+    <div class="container">
         <div class="row">
-            <div class="col-sm-12" style="margin-top: 10px">
-                <table class="table table-striped condensed">
-                    <thead>
-                        <tr>
-                            <th colspan="1">{{ section.header_label }}</th>
-                            {% for label in section.value_labels %}
-                                <th class="text-right" colspan="1">{{ label }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in section.rows %}
-                        <tr>
-                            {% if item.as_header %}
-                                <th colspan="1">{{ item.name }}</th>
-                            {% else %}
-                                <td colspan="1">{{ item.name }}</td>
-                            {% endif %}
-                            {% for number in item.numbers %}
-                                <td class="text-right" colspan=1>{{ number }}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <h5>
+                {{ table_header|capitalize }}
+            </h5>
         </div>
-    {% endfor %}
-    <div>
-        <ul>
-            {% for note in notes %}
-                {% if ':' in note %}
-                    {% set concept = note.split(':')[0] %}
-                    {% set note = note.split(':')[1:] %}
-                    {% set note = ':'.join(note) %}
-                    <li colspan="100%"><b>{{ concept|capitalize }}</b>:{{ note }}</li>
-                {% else %}
-                    <li colspan="100%">{{ note }}</li>
-                {% endif %}
-            {% endfor %}
-        </ul>
+        {% for section in summary %}
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 10px">
+                    <table class="table table-striped condensed">
+                        <thead>
+                            <tr>
+                                <th colspan="1">{{ section.header_label }}</th>
+                                {% for label in section.value_labels %}
+                                    <th class="text-right" colspan="1">{{ label }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in section.rows %}
+                            <tr>
+                                {% if item.as_header %}
+                                    <th colspan="1">{{ item.name }}</th>
+                                {% else %}
+                                    <td colspan="1">{{ item.name }}</td>
+                                {% endif %}
+                                {% for number in item.numbers %}
+                                    <td class="text-right" colspan="1">{{ number }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+        <div>
+            <ul>
+                {% for note in notes %}
+                    {% if ':' in note %}
+                        {% set concept = note.split(':')[0] %}
+                        {% set note = note.split(':')[1:] %}
+                        {% set note = ':'.join(note) %}
+                        <li colspan="100%"><b>{{ concept|capitalize }}</b>:{{ note }}</li>
+                    {% else %}
+                        <li colspan="100%">{{ note }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>

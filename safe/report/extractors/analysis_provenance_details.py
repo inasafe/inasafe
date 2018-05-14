@@ -214,6 +214,7 @@ def analysis_provenance_details_extractor(impact_report, component_metadata):
     analysis_details_header = resolve_from_dictionary(
         extra_args, ['header', 'analysis_detail'])
 
+    context['component_key'] = component_metadata.key
     context.update({
         'header': analysis_details_header,
         'details': provenance_detail
@@ -327,6 +328,7 @@ def analysis_provenance_details_simplified_extractor(
     analysis_details_header = resolve_from_dictionary(
         extra_args, ['header', 'analysis_detail'])
 
+    context['component_key'] = component_metadata.key
     context.update({
         'header': analysis_details_header,
         'details': provenance_detail
