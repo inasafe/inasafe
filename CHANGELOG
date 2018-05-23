@@ -1,3 +1,48 @@
+Changelog for version 4.4
+================================
+
+f8ca2d554 (HEAD -> metadata-4.4, ismail/metadata-4.4) Update metadata for 4.4
+c7f6a8877 (inasafe/develop, develop) Update translation.
+5f416f7cf add expressions for retrieving each sections of report (#4986)
+090aac15d Coding standards.
+68e3b3273 Revert changes to make unit test pass.
+f50de026a More unit test and support for geojson upload.
+ef7fb36fe Add full url to the layer uploaded in the return value.
+014c3d979 Add geojson to shapefile converter.
+e72826ef9 Better unit test for upload to geonode.
+eb643049c Add more handling for exception in uploading layer to geonode.
+5438c6477 add setting for inasafe output directory (#4984)
+66111f701 Check the status code first before parsing the content of request result.
+3e4470a7e add locale as a parameter on getting the qgis app (#4977)
+e4abaa3f3 (translation_4.4) if aggregation layer, the extent should be aggregation CRS or mapcanvas
+ce5079d8b Fix unit test.
+b70c58b08 fix test
+c531b7f28 tweak
+7927aaf9a part fix_#4970
+522e64b34 (Charlotte-Morgan-develop) Fix #4893, contour not properly created. Need to set the type of value in GDALDataType to Float32.
+2ee38b586 Set minimum value to 0.0
+c632a1b97 Set precision to 6 decimal for minimum needs.
+51cd8baf9 fix multi-IF serialization (#4969)
+252a25287 fix infographic not showning any expressions (#4965)
+cef9e4ffc update missing docstring on generate report (#4963)
+504f25f9d add impact report property for template extent setting (#4956)
+18ab4acd7 read specified extent from template (#4954)
+4253378e0 Html report expression (#4953)
+8a9027122 allow to add many dynamic fields when summing layers in the waterfall
+32db937ae fix save default style in datastore
+ee558c209 trying to remove "message" from exception https://stackoverflow.com/questions/1272138/baseexception-message-deprecated-in-python-2-6
+9b6257ae0 review logging levels when we run an impact function
+d9f386dc1 add QGIS full version and QGIS shorter version name in Sentry
+27713aaad add HOSTNAME_SENTRY to customize the hostname in sentry
+ff95105e7 update layer id whenever IF is being serialized (#4943)
+6c4e8cec9 remove unnecessary code from gis package
+0d90356ff fix typo
+f9fd4c81e typo
+eb5c32932 remove a critical message if everything was fine
+342cecf28 bump to version 4.4.0
+700d7285c enable geonode uploader
+1401a7da6 welcome back Sentry
+
 Changelog for version 4.3.2
 ================================
 
