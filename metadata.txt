@@ -28,7 +28,6 @@ status=final
 changelog=
     Version 4.4.0:
     - Add Geonode uploader
-    - Allow selection on the exposure layer
     - Add back Sentry configuration (need to be enabled in your settings)
     - Set precision to 6 decimal for minimum needs.
     - Add expressions for retrieving each sections of report (#4986)
