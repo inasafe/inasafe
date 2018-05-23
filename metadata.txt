@@ -30,6 +30,9 @@ changelog=
     - Add Geonode uploader
     - Allow selection on the exposure layer
     - Add back Sentry configuration (need to be enabled in your settings)
+    - Set precision to 6 decimal for minimum needs.
+    - Add expressions for retrieving each sections of report (#4986)
+    - Update to support InaSAFE run in headless mode
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards,risk
