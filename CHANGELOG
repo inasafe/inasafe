@@ -1,8 +1,13 @@
-Changelog for version 4.4
+Changelog for version 4.4.0
 ================================
 
-f8ca2d554 (HEAD -> metadata-4.4, ismail/metadata-4.4) Update metadata for 4.4
-c7f6a8877 (inasafe/develop, develop) Update translation.
+48df47650 (HEAD, inasafe/develop, metadata-4.4) Better exception handling in GeoNode uploader.
+fb73aeb84 remove duplicate metadata initialisation (#4992)
+563b4c536 Update changelog for v4.4
+710df28d8 (upstream/develop) Bump version number to 4.4 final.
+ff2591df6 Update CHANGELOG for 4.4
+7036e720e Update metadata for 4.4
+c7f6a8877 (develop) Update translation.
 5f416f7cf add expressions for retrieving each sections of report (#4986)
 090aac15d Coding standards.
 68e3b3273 Revert changes to make unit test pass.
