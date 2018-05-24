@@ -204,7 +204,6 @@ def read_iso19115_metadata(layer_uri, keyword=None, version_35=False):
         message = 'Layer based file but no xml file.\n'
         message += 'Layer path: %s.' % layer_uri
         raise NoKeywordsFoundError(message)
-    metadata = GenericLayerMetadata(layer_uri, xml_uri)
     if version_35:
         metadata = GenericLayerMetadata35(layer_uri, xml_uri)
     else:
