@@ -11,6 +11,7 @@ from PyQt4.QtGui import (
 )
 from qgis.core import QgsMapLayerRegistry
 
+from safe.common.exceptions import GeoNodeLayerUploadError
 from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.geonode.upload_layer_requests import (
     extension_siblings, login_user, upload)
@@ -165,9 +166,16 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
 
         geonode_session = login_user(url, login, password)
 
-        result = upload(url, geonode_session, layer.source())
-        self.button_box.setEnabled(True)
-        disable_busy_cursor()
+        try:
+            result = upload(url, geonode_session, layer.source())
+        except GeoNodeLayerUploadError as e:
+            result = {
+                'success': False,
+                'message': e.message
+            }
+        finally:
+            self.button_box.setEnabled(True)
+            disable_busy_cursor()
 
         if result['success']:
             self.done(QDialog.Accepted)
@@ -189,5 +197,5 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
             display_warning_message_box(
                 self,
                 tr('Error while uploading the layer.'),
-                unicode(result)
+                unicode(result['message'])
             )
