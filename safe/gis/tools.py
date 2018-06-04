@@ -13,7 +13,7 @@ from qgis.core import (
     QgsDataSourceURI,
 )
 
-from safe.common.exceptions import NoKeywordsFoundError, InvalidLayerError
+from safe.common.exceptions import InvalidLayerError
 from safe.definitions.constants import (
     VECTOR_DRIVERS,
     RASTER_DRIVERS,
@@ -33,7 +33,6 @@ from safe.utilities.gis import (
     is_polygon_layer,
     qgis_version,
 )
-from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.utilities import monkey_patch_keywords
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -243,16 +242,9 @@ def load_layer(full_layer_uri_string, name=None, provider=None):
     else:
         layer.setLayerName(name)
 
-    # Determine if layer is hazard or exposure
-    layer_purpose = 'undefined'
-    try:
-        keywords = read_iso19115_metadata(layer.source())
-        if 'layer_purpose' in keywords:
-            layer_purpose = keywords['layer_purpose']
-    except NoKeywordsFoundError:
-        pass
-
+    # update the layer keywords
     monkey_patch_keywords(layer)
+    layer_purpose = layer.keywords.get('layer_purpose')
 
     return layer, layer_purpose
 

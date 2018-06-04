@@ -372,6 +372,8 @@ def monkey_patch_keywords(layer):
 
     if not layer.keywords.get('inasafe_fields'):
         layer.keywords['inasafe_fields'] = {}
+    if not layer.keywords.get('layer_purpose'):
+        layer.keywords['layer_purpose'] = 'undefined'
 
 
 def readable_os_version():
