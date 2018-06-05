@@ -384,7 +384,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 'FROM tbl_bookmarks;')
             bookmarks = cursor.fetchall()
 
-            canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
+            canvas_crs = self.canvas.mapSettings().destinationCrs()
 
             for bookmark in bookmarks:
                 name = bookmark[1]
@@ -392,9 +392,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 rectangle = QgsRectangle(
                     bookmark[3], bookmark[4], bookmark[5], bookmark[6])
 
-                if srid != canvas_srid:
+                if srid != canvas_crs.srsid():
                     transform = QgsCoordinateTransform(
-                        srid, canvas_srid, QgsProject.instance())
+                        QgsCoordinateReferenceSystem(srid), canvas_crs, QgsProject.instance())
                     try:
                         rectangle = transform.transform(rectangle)
                     except QgsCsException:
