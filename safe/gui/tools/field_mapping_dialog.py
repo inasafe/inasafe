@@ -143,6 +143,7 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             self.field_mapping_widget.close()
             self.field_mapping_widget.deleteLater()
             self.main_layout.removeWidget(self.field_mapping_widget)
+            self.field_mapping_widget = None
 
         if layer:
             self.layer = layer
