@@ -161,7 +161,8 @@ def upload(server, session, base_file, charset='UTF-8'):
     :param charset: The encoding to use. Default to UTF-8.
     :type charset: basestring
     """
-    is_geojson = os.path.splitext(base_file)[1] == '.geojson'
+    file_ext = os.path.splitext(base_file)[1]
+    is_geojson = file_ext in ['.geojson', '.json']
     original_sibling_files, _ = siblings_files(base_file)
     if is_geojson:
         # base_file = os.path.splitext(base_file)[0]
