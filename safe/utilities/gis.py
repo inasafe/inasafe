@@ -359,7 +359,7 @@ def qgis_version_detailed():
     :returns: List containing major, minor and patch.
     :rtype: list
     """
-    version = unicode(Qgis.QGIS_VERSION_INT)
+    version = str(Qgis.QGIS_VERSION_INT)
     return [int(version[0]), int(version[1:3]), int(version[3:])]
 
 

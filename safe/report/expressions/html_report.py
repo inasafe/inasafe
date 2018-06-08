@@ -175,7 +175,7 @@ def get_report_section(
 
     if section_element:
         requested_section = container_wrapper_format.format(
-            section_content=unicode(ET.tostring(section_element)))
+            section_content=str(ET.tostring(section_element)))
         return requested_section
     else:
         return no_element_error
