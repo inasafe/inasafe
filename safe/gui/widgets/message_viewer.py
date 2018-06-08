@@ -269,10 +269,11 @@ class MessageViewer(QtWebKitWidgets.QWebView):
                     string += html
 
             string += html_footer()
-        elif (isinstance(self.static_message, str) or
-                isinstance(self.static_message, str)):
+        elif (isinstance(self.static_message, str)):
             # Handle sent text directly
             string = self.static_message
+        elif self.static_message is not None:
+            string = str(self.static_message)
         elif not self.static_message:
             # handle dynamic message
             # Handle sent Message instance
