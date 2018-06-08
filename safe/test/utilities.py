@@ -23,6 +23,7 @@ from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
 from safe.utilities.utilities import monkey_patch_keywords
+from safe.utilities.settings import setting, general_setting
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -72,7 +73,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
     """
     global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
 
-    from PyQt4.QtCore import QSettings
+    from qgis.PyQt.QtCore import QSettings
     if qsetting:
         settings = QSettings(qsetting)
     else:
