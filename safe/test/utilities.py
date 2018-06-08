@@ -17,13 +17,14 @@ import processing
 from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
                        QgsRasterLayer, QgsRectangle, QgsVectorLayer)
 from qgis.PyQt import QtWidgets
+from qgis.PyQt.QtCore import QObject, QTranslator
 from qgis.utils import iface
-from safe.common.utilities import temp_dir, unique_filename
+from safe.common.utilities import temp_dir, unique_filename, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
-from safe.utilities.utilities import monkey_patch_keywords
-from safe.utilities.settings import setting, general_setting, set_setting
+from safe.utilities.utilities import monkey_patch_keywords, reload_inasafe_modules
+from safe.utilities.settings import setting, general_setting, set_setting, set_general_setting
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -162,7 +163,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
             safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
 
         if os.path.exists(inasafe_translation_path):
-            if isinstance(QGIS_APP, pyqtWrapperType):
+            if isinstance(QGIS_APP, QObject):
                 translator = QTranslator()
             else:
                 translator = QTranslator(QGIS_APP)

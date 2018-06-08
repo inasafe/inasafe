@@ -176,7 +176,7 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
         tags[provenance_os['provenance_key']] = readable_os_version()
         qgis_short_version = provenance_qgis_version['provenance_key']
         qgis_full_version = qgis_short_version + '_full'
-        versions = [unicode(v) for v in qgis_version_detailed()]
+        versions = [str(v) for v in qgis_version_detailed()]
         tags[qgis_short_version] = '.'.join(versions[0:2])
         tags[qgis_full_version] = '.'.join(versions[0:3])
         tags[provenance_qt_version['provenance_key']] = QT_VERSION_STR
