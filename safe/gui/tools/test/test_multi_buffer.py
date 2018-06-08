@@ -19,9 +19,19 @@ from safe.gui.tools.multi_buffer_dialog import (
 class MultiBufferTest(unittest.TestCase):
 
     def setUp(self):
-        """Test initialisation run before each test."""
+        """Test initialisation"""
         self.output_path = standard_data_path(
             'hazard', 'volcano_point_multi_buffer.geojson')
+
+    def tearDown(self):
+        """Clear test data"""
+        QgsProject.instance().removeAllMapLayers()
+        try:
+            os.remove(self.output_path)
+            os.remove(self.output_path.replace('.geojson', '.xml'))
+        except OSError:
+            # With the test_temp_output test, these files don't exist.
+            pass
 
     def multi_buffer_test(self, output_path):
         """Function to test the functionality of multi buffer tool.
@@ -73,12 +83,6 @@ class MultiBufferTest(unittest.TestCase):
         self.assertEqual(expected_fields_name, new_field_names)
 
         # We need to clean generated files
-        try:
-            os.remove(self.output_path)
-            os.remove(self.output_path.replace('.geojson', '.xml'))
-        except OSError:
-            # With the test_temp_output test, these files don't exist.
-            pass
 
     def test_temp_output(self):
         """Test the multi buffer tool if user do not provide
