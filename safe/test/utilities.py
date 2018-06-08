@@ -23,7 +23,7 @@ from safe.definitions.constants import HAZARD_EXPOSURE
 from safe.gis.tools import load_layer
 from safe.gis.vector.tools import copy_layer, create_memory_layer
 from safe.utilities.utilities import monkey_patch_keywords
-from safe.utilities.settings import setting, general_setting
+from safe.utilities.settings import setting, general_setting, set_setting
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
