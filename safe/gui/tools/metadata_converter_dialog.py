@@ -150,8 +150,12 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         if not self.layer:
             return
 
-        keywords = self.keyword_io.read_keywords(layer)
-        self.show_current_metadata()
+        try:
+            keywords = self.keyword_io.read_keywords(layer)
+            self.show_current_metadata()
+        except NoKeywordsFoundError:
+            # FIXME (elpaso)
+            keywords = {}
 
         # TODO(IS): Show only possible exposure target
         if keywords.get('layer_purpose', False) == layer_purpose_hazard['key']:
