@@ -18,6 +18,7 @@ from qgis.PyQt.QtWidgets import (QAction, QDockWidget, QMenu,
                                  QMessageBox, qApp)
 
 from safe import messaging as m
+from safe.messaging.item.exceptions import InvalidMessageItemError
 from safe.common.exceptions import (HashNotFoundError, InvalidLayerError,
                                     InvalidParameterError,
                                     KeywordNotFoundError, MetadataReadError,
@@ -886,8 +887,12 @@ class Dock(QDockWidget, FORM_CLASS):
         """
         keywords = KeywordIO(layer)
         self.print_button.setEnabled(False)
-        message = keywords.to_message()
-        send_static_message(self, message)
+        try:
+            message = keywords.to_message()
+            send_static_message(self, message)
+        except InvalidMessageItemError as e:
+            # FIXME (elpaso)
+            pass
         self.show_question_button.setVisible(False)
         self.question_group.setEnabled(True)
         self.question_group.setVisible(True)
