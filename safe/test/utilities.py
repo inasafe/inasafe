@@ -17,7 +17,7 @@ import processing
 from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
                        QgsRasterLayer, QgsRectangle, QgsVectorLayer)
 from qgis.PyQt import QtWidgets
-from qgis.PyQt.QtCore import QObject, QTranslator
+from qgis.PyQt.QtCore import QTranslator
 import sip
 from qgis.utils import iface
 from safe.common.utilities import temp_dir, unique_filename, safe_dir
