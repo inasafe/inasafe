@@ -17,7 +17,7 @@ from qgis.core import Qgis, QgsCoordinateReferenceSystem, QgsProject
 from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QT_VERSION_STR
 from safe.common.version import get_version
-from safe.definitions.constants import ANALYSIS_SUCCESS, PREPARE_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS, INASAFE_TEST, PREPARE_SUCCESS
 from safe.definitions.field_groups import (age_displaced_count_group,
                                            gender_displaced_count_group)
 from safe.definitions.fields import (total_affected_field, total_exposed_field,
