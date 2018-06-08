@@ -1297,7 +1297,7 @@ class TestImpactReport(unittest.TestCase):
                         },
                         {
                             'header': 'Clean Water [l]',
-                            'value': '970'
+                            'value': '980'
                         },
                         {
                             'header': 'Family Kits',
