@@ -18,6 +18,7 @@ from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
                        QgsRasterLayer, QgsRectangle, QgsVectorLayer)
 from qgis.PyQt import QtWidgets
 from qgis.PyQt.QtCore import QObject, QTranslator
+import sip
 from qgis.utils import iface
 from safe.common.utilities import temp_dir, unique_filename, safe_dir
 from safe.definitions.constants import HAZARD_EXPOSURE
@@ -163,7 +164,7 @@ def get_qgis_app(requested_locale='en_US', qsetting=''):
             safe_dir('i18n'), 'inasafe_' + str(locale_name) + '.qm')
 
         if os.path.exists(inasafe_translation_path):
-            if isinstance(QGIS_APP, QObject):
+            if isinstance(QGIS_APP, sip.wrappertype):
                 translator = QTranslator()
             else:
                 translator = QTranslator(QGIS_APP)
