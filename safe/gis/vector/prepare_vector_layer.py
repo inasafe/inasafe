@@ -485,14 +485,12 @@ def sum_fields(layer, output_field_key, input_fields):
         # Get the output field index
         output_idx = layer.fields().lookupField(output_field_name)
         # Output index is not found
+        layer.startEditing()
         if output_idx == -1:
             output_field = create_field_from_definition(field_definition)
-            layer.startEditing()
             layer.addAttribute(output_field)
-            layer.commitChanges()
             output_idx = layer.fields().lookupField(output_field_name)
 
-        layer.startEditing()
         # Iterate to all features
         for feature in layer.getFeatures():
             context.setFeature(feature)
