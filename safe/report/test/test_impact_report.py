@@ -993,12 +993,12 @@ class TestImpactReport(unittest.TestCase):
                 }), ('exposure_layer', {
                     'content': exposure_layer.source(),
                     'header': 'Exposure Layer '
-                }), ('classification', {
-                    'content': 'generic_structure_classes',
-                    'header': 'Classification '
                 }), ('keyword_version', {
                     'content': '4.0',
                     'header': 'Keyword Version '
+                }), ('classification', {
+                    'content': 'generic_structure_classes',
+                    'header': 'Classification '
                 })])
             }), ('aggregation', {
                 'header': 'Aggregation',
@@ -1577,7 +1577,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [['B', '2,600', '640', '1,700', '230'],
+                        'rows': [['B', '2,700', '660', '1,800', '240'],
                                  ['C', '6,500', '1,700', '4,300', '590'],
                                  ['F', '7,200', '1,800', '4,700', '640'],
                                  ['G', '9,500', '2,400', '6,300', '850']],
@@ -1600,7 +1600,7 @@ class TestImpactReport(unittest.TestCase):
                                     }],
                         'group_header_colspan': 3,
                         'totals': [
-                            'Total', '25,600', '6,400', '16,900', '2,400']
+                            'Total', '25,700', '6,500', '17,000', '2,400']
                     }
                 ]),
                 ('gender', [
@@ -1609,7 +1609,7 @@ class TestImpactReport(unittest.TestCase):
                                   'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
                         'rows': [
-                            ['B', '2,600', '1,300'],
+                            ['B', '2,700', '1,400'],
                             ['C', '6,500', '3,300'],
                             ['F', '7,200', '3,600'],
                             ['G', '9,500', '4,800']],
@@ -1623,7 +1623,7 @@ class TestImpactReport(unittest.TestCase):
                             }],
                         'group_header_colspan': 1,
                         'totals': [
-                            'Total', '25,600', '12,800']
+                            'Total', '25,700', '12,900']
                     }
                 ]),
                 ('vulnerability', [
@@ -1656,13 +1656,13 @@ class TestImpactReport(unittest.TestCase):
                                   'per week',
                         'notes': [],
                         'rows': [
-                            ['B', '2,600', '7,200', '44,400', '170,000',
-                             '510', '130', '1,100'],
-                            ['C', '6,500', '18,200', '114,000', '434,000',
+                            ['B', '2,700', '7,400', '46,000', '177,000',
+                             '530', '140', '1,100'],
+                            ['C', '6,500', '18,200', '114,000', '435,000',
                              '1,300', '330', '2,600'],
                             ['F', '7,200', '20,000', '125,000', '477,000',
                              '1,500', '360', '2,900'],
-                            ['G', '9,500', '26,500', '166,000', '634,000',
+                            ['G', '9,500', '26,500', '166,000', '633,000',
                              '1,900', '480', '3,800']],
                         'columns': [
                             'Aggregation area',
@@ -1700,10 +1700,10 @@ class TestImpactReport(unittest.TestCase):
                         'group_header_colspan': 6,
                         'totals': [
                             'Total',
-                            '25,600',
-                            '71,700',
-                            '448,000',
-                            '1,714,000',
+                            '25,700',
+                            '71,900',
+                            '450,000',
+                            '1,720,000',
                             '5,200',
                             '1,300',
                             '10,200']
@@ -1777,7 +1777,7 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [['B', '10', '0', '10', '0'],
+                        'rows': [['B', '10', '0', '0', '0'],
                                  ['C', '10', '10', '10', '0'],
                                  ['F', '10', '0', '10', '0'],
                                  ['G', '10', '10', '10', '0'],
@@ -1856,9 +1856,9 @@ class TestImpactReport(unittest.TestCase):
                         'notes': [],
                         'rows': [
                             ['B', '10', '10', '20', '80', '0', '0', '0'],
-                            ['C', '10', '20', '90', '340', '0', '0', '10'],
+                            ['C', '10', '20', '90', '340', '10', '0', '10'],
                             ['F', '10', '10', '70', '260', '0', '0', '10'],
-                            ['G', '10', '20', '110', '410', '10', '0', '10'],
+                            ['G', '10', '20', '120', '430', '10', '0', '10'],
                             ['K', '10', '10', '40', '130', '0', '0', '0']],
                         'columns': [
                             'Aggregation area',
