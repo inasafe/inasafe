@@ -287,8 +287,9 @@ def create_spatial_index(layer):
     :return: The index.
     :rtype: QgsSpatialIndex
     """
+    request = QgsFeatureRequest().setSubsetOfAttributes([])
     try:
-        spatial_index = QgsSpatialIndex(layer.getFeatures())
+        spatial_index = QgsSpatialIndex(layer.getFeatures(request))
     except BaseException:
         # Spatial index is creating an unknown exception.
         # https://github.com/inasafe/inasafe/issues/4304
@@ -304,7 +305,7 @@ def create_spatial_index(layer):
             # We try now to insert feature by feature.
             # It's slower than the using the feature iterator.
             spatial_index = QgsSpatialIndex()
-            for feature in new_layer.getFeatures():
+            for feature in new_layer.getFeatures(request):
                 try:
                     spatial_index.insertFeature(feature)
                 except BaseException:
