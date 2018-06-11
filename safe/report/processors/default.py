@@ -499,7 +499,7 @@ def qgis_composer_renderer(impact_report, component):
                 impact_report.use_template_extent) else None
 
             composer_map.setKeepLayerSet(True)
-            layer_set = [l.id() for l in layers if isinstance(l, QgsMapLayer)]
+            layer_set = [l for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayers(layer_set)
             map_overview_extent = None
             if map_extent_option and isinstance(
@@ -544,7 +544,7 @@ def qgis_composer_renderer(impact_report, component):
                 square_extent = map_overview_extent
 
             composer_map.zoomToExtent(square_extent)
-            composer_map.renderModeUpdateCachedImage()
+            composer_map.invalidateCache()
 
             actual_extent = composer_map.extent()
 
