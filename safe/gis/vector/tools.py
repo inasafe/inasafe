@@ -177,16 +177,16 @@ def copy_layer(source, target):
 
     for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
-        if aggregation_layer:
+        if aggregation_layer and feature.hasGeometry():
             # See issue https://github.com/inasafe/inasafe/issues/3713
             # and issue https://github.com/inasafe/inasafe/issues/3927
             # Also handle if feature has no geometry.
             geom = geometry_checker(geom)
-            if not geom or not geom.isGeosValid():
+            if not geom:
                 LOGGER.info(
                     'One geometry in the aggregation layer is still invalid '
                     'after cleaning.')
-        out_feature.setGeometry(QgsGeometry(geom))
+        out_feature.setGeometry(geom)
         out_feature.setAttributes(feature.attributes())
         target.addFeature(out_feature)
 
