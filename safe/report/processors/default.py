@@ -197,8 +197,10 @@ def create_qgis_pdf_output(
             # settings.exportMetadata = True
 
             # TODO: ABP: check that page size is set on the pages
-
-            exporter.exportToPdf(output_path, settings)
+            res, error = exporter.exportToPdf(output_path, settings)
+            if res != QgsLayoutExporter.Success:
+                LOGGER.error(error)
+                return None
         except Exception as exc:
             LOGGER.error(exc)
             return None
