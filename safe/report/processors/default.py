@@ -231,13 +231,7 @@ def create_qgis_template_output(output_path, layout):
     context = QgsReadWriteContext()
     context.setPathResolver(QgsProject.instance().pathResolver())
 
-    template_document = QtXml.QDomDocument()
-    elem = layout.writeXml(template_document, context)
-    template_document.appendChild(elem)
-
-    with open(output_path, 'wb') as f:
-        f.write(template_document.toByteArray())
-
+    layout.saveAsTemplate(output_path, context)
     return output_path
 
 
