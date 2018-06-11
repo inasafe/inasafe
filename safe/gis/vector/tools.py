@@ -17,7 +17,10 @@ from qgis.core import (
     QgsField,
     QgsProject,
     QgsDistanceArea,
-    QgsWkbTypes
+    QgsWkbTypes,
+    QgsCoordinateReferenceSystem,
+    QgsMemoryProviderUtils,
+    QgsFields
 )
 
 from qgis.PyQt.QtCore import QVariant
@@ -117,31 +120,29 @@ def create_memory_layer(
     """
 
     if geometry == QgsWkbTypes.PointGeometry:
-        type_string = 'MultiPoint'
+        wkb_type = QgsWkbTypes.MultiPoint
     elif geometry == QgsWkbTypes.LineGeometry:
-        type_string = 'MultiLineString'
+        wkb_type = QgsWkbTypes.MultiLineString
     elif geometry == QgsWkbTypes.PolygonGeometry:
-        type_string = 'MultiPolygon'
+        wkb_type = QgsWkbTypes.MultiPolygon
     elif geometry == QgsWkbTypes.NullGeometry:
-        type_string = 'none'
+        wkb_type = QgsWkbTypes.NoGeometry
     else:
         raise MemoryLayerCreationError(
             'Layer geometry must be one of: Point, Line, Polygon or Null, I got %s' % geometry)
 
-    uri = '%s?index=yes&uuid=%s' % (type_string, str(uuid4()))
-    if coordinate_reference_system:
-        crs = coordinate_reference_system.authid().lower()
-        uri += '&crs=%s' % crs
-    memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
+    if coordinate_reference_system is None:
+        coordinate_reference_system = QgsCoordinateReferenceSystem()
+    if fields is None:
+        fields = QgsFields()
+    memory_layer = QgsMemoryProviderUtils.createMemoryLayer(name=layer_name,
+                                                            fields=fields,
+                                                            geometryType=wkb_type,
+                                                            crs=coordinate_reference_system)
+    memory_layer.dataProvider().createSpatialIndex()
     memory_layer.keywords = {
         'inasafe_fields': {}
     }
-
-    if fields:
-        data_provider = memory_layer.dataProvider()
-        data_provider.addAttributes(fields)
-        memory_layer.updateFields()
-
     return memory_layer
 
 
