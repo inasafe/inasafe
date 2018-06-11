@@ -135,6 +135,12 @@ def create_memory_layer(
         coordinate_reference_system = QgsCoordinateReferenceSystem()
     if fields is None:
         fields = QgsFields()
+    elif not isinstance(fields, QgsFields):
+        # fields is a list
+        new_fields = QgsFields()
+        for f in fields:
+            new_fields.append(f)
+        fields = new_fields
     memory_layer = QgsMemoryProviderUtils.createMemoryLayer(name=layer_name,
                                                             fields=fields,
                                                             geometryType=wkb_type,
