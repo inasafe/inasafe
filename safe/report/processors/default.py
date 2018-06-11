@@ -710,11 +710,11 @@ def qt_svg_to_png_renderer(impact_report, component):
     return component.output
 
 
-def atlas_renderer(composition, coverage_layer, output_path, file_format):
+def atlas_renderer(layout, coverage_layer, output_path, file_format):
     """Extract composition using atlas generation.
 
-    :param composition: QGIS Composition object used for producing the report.
-    :type composition: qgis.core.QgsLayout
+    :param layout: QGIS Print Layout object used for producing the report.
+    :type layout: qgis.core.QgsPrintLayout
 
     :param coverage_layer: Coverage Layer used for atlas map.
     :type coverage_layer: QgsMapLayer
@@ -729,27 +729,21 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
     :rtype: str, list
     """
     # set the composer map to be atlas driven
-    composer_map = composition_item(
-        composition, 'impact-map', QgsLayoutItemMap)
+    composer_map = layout_item(
+        layout, 'impact-map', QgsLayoutItemMap)
     composer_map.setAtlasDriven(True)
     composer_map.setAtlasScalingMode(QgsLayoutItemMap.Auto)
 
     # setup the atlas composition and composition atlas mode
-    atlas_composition = composition.atlas()
+    atlas_composition = layout.atlas()
     atlas_composition.setCoverageLayer(coverage_layer)
-    atlas_composition.setComposerMap(composer_map)
-    atlas_composition.prepareMap(composer_map)
-    atlas_on_single_file = atlas_composition.singleFile()
-    composition.setAtlasMode(QgsPrintLayout.ExportAtlas)
+    atlas_on_single_file = layout.customProperty('singleFile', True)
 
     if file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
-        if not atlas_composition.filenamePattern():
-            atlas_composition.setFilenamePattern(
+        if not atlas_composition.filenameExpression():
+            atlas_composition.setFilenameExpression(
                 "'output_'||@atlas_featurenumber")
         output_directory = os.path.dirname(output_path)
-
-        printer = QPrinter(QPrinter.HighResolution)
-        painter = QPainter()
 
         # we need to set the predefined scales for atlas
         project_scales = []
@@ -764,58 +758,19 @@ def atlas_renderer(composition, coverage_layer, output_path, file_format):
             parts = scale.split(':')
             if len(parts) == 2:
                 project_scales.append(float(parts[1]))
-        atlas_composition.setPredefinedScales(project_scales)
+        layout.reportContext().setPredefinedScales(project_scales)
 
-        if not atlas_composition.beginRender() and (
-                atlas_composition.featureFilterErrorString()):
-            msg = 'Atlas processing error: {error}'.format(
-                error=atlas_composition.featureFilterErrorString())
-            LOGGER.error(msg)
-            return
-
-        if atlas_on_single_file:
-            atlas_composition.prepareForFeature(0)
-            composition.beginPrintAsPDF(printer, output_path)
-            composition.beginPrint(printer)
-            if not painter.begin(printer):
-                msg = ('Atlas processing error: '
-                       'Cannot write to {output}.').format(output=output_path)
-                LOGGER.error(msg)
-                return
+        settings = QgsLayoutExporter.PdfExportSettings()
 
         LOGGER.info('Exporting Atlas')
-
         atlas_output = []
-        for feature_index in range(atlas_composition.numFeatures()):
-            if not atlas_composition.prepareForFeature(feature_index):
-                msg = ('Atlas processing error: Exporting atlas error at '
-                       'feature number {index}').format(index=feature_index)
-                LOGGER.error(msg)
-                return
-            if not atlas_on_single_file:
-                # we need another printer object fot multi file atlas
-                multi_file_printer = QPrinter(QPrinter.HighResolution)
-                current_filename = atlas_composition.currentFilename()
-                output_path = os.path.join(
-                    output_directory, current_filename + '.pdf')
-                composition.beginPrintAsPDF(multi_file_printer, output_path)
-                composition.beginPrint(multi_file_printer)
-                if not painter.begin(multi_file_printer):
-                    msg = ('Atlas processing error: Cannot write to '
-                           '{output}.').format(output=output_path)
-                    LOGGER.error(msg)
-                    return
-                composition.doPrint(multi_file_printer, painter)
-                painter.end()
-                composition.georeferenceOutput(output_path)
-                atlas_output.append(output_path)
-            else:
-                composition.doPrint(printer, painter, feature_index > 0)
-
-        atlas_composition.endRender()
-
         if atlas_on_single_file:
-            painter.end()
-            return output_path
+            res, error = QgsLayoutExporter.exportToPdf(atlas_composition, output_path, settings)
+            atlas_output.append(output_path)
+        else:
+            res, error = QgsLayoutExporter.exportToPdfs(atlas_composition, output_directory, settings)
+
+        if res != QgsLayoutExporter.Success:
+            LOGGER.error(error)
 
         return atlas_output
