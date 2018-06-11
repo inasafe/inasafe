@@ -146,7 +146,7 @@ def jinja2_renderer(impact_report, component):
 def create_qgis_pdf_output(
         impact_report,
         output_path,
-        composition,
+        layout,
         file_format,
         metadata):
     """Produce PDF output using QgsLayout.
@@ -154,8 +154,8 @@ def create_qgis_pdf_output(
     :param output_path: The output path.
     :type output_path: str
 
-    :param composition: QGIS Composition object.
-    :type composition: qgis.core.QgsLayout
+    :param layout: QGIS Layout object.
+    :type layout: qgis.core.QgsPrintLayout
 
     :param qgis_composition_context: QGIS Composition context used by renderer.
     :type qgis_composition_context: safe.report.impact_report.
@@ -181,14 +181,14 @@ def create_qgis_pdf_output(
 
     # process atlas generation
     print_atlas = setting('print_atlas_report', False, bool)
-    if composition.atlas().enabled() and (
+    if layout.atlas().enabled() and (
             print_atlas and aggregation_summary_layer):
         output_path = atlas_renderer(
-            composition, aggregation_summary_layer, output_path, file_format)
-    # for QGIS composer only pdf and png output are available
+            layout, aggregation_summary_layer, output_path, file_format)
+    # for QGIS layout only pdf and png output are available
     elif file_format == QgisComposerComponentsMetadata.OutputFormat.PDF:
         try:
-            exporter = QgsLayoutExporter(composition)
+            exporter = QgsLayoutExporter(layout)
             settings = QgsLayoutExporter.PdfExportSettings()
             settings.dpi = metadata.page_dpi
             settings.rasterizeWholeImage = \
@@ -440,7 +440,7 @@ def qgis_composer_renderer(impact_report, component):
     for img in context.image_elements:
         item_id = img.get('id')
         path = img.get('path')
-        image = composition_item(layout, item_id, QgsLayoutItemPicture)
+        image = layout_item(layout, item_id, QgsLayoutItemPicture)
         if image and path:
             image.setPicturePath(path)
 
@@ -448,7 +448,7 @@ def qgis_composer_renderer(impact_report, component):
     for html_el in context.html_frame_elements:
         item_id = html_el.get('id')
         mode = html_el.get('mode')
-        html_element = composition_item(layout, item_id, QgsLayoutItemHtml)
+        html_element = layout_item(layout, item_id, QgsLayoutItemHtml)
         if html_element:
             if mode == 'text':
                 text = html_el.get('text')
@@ -477,7 +477,7 @@ def qgis_composer_renderer(impact_report, component):
                 layer, QgsMapLayer)
         ]
         map_extent_option = map_el.get('extent')
-        composer_map = composition_item(layout, item_id, QgsLayoutItemMap)
+        composer_map = layout_item(layout, item_id, QgsLayoutItemMap)
 
         for index, layer in enumerate(layers):
             # we need to check whether the layer is registered or not
@@ -569,7 +569,7 @@ def qgis_composer_renderer(impact_report, component):
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
 
-        legend = composition_item(layout, item_id, QgsLayoutItemLegend)
+        legend = layout_item(layout, item_id, QgsLayoutItemLegend)
         """:type: qgis.core.QgsLayoutItemLegend"""
         if legend:
             # set column count
