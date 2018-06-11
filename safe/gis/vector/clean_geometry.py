@@ -64,7 +64,7 @@ def geometry_checker(geometry):
     :param geometry: The geometry to check and clean.
     :type geometry: QgsGeometry
 
-    :return: A cleaned geometry
+    :return: A cleaned geometry, or None if the geometry could not be repaired
     :rtype: QgsGeometry
     """
     if geometry is None:
@@ -74,9 +74,9 @@ def geometry_checker(geometry):
     if geometry.isGeosValid():
         return geometry
     else:
-        new_geom = geometry.buffer(0, 5)
+        new_geom = geometry.makeValid()
         if new_geom.isGeosValid():
             return new_geom
         else:
-            # Buffer 0 is not enough, the feature will be deleted.
+            # Make valid was not enough, the feature will be deleted.
             return None
