@@ -18,7 +18,6 @@ from qgis.PyQt import QtXml
 from qgis.PyQt.QtCore import QUrl, QRectF
 
 from qgis.PyQt.QtGui import QImage, QPainter
-from qgis.PyQt.QtPrintSupport import QPrinter
 from qgis.PyQt.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader

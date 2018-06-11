@@ -8,8 +8,6 @@ from math import isnan
 
 import ogr
 from qgis.core import (
-    QgsGeometry,
-    QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
     QgsFeature,
