@@ -1,7 +1,6 @@
 # coding=utf-8
 
 """Try to make a layer valid."""
-from qgis.core import QgsFeatureRequest
 
 from safe.common.custom_logging import LOGGER
 from safe.definitions.processing_steps import clean_geometry_steps
@@ -32,11 +31,11 @@ def clean_layer(layer):
     count = 0
 
     # iterate through all features
-    for feature in layer.getFeatures(QgsFeatureRequest().setSubsetOfAttributes([])):
+    for feature in layer.getFeatures():
         geom = feature.geometry()
         geometry_cleaned = geometry_checker(geom)
-        if geometry_cleaned and not geom.equals(geometry_cleaned):
-            layer.changeGeometry(feature.id(), geometry_cleaned, skipDefaultValue=True)
+        if geometry_cleaned:
+            feature.setGeometry(geometry_cleaned)
         else:
             count += 1
             layer.deleteFeature(feature.id())
