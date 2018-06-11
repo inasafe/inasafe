@@ -11,6 +11,7 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
+import sip
 from tempfile import mkdtemp
 
 from qgis.PyQt import QtXml
@@ -23,6 +24,7 @@ from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
     QgsMapLayer,
+    QgsLayoutMultiFrame,
     QgsLayoutFrame,
     QgsPrintLayout,
     QgsLayoutExporter,
@@ -55,10 +57,10 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def composition_item(layout, item_id, item_class):
-    """Fetch a specific item according to its type in a composer.
+def layout_item(layout, item_id, item_class):
+    """Fetch a specific item according to its type in a layout.
 
-    We got some problem with QgsComposition::getComposerItemById. Don't use it,
+    There's some sip casting conversion issues with QgsLayout::itemById. Don't use it,
     and use this function instead.
     See https://github.com/inasafe/inasafe/issues/4271
 
@@ -71,30 +73,21 @@ def composition_item(layout, item_id, item_class):
     :param item_class: The expected class name.
     :type item_class: cls
 
-    :return: The composition item, inherited class of QgsLayoutItem.
+    :return: The layout item, inherited class of QgsLayoutItem.
     """
-    if item_class.__name__ == 'QgsLayoutItemMap':
-        # It needs this condition for Rohmat (Ubuntu)
-        item = layout.itemById(item_id)
-        if isinstance(item, QgsLayoutItemMap):
-            return item
+    item = layout.itemById(item_id)
+    if item is None:
+        # no match!
+        return item
 
-    # Normal behaviour
-    for item in layout.items():
-        if isinstance(item, item_class):
-            if item.id() == item_id:
-                return item
-
-    # Note from Etienne
-    # Still no item? No problem, let's try something else to fetch the map.
-    if item_class.__name__ == 'QgsLayoutItemMap':
-        maps = [it for it in layout.items() if isinstance(it, QgsLayoutItemMap)]
-        for composer_map in maps:
-            if composer_map.displayName() == item_id:
-                return composer_map
-
-    # We found nothing
-    return None
+    if issubclass(item_class, QgsLayoutMultiFrame):
+        # finding a multiframe by frame id
+        frame = sip.cast(item, QgsLayoutFrame)
+        multi_frame = frame.multiFrame()
+        return sip.cast(multi_frame, item_class)
+    else:
+        # force sip to correctly cast item to required type
+        return sip.cast(item, item_class)
 
 
 def jinja2_renderer(impact_report, component):
