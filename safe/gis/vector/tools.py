@@ -5,7 +5,6 @@
 
 import logging
 from math import isnan
-from uuid import uuid4
 
 import ogr
 from qgis.core import (
