@@ -7,7 +7,8 @@ from os import listdir
 from os.path import join, exists, splitext, dirname
 
 from qgis.PyQt import QtGui, QtWidgets, QtCore, QtXml
-from qgis.core import (QgsApplication,
+from qgis.core import (
+    QgsApplication,
     QgsPrintLayout,
     QgsProject,
     QgsReadWriteContext)
