@@ -29,7 +29,7 @@ from qgis.PyQt.QtCore import QRegExp, QSettings, Qt, QVariant, pyqtSlot
 from qgis.PyQt.QtNetwork import QNetworkReply
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import (QButtonGroup, QDialog, QFileDialog,
-                                 QMessageBox, QProgressDialog)
+                                 QMessageBox)
 from safe.common.exceptions import CanceledImportDialogError, FileMissingError
 from safe.definitions.peta_bencana import development_api, production_api
 from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
