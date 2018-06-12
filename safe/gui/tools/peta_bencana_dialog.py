@@ -102,11 +102,6 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         self.radio_button_production.clicked.connect(self.populate_combo_box)
         self.radio_button_development.clicked.connect(self.populate_combo_box)
 
-        # creating progress dialog for download
-        self.progress_dialog = QProgressDialog(self)
-        self.progress_dialog.setAutoClose(False)
-        self.progress_dialog.setWindowTitle(title)
-
         # Set up things for context help
         self.help_button = self.button_box.button(
             QtWidgets.QDialogButtonBox.Help)
@@ -227,8 +222,9 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
             self.download(source, output_base_file_path)
 
             # Open downloaded file as QgsMapLayer
+            options = QgsVectorLayer.LayerOptions(False)
             layer = QgsVectorLayer(
-                output_base_file_path, 'flood', 'ogr', False)
+                output_base_file_path, 'flood', 'ogr', options)
         except Exception as e:
             disable_busy_cursor()
             QMessageBox.critical(self, title, str(e))
