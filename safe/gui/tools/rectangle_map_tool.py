@@ -131,10 +131,10 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         :rtype: QgsRectangle
         """
         if self.start_point is None or self.end_point is None:
-            return None
+            return QgsRectangle()
         elif self.start_point.x() == self.end_point.x() or \
                 self.start_point.y() == self.end_point.y():
-            return None
+            return QgsRectangle()
 
         return QgsRectangle(self.start_point, self.end_point)
 
