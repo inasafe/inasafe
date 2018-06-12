@@ -3,7 +3,6 @@
 """QGIS utilities for InaSAFE."""
 
 from qgis.PyQt.QtWidgets import QMessageBox, QPushButton
-from qgis.gui import QgsMessageBar
 from qgis.utils import iface
 from qgis.core import Qgis
 from safe.utilities.i18n import tr
@@ -112,7 +111,7 @@ def display_success_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, QgsMessageBar.SUCCESS, duration)
+    iface.messageBar().pushWidget(widget, Qgis.Success, duration)
 
 
 def display_warning_message_box(parent=None, title=None, message=None):
@@ -216,4 +215,4 @@ def display_critical_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, QgsMessageBar.CRITICAL, duration)
+    iface.messageBar().pushWidget(widget, Qgis.Critical, duration)
