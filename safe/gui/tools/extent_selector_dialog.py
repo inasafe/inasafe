@@ -247,7 +247,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
 
-        if self.tool.rectangle() is not None:
+        if not self.tool.rectangle().isEmpty():
             self.extent_defined.emit(
                 self.tool.rectangle(),
                 self.canvas.mapSettings().destinationCrs())
@@ -301,7 +301,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """Update the UI with the current active coordinates."""
         rect = self.tool.rectangle()
         self.blockSignals(True)
-        if rect is not None:
+        if not rect.isEmpty():
             self.x_minimum.setValue(rect.xMinimum())
             self.y_minimum.setValue(rect.yMinimum())
             self.x_maximum.setValue(rect.xMaximum())
@@ -398,9 +398,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                     try:
                         rectangle = transform.transform(rectangle)
                     except QgsCsException:
-                        rectangle = None
+                        rectangle = QgsRectangle()
 
-                if rectangle is None or rectangle.isEmpty():
+                if rectangle.isEmpty():
                     pass
 
                 self.bookmarks_list.addItem(name, rectangle)
