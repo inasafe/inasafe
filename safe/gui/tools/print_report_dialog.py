@@ -7,7 +7,10 @@ from os import listdir
 from os.path import join, exists, splitext, dirname
 
 from qgis.PyQt import QtGui, QtWidgets, QtCore, QtXml
-from qgis.core import QgsApplication
+from qgis.core import (QgsApplication,
+    QgsPrintLayout,
+    QgsProject,
+    QgsReadWriteContext)
 
 from safe import messaging as m
 from safe.common.signals import send_error_message, send_static_message
@@ -360,7 +363,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
                 QtCore.QUrl.fromLocalFile(path))
 
     def open_in_composer(self):
-        """Open map in composer given MapReport instance.
+        """Open in layout designer a given MapReport instance.
 
         .. versionadded: 4.3.0
         """
@@ -378,7 +381,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
                 report_path=report_path,
                 suffix='.qpt'):
 
-            composer = self.iface.createNewPrintLayout()
+            layout = QgsPrintLayout(QgsProject.instance())
 
             with open(template_path) as template_file:
                 template_content = template_file.read()
@@ -386,8 +389,9 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
             document = QtXml.QDomDocument()
             document.setContent(template_content)
 
-            # load composition object
-            load_status = composer.currentLayout().loadFromTemplate(document)
+            # load layout object
+            rwcontext = QgsReadWriteContext()
+            load_status = layout.loadFromTemplate(document, rwcontext)
 
             if not load_status:
                 # noinspection PyCallByClass,PyTypeChecker
@@ -397,6 +401,9 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
                     tr('Error loading template: %s') % template_path)
 
                 return
+
+            QgsProject.instance().layoutManager().addLayout(layout)
+            self.iface.openLayoutDesigner(layout)
 
     def prepare_components(self):
         """Prepare components that are going to be generated based on

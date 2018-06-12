@@ -87,7 +87,7 @@
      <item>
       <widget class="QPushButton" name="pbnReportComposer">
        <property name="text">
-        <string>Open in composer</string>
+        <string>Open in layout designer</string>
        </property>
       </widget>
      </item>

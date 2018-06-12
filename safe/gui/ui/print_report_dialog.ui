@@ -117,10 +117,10 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Prepare report and open it in QGIS composer</string>
+                <string>Prepare report and open it in QGIS Layout Designer</string>
                </property>
                <property name="text">
-                <string>Open in composer</string>
+                <string>Open in layout designer</string>
                </property>
               </widget>
              </item>
