@@ -20,13 +20,24 @@ from importlib import reload
 from io import StringIO
 
 from future import standard_library
-from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
-                       QgsRasterLayer, QgsRectangle, QgsVectorLayer, QgsApplication)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsVectorLayer,
+    QgsApplication)
 from qgis.PyQt import QtCore, QtGui
 from qgis.PyQt.QtCore import Qt, pyqtSlot
-from qgis.PyQt.QtWidgets import (QAbstractItemView, QDialog, QDialogButtonBox,
-                                 QFileDialog, QPushButton, QTableWidgetItem,
-                                 QMessageBox)
+from qgis.PyQt.QtWidgets import (
+    QAbstractItemView,
+    QDialog,
+    QDialogButtonBox,
+    QFileDialog,
+    QPushButton,
+    QTableWidgetItem,
+    QMessageBox,
+    QHeaderView)
 
 from safe.common.signals import send_error_message
 from safe.common.utilities import temp_dir
@@ -87,8 +98,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.dock = dock
 
         header_view = self.table.horizontalHeader()
-        header_view.setSectionResizeMode(0, QtGui.QHeaderView.Stretch)
-        header_view.setSectionResizeMode(1, QtGui.QHeaderView.Interactive)
+        header_view.setSectionResizeMode(0, QHeaderView.Stretch)
+        header_view.setSectionResizeMode(1, QHeaderView.Interactive)
 
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
