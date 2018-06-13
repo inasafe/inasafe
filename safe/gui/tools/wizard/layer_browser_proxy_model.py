@@ -60,7 +60,7 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
                 'QgsPGConnectionItem',
                 'QgsPGSchemaItem',
                 'QgsPGLayerItem',
-                'QgsFavouritesItem',
+                'QgsFavoritesItem',
                 'QgsDirectoryItem',
                 'QgsLayerItem',
                 'QgsGdalLayerItem',

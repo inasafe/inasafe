@@ -61,6 +61,7 @@ class WizardStepBrowser(WizardStep):
         WizardStep.__init__(self, parent)
         # Set model for browser
         browser_model = QgsBrowserModel()
+        browser_model.initialize()
         self.proxy_model = LayerBrowserProxyModel(self)
         self.proxy_model.setSourceModel(browser_model)
 
