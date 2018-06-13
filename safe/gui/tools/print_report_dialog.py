@@ -7,6 +7,7 @@ from os import listdir
 from os.path import join, exists, splitext, dirname
 
 from qgis.PyQt import QtGui, QtWidgets, QtCore, QtXml
+from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.core import (
     QgsApplication,
     QgsPrintLayout,
@@ -547,7 +548,7 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
         else:
             directory = ''
         # noinspection PyCallByClass,PyTypeChecker
-        file_name = QtGui.QFileDialog.getOpenFileName(
+        file_name = QFileDialog.getOpenFileName(
             self,
             tr('Select report'),
             directory,

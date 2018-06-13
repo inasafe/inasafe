@@ -633,7 +633,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name_dialog = QFileDialog(self)
-        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
+        file_name_dialog.setAcceptMode(QFileDialog.AcceptOpen)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
         path_name = resources_path('minimum_needs')
@@ -659,7 +659,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file.
         """
         file_name_dialog = QFileDialog(self)
-        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setAcceptMode(QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
         file_name = None
@@ -692,7 +692,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name_dialog = QFileDialog(self)
-        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setAcceptMode(QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
         file_name_dialog.setDirectory(expanduser('~/.qgis2/minimum_needs'))
@@ -726,7 +726,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.tr('Create a minimum needs profile'),
             expanduser('~/.qgis2/minimum_needs'),
             self.tr('JSON files (*.json *.JSON)'),
-            options=QtGui.QFileDialog.DontUseNativeDialog)
+            options=QFileDialog.DontUseNativeDialog)
         if not file_name:
             return
         file_name = basename(file_name)
