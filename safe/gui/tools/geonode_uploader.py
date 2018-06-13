@@ -169,7 +169,7 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
         except GeoNodeLayerUploadError as e:
             result = {
                 'success': False,
-                'message': e.message
+                'message': str(e)
             }
         finally:
             self.button_box.setEnabled(True)

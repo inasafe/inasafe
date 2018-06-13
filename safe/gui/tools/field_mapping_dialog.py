@@ -283,6 +283,6 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
             self.save_metadata()
         except InvalidValidationException as e:
             display_warning_message_box(
-                self, tr('Invalid Field Mapping'), e.message)
+                self, tr('Invalid Field Mapping'), str(e))
             return
         super(FieldMappingDialog, self).accept()

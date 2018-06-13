@@ -604,19 +604,19 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             parameter.value = float(resource['Default'])
         except ValueOutOfBounds as e:
             warning = self.tr(
-                'Problem - default value is invalid') + '\n' + e.message
+                'Problem - default value is invalid') + '\n' + str(e)
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
         except InvalidMaximumError as e:
             warning = self.tr(
-                'Problem - maximum value is invalid') + '\n' + e.message
+                'Problem - maximum value is invalid') + '\n' + str(e)
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
         except InvalidMinimumError as e:
             warning = self.tr(
-                'Problem - minimum value is invalid') + '\n' + e.message
+                'Problem - minimum value is invalid') + '\n' + str(e)
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.warning(None, 'InaSAFE', warning)
             return
