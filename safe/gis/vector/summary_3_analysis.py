@@ -83,7 +83,7 @@ def analysis_summary(aggregate_hazard, analysis):
 
     hazard_class = source_fields[hazard_class_field['key']]
     hazard_class_index = aggregate_hazard.fields().lookupField(hazard_class)
-    unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
+    unique_hazard = list(aggregate_hazard.uniqueValues(hazard_class_index))
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
     hazard = hazard_keywords['hazard']

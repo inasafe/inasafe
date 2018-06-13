@@ -95,7 +95,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
 
     exposure_class = source_fields[exposure_class_field['key']]
     exposure_class_index = impact.fields().lookupField(exposure_class)
-    unique_exposure = impact.uniqueValues(exposure_class_index)
+    unique_exposure = list(impact.uniqueValues(exposure_class_index))
 
     fields = ['aggregation_id', 'hazard_id']
     absolute_values = create_absolute_values_structure(impact, fields)

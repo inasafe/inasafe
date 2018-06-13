@@ -170,7 +170,7 @@ def _check_value_mapping(layer, exposure_key=None):
     for group in list(value_map.values()):
         exposure_mapped.extend(group)
 
-    diff = list(set(unique_exposure) - set(exposure_mapped))
+    diff = list(unique_exposure - set(exposure_mapped))
 
     if other in list(value_map.keys()):
         value_map[other].extend(diff)

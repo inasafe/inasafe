@@ -813,7 +813,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 layer_purpose['name'],
                 classification['name'],
                 field.upper())
-            unique_values = self.parent.layer.uniqueValues(field_index)
+            unique_values = list(self.parent.layer.uniqueValues(field_index))
 
         # Set description
         description_label = QLabel(description_text)
