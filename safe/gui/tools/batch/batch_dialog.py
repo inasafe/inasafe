@@ -85,7 +85,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.setWindowModality(Qt.ApplicationModal)
         self.iface = iface
         self.dock = dock
-        self.legend = iface.legendInterface()
 
         header_view = self.table.horizontalHeader()
         header_view.setSectionResizeMode(0, QtGui.QHeaderView.Stretch)
@@ -382,6 +381,18 @@ class BatchDialog(QDialog, FORM_CLASS):
                 LOGGER.warning('Input in scenario is not recognized/supported')
                 return
 
+    @staticmethod
+    def set_layer_visible(layer, visible):
+        """Sets a layer in the project visible or not
+
+        :param layer: layer to change
+        :type layer: QgsMapLayer
+
+        :param visible: True to show layer, False to hide layer
+        :type visible: bool
+        """
+        QgsProject.instance().layerTreeRoot().findLayer(layer.id()).setItemVisibilityChecked(visible)
+
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
 
@@ -486,10 +497,10 @@ class BatchDialog(QDialog, FORM_CLASS):
                         for layer in map_canvas:
                             # turn of layer visibility if not impact layer
                             if map_canvas[layer].id() == impact_layer.id():
-                                self.legend.setLayerVisible(
+                                self.set_layer_visible(
                                     map_canvas[layer], True)
                             else:
-                                self.legend.setLayerVisible(
+                                self.set_layer_visible(
                                     map_canvas[layer], False)
 
                         # we need to set analysis_impacted as an active layer
