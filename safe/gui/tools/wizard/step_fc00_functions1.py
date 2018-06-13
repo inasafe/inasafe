@@ -97,7 +97,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         for row in range(self.tblFunctions1.rowCount()):
             for column in range(self.tblFunctions1.columnCount()):
                 item = self.tblFunctions1.item(row, column)
-                item.setText((item == selItem) and '\\u2022' or '')
+                item.setText((item == selItem) and '•' or '')
 
     # pylint: disable=W0613
     # noinspection PyPep8Naming
