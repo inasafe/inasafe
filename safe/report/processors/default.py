@@ -419,7 +419,7 @@ def qgis_composer_renderer(impact_report, component):
 
     # Replace
     for k, v in context.substitution_map.items():
-        template_content = template_content.replace(k, v)
+        template_content = template_content.replace('[{}]'.format(k), v)
 
     document.setContent(template_content)
 
