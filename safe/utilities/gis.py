@@ -47,7 +47,7 @@ def extent_string_to_array(extent_text):
     try:
         coordinates = [float(i) for i in coordinates]
     except ValueError as e:
-        message = e.message
+        message = str(e)
         LOGGER.error(message)
         return None
     return coordinates

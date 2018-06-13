@@ -276,7 +276,7 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
             display_warning_message_box(
                 self,
                 tr('Metadata Conversion Failed'),
-                e.message)
+                str(e))
             return
 
         if not os.path.exists(output_path):

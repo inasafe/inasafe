@@ -959,7 +959,7 @@ class Dock(QDockWidget, FORM_CLASS):
                             keywords))
             except InvalidLayerError as e:
                 display_critical_message_bar(
-                    tr("Invalid Layer"), get_string(e.message))
+                    tr("Invalid Layer"), str(e))
                 self.impact_function = None
 
             show_keywords = True

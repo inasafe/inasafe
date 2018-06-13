@@ -94,7 +94,7 @@ def get_error_message(exception, context=None, suggestion=None):
 
     suggestion = suggestion
     if suggestion is None and hasattr(exception, 'suggestion'):
-        suggestion = exception.message
+        suggestion = exception.suggestion
 
     error_message = ErrorMessage(
         problem,

@@ -103,7 +103,7 @@ def main():
         :type exception: Exception
         """
         box = QMessageBox()
-        box.critical(parent, 'Error occured', exception.message)
+        box.critical(parent, 'Error occured', str(exception))
 
     def show_parameter(the_parameter_container):
         """Print the value of parameter.
