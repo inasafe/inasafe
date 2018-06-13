@@ -331,7 +331,7 @@ class FieldMappingTab(QWidget, object):
         field = self.layer.fields().field(field_name)
 
         index = self.layer.fields().lookupField(field_name)
-        unique_values = self.layer.uniqueValues(index)
+        unique_values = list(self.layer.uniqueValues(index))
         pretty_unique_values = ', '.join([str(v) for v in unique_values[:10]])
 
         footer_text = tr('Field type: {0}\n').format(field.typeName())
