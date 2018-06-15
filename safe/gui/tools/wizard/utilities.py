@@ -6,7 +6,6 @@ import logging
 import os
 
 from qgis.PyQt import QtCore
-from qgis.PyQt.QtWidgets import QLayout
 from qgis.core import QgsCoordinateTransform, QgsProject
 
 import safe.gui.tools.wizard.wizard_strings

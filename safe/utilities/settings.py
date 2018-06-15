@@ -39,6 +39,7 @@ def deep_convert_dict(value):
 
     return to_ret
 
+
 def set_general_setting(key, value, qsettings=None):
     """Set value to QSettings based on key.
 

@@ -88,7 +88,6 @@ from safe.utilities.qgis_utilities import (display_critical_message_bar,
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.utilities.resources import get_ui_class
 from safe.utilities.settings import set_setting, setting
-from safe.utilities.unicode import get_string
 from safe.utilities.utilities import (basestring_to_message, get_error_message,
                                       is_keyword_version_supported,
                                       is_plugin_installed)
