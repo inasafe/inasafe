@@ -152,7 +152,9 @@ def add_layers_to_canvas_with_custom_orders(
     :type iface: QgisAppInterface
     """
     root = QgsProject.instance().layerTreeRoot()
-    root.setVisible(False)  # Make all layers hidden.
+    # Make all layers hidden.
+    for child in root.children():
+        child.setItemVisibilityChecked(False)
 
     group_analysis = root.insertGroup(0, impact_function.name)
     group_analysis.setItemVisibilityChecked(True)
