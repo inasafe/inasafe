@@ -215,7 +215,7 @@ def get_free_memory():
     if 'win32' in sys.platform:
         # windows
         return get_free_memory_win()
-    elif 'linux2' in sys.platform:
+    elif 'linux' in sys.platform:
         # linux
         return get_free_memory_linux()
     elif 'darwin' in sys.platform:

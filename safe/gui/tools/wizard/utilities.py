@@ -205,7 +205,7 @@ def clear_layout(layout):
     """
     # Different platform has different treatment
     # If InaSAFE running on Windows or Linux
-    if sys.platform in ['linux2', 'win32']:
+    if sys.platform in ['linux', 'win32']:
         # Adapted from http://stackoverflow.com/a/9383780
         if layout is not None:
             while layout.count():
