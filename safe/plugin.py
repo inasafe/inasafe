@@ -884,6 +884,7 @@ class Plugin():
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.setAttribute(Qt.WA_DeleteOnClose, True)  # otherwise dialog is never deleted
         dialog.show()  # non modal
 
     def show_geonode_uploader(self):
