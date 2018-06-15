@@ -4,10 +4,9 @@
 
 import logging
 import os
-import sys
 
 from qgis.PyQt import QtCore
-from qgis.PyQt.QtWidgets import QWidgetItem, QSpacerItem, QLayout
+from qgis.PyQt.QtWidgets import QLayout
 from qgis.core import QgsCoordinateTransform, QgsProject
 
 import safe.gui.tools.wizard.wizard_strings
@@ -29,7 +28,6 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
 
 # Data roles
 RoleFunctions = QtCore.Qt.UserRole
@@ -205,40 +203,22 @@ def clear_layout(layout):
     """
     # Different platform has different treatment
     # If InaSAFE running on Windows or Linux
-    if sys.platform in ['linux', 'win32']:
-        # Adapted from http://stackoverflow.com/a/9383780
-        if layout is not None:
-            while layout.count():
-                item = layout.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    # Remove the widget from layout
-                    widget.close()
-                    widget.deleteLater()
-                else:
-                    clear_layout(item.layout())
 
-                # Remove the item from layout
-                layout.removeItem(item)
-
-    # If InaSAFE running on anything else than Windows or Linux
-    else:
-        # Adapted from http://stackoverflow.com/a/9375273/1198772
-        for i in reversed(list(range(layout.count()))):
-            item = layout.itemAt(i)
-
-            if isinstance(item, QWidgetItem):
-                item.widget().close()
-            elif isinstance(item, QLayout):
-                clear_layout(item.layout())
-            elif isinstance(item, QSpacerItem):
-                # No need to do anything
-                pass
+    # Adapted from http://stackoverflow.com/a/9383780
+    if layout is not None:
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                # Remove the widget from layout
+                widget.close()
+                widget.deleteLater()
             else:
-                pass
+                clear_layout(item.layout())
 
             # Remove the item from layout
             layout.removeItem(item)
+            del item  # shouldn't be needed, but just to be safe...
 
 
 def skip_inasafe_field(layer, inasafe_fields):
