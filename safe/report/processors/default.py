@@ -29,6 +29,7 @@ from qgis.core import (
     QgsLayoutExporter,
     QgsLayoutItemHtml,
     QgsLayoutItemPicture,
+    QgsLayoutItemPage,
     QgsRectangle,
     QgsLegendRenderer,
     QgsLegendStyle,
@@ -258,9 +259,11 @@ def qgis_composer_html_renderer(impact_report, component):
     # QGIS3: not used
     # qgis_composition_context = impact_report.qgis_composition_context
 
-    # load composition object
+    # create new layout with A4 portrait page
     layout = QgsPrintLayout(QgsProject.instance())
-    layout.initializeDefaults()
+    page = QgsLayoutItemPage(layout)
+    page.setPageSize('A4', orientation=QgsLayoutItemPage.Portrait)
+    layout.pageCollection().addPage(page)
 
     if not context.html_frame_elements:
         # if no html frame elements at all, do not generate empty report.
