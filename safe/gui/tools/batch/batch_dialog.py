@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 import os
 import sys
-from configparser import ConfigParser, MissingSectionHeaderError, ParsingError
+from configparser import ConfigParser, MissingSectionHeaderError, ParsingError, Error
 from datetime import datetime
 from importlib import reload
 from io import StringIO
@@ -236,7 +236,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     for key, value in list(scenarios.items()):
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
-                except ParsingError:
+                except Error:
                     unparsed_files.append(current_path)
 
         # unblock signal
@@ -424,7 +424,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
         self.enable_busy_cursor()
         for layer_group in self.layer_group_container:
-            layer_group.setVisible(False)
+            layer_group.setItemVisibilityChecked(False)
 
         # set status to 'running'
         status_item.setText(self.tr('Running'))
