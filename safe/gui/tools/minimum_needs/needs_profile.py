@@ -206,7 +206,7 @@ class NeedsProfile(MinimumNeeds):
                     locale_minimum_needs_dir, file_name)
                 if not os.path.exists(destination_file) or overwrite:
                     copy(source_file, destination_file)
-            # move old min needs profile under .qgis2 to .qgis2/inasafe
+            # move old min needs profile under user profile to inasafe subdirectory
             self.move_old_profile(locale_minimum_needs_dir)
             profiles = [
                 profile[:-5] for profile in
@@ -292,8 +292,8 @@ class NeedsProfile(MinimumNeeds):
 
     @property
     def root_directory(self):
-        """Map the root directory to ~/.qgis2/inasafe so the minimum needs
-           profile will be placed there (~/.qgis2/inasafe/minimum_needs).
+        """Map the root directory to user profile/inasafe so the minimum needs
+           profile will be placed there (user profile/inasafe/minimum_needs).
 
         :returns: root directory
         :rtype: QString
@@ -346,7 +346,7 @@ class NeedsProfile(MinimumNeeds):
         )
 
     def move_old_profile(self, locale_minimum_needs_dir):
-        """Move old minimum needs profile under ~/.qgis2/minimum_needs.
+        """Move old minimum needs profile under user profile/minimum_needs.
            This function is to get rid the old min needs profile came
            from InaSAFE < 4.0.
 
