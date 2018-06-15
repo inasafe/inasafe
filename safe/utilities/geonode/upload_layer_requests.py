@@ -128,7 +128,7 @@ def login_user(server, login, password):
     login_form_regexp = (
         "<input type='hidden' name='csrfmiddlewaretoken' value='(.*)' />")
     expression_compiled = re.compile(login_form_regexp)
-    match = expression_compiled.search(result.content)
+    match = expression_compiled.search(result.text)
     csrf_token = match.groups()[0]
 
     payload = {
@@ -176,7 +176,7 @@ def upload(server, session, base_file, charset='UTF-8'):
 
     # Get the upload CSRF token
     expression = re.compile('csrf_token(\s*)=(\s*)"([a-zA-Z0-9]*?)",')
-    match = expression.search(result.content)
+    match = expression.search(result.text)
     csrf_token = match.groups()[2]
 
     # Start the data dict
