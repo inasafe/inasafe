@@ -1530,7 +1530,7 @@ class ImpactFunction():
                 'however we advise you not to use these version since the '
                 'Plugin Manager version may be incompatible with the '
                 'version needed by InaSAFE. To resolve this issue, check in '
-                'your .qgis2/python/plugins directory if you have a '
+                'your (QGIS profile path)/python/plugins directory if you have a '
                 'processing folder. If you do, remove the processing folder '
                 'and then restart QGIS. If this issue persists, please '
                 'report the problem to the InaSAFE team.')

@@ -12,6 +12,7 @@ from qgis.PyQt.QtGui import QIcon
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
 from qgis.core import Qgis  # NOQA pylint: disable=unused-import
+from qgis.core import QgsApplication
 
 from parameters.float_parameter import FloatParameter
 from parameters.parameter_exceptions import (
@@ -695,7 +696,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file_name_dialog.setAcceptMode(QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
-        file_name_dialog.setDirectory(expanduser('~/.qgis2/minimum_needs'))
+        dir = os.path.join(QgsApplication.qgisSettingsDirPath(), 'inasafe', 'minimum_needs')
+        file_name_dialog.setDirectory(expanduser(dir))
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
         else:
@@ -721,10 +723,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Create a new profile by name.
         """
         # noinspection PyCallByClass,PyTypeChecker
+        dir = os.path.join(QgsApplication.qgisSettingsDirPath(), 'inasafe', 'minimum_needs')
         file_name, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Create a minimum needs profile'),
-            expanduser('~/.qgis2/minimum_needs'),
+            expanduser(dir),
             self.tr('JSON files (*.json *.JSON)'),
             options=QFileDialog.DontUseNativeDialog)
         if not file_name:
