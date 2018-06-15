@@ -596,7 +596,8 @@ def qgis_composer_renderer(impact_report, component):
                         not impact_report.multi_exposure_impact_function):
                     QgsLegendRenderer.setNodeLegendStyle(
                         tree_layer, QgsLegendStyle.Hidden)
-            legend.synchronizeWithModel()
+            legend.adjustBoxSize()
+            legend.updateFilterByMap(False)
 
     # process to output
 
