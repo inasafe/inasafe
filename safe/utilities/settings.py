@@ -3,6 +3,7 @@
 
 import json
 import logging
+from collections import OrderedDict
 
 from qgis.PyQt.QtCore import QSettings
 
@@ -15,6 +16,28 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+
+def deep_convert_dict(value):
+    """
+    Converts any OrderedDict elements in a value to
+    ordinary dictionaries, safe for storage in QSettings
+
+    :param value: value to convert
+    :type value: Union[dict,OrderedDict]
+
+    :return: dict
+    """
+    to_ret = value
+    if isinstance(value, OrderedDict):
+        to_ret = dict(value)
+
+    try:
+        for k, v in to_ret.items():
+            to_ret[k] = deep_convert_dict(v)
+    except AttributeError:
+        pass
+
+    return to_ret
 
 def set_general_setting(key, value, qsettings=None):
     """Set value to QSettings based on key.
@@ -32,7 +55,7 @@ def set_general_setting(key, value, qsettings=None):
     if not qsettings:
         qsettings = QSettings()
 
-    qsettings.setValue(key, value)
+    qsettings.setValue(key, deep_convert_dict(value))
 
 
 def general_setting(key, default=None, expected_type=None, qsettings=None):
