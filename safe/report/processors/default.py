@@ -280,9 +280,7 @@ def qgis_composer_html_renderer(impact_report, component):
         height = html_el.get('height', component.page_height - 2 * margin_top)
 
         html_frame = QgsLayoutFrame(layout, html_element)
-        html_frame.attemptSetSceneRect(QRectF(0, 0, width, height))
-        # FIXME: ABP set margins: margin_left,
-        # margin_,
+        html_frame.attemptSetSceneRect(QRectF(margin_left, margin_top, width, height))
         html_element.addFrame(html_frame)
 
         if html_element:
