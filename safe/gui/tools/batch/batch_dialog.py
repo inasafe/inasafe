@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 import os
 import sys
-from configparser import ConfigParser, MissingSectionHeaderError, ParsingError, Error
+from configparser import ConfigParser, MissingSectionHeaderError, Error
 from datetime import datetime
 from importlib import reload
 from io import StringIO
