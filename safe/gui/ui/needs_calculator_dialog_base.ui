@@ -52,6 +52,18 @@
        </property>
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="label_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
          <property name="text">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in the specified aggregation areas. Press the help button for more detailed instruction about this tool.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
