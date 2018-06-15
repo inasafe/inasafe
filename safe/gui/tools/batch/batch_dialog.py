@@ -541,7 +541,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     LOGGER.info('Bad input detected')
 
                 elif status == ANALYSIS_FAILED_BAD_CODE:
-                    LOGGER.info('Impact function encountered a bug')
+                    LOGGER.info('Impact function encountered a bug: %s' % message)
 
             else:
                 LOGGER.warning('Impact function not ready')
