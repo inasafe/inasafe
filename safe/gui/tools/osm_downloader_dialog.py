@@ -74,11 +74,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(title)
 
         self.iface = iface
-
-        # creating progress dialog for download
-        self.progress_dialog = QProgressDialog(self)
-        self.progress_dialog.setAutoClose(False)
-        self.progress_dialog.setWindowTitle(title)
+        self.progress_dialog = None
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
@@ -365,6 +361,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         try:
             self.save_state()
             self.require_directory()
+
+            # creating progress dialog for download
+            self.progress_dialog = QProgressDialog(self)
+            self.progress_dialog.setAutoClose(False)
+            self.progress_dialog.setWindowTitle(self.windowTitle())
+
             for feature_type in feature_types:
 
                 output_directory = self.output_directory.text()
@@ -404,6 +406,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 self, error_dialog_title, str(exception))
 
             self.progress_dialog.cancel()
+            self.progress_dialog.deleteLater()
 
         finally:
             # Unlock the bounding_box_group
