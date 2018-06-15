@@ -63,7 +63,7 @@ def mmi_ramp_roman(raster_layer):
 
     raster_shader = QgsRasterShader()
     ramp_shader = QgsColorRampShader()
-    ramp_shader.setColorRampType(QgsColorRampShader.INTERPOLATED)
+    ramp_shader.setColorRampType(QgsColorRampShader.Interpolated)
     ramp_shader.setColorRampItemList(items)
     raster_shader.setRasterShaderFunction(ramp_shader)
     band = 1
