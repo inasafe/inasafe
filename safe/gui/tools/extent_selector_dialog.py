@@ -98,7 +98,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
             # Ensure supplied extent is in current canvas crs
             transform = QgsCoordinateTransform(
-                crs, self.canvas.mapSettings().destinationCrs(), QgsProject.instance())
+                crs,
+                self.canvas.mapSettings().destinationCrs(),
+                QgsProject.instance()
+            )
             transformed_extent = transform.transformBoundingBox(extent)
             self.tool.set_rectangle(transformed_extent)
 
@@ -396,7 +399,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
                 if srid != canvas_crs.srsid():
                     transform = QgsCoordinateTransform(
-                        QgsCoordinateReferenceSystem(srid), canvas_crs, QgsProject.instance())
+                        QgsCoordinateReferenceSystem(srid),
+                        canvas_crs,
+                        QgsProject.instance()
+                    )
                     try:
                         rectangle = transform.transform(rectangle)
                     except QgsCsException:

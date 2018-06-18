@@ -7,7 +7,14 @@ import logging
 from collections import OrderedDict
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QDialog, QComboBox, QLabel, QSizePolicy, QTreeWidgetItem, QListWidgetItem
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QComboBox,
+    QLabel,
+    QSizePolicy,
+    QTreeWidgetItem,
+    QListWidgetItem
+)
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import QgsProject, QgsApplication

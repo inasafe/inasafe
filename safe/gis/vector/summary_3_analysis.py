@@ -157,9 +157,11 @@ def analysis_summary(aggregate_hazard, analysis):
     for key, summary_rule in list(summary_rules.items()):
         input_field = summary_rule['input_field']
         case_field = summary_rule['case_field']
-        if aggregate_hazard.fields().lookupField(input_field['field_name']) == -1:
+        if aggregate_hazard.fields().lookupField(input_field['field_name']) \
+                == -1:
             continue
-        if aggregate_hazard.fields().lookupField(case_field['field_name']) == -1:
+        if aggregate_hazard.fields().lookupField(case_field['field_name']) \
+                == -1:
             continue
 
         summary_value = 0

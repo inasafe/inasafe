@@ -60,8 +60,8 @@ LOGGER = logging.getLogger('InaSAFE')
 def layout_item(layout, item_id, item_class):
     """Fetch a specific item according to its type in a layout.
 
-    There's some sip casting conversion issues with QgsLayout::itemById. Don't use it,
-    and use this function instead.
+    There's some sip casting conversion issues with QgsLayout::itemById.
+    Don't use it, and use this function instead.
     See https://github.com/inasafe/inasafe/issues/4271
 
     :param layout: The layout to look in.

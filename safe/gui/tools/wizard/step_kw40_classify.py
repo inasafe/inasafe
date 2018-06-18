@@ -7,7 +7,11 @@ from copy import deepcopy
 
 import numpy
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QListWidgetItem, QAbstractItemView, QTreeWidgetItem
+from qgis.PyQt.QtWidgets import (
+    QListWidgetItem,
+    QAbstractItemView,
+    QTreeWidgetItem
+)
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 

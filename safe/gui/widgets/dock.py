@@ -26,37 +26,43 @@ from safe.common.exceptions import (HashNotFoundError, InvalidLayerError,
 from safe.common.signals import send_error_message, send_static_message
 from safe.common.version import get_version
 from safe.defaults import supporters_logo_path
-from safe.definitions.constants import (ANALYSIS_FAILED_BAD_CODE,
-                                        ANALYSIS_FAILED_BAD_INPUT,
-                                        ANALYSIS_SUCCESS, EXPOSURE,
-                                        HAZARD_EXPOSURE_BOUNDINGBOX,
-                                        HAZARD_EXPOSURE_VIEW,
-                                        MULTI_EXPOSURE_ANALYSIS_FLAG,
-                                        PREPARE_FAILED_BAD_INPUT,
-                                        PREPARE_FAILED_BAD_LAYER,
-                                        PREPARE_FAILED_INSUFFICIENT_OVERLAP,
-                                        PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
-                                        PREPARE_SUCCESS,
-                                        entire_area_item_aggregation,
-                                        inasafe_keyword_version_key)
+from safe.definitions.constants import (
+    ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_SUCCESS, EXPOSURE,
+    HAZARD_EXPOSURE_BOUNDINGBOX,
+    HAZARD_EXPOSURE_VIEW,
+    MULTI_EXPOSURE_ANALYSIS_FLAG,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_BAD_LAYER,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP_REQUESTED_EXTENT,
+    PREPARE_SUCCESS,
+    entire_area_item_aggregation,
+    inasafe_keyword_version_key
+)
 from safe.definitions.extra_keywords import extra_keyword_analysis_type
-from safe.definitions.layer_purposes import (layer_purpose_aggregate_hazard_impacted,
-                                             layer_purpose_aggregation,
-                                             layer_purpose_aggregation_summary,
-                                             layer_purpose_analysis_impacted,
-                                             layer_purpose_exposure,
-                                             layer_purpose_exposure_summary,
-                                             layer_purpose_exposure_summary_table,
-                                             layer_purpose_hazard,
-                                             layer_purpose_profiling)
+from safe.definitions.layer_purposes import (
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation,
+    layer_purpose_aggregation_summary,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure,
+    layer_purpose_exposure_summary,
+    layer_purpose_exposure_summary_table,
+    layer_purpose_hazard,
+    layer_purpose_profiling
+)
 from safe.definitions.provenance import (duplicated_global_variables,
                                          provenance_list)
 from safe.definitions.reports import (final_product_tag, html_product_tag,
                                       pdf_product_tag, qpt_product_tag)
-from safe.definitions.reports.components import (infographic_report,
-                                                 map_report,
-                                                 standard_impact_report_metadata_html,
-                                                 standard_impact_report_metadata_pdf)
+from safe.definitions.reports.components import (
+    infographic_report,
+    map_report,
+    standard_impact_report_metadata_html,
+    standard_impact_report_metadata_pdf
+)
 from safe.definitions.utilities import (definition, get_name,
                                         update_template_component)
 from safe.gui.analysis_utilities import (add_debug_layers_to_canvas,
@@ -1073,11 +1079,15 @@ class Dock(QDockWidget, FORM_CLASS):
 
         # Get the hazard and exposure definition used in current IF
         hazard = definition(
-            QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
-                'hazard_keywords__hazard'))
+            QgsExpressionContextUtils.projectScope(
+                QgsProject.instance()).variable(
+                'hazard_keywords__hazard')
+        )
         exposure = definition(
-            QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
-                'exposure_keywords__exposure'))
+            QgsExpressionContextUtils.projectScope(
+                QgsProject.instance()).variable(
+                    'exposure_keywords__exposure')
+        )
 
         # TODO: temporary hack until Impact Function becomes serializable
         # need to have impact report

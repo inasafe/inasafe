@@ -58,7 +58,7 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
             'If you save your credentials, it will be stored in plain text in '
             'your QGIS settings. '
             'The layer must be file based, only these extensions are '
-            'supported: {}.').format(', '.join(list(extension_siblings.keys()))))
+            'supported: {}.').format(', '.join(list(extension_siblings.keys()))))  # noqa
 
         # Fix for issue 1699 - cancel button does nothing
         cancel_button = self.button_box.button(QDialogButtonBox.Cancel)

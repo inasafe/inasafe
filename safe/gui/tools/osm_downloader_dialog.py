@@ -19,7 +19,12 @@ import os
 
 from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import QRegExp
-from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QProgressDialog,
+    QMessageBox,
+    QFileDialog
+)
 from qgis.core import QgsRectangle, QgsExpressionContextUtils
 from qgis.gui import QgsMapToolPan
 

@@ -262,7 +262,8 @@ def active_classification(keywords, exposure_key):
     classifications = None
     if 'classification' in keywords:
         return keywords['classification']
-    if 'layer_mode' in keywords and keywords['layer_mode'] == layer_mode_continuous['key']:
+    if 'layer_mode' in keywords and keywords['layer_mode'] == \
+            layer_mode_continuous['key']:
         classifications = keywords['thresholds'].get(exposure_key)
     elif 'value_maps' in keywords:
         classifications = keywords['value_maps'].get(exposure_key)

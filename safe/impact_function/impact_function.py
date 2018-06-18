@@ -1530,9 +1530,9 @@ class ImpactFunction():
                 'however we advise you not to use these version since the '
                 'Plugin Manager version may be incompatible with the '
                 'version needed by InaSAFE. To resolve this issue, check in '
-                'your (QGIS profile path)/python/plugins directory if you have a '
-                'processing folder. If you do, remove the processing folder '
-                'and then restart QGIS. If this issue persists, please '
+                'your (QGIS profile path)/python/plugins directory if you '
+                'have a processing folder. If you do, remove the processing '
+                'folder and then restart QGIS. If this issue persists, please '
                 'report the problem to the InaSAFE team.')
             message = m.Message()
             message.add(warning_heading)
@@ -1679,7 +1679,8 @@ class ImpactFunction():
             if self.hazard.keywords.get('hazard') == hazard_earthquake['key']:
                 if is_vector_layer(self._exposure_summary):
                     field = distance_field['field_name']
-                    if self._exposure_summary.fields().lookupField(field) != -1:
+                    if self._exposure_summary.fields().lookupField(field) \
+                            != -1:
                         layer = create_memory_layer(
                             'ordered',
                             self._exposure_summary.geometryType(),
@@ -2283,7 +2284,8 @@ class ImpactFunction():
         exposure = self.exposure.keywords.get('exposure')
         geometry = self.exposure.geometryType()
         indivisible_keys = [f['key'] for f in indivisible_exposure]
-        if exposure not in indivisible_keys and geometry != QgsWkbTypes.PointGeometry:
+        if exposure not in indivisible_keys and geometry != \
+                QgsWkbTypes.PointGeometry:
             # We can now split features because the `prepare_vector_layer`
             # might have added the size field.
             self.set_state_process(

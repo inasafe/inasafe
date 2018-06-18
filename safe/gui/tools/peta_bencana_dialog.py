@@ -200,7 +200,9 @@ class PetaBencanaDialog(QDialog, FORM_CLASS):
         except CanceledImportDialogError:
             return
 
-        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(
+            QtGui.QCursor(QtCore.Qt.WaitCursor)
+        )
 
         source = self.define_url()
         # save the file as json first

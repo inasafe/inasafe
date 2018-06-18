@@ -91,7 +91,8 @@ def update_value_map(layer, exposure_key=None):
     layer.startEditing()
     layer.addAttribute(classified_field)
 
-    classified_field_index = layer.fields().lookupField(classified_field.name())
+    classified_field_index = layer.fields(). \
+        lookupField(classified_field.name())
 
     for feature in layer.getFeatures():
         attributes = feature.attributes()

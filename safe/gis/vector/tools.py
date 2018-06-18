@@ -104,7 +104,8 @@ def create_memory_layer(
     :type layer_name: str
 
     :param geometry: The geometry of the layer.
-    :rtype geometry: QgsWkbTypes (note: from C++ QgsWkbTypes::GeometryType enum)
+    :rtype geometry: QgsWkbTypes (note:
+                     from C++ QgsWkbTypes::GeometryType enum)
 
     :param coordinate_reference_system: The CRS of the memory layer.
     :type coordinate_reference_system: QgsCoordinateReferenceSystem
@@ -126,7 +127,8 @@ def create_memory_layer(
         wkb_type = QgsWkbTypes.NoGeometry
     else:
         raise MemoryLayerCreationError(
-            'Layer geometry must be one of: Point, Line, Polygon or Null, I got %s' % geometry)
+            'Layer geometry must be one of: Point, Line, '
+            'Polygon or Null, I got %s' % geometry)
 
     if coordinate_reference_system is None:
         coordinate_reference_system = QgsCoordinateReferenceSystem()
@@ -138,10 +140,12 @@ def create_memory_layer(
         for f in fields:
             new_fields.append(f)
         fields = new_fields
-    memory_layer = QgsMemoryProviderUtils.createMemoryLayer(name=layer_name,
-                                                            fields=fields,
-                                                            geometryType=wkb_type,
-                                                            crs=coordinate_reference_system)
+    memory_layer = QgsMemoryProviderUtils. \
+        createMemoryLayer(name=layer_name,
+                          fields=fields,
+                          geometryType=wkb_type,
+                          crs=coordinate_reference_system)
+
     memory_layer.dataProvider().createSpatialIndex()
     memory_layer.keywords = {
         'inasafe_fields': {}
@@ -437,7 +441,9 @@ class SizeCalculator():
         """
         self.calculator = QgsDistanceArea()
         self.calculator.setSourceCrs(
-            coordinate_reference_system, QgsProject.instance().transformContext())
+            coordinate_reference_system,
+            QgsProject.instance().transformContext()
+        )
         self.calculator.setEllipsoid('WGS84')
 
         if geometry_type == QgsWkbTypes.LineGeometry:

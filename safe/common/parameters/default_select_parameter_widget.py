@@ -2,7 +2,15 @@
 """Default Select Parameter Widget."""
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QHBoxLayout, QGridLayout, QDoubleSpinBox, QRadioButton, QButtonGroup, QWidget, QLabel
+from qgis.PyQt.QtWidgets import (
+    QHBoxLayout,
+    QGridLayout,
+    QDoubleSpinBox,
+    QRadioButton,
+    QButtonGroup,
+    QWidget,
+    QLabel
+)
 
 from parameters.qt_widgets.select_parameter_widget import SelectParameterWidget
 from safe.utilities.i18n import tr

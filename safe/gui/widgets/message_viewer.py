@@ -128,7 +128,9 @@ class MessageViewer(QtWebKitWidgets.QWebView):
         context_menu = QMenu(self)
 
         # add select all
-        action_select_all = self.page().action(QtWebKitWidgets.QWebPage.SelectAll)
+        action_select_all = self.page().action(
+            QtWebKitWidgets.QWebPage.SelectAll
+        )
         action_select_all.setEnabled(not self.page_to_text() == '')
         context_menu.addAction(action_select_all)
 
@@ -159,7 +161,9 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
         # add view source if in dev mode
         if self.dev_mode:
-            action_copy = self.page().action(QtWebKitWidgets.QWebPage.InspectElement)
+            action_copy = self.page().action(
+                QtWebKitWidgets.QWebPage.InspectElement
+            )
             action_copy.setEnabled(True)
             context_menu.addAction(action_copy)
 

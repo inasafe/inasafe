@@ -7,8 +7,17 @@ from collections import OrderedDict
 from functools import partial
 
 from qgis.PyQt.QtCore import Qt, QSettings
-from qgis.PyQt.QtWidgets import QWidget, QListWidget, QAbstractItemView, QListWidgetItem, QLayout, QHBoxLayout, QVBoxLayout, QLabel, QSizePolicy
-
+from qgis.PyQt.QtWidgets import (
+    QWidget,
+    QListWidget,
+    QAbstractItemView,
+    QListWidgetItem,
+    QLayout,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QSizePolicy
+)
 from parameters.qt_widgets.parameter_container import ParameterContainer
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.parameters.group_select_parameter import (

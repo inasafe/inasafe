@@ -5,7 +5,12 @@
 from collections import OrderedDict
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QTreeWidget, QTreeWidgetItem, QCheckBox, QHeaderView
+from qgis.PyQt.QtWidgets import (
+    QTreeWidget,
+    QTreeWidgetItem,
+    QCheckBox,
+    QHeaderView
+)
 from qgis.PyQt.QtGui import QFont
 
 from safe.common.parameters.percentage_parameter_widget import (

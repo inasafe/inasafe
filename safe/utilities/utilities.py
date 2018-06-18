@@ -87,7 +87,8 @@ def get_error_message(exception, context=None, suggestion=None):
     if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
     else:
-        if hasattr(exception, 'message') and isinstance(exception.message, Message):
+        if hasattr(exception, 'message') and \
+                isinstance(exception.message, Message):
             problem.append = m.Text(str(exception.message.message))
         else:
             problem.append = m.Text(str(exception))
