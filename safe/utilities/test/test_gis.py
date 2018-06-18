@@ -29,7 +29,7 @@ class TestQGIS(unittest.TestCase):
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back."""
         # Polygon layer
-        
+
         layer = load_test_vector_layer(
             'aggregation',
             'district_osm_jakarta.geojson',
@@ -61,7 +61,7 @@ class TestQGIS(unittest.TestCase):
         self.assertFalse(is_raster_y_inverted(layer))
 
     def test_rectangle_from_wkt(self):
-        """Test we can a create a rectangle from a WKT."""        
+        """Test we can a create a rectangle from a WKT."""
         rectangle = wkt_to_rectangle('POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))')
         self.assertTrue(isinstance(rectangle, QgsRectangle))
 

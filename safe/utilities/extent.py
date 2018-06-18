@@ -121,7 +121,8 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
+        transform = QgsCoordinateTransform(
+            crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._user_extent = extent
         set_setting('user_extent', extent.asWkt())
@@ -150,7 +151,8 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
+        transform = QgsCoordinateTransform(
+            crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._last_analysis_extent = extent
 
@@ -178,7 +180,8 @@ class Extent():
         :type crs: QgsCoordinateReferenceSystem
         """
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.crs, QgsProject.instance())
+        transform = QgsCoordinateTransform(
+            crs, self.crs, QgsProject.instance())
         extent.transform(transform)
         self._next_analysis_extent = extent
 

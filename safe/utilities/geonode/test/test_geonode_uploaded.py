@@ -27,7 +27,7 @@ shapefile_layer_uri = standard_data_path('exposure', 'airports.shp')
 ascii_layer_uri = standard_data_path('gisv4', 'hazard', 'earthquake.asc')
 tif_layer_uri = standard_data_path('hazard', 'earthquake.tif')
 geojson_layer_uri = standard_data_path(
-    'gisv4', 'hazard','classified_vector.geojson')
+    'gisv4', 'hazard', 'classified_vector.geojson')
 
 
 class GeonodeUploadTest(unittest.TestCase):

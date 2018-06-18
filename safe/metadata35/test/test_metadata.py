@@ -29,6 +29,7 @@ from unittest import TestCase
 
 
 class TestMetadata(TestCase):
+
     def test_no_BaseMeta_instantiation(self):
         """check that we can't instantiate abstract class BaseMetadata with
         abstract methods"""

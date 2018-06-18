@@ -56,6 +56,7 @@ def print_class(array, result_class, expected_result):
 
 
 class TestUtilities(unittest.TestCase):
+
     def test_humanize_class(self):
         """Test humanize class
         First class interval < 1

@@ -86,14 +86,16 @@ class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
         self.remove_class_button.clicked.connect(self.ok_button_status)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
         # Fix for issue 1699 - cancel button does nothing
-        cancel_button = self.button_box.button(QtWidgets.QDialogButtonBox.Cancel)
+        cancel_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Fix ends
         ok_button = self.button_box.button(QtWidgets.QDialogButtonBox.Ok)
@@ -243,13 +245,16 @@ class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
     def ok_button_status(self):
         """Function to enable or disable OK button."""
         if not self.layer.currentLayer():
-            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+            self.button_box.button(
+                QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
         elif (self.hazard_class_form.count() > 0 and
                 self.layer.currentLayer().name() and
                 len(self.output_form.text()) >= 0):
-            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(True)
+            self.button_box.button(
+                QtWidgets.QDialogButtonBox.Ok).setEnabled(True)
         else:
-            self.button_box.button(QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
+            self.button_box.button(
+                QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
 
     @pyqtSlot(bool)  # prevents actions being handled twice
     def help_toggled(self, flag):

@@ -727,7 +727,8 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(0, status, steps)
         # self.assertDictEqual(expected_steps, steps, scenario_path)
         try:
-            self.assertEqual(dict_values_sorted(expected_steps), dict_values_sorted(steps))
+            self.assertEqual(dict_values_sorted(
+                expected_steps), dict_values_sorted(steps))
         except AssertionError:
             LOGGER.info('Exception found in ' + scenario_path)
             raise

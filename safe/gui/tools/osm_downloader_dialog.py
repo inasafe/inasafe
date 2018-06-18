@@ -77,7 +77,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.progress_dialog = None
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)

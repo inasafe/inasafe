@@ -402,7 +402,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param visible: True to show layer, False to hide layer
         :type visible: bool
         """
-        QgsProject.instance().layerTreeRoot().findLayer(layer.id()).setItemVisibilityChecked(visible)
+        QgsProject.instance().layerTreeRoot().findLayer(
+            layer.id()).setItemVisibilityChecked(visible)
 
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
@@ -541,7 +542,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                     LOGGER.info('Bad input detected')
 
                 elif status == ANALYSIS_FAILED_BAD_CODE:
-                    LOGGER.info('Impact function encountered a bug: %s' % message)
+                    LOGGER.info(
+                        'Impact function encountered a bug: %s' % message)
 
             else:
                 LOGGER.warning('Impact function not ready')

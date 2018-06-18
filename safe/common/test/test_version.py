@@ -26,6 +26,7 @@ from safe.definitions.versions import inasafe_version, inasafe_release_status
 
 
 class TestVersion(unittest.TestCase):
+
     def test_get_version(self):
         """Test for get_version."""
         version_tuple = ('2', '2', '0', 'alpha', '0')

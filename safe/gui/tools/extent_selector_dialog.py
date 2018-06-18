@@ -116,7 +116,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Wire up button events
         self.capture_button.clicked.connect(self.start_capture)
         # Handle cancel
-        cancel_button = self.button_box.button(QtWidgets.QDialogButtonBox.Cancel)
+        cancel_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Make sure to reshow this dialog when rectangle is captured
         self.tool.rectangle_created.connect(self.stop_capture)
@@ -124,7 +125,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.ok_button = self.button_box.button(QtWidgets.QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
         # Set up context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)

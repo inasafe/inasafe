@@ -1598,7 +1598,8 @@ def set_provenance_to_project_variables(provenances):
 
 def remove_provenance_project_variables():
     """Removing variables from provenance data."""
-    project_context_scope = QgsExpressionContextUtils.projectScope(QgsProject.instance())
+    project_context_scope = QgsExpressionContextUtils.projectScope(
+        QgsProject.instance())
     existing_variable_names = project_context_scope.variableNames()
 
     # Save the existing variables that's not provenance variable.

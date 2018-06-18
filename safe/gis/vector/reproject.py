@@ -53,7 +53,8 @@ def reproject(layer, output_crs, callback=None):
         output_layer_name, layer.geometryType(), output_crs, input_fields)
     reprojected.startEditing()
 
-    crs_transform = QgsCoordinateTransform(input_crs, output_crs, QgsProject.instance())
+    crs_transform = QgsCoordinateTransform(
+        input_crs, output_crs, QgsProject.instance())
 
     out_feature = QgsFeature()
 

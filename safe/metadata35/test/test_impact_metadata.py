@@ -46,6 +46,7 @@ from safe.metadata35.test import (
 
 
 class TestImpactMetadata(TestCase):
+
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 4)
@@ -170,7 +171,8 @@ class TestImpactMetadata(TestCase):
         )
         # Unless we want to add a specialized library, this
         # is the best we can do with what python offers
-        self.assertEqual(sorted(expected_metadata.split('\n')), sorted(read_tmp_metadata.xml.split('\n')))
+        self.assertEqual(sorted(expected_metadata.split('\n')),
+                         sorted(read_tmp_metadata.xml.split('\n')))
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON

@@ -24,9 +24,11 @@ import json
 from collections import OrderedDict
 from safe.common.minimum_needs import MinimumNeeds
 
+
 def cmp(d1, d2):
     """Compare 2 dicts, return 0 if equals"""
     return 0 if list(d1.items()) == list(d2.items()) else 1
+
 
 class MinimumNeedsTest(unittest.TestCase):
     """Test the SAFE Table."""

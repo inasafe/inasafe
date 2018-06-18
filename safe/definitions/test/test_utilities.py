@@ -195,7 +195,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
             exposure_population,
             exposure_land_cover,
         ]
-        self.assertEqual(dict_values_sorted(exposures), dict_values_sorted(expected))
+        self.assertEqual(dict_values_sorted(exposures),
+                         dict_values_sorted(expected))
 
         exposures = exposures_for_layer('line')
         expected = [exposure_road]
@@ -217,7 +218,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_units(self):
         """Test for hazard_units"""
         expected = [unit_metres, unit_feet, unit_generic]
-        self.assertEqual(dict_values_sorted(hazard_units('flood')), dict_values_sorted(expected))
+        self.assertEqual(dict_values_sorted(
+            hazard_units('flood')), dict_values_sorted(expected))
 
     def test_hazards_classifications(self):
         """Test for get_hazards_classifications."""

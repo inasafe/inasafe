@@ -102,7 +102,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
         }
         for field in frequency:
             # check value exists in the field
-            field_idx = analysis_layer.fields().lookupField(field['field_name'])
+            field_idx = analysis_layer.fields(
+            ).lookupField(field['field_name'])
             if field_idx == -1:
                 # skip if field doesn't exists
                 continue
