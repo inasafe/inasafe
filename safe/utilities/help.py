@@ -7,10 +7,8 @@ from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QDesktopServices
 from safe.gui.tools.help.dock_help import dock_help
 from safe.utilities.resources import (
-    get_ui_class,
     html_footer,
     html_help_header,
-    resources_path
 )
 
 
