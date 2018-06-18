@@ -199,7 +199,8 @@ def create_qgis_pdf_output(
             # TODO: ABP: check that page size is set on the pages
             res = exporter.exportToPdf(output_path, settings)
             if res != QgsLayoutExporter.Success:
-                LOGGER.error('Error exporting to {}'.format(exporter.errorFile()))
+                LOGGER.error('Error exporting to {}'.format(
+                    exporter.errorFile()))
                 return None
         except Exception as exc:
             LOGGER.error(exc)
@@ -280,7 +281,8 @@ def qgis_composer_html_renderer(impact_report, component):
         height = html_el.get('height', component.page_height - 2 * margin_top)
 
         html_frame = QgsLayoutFrame(layout, html_element)
-        html_frame.attemptSetSceneRect(QRectF(margin_left, margin_top, width, height))
+        html_frame.attemptSetSceneRect(
+            QRectF(margin_left, margin_top, width, height))
         html_element.addFrame(html_frame)
 
         if html_element:
@@ -766,10 +768,12 @@ def atlas_renderer(layout, coverage_layer, output_path, file_format):
         LOGGER.info('Exporting Atlas')
         atlas_output = []
         if atlas_on_single_file:
-            res, error = QgsLayoutExporter.exportToPdf(atlas_composition, output_path, settings)
+            res, error = QgsLayoutExporter.exportToPdf(
+                atlas_composition, output_path, settings)
             atlas_output.append(output_path)
         else:
-            res, error = QgsLayoutExporter.exportToPdfs(atlas_composition, output_directory, settings)
+            res, error = QgsLayoutExporter.exportToPdfs(
+                atlas_composition, output_directory, settings)
 
         if res != QgsLayoutExporter.Success:
             LOGGER.error(error)

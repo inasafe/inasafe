@@ -292,7 +292,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_aggregation_without_inasafe_fields(self):
         """Test keyword wizard for layer without inasafe fields."""
@@ -510,7 +511,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_hazard_volcano_polygon_existing_keywords(self):
         """Test existing keyword for hazard volcano polygon."""
@@ -843,7 +845,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_structure_polygon_existing_keywords(self):
         """Test existing keyword for exposure structure polygon."""
@@ -980,7 +983,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         self.assertDictEqual(
-            dict_values_sorted(layer.keywords['value_map']), 
+            dict_values_sorted(layer.keywords['value_map']),
             dict_values_sorted(dialog.get_keywords()['value_map']))
 
     def test_aggregation_keyword(self):
@@ -1059,7 +1062,7 @@ class TestKeywordWizard(unittest.TestCase):
         }
         # Check the keywords
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), 
+        self.assertDictEqual(dict_values_sorted(real_keywords),
                              dict_values_sorted(expected_keyword))
 
     def test_aggregation_existing_keyword(self):
@@ -1139,7 +1142,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check the keywords
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), 
+        self.assertDictEqual(dict_values_sorted(real_keywords),
                              dict_values_sorted(expected_keyword))
 
     def test_exposure_population_polygon_keyword(self):
@@ -1269,7 +1272,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_population_polygon_existing_keyword(self):
         """Test existing exposure population polygon with keyword."""
@@ -1400,7 +1404,8 @@ class TestKeywordWizard(unittest.TestCase):
         # Checking Keyword Created
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_exposure_population_raster(self):
         """Test keyword wizard for population raster."""
@@ -2073,7 +2078,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_classified_raster_existing_keywords(self):
         """Test keyword wizard for existing keywords classified raster."""
@@ -2204,7 +2210,8 @@ class TestKeywordWizard(unittest.TestCase):
         # Checking Keyword Created
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_continuous_raster_keywords(self):
         """Test keyword wizard for continuous raster."""
@@ -2655,7 +2662,8 @@ class TestKeywordWizard(unittest.TestCase):
 
         real_keywords = dialog.get_keywords()
 
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     # @unittest.skip(
     #     'This test is hanging for a unknown reason since a few times.')
@@ -2820,7 +2828,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_earthquake_raster_dirty_keywords(self):
         """Test for Earthquake raster keyword wizard."""
@@ -3132,7 +3141,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def test_earthquake_raster_invalid_key(self):
         """Test for Earthquake raster keyword wizard."""
@@ -3289,7 +3299,8 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
-        self.assertDictEqual(dict_values_sorted(real_keywords), dict_values_sorted(expected_keyword))
+        self.assertDictEqual(dict_values_sorted(
+            real_keywords), dict_values_sorted(expected_keyword))
 
     def check_radio_button_behaviour(self, inasafe_default_dialog):
         """Test radio button behaviour so they are disabled when user set the

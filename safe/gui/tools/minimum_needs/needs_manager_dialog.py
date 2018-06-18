@@ -154,7 +154,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.save_profile_as)
 
         # Set up things for context help
-        self.help_button = self.button_box.button(QtWidgets.QDialogButtonBox.Help)
+        self.help_button = self.button_box.button(
+            QtWidgets.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
@@ -696,7 +697,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         file_name_dialog.setAcceptMode(QFileDialog.AcceptSave)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
-        dir = os.path.join(QgsApplication.qgisSettingsDirPath(), 'inasafe', 'minimum_needs')
+        dir = os.path.join(QgsApplication.qgisSettingsDirPath(),
+                           'inasafe', 'minimum_needs')
         file_name_dialog.setDirectory(expanduser(dir))
         if file_name_dialog.exec_():
             file_name = file_name_dialog.selectedFiles()[0]
@@ -723,7 +725,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Create a new profile by name.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        dir = os.path.join(QgsApplication.qgisSettingsDirPath(), 'inasafe', 'minimum_needs')
+        dir = os.path.join(QgsApplication.qgisSettingsDirPath(),
+                           'inasafe', 'minimum_needs')
         file_name, __ = QFileDialog.getSaveFileName(
             self,
             self.tr('Create a minimum needs profile'),

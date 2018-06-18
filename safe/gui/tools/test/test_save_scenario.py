@@ -75,7 +75,6 @@ class SaveScenarioTest(unittest.TestCase):
         # need to be able to react to the status changes of the other combos
         self.save_scenario_dialog = None
 
-
     # FIXME
     @unittest.skipIf(os.environ.get('ON_TRAVIS', False),
                      "Skip when running on Travis")

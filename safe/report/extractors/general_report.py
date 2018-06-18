@@ -336,7 +336,8 @@ def multi_exposure_general_report_extractor(impact_report, component_metadata):
 
             elif field in [displaced_field, fatalities_field]:
                 if field['key'] in analysis_inasafe_fields and is_population:
-                    field_index = analysis_layer.fields().lookupField(field['name'])
+                    field_index = analysis_layer.fields(
+                    ).lookupField(field['name'])
                     if field == fatalities_field:
                         # For fatalities field, we show a range of number
                         # instead

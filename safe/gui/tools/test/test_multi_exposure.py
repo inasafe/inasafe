@@ -79,7 +79,8 @@ class MultiExposureDialogTest(unittest.TestCase):
         self.assertEqual(0, dialog.list_layers_in_map_report.count())
 
         # Let's select the impact layer.
-        self.assertEqual(item_from_analysis.child(1).text(0), 'Generic Hazard Polygon On Population Polygon')
+        self.assertEqual(item_from_analysis.child(1).text(
+            0), 'Generic Hazard Polygon On Population Polygon')
         self.assertEqual(4, item_from_analysis.child(1).childCount())
         item_from_analysis.child(1).child(0).setSelected(True)
         self.assertFalse(dialog.move_down.isEnabled())

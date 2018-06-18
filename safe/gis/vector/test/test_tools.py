@@ -36,7 +36,8 @@ class TestVectorTools(unittest.TestCase):
         self.assertEqual(new_layer.crs(), layer.crs())
         self.assertEqual(new_layer.wkbType(), QgsWkbTypes.MultiPolygon)
 
-        # create_memory_layer should also accept a list of fields, not a QgsFields object
+        # create_memory_layer should also accept a list of fields, not a
+        # QgsFields object
         field_list = [f for f in layer.fields()]
         new_layer = create_memory_layer(
             'New layer', layer.geometryType(), layer.crs(), field_list)

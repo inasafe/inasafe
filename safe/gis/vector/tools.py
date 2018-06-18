@@ -436,7 +436,8 @@ class SizeCalculator():
         :type exposure_key: qgis.core.QgsWkbTypes.GeometryType
         """
         self.calculator = QgsDistanceArea()
-        self.calculator.setSourceCrs(coordinate_reference_system, QgsProject.instance().transformContext())
+        self.calculator.setSourceCrs(
+            coordinate_reference_system, QgsProject.instance().transformContext())
         self.calculator.setEllipsoid('WGS84')
 
         if geometry_type == QgsWkbTypes.LineGeometry:

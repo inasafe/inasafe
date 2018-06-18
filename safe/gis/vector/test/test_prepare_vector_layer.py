@@ -144,7 +144,8 @@ class TestPrepareLayer(unittest.TestCase):
         }
         layer.keywords['value_map'] = dict(value_map)
         layer = _check_value_mapping(layer)
-        self.assertEqual(dict_values_sorted(value_map), dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(value_map),
+                         dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop and unknown, the other group should be created.
         layer.keywords['value_map'] = {
@@ -159,7 +160,8 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertEqual(dict_values_sorted(expected_value_map), dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(expected_value_map),
+                         dict_values_sorted(layer.keywords['value_map']))
 
         # Missing shop, it should be added to the other group.
         layer.keywords['value_map'] = {
@@ -175,7 +177,8 @@ class TestPrepareLayer(unittest.TestCase):
             'other': ['shop', 'unknown']
         }
         layer = _check_value_mapping(layer)
-        self.assertEqual(dict_values_sorted(expected_value_map), dict_values_sorted(layer.keywords['value_map']))
+        self.assertEqual(dict_values_sorted(expected_value_map),
+                         dict_values_sorted(layer.keywords['value_map']))
 
     def test_own_id_column(self):
         """Test if we can re-use the column ID from the user."""
@@ -224,11 +227,13 @@ class TestPrepareLayer(unittest.TestCase):
                     F_9_15__idx])
             self.assertEqual(feature[exposure_id__idx], sum_value)
 
-        new_field__idx = layer.fields().lookupField(female_count_field['field_name'])
+        new_field__idx = layer.fields().lookupField(
+            female_count_field['field_name'])
         # Check if the new field doesn't exist
         self.assertEqual(new_field__idx, -1)
         sum_fields(layer, female_count_field['key'], ['F_0_4', 'F_5_9'])
-        new_field__idx = layer.fields().lookupField(female_count_field['field_name'])
+        new_field__idx = layer.fields().lookupField(
+            female_count_field['field_name'])
         for feature in layer.getFeatures():
             sum_value = (feature[F_0_4__idx] + feature[F_5_9__idx])
             self.assertEqual(feature[new_field__idx], sum_value)
@@ -273,7 +278,8 @@ class TestPrepareLayer(unittest.TestCase):
 
         # Check if the original fields are gone
         for original_female_field in original_female_fields:
-            self.assertEqual(layer.fields().lookupField(original_female_field), -1)
+            self.assertEqual(layer.fields().lookupField(
+                original_female_field), -1)
 
 
 if __name__ == '__main__':

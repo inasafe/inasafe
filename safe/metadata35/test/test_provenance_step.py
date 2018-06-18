@@ -27,6 +27,7 @@ from safe.metadata35.provenance import ProvenanceStep
 
 
 class TestProvenanceStep(TestCase):
+
     def test_step(self):
         title = 'Calculated some random impact'
         description = 'Calculated some random impact'

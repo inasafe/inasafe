@@ -206,7 +206,8 @@ class NeedsProfile(MinimumNeeds):
                     locale_minimum_needs_dir, file_name)
                 if not os.path.exists(destination_file) or overwrite:
                     copy(source_file, destination_file)
-            # move old min needs profile under user profile to inasafe subdirectory
+            # move old min needs profile under user profile to inasafe
+            # subdirectory
             self.move_old_profile(locale_minimum_needs_dir)
             profiles = [
                 profile[:-5] for profile in
