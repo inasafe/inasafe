@@ -40,7 +40,7 @@ tags=contingency planning, impact assessments, disaster scenarios, natural hazar
 homepage=http://www.inasafe.org/
 tracker=https://github.com/inasafe/inasafe/issues
 repository=https://github.com/inasafe/inasafe
-icon=resources/img/icons/icon.png
+icon=safe/resources/img/icons/icon.png
 # experimental flag
 experimental=False
 
