@@ -41,4 +41,3 @@ class HelpDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setWindowIcon(QtGui.QIcon(icon))
 
         self.help_web_view.setHtml(get_help_html(message))
-

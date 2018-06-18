@@ -48,9 +48,11 @@ from safe.definitions.constants import (ANALYSIS_FAILED_BAD_CODE,
 from safe.definitions.layer_purposes import (layer_purpose_aggregation,
                                              layer_purpose_exposure,
                                              layer_purpose_hazard)
-from safe.definitions.reports.components import (all_default_report_components,
-                                                 map_report,
-                                                 standard_impact_report_metadata_pdf)
+from safe.definitions.reports.components import (
+    all_default_report_components,
+    map_report,
+    standard_impact_report_metadata_pdf
+)
 from safe.definitions.utilities import update_template_component
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
@@ -755,7 +757,9 @@ class BatchDialog(QDialog, FORM_CLASS):
     # noinspection PyMethodMayBeStatic
     def enable_busy_cursor(self):
         """Set the hourglass enabled."""
-        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(
+            QtGui.QCursor(QtCore.Qt.WaitCursor)
+        )
 
     # noinspection PyMethodMayBeStatic
     def disable_busy_cursor(self):

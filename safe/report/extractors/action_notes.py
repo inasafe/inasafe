@@ -177,7 +177,8 @@ def notes_assumptions_extractor(impact_report, component_metadata):
             # we make a copy here because we don't want to
             # change the real value.
             copy_of_hazard_class = dict(hazard_class)
-            if copy_of_hazard_class['fatality_rate'] is None or copy_of_hazard_class['fatality_rate'] <= 0:
+            if copy_of_hazard_class['fatality_rate'] is None or \
+                    copy_of_hazard_class['fatality_rate'] <= 0:
                 copy_of_hazard_class['fatality_rate'] = 0
             else:
                 # we want to show the rate as a scientific notation

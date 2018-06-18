@@ -19,7 +19,14 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import QCoreApplication, Qt
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtWidgets import QAction, QApplication, QToolButton, QMenu, QLineEdit, QInputDialog
+from qgis.PyQt.QtWidgets import (
+    QAction,
+    QApplication,
+    QToolButton,
+    QMenu,
+    QLineEdit,
+    QInputDialog
+)
 from qgis.PyQt.QtGui import QIcon
 
 from safe.common.custom_logging import LOGGER

@@ -51,8 +51,10 @@ class MEMORYSTATUSEX(ctypes.Structure):
 
 
 def python2_round(number, ndigits=0):
-    """Python 2 round function, see: http://python3porting.com/differences.html#rounding-behavior
-    The behavior of round has changed in Python 3. In Python 2, rounding of halfway cases was away from zero, and round() would always return a float.
+    """Python 2 round function,
+    see: http://python3porting.com/differences.html#rounding-behavior
+    The behavior of round has changed in Python 3. In Python 2, rounding of
+    halfway cases was away from zero, and round() would always return a float.
 
     Round a number to a given precision in decimal digits (default 0 digits).
     This returns an int when called with one argument, otherwise the

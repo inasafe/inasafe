@@ -6,8 +6,14 @@ from collections import OrderedDict
 from datetime import datetime
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import QLineEdit, QDateTimeEdit, QDoubleSpinBox, QComboBox, QCheckBox, QSpinBox
-
+from qgis.PyQt.QtWidgets import (
+    QLineEdit,
+    QDateTimeEdit,
+    QDoubleSpinBox,
+    QComboBox,
+    QCheckBox,
+    QSpinBox
+)
 from safe import messaging as m
 from safe.common.custom_logging import LOGGER
 from safe.gui.tools.wizard.wizard_step import WizardStep

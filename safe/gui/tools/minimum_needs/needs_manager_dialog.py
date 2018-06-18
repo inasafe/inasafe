@@ -7,7 +7,14 @@ from os.path import expanduser, basename
 
 from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import pyqtSlot
-from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QGridLayout, QPushButton, QDialogButtonBox, QMessageBox
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QFileDialog,
+    QGridLayout,
+    QPushButton,
+    QDialogButtonBox,
+    QMessageBox
+)
 from qgis.PyQt.QtGui import QIcon
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
@@ -262,7 +269,12 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             'provided by InaSAFE. Do you want to continue ?')
         # noinspection PyCallByClass
         reply = QMessageBox.question(
-            self, title, msg, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+            self,
+            title,
+            msg,
+            QtWidgets.QMessageBox.Yes,
+            QtWidgets.QMessageBox.No
+        )
 
         if reply == QtWidgets.QMessageBox.Yes:
             self.profile_combo.clear()

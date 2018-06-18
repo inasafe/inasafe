@@ -240,7 +240,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # will cause key error if no hazard count for that particular
                 # class
                 field_name = exposure_summary_table_fields[field_key_name]
-                field_index = exposure_summary_table.fields().lookupField(field_name)
+                field_index = exposure_summary_table.fields() \
+                    .lookupField(field_name)
                 # exposure summary table is in csv format, so the field
                 # returned is always in text format
                 count_value = int(float(feat[field_index]))

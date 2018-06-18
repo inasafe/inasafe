@@ -242,7 +242,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             smoothing_method = SCIPY_SMOOTHING
 
         # noinspection PyUnresolvedReferences
-        QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QgsApplication.instance().setOverrideCursor(
+            QtGui.QCursor(QtCore.Qt.WaitCursor)
+        )
 
         extra_keywords = {}
         if self.check_box_custom_shakemap_id.isChecked():

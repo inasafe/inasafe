@@ -243,7 +243,8 @@ def content():
     )))
     message.add(m.Paragraph(tr(
         'Note: The profile must be saved in your home directory under '
-        '(QGIS profile path)/minimum_needs in order for InaSAFE to successfully '
+        '(QGIS profile path)/minimum_needs in order '
+        'for InaSAFE to successfully '
         'detect it.'
     )))
     message.add(m.Paragraph(tr(

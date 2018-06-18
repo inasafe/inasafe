@@ -10,7 +10,18 @@ from functools import partial
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
 from qgis.PyQt.QtCore import pyqtSlot, QVariant, QSettings, Qt
-from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QDialogButtonBox, QGroupBox, QVBoxLayout, QScrollArea, QWidget, QLabel, QPushButton, QMessageBox
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QFileDialog,
+    QDialogButtonBox,
+    QGroupBox,
+    QVBoxLayout,
+    QScrollArea,
+    QWidget,
+    QLabel,
+    QPushButton,
+    QMessageBox
+)
 from qgis.PyQt.QtGui import QIcon, QPixmap
 
 from parameters.float_parameter import FloatParameter

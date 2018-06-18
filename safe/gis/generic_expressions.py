@@ -345,8 +345,9 @@ def hazard_extra_keyword(keyword, feature, parent):
         in current hazard layer's extra keywords.
     """
     _ = feature, parent  # NOQA
-    hazard_layer_path = QgsExpressionContextUtils.projectScope(QgsProject.instance()).variable(
-        'hazard_layer')
+    hazard_layer_path = QgsExpressionContextUtils. \
+        projectScope(QgsProject.instance()).variable(
+          'hazard_layer')
     hazard_layer = load_layer(hazard_layer_path)[0]
     keywords = KeywordIO.read_keywords(hazard_layer)
     extra_keywords = keywords.get('extra_keywords')

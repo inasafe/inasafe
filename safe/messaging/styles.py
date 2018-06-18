@@ -17,19 +17,19 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
-from future import standard_library
-standard_library.install_aliases()
 import os
-import urllib.request
-import urllib.parse
 import urllib.error
 import urllib.parse
+import urllib.request
+
+from future import standard_library
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-
 from safe.utilities.resources import resources_path
+
+standard_library.install_aliases()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

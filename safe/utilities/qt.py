@@ -41,11 +41,14 @@ def qt_at_least(needed_version, test_version=None):
 
 def enable_busy_cursor():
     """Set the hourglass enabled and stop listening for layer changes."""
-    QgsApplication.instance().setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+    QgsApplication.instance().setOverrideCursor(
+        QtGui.QCursor(QtCore.Qt.WaitCursor)
+    )
 
 
 def disable_busy_cursor():
     """Disable the hourglass cursor and listen for layer changes."""
     while QgsApplication.instance().overrideCursor() is not None and \
-            QgsApplication.instance().overrideCursor().shape() == QtCore.Qt.WaitCursor:
+            QgsApplication.instance().overrideCursor().shape() == \
+            QtCore.Qt.WaitCursor:
         QgsApplication.instance().restoreOverrideCursor()

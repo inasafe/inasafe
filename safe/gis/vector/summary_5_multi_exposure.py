@@ -238,7 +238,10 @@ def multi_exposure_aggregation_summary(aggregation, intermediate_layers):
 
         # Get Aggregation ID from original feature
         index = (
-            layer.fields().lookupField(source_fields[aggregation_id_field['key']]))
+            layer.fields().lookupField(
+                source_fields[aggregation_id_field['key']]
+            )
+        )
 
         for source_feature in layer.getFeatures(request):
             target_expression = QgsFeatureRequest()

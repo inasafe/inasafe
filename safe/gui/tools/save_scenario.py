@@ -1,13 +1,11 @@
 # coding=utf-8
 
 """Save Scenario Dialog."""
-from future import standard_library
-standard_library.install_aliases()
-
-
 import logging
 import os
 from configparser import ConfigParser
+
+from future import standard_library
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -16,13 +14,15 @@ import qgis  # NOQA pylint: disable=unused-import
 from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QMessageBox
-
 from safe.gui.gui_utilities import layer_from_combo
 from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import resources_path
-from safe.utilities.settings import setting, set_setting
+from safe.utilities.settings import set_setting, setting
+
+standard_library.install_aliases()
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

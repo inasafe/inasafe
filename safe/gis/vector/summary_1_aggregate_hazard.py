@@ -245,7 +245,8 @@ def report_on_field(layer):
     exposure = layer.keywords.get('exposure')
     if geometry == QgsWkbTypes.PointGeometry:
         field_index = None
-    if geometry == QgsWkbTypes.PolygonGeometry and exposure == exposure_structure['key']:
+    if geometry == QgsWkbTypes.PolygonGeometry and exposure == \
+            exposure_structure['key']:
         field_index = None
 
     # Special case if it's an exposure without classification. It means it's
