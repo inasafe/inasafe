@@ -21,7 +21,13 @@ from safe.utilities.utilities import (
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
-
+from safe.utilities.help import get_help_html
+from safe.utilities.resources import (
+    html_footer,
+    html_help_header,
+)
+from safe.messaging import Message
+from safe.gui.tools.help.dock_help import dock_help
 
 class UtilitiesTest(unittest.TestCase):
 
@@ -71,6 +77,23 @@ class UtilitiesTest(unittest.TestCase):
         """Test if we can know if a plugin is installed."""
         self.assertTrue(is_plugin_installed('inasafe'))
         self.assertFalse(is_plugin_installed('inasafeZ'))
+
+
+    def test_get_help_html(self):
+        """Test that get_help_html works"""
+
+        # no message: default to dock_help
+        text = get_help_html()
+        self.assertTrue(html_help_header() in text)
+        self.assertTrue(html_footer() in text)
+        self.assertTrue(dock_help().to_html() in text)
+
+        # custom message
+        message = Message("A text message")
+        text = get_help_html(message)
+        self.assertTrue(message.to_html() in text)
+
+
 
 
 if __name__ == '__main__':
