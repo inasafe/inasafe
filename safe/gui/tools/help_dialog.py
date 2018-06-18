@@ -7,9 +7,9 @@ import qgis  # NOQA pylint: disable=unused-import
 from qgis.PyQt import QtGui, QtWidgets
 from qgis.PyQt.QtCore import Qt
 
-from safe.gui.tools.help.dock_help import dock_help
-from safe.utilities.resources import (
-    get_ui_class, html_footer, html_help_header, resources_path)
+from safe.utilities.resources import resources_path, get_ui_class
+from safe.utilities.help import get_help_html
+
 
 FORM_CLASS = get_ui_class('help_dialog_base.ui')
 
@@ -40,15 +40,5 @@ class HelpDialog(QtWidgets.QDialog, FORM_CLASS):
         icon = resources_path('img', 'icons', 'show-inasafe-help.svg')
         self.setWindowIcon(QtGui.QIcon(icon))
 
-        header = html_help_header()
-        footer = html_footer()
+        self.help_web_view.setHtml(get_help_html(message))
 
-        string = header
-
-        if message is None:
-            message = dock_help()
-
-        string += message.to_html()
-        string += footer
-
-        self.help_web_view.setHtml(string)

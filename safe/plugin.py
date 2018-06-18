@@ -917,12 +917,9 @@ class Plugin():
 
     def show_definitions(self):
         """Show InaSAFE Definitions (a report showing all key metadata)."""
-        from safe.gui.tools.help_dialog import HelpDialog
+        from safe.utilities.help import show_help
         from safe.gui.tools.help import definitions_help
-        dialog = HelpDialog(
-            self.iface.mainWindow(),
-            definitions_help.definitions_help())
-        dialog.show()  # non modal
+        show_help(definitions_help.definitions_help())
 
     def show_field_mapping(self):
         """Show InaSAFE Field Mapping."""
