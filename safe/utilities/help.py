@@ -39,6 +39,8 @@ def show_help(message=None):
     """
 
     help_path = mktemp('.html')
-    with open(help_path, 'w+') as f:
-        f.write(get_help_html(message))
-        QDesktopServices.openUrl(QUrl(help_path))
+    with open(help_path, 'wb+') as f:
+        help_html = get_help_html(message)
+        f.write(help_html.encode('utf8'))
+        path_with_protocol = 'file://' + help_path
+        QDesktopServices.openUrl(QUrl(path_with_protocol))
