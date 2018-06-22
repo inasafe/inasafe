@@ -210,6 +210,8 @@ def is_raster_layer(layer):
     :returns: True if the layer contains polygons, otherwise False.
     :rtype: bool
     """
+    if not isinstance(layer, QgsMapLayer):
+        return False
     try:
         return layer.type() == QgsMapLayer.RasterLayer
     except AttributeError:
@@ -242,6 +244,9 @@ def is_vector_layer(layer):
     :returns: True if the layer is vector layer, otherwise False.
     :rtype: bool
     """
+    if not isinstance(layer, QgsMapLayer):
+        return False
+
     try:
         return layer.type() == QgsMapLayer.VectorLayer
     except AttributeError:
@@ -258,8 +263,7 @@ def is_point_layer(layer):
     :rtype: bool
     """
     try:
-        return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Point)
+        return is_vector_layer(layer) and (layer.geometryType() == QGis.Point)
     except AttributeError:
         return False
 
@@ -275,8 +279,7 @@ def is_line_layer(layer):
 
     """
     try:
-        return (layer.type() == QgsMapLayer.VectorLayer) and (
-            layer.geometryType() == QGis.Line)
+        return is_vector_layer(layer) and (layer.geometryType() == QGis.Line)
     except AttributeError:
         return False
 
@@ -292,7 +295,7 @@ def is_polygon_layer(layer):
 
     """
     try:
-        return (layer.type() == QgsMapLayer.VectorLayer) and (
+        return is_vector_layer(layer) and (
             layer.geometryType() == QGis.Polygon)
     except AttributeError:
         return False

@@ -25,7 +25,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @profile
-def smart_clip(layer_to_clip, mask_layer):
+def smart_clip(
+        layer_to_clip, mask_layer, check_selected_flag=False, callback=None):
     """Smart clip a vector layer with another.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
@@ -35,6 +36,15 @@ def smart_clip(layer_to_clip, mask_layer):
 
     :param mask_layer: The vector layer to use for clipping.
     :type mask_layer: QgsVectorLayer
+
+    :param check_selected_flag: If the algorithm must check the selection flag.
+    Default to False.
+    :type check_selected_flag: bool
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
+        Defaults to None.
+    :type callback: function
 
     :return: The clip vector layer.
     :rtype: QgsVectorLayer
@@ -64,7 +74,15 @@ def smart_clip(layer_to_clip, mask_layer):
 
     extent = mask_layer.extent()
 
-    for feature in layer_to_clip.getFeatures(QgsFeatureRequest(extent)):
+    request = QgsFeatureRequest()
+    request.setFilterRect(extent)
+    # Check for some selected features
+    try:
+        if layer_to_clip.use_selected_features_only:
+            request.setFilterFids(layer_to_clip.selectedFeaturesIds())
+    except AttributeError:
+        pass
+    for feature in layer_to_clip.getFeatures(request):
 
         if engine.intersects(feature.geometry().geometry()):
             out_feat = QgsFeature()

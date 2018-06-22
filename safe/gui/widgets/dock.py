@@ -105,7 +105,12 @@ from safe.messaging import styles
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
 from safe.utilities.extent import Extent
-from safe.utilities.gis import wkt_to_rectangle, qgis_version, layer_icon
+from safe.utilities.gis import (
+    is_vector_layer,
+    layer_icon,
+    qgis_version,
+    wkt_to_rectangle,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.qgis_utilities import (
@@ -205,7 +210,8 @@ class Dock(QDockWidget, FORM_CLASS):
 
         canvas = self.iface.mapCanvas()
 
-        # Current aggregation layer
+        # Current aggregation/exposure layer
+        self._exposure = None
         self._aggregation = None
 
         # Enable on the fly projection by default
@@ -250,6 +256,39 @@ class Dock(QDockWidget, FORM_CLASS):
             'will be affected? Summarise the results by selected '
             'features in')
         self.aggregation_question_label.setText(self.label_without_selection)
+
+    @property
+    def exposure(self):
+        """Property for the current exposure layer.
+
+        :return: The exposure layer or None.
+        :rtype: QgsMapLayer
+        """
+        return self._exposure
+
+    @exposure.setter
+    def exposure(self, layer):
+        """Setter for the current exposure layer.
+
+        :param layer: The current exposure layer.
+        :type layer: QgsMapLayer
+        """
+        # We need to disconnect first.
+        if is_vector_layer(self._exposure) and self.use_selected_features_only:
+            # noinspection PyBroadException
+            try:
+                self._exposure.selectionChanged.disconnect(
+                    self.validate_impact_function)
+            except Exception:
+                # It was not connected. If the user change his settings while
+                # selection only feature was not enabled before.
+                pass
+
+        self._exposure = layer
+
+        if is_vector_layer(layer) and self.use_selected_features_only:
+            self._exposure.selectionChanged.connect(
+                self.validate_impact_function)
 
     @property
     def aggregation(self):
@@ -555,6 +594,7 @@ class Dock(QDockWidget, FORM_CLASS):
         """
         del index
         self.toggle_aggregation_layer_combo()
+        self.exposure = layer_from_combo(self.exposure_layer_combo)
         self.validate_impact_function()
 
     def index_changed_aggregation_layer_combo(self, index):
@@ -749,6 +789,9 @@ class Dock(QDockWidget, FORM_CLASS):
             0, entire_area_item_aggregation)
         self.aggregation_layer_combo.setCurrentIndex(0)
         self.toggle_aggregation_layer_combo()
+
+        # Save the current exposure layer, to check for some selected features
+        self.exposure = layer_from_combo(self.exposure_layer_combo)
 
         self.restore_state()
         self.question_group.setEnabled(True)
@@ -1429,11 +1472,11 @@ class Dock(QDockWidget, FORM_CLASS):
         impact_function.hazard = layer_from_combo(self.hazard_layer_combo)
         impact_function.exposure = layer_from_combo(self.exposure_layer_combo)
         aggregation = layer_from_combo(self.aggregation_layer_combo)
+        impact_function.use_selected_features_only = (
+            self.use_selected_features_only)
 
         if aggregation:
             impact_function.aggregation = aggregation
-            impact_function.use_selected_features_only = (
-                self.use_selected_features_only)
 
             if self.use_selected_features_only and (
                     aggregation.selectedFeatureCount() > 0):

@@ -63,6 +63,9 @@ def _run_tests(test_suite, package_name, with_coverage=False):
         with open(report.name, 'r') as fin:
             print fin.read()
 
+    # If you can't see this print while testing, it means QGIS crashed!
+    print 'End of testing'
+
 
 def test_package(package='safe'):
     """Test package.
