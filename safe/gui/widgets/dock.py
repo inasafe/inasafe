@@ -1324,7 +1324,7 @@ class Dock(QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         qgis_exposure = layer_from_combo(self.exposure_layer_combo)
-        if self.hide_exposure_flag:
+        if self.hide_exposure_flag and qgis_exposure is not None:
             treeroot = QgsProject.instance().layerTreeRoot()
             treelayer = treeroot.findLayer(qgis_exposure.id())
             if treelayer:

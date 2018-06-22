@@ -680,9 +680,10 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 treeroot = QgsProject.instance().layerTreeRoot()
                 for combo in list(self.combos_exposures.values()):
                     layer = layer_from_combo(combo)
-                    treelayer = treeroot.findLayer(layer.id())
-                    if treelayer:
-                        treelayer.setItemVisibilityChecked(False)
+                    if layer is not None:
+                        treelayer = treeroot.findLayer(layer.id())
+                        if treelayer:
+                            treelayer.setItemVisibilityChecked(False)
 
             # Set last analysis extent
             self._extent.set_last_analysis_extent(

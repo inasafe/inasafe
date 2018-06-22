@@ -187,7 +187,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         qgis_exposure = (
             QgsProject.instance().mapLayer(
                 self.parent.exposure_layer.id()))
-        if self.hide_exposure_flag:
+        if self.hide_exposure_flag and qgis_exposure is not None:
             treeroot = QgsProject.instance().layerTreeRoot()
             treelayer = treeroot.findLayer(qgis_exposure.id())
             if treelayer:

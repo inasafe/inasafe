@@ -404,6 +404,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         :param visible: True to show layer, False to hide layer
         :type visible: bool
         """
+        if layer is None:
+            return
+
         QgsProject.instance().layerTreeRoot().findLayer(
             layer.id()).setItemVisibilityChecked(visible)
 
