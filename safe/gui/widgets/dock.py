@@ -895,7 +895,7 @@ class Dock(QDockWidget, FORM_CLASS):
         try:
             message = keywords.to_message()
             send_static_message(self, message)
-        except InvalidMessageItemError as e:
+        except InvalidMessageItemError:
             # FIXME (elpaso)
             pass
         self.show_question_button.setVisible(False)
