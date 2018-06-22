@@ -18,8 +18,7 @@ __revision__ = '$Format:%H$'
 
 
 def deep_convert_dict(value):
-    """
-    Converts any OrderedDict elements in a value to
+    """Converts any OrderedDict elements in a value to
     ordinary dictionaries, safe for storage in QSettings
 
     :param value: value to convert

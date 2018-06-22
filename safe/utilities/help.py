@@ -17,6 +17,7 @@ def get_help_html(message=None):
 
     :param message: An optional message object to display in the dialog.
     :type message: Message.Message
+
     :return: the help HTML content
     :rtype: str
     """

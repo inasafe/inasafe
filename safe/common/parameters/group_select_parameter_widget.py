@@ -17,10 +17,12 @@ from qgis.PyQt.QtWidgets import (
     QWidget
 )
 
-from parameters.qt_widgets.generic_parameter_widget import \
+from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget
-from safe.common.parameters.percentage_parameter_widget import \
+)
+from safe.common.parameters.percentage_parameter_widget import (
     PercentageSpinBox
+)
 from safe.definitions.constants import MULTIPLE_DYNAMIC, SINGLE_DYNAMIC, STATIC
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
