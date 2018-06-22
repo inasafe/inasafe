@@ -4,10 +4,18 @@
 import logging
 
 from qgis.PyQt.QtCore import Qt
-from qgis.PyQt.QtWidgets import (QAbstractItemView, QButtonGroup, QGridLayout,
-                                 QLabel, QListWidget, QListWidgetItem,
-                                 QRadioButton, QSizePolicy, QVBoxLayout,
-                                 QWidget)
+from qgis.PyQt.QtWidgets import (
+    QAbstractItemView,
+    QButtonGroup,
+    QGridLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QRadioButton,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget
+)
 
 from parameters.qt_widgets.generic_parameter_widget import \
     GenericParameterWidget
