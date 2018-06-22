@@ -8,7 +8,7 @@ from collections import OrderedDict
 from copy import deepcopy
 from datetime import datetime
 from os import makedirs
-from os.path import join, exists, dirname
+from os.path import join, exists, dirname, basename
 from socket import gethostname
 
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -32,6 +32,7 @@ from safe import messaging as m
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
+    InvalidLayerError,
     WrongEarthquakeFunction,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
@@ -2696,7 +2697,7 @@ class ImpactFunction(object):
         return actions
 
     @staticmethod
-    def load_from_output_metadata(output_metadata):
+    def load_from_output_metadata(output_metadata, source_directory=None):
         """Set Impact Function based on an output of an analysis's metadata.
 
         If possible, we will try to use layers already in the legend and to not
@@ -2705,40 +2706,68 @@ class ImpactFunction(object):
         :param output_metadata: Metadata from an output layer.
         :type output_metadata: OutputLayerMetadata
 
+        :param source_directory: A directory to look layers in if not found
+        from metadata.
+        :type source_directory: basestring
+
         :returns: Impact Function based on the metadata.
         :rtype: ImpactFunction
         """
         impact_function = ImpactFunction()
         provenance = output_metadata['provenance_data']
 
+        def load_layer(path, parent_directory=None):
+            try:
+                return load_layer_from_registry(path)
+            except InvalidLayerError:
+                pass
+
+            if not parent_directory:
+                return None
+
+            LOGGER.info(
+                'Layer not loaded from metadata. Trying from current '
+                'directory.')
+            file_name = basename(exposure_path)
+            try:
+                return load_layer_from_registry(
+                    join(source_directory, file_name))
+            except InvalidLayerError:
+                return False
+
         # Set exposure layer
         exposure_path = get_provenance(provenance, provenance_exposure_layer)
         if exposure_path:
-            impact_function.exposure = load_layer_from_registry(exposure_path)
-            set_provenance(
-                provenance,
-                provenance_exposure_layer_id,
-                impact_function.exposure.id())
+            layer = load_layer(exposure_path, source_directory)
+            if layer:
+                impact_function.exposure = layer
+                set_provenance(
+                    provenance,
+                    provenance_exposure_layer_id,
+                    impact_function.exposure.id())
 
         # Set hazard layer
         hazard_path = get_provenance(provenance, provenance_hazard_layer)
         if hazard_path:
-            impact_function.hazard = load_layer_from_registry(hazard_path)
-            set_provenance(
-                provenance,
-                provenance_hazard_layer_id,
-                impact_function.hazard.id())
+            layer = load_layer(hazard_path, source_directory)
+            if layer:
+                impact_function.hazard = layer
+                set_provenance(
+                    provenance,
+                    provenance_hazard_layer_id,
+                    impact_function.hazard.id())
 
         # Set aggregation layer
         aggregation_path = get_provenance(
             provenance, provenance_aggregation_layer)
         if aggregation_path:
-            impact_function.aggregation = (
-                load_layer_from_registry(aggregation_path))
-            set_provenance(
-                provenance,
-                provenance_aggregation_layer_id,
-                impact_function.aggregation.id())
+            layer = load_layer(aggregation_path, source_directory)
+            if layer:
+                impact_function.aggregation = layer
+                set_provenance(
+                    provenance,
+                    provenance_aggregation_layer_id,
+                    impact_function.aggregation.id())
 
         # Requested extent
         requested_extent = get_provenance(
@@ -2799,56 +2828,65 @@ class ImpactFunction(object):
         exposure_summary_path = get_provenance(
             provenance, provenance_layer_exposure_summary)
         if exposure_summary_path:
-            impact_function._exposure_summary = load_layer_from_registry(
-                exposure_summary_path)
-            set_provenance(
-                provenance,
-                provenance_layer_exposure_summary_id,
-                impact_function._exposure_summary.id())
+            layer = load_layer(exposure_summary_path, source_directory)
+            if layer:
+                impact_function._exposure_summary = layer
+                set_provenance(
+                    provenance,
+                    provenance_layer_exposure_summary_id,
+                    impact_function._exposure_summary.id())
 
         # aggregate_hazard_impacted
         aggregate_hazard_impacted_path = get_provenance(
             provenance, provenance_layer_aggregate_hazard_impacted)
         if aggregate_hazard_impacted_path:
-            impact_function._aggregate_hazard_impacted = (
-                load_layer_from_registry(aggregate_hazard_impacted_path))
-            set_provenance(
-                provenance,
-                provenance_layer_aggregate_hazard_impacted_id,
-                impact_function._aggregate_hazard_impacted.id())
+            layer = load_layer(
+                aggregate_hazard_impacted_path, source_directory)
+            if layer:
+                impact_function._aggregate_hazard_impacted = layer
+                set_provenance(
+                    provenance,
+                    provenance_layer_aggregate_hazard_impacted_id,
+                    impact_function._aggregate_hazard_impacted.id())
 
         # aggregation_summary
         aggregation_summary_path = get_provenance(
             provenance, provenance_layer_aggregation_summary)
         if aggregation_summary_path:
-            impact_function._aggregation_summary = load_layer_from_registry(
-                aggregation_summary_path)
-            set_provenance(
-                provenance,
-                provenance_layer_aggregation_summary_id,
-                impact_function._aggregation_summary.id())
+            layer = load_layer(
+                aggregation_summary_path, source_directory)
+            if layer:
+                impact_function._aggregation_summary = layer
+                set_provenance(
+                    provenance,
+                    provenance_layer_aggregation_summary_id,
+                    impact_function._aggregation_summary.id())
 
         # analysis_impacted
         analysis_impacted_path = get_provenance(
             provenance, provenance_layer_analysis_impacted)
         if analysis_impacted_path:
-            impact_function._analysis_impacted = load_layer_from_registry(
-                analysis_impacted_path)
-            set_provenance(
-                provenance,
-                provenance_layer_analysis_impacted_id,
-                impact_function._analysis_impacted.id())
+            layer = load_layer(
+                analysis_impacted_path, source_directory)
+            if layer:
+                impact_function._analysis_impacted = layer
+                set_provenance(
+                    provenance,
+                    provenance_layer_analysis_impacted_id,
+                    impact_function._analysis_impacted.id())
 
         # exposure_summary_table
         exposure_summary_table_path = get_provenance(
             provenance, provenance_layer_exposure_summary_table)
         if exposure_summary_table_path:
-            impact_function._exposure_summary_table = load_layer_from_registry(
-                exposure_summary_table_path)
-            set_provenance(
-                provenance,
-                provenance_layer_exposure_summary_table_id,
-                impact_function._exposure_summary_table.id())
+            layer = load_layer(
+                exposure_summary_table_path, source_directory)
+            if layer:
+                impact_function._exposure_summary_table = layer
+                set_provenance(
+                    provenance,
+                    provenance_layer_exposure_summary_table_id,
+                    impact_function._exposure_summary_table.id())
 
         # profiling
         # Skip if it's debug mode
@@ -2856,8 +2894,10 @@ class ImpactFunction(object):
             profiling_path = get_provenance(
                 provenance, provenance_layer_profiling)
             if profiling_path:
-                impact_function._profiling_table = load_layer_from_registry(
-                    profiling_path)
+                layer = load_layer(
+                    profiling_path, source_directory)
+                if layer:
+                    impact_function._profiling_table = layer
 
         impact_function._output_layer_expected = \
             impact_function._compute_output_layer_expected()
