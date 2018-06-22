@@ -1,11 +1,16 @@
 # coding=utf-8
 """Default Value Parameter Widget."""
 
-from qgis.PyQt.QtWidgets import (QButtonGroup, QDoubleSpinBox, QHBoxLayout,
-                                 QRadioButton)
+from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
+    QDoubleSpinBox,
+    QHBoxLayout,
+    QRadioButton
+)
 
-from parameters.qt_widgets.generic_parameter_widget import \
+from parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

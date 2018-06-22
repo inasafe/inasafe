@@ -1196,10 +1196,16 @@ def get_control_text(file_name):
 
 
 def dict_values_sorted(d):
+    """Make sure dict values are sorted when they are sortable.
+    This also works for lists of dicts and dicts of lists
+
+    :param d: the dictionay to sort
+    :type d: dict or list
+
+    :return: dict or list with values sorted
+    :rtype: dict or list
     """
-    Make sure dict values are sorted when they are sortable.
-    This also works for lists of dicts nd discts of lists
-    """
+
     if isinstance(d, list):
         _l = [dict_values_sorted(v) for v in d]
         _l.sort(key=lambda x: x if not isinstance(x, dict)
