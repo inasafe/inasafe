@@ -14,8 +14,13 @@ from os.path import basename, exists, join, splitext
 from tempfile import mkdtemp
 
 import processing
-from qgis.core import (QgsCoordinateReferenceSystem, QgsProject,
-                       QgsRasterLayer, QgsRectangle, QgsVectorLayer)
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsProject,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsVectorLayer
+)
 from qgis.PyQt import QtWidgets
 from qgis.PyQt.QtCore import QTranslator
 import sip

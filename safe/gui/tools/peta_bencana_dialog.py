@@ -19,25 +19,39 @@ from shutil import copy
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
-from qgis.core import (QgsApplication, QgsCoordinateTransform, QgsExpression,
-                       QgsExpressionContext, QgsField, QgsProject,
-                       QgsVectorFileWriter, QgsVectorLayer)
+from qgis.core import (
+    QgsApplication,
+    QgsCoordinateTransform,
+    QgsExpression,
+    QgsExpressionContext,
+    QgsField,
+    QgsProject,
+    QgsVectorFileWriter,
+    QgsVectorLayer
+)
 # noinspection PyPackageRequirements
 from qgis.PyQt import QtCore, QtGui, QtWidgets
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import QRegExp, QSettings, Qt, QVariant, pyqtSlot
 from qgis.PyQt.QtNetwork import QNetworkReply
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtWidgets import (QButtonGroup, QDialog, QFileDialog,
-                                 QMessageBox)
+from qgis.PyQt.QtWidgets import (
+    QButtonGroup,
+    QDialog,
+    QFileDialog,
+    QMessageBox
+)
 from safe.common.exceptions import CanceledImportDialogError, FileMissingError
 from safe.definitions.peta_bencana import development_api, production_api
 from safe.gui.tools.help.peta_bencana_help import peta_bencana_help
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.utilities.qt import disable_busy_cursor
-from safe.utilities.resources import (get_ui_class, html_footer, html_header,
-                                      resources_path)
+from safe.utilities.resources import (
+    get_ui_class, html_footer,
+    html_header,
+    resources_path
+)
 from safe.utilities.settings import setting
 
 # pylint: enable=unused-import

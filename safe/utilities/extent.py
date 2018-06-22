@@ -3,13 +3,22 @@
 """Related to the extent (with or without an aggregation layer."""
 
 
-from qgis.core import (QgsCoordinateTransform, QgsGeometry, QgsProject,
-                       QgsWkbTypes)
+from qgis.core import (
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsProject,
+    QgsWkbTypes
+)
 from qgis.gui import QgsRubberBand
 from qgis.PyQt.QtCore import Qt
-from safe.definitions.styles import (last_analysis_color, last_analysis_width,
-                                     next_analysis_color, next_analysis_width,
-                                     user_analysis_color, user_analysis_width)
+from safe.definitions.styles import (
+    last_analysis_color,
+    last_analysis_width,
+    next_analysis_color,
+    next_analysis_width,
+    user_analysis_color,
+    user_analysis_width
+)
 from safe.utilities.settings import set_setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

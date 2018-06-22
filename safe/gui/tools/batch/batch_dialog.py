@@ -37,17 +37,23 @@ from qgis.PyQt.QtWidgets import (
     QPushButton,
     QTableWidgetItem,
     QMessageBox,
-    QHeaderView)
+    QHeaderView
+)
 
 from safe.common.signals import send_error_message
 from safe.common.utilities import temp_dir
 from safe.datastore.folder import Folder
-from safe.definitions.constants import (ANALYSIS_FAILED_BAD_CODE,
-                                        ANALYSIS_FAILED_BAD_INPUT,
-                                        ANALYSIS_SUCCESS, PREPARE_SUCCESS)
-from safe.definitions.layer_purposes import (layer_purpose_aggregation,
-                                             layer_purpose_exposure,
-                                             layer_purpose_hazard)
+from safe.definitions.constants import (
+    ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_SUCCESS,
+    PREPARE_SUCCESS
+)
+from safe.definitions.layer_purposes import (
+    layer_purpose_aggregation,
+    layer_purpose_exposure,
+    layer_purpose_hazard
+)
 from safe.definitions.reports.components import (
     all_default_report_components,
     map_report,
