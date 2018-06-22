@@ -11,21 +11,32 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 
 from qgis.core import QgsFeatureRequest, QgsVectorLayer
-from safe.common.exceptions import (ContourCreationError, FileNotFoundError,
-                                    InvalidLayerError)
-from safe.common.utilities import (romanise, temp_dir,
-                                   unique_filename)
+from safe.common.exceptions import (
+    ContourCreationError,
+    FileNotFoundError,
+    InvalidLayerError
+)
+from safe.common.utilities import (
+    romanise,
+    temp_dir,
+    unique_filename
+)
 from safe.definitions.constants import NUMPY_SMOOTHING
-from safe.definitions.fields import (contour_colour_field, contour_fields,
-                                     contour_halign_field,
-                                     contour_length_field, contour_mmi_field,
-                                     contour_roman_field, contour_valign_field,
-                                     contour_x_field, contour_y_field)
+from safe.definitions.fields import (
+    contour_colour_field,
+    contour_fields,
+    contour_halign_field,
+    contour_length_field, contour_mmi_field,
+    contour_roman_field, contour_valign_field,
+    contour_x_field, contour_y_field
+)
 from safe.definitions.layer_geometry import layer_geometry_line
 from safe.definitions.layer_modes import layer_mode_classified
 from safe.definitions.layer_purposes import layer_purpose_earthquake_contour
-from safe.gis.vector.tools import (create_ogr_field_from_definition,
-                                   field_index_from_definition)
+from safe.gis.vector.tools import (
+    create_ogr_field_from_definition,
+    field_index_from_definition
+)
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import write_iso19115_metadata
 from safe.utilities.resources import resources_path

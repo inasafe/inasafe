@@ -11,22 +11,35 @@ from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
 from qgis.PyQt.QtCore import QFileInfo, pyqtSlot
 # noinspection PyPackageRequirements
-from qgis.PyQt.QtWidgets import (QDialog, QDialogButtonBox, QFileDialog,
-                                 QMessageBox)
+from qgis.PyQt.QtWidgets import (
+    QDialog,
+    QDialogButtonBox,
+    QFileDialog,
+    QMessageBox
+)
 from qgis.utils import iface
 from safe import messaging as m
 from safe.common.version import get_version
-from safe.definitions.constants import (NONE_SMOOTHING, NUMPY_SMOOTHING,
-                                        SCIPY_SMOOTHING)
-from safe.definitions.extra_keywords import (extra_keyword_earthquake_event_id,
-                                             extra_keyword_earthquake_source)
+from safe.definitions.constants import (
+    NONE_SMOOTHING,
+    NUMPY_SMOOTHING,
+    SCIPY_SMOOTHING
+)
+from safe.definitions.extra_keywords import (
+    extra_keyword_earthquake_event_id,
+    extra_keyword_earthquake_source
+)
 from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.messaging import styles
 from safe.utilities.i18n import tr
-from safe.utilities.resources import (get_ui_class, html_footer, html_header,
-                                      resources_path)
+from safe.utilities.resources import (
+    get_ui_class,
+    html_footer,
+    html_header,
+    resources_path
+)
 from safe.utilities.settings import setting
 from safe.utilities.styling import mmi_ramp_roman
 

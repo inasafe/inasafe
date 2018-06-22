@@ -18,39 +18,52 @@ from qgis.PyQt.Qt import PYQT_VERSION_STR
 from qgis.PyQt.QtCore import QT_VERSION_STR
 from safe.common.version import get_version
 from safe.definitions.constants import ANALYSIS_SUCCESS, INASAFE_TEST, PREPARE_SUCCESS
-from safe.definitions.field_groups import (age_displaced_count_group,
-                                           gender_displaced_count_group)
-from safe.definitions.fields import (total_affected_field, total_exposed_field,
-                                     total_not_affected_field,
-                                     total_not_exposed_field)
+from safe.definitions.field_groups import (
+    age_displaced_count_group,
+    gender_displaced_count_group
+)
+from safe.definitions.fields import (
+    total_affected_field,
+    total_exposed_field,
+    total_not_affected_field,
+    total_not_exposed_field
+)
 from safe.definitions.hazard import hazard_flood
 from safe.definitions.hazard_classifications import flood_hazard_classes
 from safe.definitions.provenance import provenance_use_rounding
-from safe.definitions.reports.components import (action_checklist_component,
-                                                 aggregation_postprocessors_component,
-                                                 aggregation_result_component,
-                                                 analysis_detail_component,
-                                                 analysis_provenance_details_component,
-                                                 analysis_provenance_details_simplified_component,
-                                                 general_report_component,
-                                                 map_report,
-                                                 minimum_needs_component,
-                                                 notes_assumptions_component,
-                                                 population_infographic_component,
-                                                 standard_impact_report_metadata_html,
-                                                 standard_impact_report_metadata_pdf,
-                                                 standard_multi_exposure_impact_report_metadata_html)
-from safe.definitions.utilities import (generate_default_profile,
-                                        get_displacement_rate, is_affected,
-                                        update_template_component)
+from safe.definitions.reports.components import (
+    action_checklist_component,
+    aggregation_postprocessors_component,
+    aggregation_result_component,
+    analysis_detail_component,
+    analysis_provenance_details_component,
+    analysis_provenance_details_simplified_component,
+    general_report_component,
+    map_report,
+    minimum_needs_component,
+    notes_assumptions_component,
+    population_infographic_component,
+    standard_impact_report_metadata_html,
+    standard_impact_report_metadata_pdf,
+    standard_multi_exposure_impact_report_metadata_html
+)
+from safe.definitions.utilities import (
+    generate_default_profile,
+    get_displacement_rate,
+    is_affected,
+    update_template_component
+)
 from safe.gis.tools import full_layer_uri
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.multi_exposure_wrapper import \
     MultiExposureImpactFunction
 from safe.report.impact_report import ImpactReport
 from safe.report.report_metadata import ReportMetadata
-from safe.test.utilities import (get_qgis_app, load_test_raster_layer,
-                                 load_test_vector_layer)
+from safe.test.utilities import (
+    get_qgis_app,
+    load_test_raster_layer,
+    load_test_vector_layer
+)
 from safe.utilities.resources import resources_path
 from safe.utilities.settings import delete_setting, set_setting, setting
 from safe.utilities.utilities import readable_os_version
