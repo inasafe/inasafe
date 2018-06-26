@@ -10,7 +10,7 @@ __revision__ = '$Format:%H$'
 # InaSAFE version (please synchronize with metadata.txt or travis will fail !)
 inasafe_version = '5.0.0'
 # alpha, beta, rc or final (Travis will fail)
-inasafe_release_status = 'alpha'
+inasafe_release_status = 'alpha-2'
 
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '5.0'
