@@ -199,7 +199,10 @@ class TestDefinitionsUtilities(unittest.TestCase):
                          dict_values_sorted(expected))
 
         exposures = exposures_for_layer('line')
-        expected = [exposure_road]
+        expected = [
+            exposure_road,
+            exposure_structure,
+        ]
         self.assertEqual(exposures, expected)
 
     def test_hazard_categories_for_layer(self):

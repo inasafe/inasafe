@@ -260,8 +260,8 @@ exposure_structure = {
     'description': tr(
         'A <b>structure</b> can be any relatively permanent man '
         'made feature such as a building (an enclosed structure '
-        'with walls and a roof), telecommunications facility or '
-        'bridge.'),
+        'with walls and a roof), telecommunications facility, power '
+        'lines or bridge.'),
     'notes': [
         {
             'item_category': 'structure_general',
@@ -312,7 +312,8 @@ exposure_structure = {
     ],
     'allowed_geometries': [
         'polygon',
-        'point'
+        'point',
+        'line'
     ],
     'size_unit': unit_square_metres,
     'units': [count_exposure_unit],
