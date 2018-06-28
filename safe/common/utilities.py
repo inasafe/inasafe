@@ -243,7 +243,7 @@ def get_free_memory_linux():
     Return in MB unit
     """
     try:
-        p = Popen('free -m', shell=True, stdout=PIPE)
+        p = Popen('free -m', shell=True, stdout=PIPE, encoding='utf8')
         stdout_string = p.communicate()[0].split('\n')[2]
     except OSError:
         raise OSError
@@ -260,7 +260,7 @@ def get_free_memory_osx():
     """
     try:
         p = Popen('echo -e "\n$(top -l 1 | awk \'/PhysMem/\';)\n"',
-                  shell=True, stdout=PIPE)
+                  shell=True, stdout=PIPE, encoding='utf8')
         stdout_string = p.communicate()[0].split('\n')[1]
         # e.g. output (its a single line) OSX 10.9 Mavericks
         # PhysMem: 6854M used (994M wired), 1332M unused.
