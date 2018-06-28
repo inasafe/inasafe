@@ -4,35 +4,19 @@
 
 import processing
 
-from qgis.core import (
-    QgsApplication,
-    QgsFeatureRequest,
-    QgsProcessingContext,
-    QgsProject)
-from qgis.analysis import QgsNativeAlgorithms
-
 from safe.common.exceptions import ProcessingInstallationError
 from safe.definitions.processing_steps import clip_steps
 from safe.gis.sanity_check import check_layer
 from safe.utilities.profiling import profile
+from safe.gis.processing_tools import (
+    create_processing_context,
+    create_processing_feedback,
+    initialize_processing)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
-
-def create_processing_context():
-    """
-    Creates a default processing context
-    """
-    context = QgsProcessingContext()
-    context.setProject(QgsProject.instance())
-
-    # skip Processing geometry checks - Inasafe has its own geometry validation
-    # routines which have already been used
-    context.setInvalidGeometryCheck(QgsFeatureRequest.GeometryNoCheck)
-    return context
 
 
 @profile
@@ -62,11 +46,10 @@ def clip(layer_to_clip, mask_layer):
 
     # TODO implement callback through QgsProcessingFeedback object
 
-    # Required if running from command line
-    if not QgsApplication.processingRegistry().algorithms():
-        QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
+    initialize_processing()
 
-    context = create_processing_context()
+    feedback = create_processing_feedback()
+    context = create_processing_context(feedback=feedback)
     result = processing.run('native:clip', parameters, context=context)
     if result is None:
         raise ProcessingInstallationError
