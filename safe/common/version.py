@@ -33,7 +33,8 @@ def current_git_hash():
         stderr=subprocess.PIPE,
         shell=True,
         cwd=repo_dir,
-        universal_newlines=True
+        universal_newlines=True,
+        encoding='utf8'
     )
     hash_number = git_show.communicate()[0].partition('\n')[0]
     return hash_number
