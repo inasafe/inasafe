@@ -63,10 +63,14 @@ def intersection(source, mask):
     intersect.setName(output_layer_name)
     intersect.keywords = dict(source.keywords)
     intersect.keywords['title'] = output_layer_name
-    intersect.keywords['layer_purpose'] = layer_purpose_exposure_summary['key']
-    intersect.keywords['inasafe_fields'] = dict(source.keywords['inasafe_fields'])
-    intersect.keywords['inasafe_fields'].update(mask.keywords['inasafe_fields'])
-    intersect.keywords['hazard_keywords'] = dict(mask.keywords['hazard_keywords'])
+    intersect.keywords['layer_purpose'] = \
+        layer_purpose_exposure_summary['key']
+    intersect.keywords['inasafe_fields'] = \
+        dict(source.keywords['inasafe_fields'])
+    intersect.keywords['inasafe_fields'].update(
+        mask.keywords['inasafe_fields'])
+    intersect.keywords['hazard_keywords'] = \
+        dict(mask.keywords['hazard_keywords'])
     intersect.keywords['exposure_keywords'] = dict(source.keywords)
     intersect.keywords['aggregation_keywords'] = dict(
         mask.keywords['aggregation_keywords'])
