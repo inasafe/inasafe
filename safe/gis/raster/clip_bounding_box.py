@@ -5,7 +5,7 @@
 import logging
 
 import processing
-from qgis.core import QgsRasterLayer, QgsApplication
+from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import ProcessingInstallationError
 from safe.common.utilities import unique_filename, temp_dir
@@ -98,7 +98,10 @@ def clip_by_extent(layer, extent):
         feedback = create_processing_feedback()
         context = create_processing_context(feedback=feedback)
 
-        result = processing.run("gdal:cliprasterbyextent", parameters, context=context)
+        result = processing.run(
+            "gdal:cliprasterbyextent",
+            parameters,
+            context=context)
 
         if result is None:
             raise ProcessingInstallationError
