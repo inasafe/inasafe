@@ -55,6 +55,7 @@ def clip(layer_to_clip, mask_layer):
         raise ProcessingInstallationError
 
     clipped = result['OUTPUT']
+    clipped.setName(output_layer_name)
 
     clipped.keywords = layer_to_clip.keywords.copy()
     clipped.keywords['title'] = output_layer_name
