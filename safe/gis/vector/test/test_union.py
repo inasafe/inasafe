@@ -39,7 +39,7 @@ class TestUnionVector(unittest.TestCase):
 
         layer = union(union_a, union_b)
 
-        self.assertEqual(layer.featureCount(), 11)
+        self.assertEqual(layer.featureCount(), 14)
         self.assertEqual(
             union_a.fields().count() + union_b.fields().count(),
             layer.fields().count()
