@@ -1724,6 +1724,48 @@ disabled_displaced_count_field = {
     'replace_null': False
 }
 
+pcrafi_construction_class_id_field = {
+    'key': 'pcrafi_construction_class_id_field',
+    'name': tr('PCRAFI Construction class id field'),
+    'field_name': 'pcrafi_constr_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI construction class ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+pcrafi_minimum_floor_height_id_field = {
+    'key': 'pcrafi_minimum_floor_height_id_field',
+    'name': tr('PCRAFI Minimum floor height id field'),
+    'field_name': 'pcrafi_floor_height_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI minimum floor height ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Count, outputs (Absolute values)
 # # # # # # # # # #
