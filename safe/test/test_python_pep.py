@@ -23,7 +23,7 @@ class TestPythonPep(unittest.TestCase):
         if os.environ.get('ON_TRAVIS', False):
             root = './'
             command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+            output = Popen(command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
             default_number_lines = 5
         elif sys.platform.startswith('win'):
             # ET I don't know on windows.
@@ -33,7 +33,7 @@ class TestPythonPep(unittest.TestCase):
             # OSX and linux just delegate to make
             root = '../../'
             command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+            output = Popen(command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
             default_number_lines = 5
 
         # make pep8 produces some extra lines by default.
@@ -50,7 +50,11 @@ class TestPythonPep(unittest.TestCase):
         if os.environ.get('ON_TRAVIS', False):
             root = './'
             command = ['make', 'pep257']
-            output = Popen(command, stderr=PIPE, cwd=root).communicate()[1]
+            output = Popen(
+                command,
+                stderr=PIPE,
+                cwd=root,
+                encoding='utf8').communicate()[1]
             default_number_lines = 0
         elif sys.platform.startswith('win'):
             root = '../../'
@@ -67,14 +71,19 @@ class TestPythonPep(unittest.TestCase):
                 command,
                 stderr=PIPE,
                 cwd=root,
-                executable=os.path.join(path, 'pep257.exe')).communicate()[1]
+                executable=os.path.join(path, 'pep257.exe'),
+                encoding='utf8').communicate()[1]
             default_number_lines = 0
 
         else:
             # OSX and linux just delegate to make
             root = '../../'
             command = ['make', 'pep257']
-            output = Popen(command, stderr=PIPE, cwd=root).communicate()[1]
+            output = Popen(
+                command,
+                stderr=PIPE,
+                cwd=root,
+                encoding='utf8').communicate()[1]
             default_number_lines = 0
 
         # make pep257 produces some extra lines by default.

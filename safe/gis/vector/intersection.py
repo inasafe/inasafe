@@ -2,29 +2,24 @@
 
 """Intersect two layers."""
 
-
 import logging
 
-from qgis.core import (
-    QgsGeometry,
-    QgsFeatureRequest,
-    QgsWkbTypes,
-    QgsFeature,
-)
+import processing
 
+from safe.common.exceptions import ProcessingInstallationError
 from safe.definitions.layer_purposes import layer_purpose_exposure_summary
 from safe.definitions.processing_steps import intersection_steps
 from safe.gis.sanity_check import check_layer
-from safe.gis.vector.tools import (
-    create_memory_layer, wkb_type_groups, create_spatial_index)
-from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
+from safe.gis.processing_tools import (
+    create_processing_context,
+    create_processing_feedback,
+    initialize_processing)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -34,10 +29,6 @@ def intersection(source, mask):
     """Intersect two layers.
 
     Issue https://github.com/inasafe/inasafe/issues/3186
-
-    Note : This algorithm is copied from :
-    https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/
-    qgis/Intersection.py
 
     :param source: The vector layer to clip.
     :type source: QgsVectorLayer
@@ -54,86 +45,35 @@ def intersection(source, mask):
     output_layer_name = output_layer_name % (
         source.keywords['layer_purpose'])
 
-    fields = source.fields()
-    fields.extend(mask.fields())
+    parameters = {'INPUT': source,
+                  'OVERLAY': mask,
+                  'OUTPUT': 'memory:'}
 
-    writer = create_memory_layer(
-        output_layer_name,
-        source.geometryType(),
-        source.crs(),
-        fields
-    )
+    # TODO implement callback through QgsProcessingFeedback object
 
-    writer.startEditing()
+    initialize_processing()
 
-    # Begin copy/paste from Processing plugin.
-    # Please follow their code as their code is optimized.
-    # The code below is not following our coding standards because we want to
-    # be able to track any diffs from QGIS easily.
+    feedback = create_processing_feedback()
+    context = create_processing_context(feedback=feedback)
+    result = processing.run('native:intersection', parameters, context=context)
+    if result is None:
+        raise ProcessingInstallationError
 
-    out_feature = QgsFeature()
-    index = create_spatial_index(mask)
-
-    # Todo callback
-    # total = 100.0 / len(selectionA)
-
-    for current, in_feature in enumerate(source.getFeatures()):
-        # progress.setPercentage(int(current * total))
-        geom = in_feature.geometry()
-        attributes = in_feature.attributes()
-        intersects = index.intersects(geom.boundingBox())
-        for i in intersects:
-            request = QgsFeatureRequest().setFilterFid(i)
-            feature_mask = next(mask.getFeatures(request))
-            tmp_geom = feature_mask.geometry()
-            if geom.intersects(tmp_geom):
-                mask_attributes = feature_mask.attributes()
-                int_geom = QgsGeometry(geom.intersection(tmp_geom))
-                if int_geom.wkbType() == QgsWkbTypes.Unknown\
-                        or QgsWkbTypes.flatType(
-                        int_geom.constGet().wkbType()) ==\
-                        QgsWkbTypes.GeometryCollection:
-                    int_com = geom.combine(tmp_geom)
-                    int_geom = QgsGeometry()
-                    if int_com:
-                        int_sym = geom.symDifference(tmp_geom)
-                        int_geom = QgsGeometry(int_com.difference(int_sym))
-                if int_geom.isEmpty() or not int_geom.isGeosValid():
-                    # LOGGER.debug(
-                    #     tr('GEOS geoprocessing error: One or more input '
-                    #        'features have invalid geometry.'))
-                    pass
-                try:
-                    geom_types = wkb_type_groups[
-                        wkb_type_groups[int_geom.wkbType()]]
-                    if int_geom.wkbType() in geom_types:
-                        if int_geom.type() == source.geometryType():
-                            # We got some features which have not the same
-                            # kind of geometry. We want to skip them.
-                            out_feature.setGeometry(int_geom)
-                            attrs = []
-                            attrs.extend(attributes)
-                            attrs.extend(mask_attributes)
-                            out_feature.setAttributes(attrs)
-                            writer.addFeature(out_feature)
-                except BaseException:
-                    LOGGER.debug(
-                        tr('Feature geometry error: One or more output '
-                           'features ignored due to invalid geometry.'))
-                    continue
-
-    # End copy/paste from Processing plugin.
-    writer.commitChanges()
-
-    writer.keywords = dict(source.keywords)
-    writer.keywords['title'] = output_layer_name
-    writer.keywords['layer_purpose'] = layer_purpose_exposure_summary['key']
-    writer.keywords['inasafe_fields'] = dict(source.keywords['inasafe_fields'])
-    writer.keywords['inasafe_fields'].update(mask.keywords['inasafe_fields'])
-    writer.keywords['hazard_keywords'] = dict(mask.keywords['hazard_keywords'])
-    writer.keywords['exposure_keywords'] = dict(source.keywords)
-    writer.keywords['aggregation_keywords'] = dict(
+    intersect = result['OUTPUT']
+    intersect.setName(output_layer_name)
+    intersect.keywords = dict(source.keywords)
+    intersect.keywords['title'] = output_layer_name
+    intersect.keywords['layer_purpose'] = \
+        layer_purpose_exposure_summary['key']
+    intersect.keywords['inasafe_fields'] = \
+        dict(source.keywords['inasafe_fields'])
+    intersect.keywords['inasafe_fields'].update(
+        mask.keywords['inasafe_fields'])
+    intersect.keywords['hazard_keywords'] = \
+        dict(mask.keywords['hazard_keywords'])
+    intersect.keywords['exposure_keywords'] = dict(source.keywords)
+    intersect.keywords['aggregation_keywords'] = dict(
         mask.keywords['aggregation_keywords'])
 
-    check_layer(writer)
-    return writer
+    check_layer(intersect)
+    return intersect

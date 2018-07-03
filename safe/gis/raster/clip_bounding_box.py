@@ -5,7 +5,7 @@
 import logging
 
 import processing
-from qgis.core import QgsRasterLayer, QgsApplication
+from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import ProcessingInstallationError
 from safe.common.utilities import unique_filename, temp_dir
@@ -14,6 +14,10 @@ from safe.gis.sanity_check import check_layer
 from safe.utilities.gis import is_raster_y_inverted
 from safe.utilities.profiling import profile
 from safe.utilities.utilities import get_error_message
+from safe.gis.processing_tools import (
+    create_processing_context,
+    create_processing_feedback,
+    initialize_processing)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -90,11 +94,14 @@ def clip_by_extent(layer, extent):
         parameters['EXTRA'] = ''
         parameters['OUTPUT'] = output_raster
 
-        # Fix safe.impact_function test failing
-        if not QgsApplication.processingRegistry().algorithms():
-            processing.Processing.initialize()
+        initialize_processing()
+        feedback = create_processing_feedback()
+        context = create_processing_context(feedback=feedback)
 
-        result = processing.run("gdal:cliprasterbyextent", parameters)
+        result = processing.run(
+            "gdal:cliprasterbyextent",
+            parameters,
+            context=context)
 
         if result is None:
             raise ProcessingInstallationError
