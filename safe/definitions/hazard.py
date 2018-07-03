@@ -18,6 +18,7 @@ from safe.definitions.hazard_classifications import (
     earthquake_mmi_scale,
     flood_hazard_classes,
     flood_petabencana_hazard_classes,
+    flood_pcrafi_hazard_classes,
     tsunami_hazard_classes,
     tsunami_hazard_population_classes,
     tsunami_hazard_classes_ITB,
@@ -227,6 +228,7 @@ hazard_flood = {
     'classifications': [
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
+        flood_pcrafi_hazard_classes,
         generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,

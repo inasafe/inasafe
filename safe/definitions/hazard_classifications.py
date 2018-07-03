@@ -658,6 +658,123 @@ flood_petabencana_hazard_classes = {
     'classification_unit': tr('hazard zone')
 }
 
+flood_pcrafi_hazard_classes = {
+    'key': 'flood_pcrafi_hazard_classes',
+    'name': tr('Flood classes PCRAFI'),
+    'type': hazard_classification_type,
+    'description': tr(
+        'This is a flood classification for an area. The area is broken '
+        'down into a number of flood classes of increasing severity based '
+        'on the water depth according to the PCRAFI project.'),
+    'citations': [
+        {
+            'text': 'PCRAFI',
+            'link': 'https://pcrafi.spc.int'
+        }
+    ],
+    'classes': [
+        {
+            'key': 'very high',
+            'value': 5,
+            'color': dark_red,
+            'name': tr('Very high'),
+            'affected': True,
+            'description': tr('Flooding is over 300 centimetres.'),
+            'fatality_rate': None,
+            'displacement_rate': 0.05,
+            'numeric_default_min': 3.0,
+            'numeric_default_max': big_number,
+            'string_defaults': ['very high', 'very severe'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'high',
+            'value': 4,
+            'color': red,
+            'name': tr('High'),
+            'affected': True,
+            'description': tr('Flooding between 110 and 300 centimetres.'),
+            'fatality_rate': None,
+            'displacement_rate': 0.05,
+            'numeric_default_min': 1.1,
+            'numeric_default_max': 3.0,
+            'string_defaults': ['high', 'severe'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 3,
+            'color': orange,
+            'name': tr('Medium'),
+            'affected': True,
+            'description': tr(
+                'Flooding between 40 and 110 centimetres.'),
+            'fatality_rate': None,
+            'displacement_rate': 0.03,
+            'numeric_default_min': 0.4,
+            'numeric_default_max': 1.1,
+            'string_defaults': ['medium', 'moderate'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 2,
+            'color': yellow,
+            'name': tr('Low'),
+            'affected': True,
+            'description': tr(
+                'Flooding of between 20 and 40 centimetres.'),
+            'fatality_rate': None,
+            'displacement_rate': 0.01,
+            'numeric_default_min': 0.2,
+            'numeric_default_max': 0.4,
+            'string_defaults': ['low', 'minor'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'very low',
+            'value': 1,
+            'color': light_green,
+            'name': tr('Very low'),
+            'affected': False,
+            'description': tr(
+                'Flooding of between 0 and 20 centimetres. '),
+            'fatality_rate': None,
+            'displacement_rate': 0.0,
+            'numeric_default_min': 0,
+            'numeric_default_max': 0.2,
+            'string_defaults': ['very low', 'very minor'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        }
+    ],
+    'classification_unit': tr('hazard zone')
+}
+
 inundation_dam_class = {
     'key': 'inundation_dam_class',
     'name': tr('Inundation classes'),
@@ -1934,6 +2051,7 @@ hazard_classification = {
         generic_hazard_classes,
         flood_hazard_classes,
         flood_petabencana_hazard_classes,
+        flood_pcrafi_hazard_classes,
         inundation_dam_class,
         earthquake_mmi_scale,
         tsunami_hazard_classes,
