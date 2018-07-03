@@ -168,6 +168,10 @@ def calculate_cardinality(
     index %= direction_count
     return direction_list[index]
 
+def post_processor_pcrafi_damage_ratio_function(
+    exposure=None, hazard=None, classification=None, hazard_class=None, pcrafi_construction_class=None, pcrafi_minimum_floor_height_class=None):
+    return pcrafi_construction_class*pcrafi_minimum_floor_height_class
+
 
 # This postprocessor function is also used in the aggregation_summary
 def post_processor_affected_function(
