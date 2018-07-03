@@ -1724,6 +1724,11 @@ disabled_displaced_count_field = {
     'replace_null': False
 }
 
+# # # # # # # # # #
+# PCRAFI post processor fields
+# # # # # # # # # #
+
+# Inputs
 pcrafi_construction_class_id_field = {
     'key': 'pcrafi_construction_class_id_field',
     'name': tr('PCRAFI Construction class id field'),
