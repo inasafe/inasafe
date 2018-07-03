@@ -4,13 +4,16 @@
 
 from math import floor
 
+from scipy.stats import norm
+
 # noinspection PyUnresolvedReferences
-from qgis.core import QgsPointXY
+from qgis.core import QgsPointXY, NULL
 
 from safe.definitions.exposure import exposure_population
 from safe.definitions.hazard_classifications import (
     hazard_classes_all, not_exposed_class)
 from safe.definitions.utilities import get_displacement_rate, is_affected
+from safe.utilities.utilities import LOGGER
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -168,6 +171,124 @@ def calculate_cardinality(
     index %= direction_count
     return direction_list[index]
 
+
+def post_processor_pcrafi_damage_ratio_function(
+        exposure=None, hazard=None, classification=None, hazard_class=None,
+        pcrafi_construction_class=None,
+        pcrafi_minimum_floor_height_class=None):
+    """
+    Postprocessor where we compute the fragility of a structure in flood.
+    :param exposure:
+    :param hazard:
+    :param classification:
+    :param hazard_class:
+    :param pcrafi_construction_class:
+    :param pcrafi_minimum_floor_height_class:
+    :return: The fragility value on the curve for a certain
+    pcrafi_construction class or None if any issue happens
+    """
+
+    # LOGGER.info(
+    # 'PCRAFI Post-processor: %s' % pcrafi_construction_class)
+    # LOGGER.info(
+    # 'PCRAFI Post-processor: %s' % type(pcrafi_construction_class))
+
+    if pcrafi_construction_class == NULL:
+        LOGGER.info(
+            'PCRAFI Post-processor: pcrafi_construction_class is NULL')
+        return None
+
+    # LOGGER.info(
+    # 'PCRAFI Post-processor: %s' % pcrafi_minimum_floor_height_class)
+    # LOGGER.info(
+    # 'PCRAFI Post-processor: %s' % type(pcrafi_minimum_floor_height_class))
+    if pcrafi_minimum_floor_height_class == NULL:
+        LOGGER.info(
+            'PCRAFI Post-processor: pcrafi_minimum_floor_height_class is NULL')
+        return None
+
+    if hazard != 'flood':
+        LOGGER.info('PCRAFI Post-processor: %s hazard is not flood' % hazard)
+        return None
+
+    classes = {
+        111: {
+            'mean': 0.7,
+            'stdev': 0.2
+            },
+
+        121: {
+            'mean': 0.7,
+            'stdev': 0.2
+            },
+        122: {
+            'mean': 0.7,
+            'stdev': 0.2
+            },
+        211: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        221: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        311: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        321: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        411: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        421: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        511: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        512: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        611: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        711: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        911: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+        921: {
+            'mean': 1.5,
+            'stdev': 0.5
+            },
+
+        }
+
+    try:
+        settings = classes[pcrafi_construction_class]
+        d = norm(loc=settings['mean'], scale=settings['stdev'])
+    except KeyError:
+        return None
+    try:
+        # TODO this passes the floor_height class value [1..5] to the curve
+        # which is obviously wrong. we need to pass a meter value to the
+        # curve or make a "stepped" curve
+        damage = d.cdf(pcrafi_minimum_floor_height_class)
+        return float(damage)
+    except TypeError:
+        return None
 
 # This postprocessor function is also used in the aggregation_summary
 def post_processor_affected_function(

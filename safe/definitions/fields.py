@@ -1725,6 +1725,74 @@ disabled_displaced_count_field = {
 }
 
 # # # # # # # # # #
+# PCRAFI post processor fields
+# # # # # # # # # #
+
+# Inputs
+pcrafi_construction_class_id_field = {
+    'key': 'pcrafi_construction_class_id_field',
+    'name': tr('PCRAFI Construction class id field'),
+    'field_name': 'pcrafi_constr_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI construction class ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+pcrafi_minimum_floor_height_id_field = {
+    'key': 'pcrafi_minimum_floor_height_id_field',
+    'name': tr('PCRAFI Minimum floor height id field'),
+    'field_name': 'pcrafi_floor_height_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI minimum floor height ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Output
+pcrafi_damage_ratio_output = {
+    'key': 'pcrafi_damage_ratio_output',
+    'name': tr('PCRAFI Damage ratio'),
+    'field_name': 'pcrafi_damage_ratio',
+    'type': QVariant.Double,
+    'length': 8,
+    'precision': 4,
+    'description': tr(
+        'The PCRAFI damage ratio field represents the building as calculated by the PCRAFI post processor.'),
+    'help_text': tr('A value of 0 means no damage; a value of 1 means complete destruction.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# # # # # # # # # #
 # Count, outputs (Absolute values)
 # # # # # # # # # #
 
