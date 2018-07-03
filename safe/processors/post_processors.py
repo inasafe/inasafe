@@ -20,7 +20,10 @@ from safe.definitions.fields import (
     feature_value_field,
     size_field,
     hazard_class_field,
-    affected_field
+    affected_field,
+    pcrafi_construction_class_id_field,
+    pcrafi_minimum_floor_height_id_field,
+    pcrafi_damage_ratio_output,
 )
 from safe.definitions.hazard import hazard_earthquake
 from safe.definitions.hazard_classifications import not_exposed_class
@@ -30,7 +33,8 @@ from safe.processors.post_processor_functions import (
     calculate_distance,
     multiply,
     size,
-    post_processor_affected_function)
+    post_processor_affected_function,
+    post_processor_pcrafi_damage_ratio_function)
 from safe.processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
@@ -280,6 +284,47 @@ post_processor_affected = {
             'value': affected_field,
             'type': function_process,
             'function': post_processor_affected_function
+        }
+    }
+}
+
+post_processor_pcrafi_flood = {
+    'key': 'post_processor_pcrafi_flood',
+    'name': tr('PCRAFI Post-processor for floods'),
+    'description': tr(
+        'A post processor that calculates building damage by flood heights for the PCRAFI buildings dataset.'
+    ),
+    'input': {
+        'hazard_class': {
+            'value': hazard_class_field,
+            'type': field_input_type,
+        },
+        'exposure': {
+            'type': keyword_input_type,
+            'value': ['exposure_keywords', 'exposure'],
+        },
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification'],
+        },
+        'hazard': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'hazard'],
+        },
+        'pcrafi_construction_class': {
+            'type': field_input_type,
+            'value': pcrafi_construction_class_id_field,
+        },
+        'pcrafi_minimum_floor_height_class': {
+            'type': field_input_type,
+            'value': pcrafi_minimum_floor_height_id_field,
+        },
+    },
+    'output': {
+        'affected': {
+            'value': pcrafi_damage_ratio_output,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_ratio_function
         }
     }
 }

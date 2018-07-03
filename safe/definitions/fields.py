@@ -1766,6 +1766,27 @@ pcrafi_minimum_floor_height_id_field = {
     'replace_null': False
 }
 
+# Output
+pcrafi_damage_ratio_output = {
+    'key': 'pcrafi_damage_ratio_output',
+    'name': tr('PCRAFI Damage ratio'),
+    'field_name': 'pcrafi_damage_ratio',
+    'type': QVariant.Double,
+    'length': 8,
+    'precision': 4,
+    'description': tr(
+        'The PCRAFI damage ratio field represents the building as calculated by the PCRAFI post processor.'),
+    'help_text': tr('A value of 0 means no damage; a value of 1 means complete destruction.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Count, outputs (Absolute values)
 # # # # # # # # # #
