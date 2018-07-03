@@ -3,6 +3,7 @@
 """Python functions that we use in postprocessors."""
 
 from math import floor
+from scipy.stats import norm
 
 # noinspection PyUnresolvedReferences
 from qgis.core import QgsPointXY
@@ -168,9 +169,79 @@ def calculate_cardinality(
     index %= direction_count
     return direction_list[index]
 
+
 def post_processor_pcrafi_damage_ratio_function(
-    exposure=None, hazard=None, classification=None, hazard_class=None, pcrafi_construction_class=None, pcrafi_minimum_floor_height_class=None):
-    return pcrafi_construction_class*pcrafi_minimum_floor_height_class
+        exposure=None, hazard=None, classification=None, hazard_class=None,
+        pcrafi_construction_class=None,
+        pcrafi_minimum_floor_height_class=None):
+    classes = {
+        111: {
+            'mean': 70,
+            'stdev': 20
+            },
+
+        121: {
+            'mean': 343,
+            'stdev': 43
+            },
+        122: {
+            'mean': 45,
+            'stdev': 1
+            },
+        211: {
+            'mean': 190,
+            'stdev': 3
+            },
+        221: {
+            'mean': 10,
+            'stdev': 10
+            },
+        311: {
+            'mean': 109,
+            'stdev': 33
+            },
+        321: {
+            'mean': 45,
+            'stdev': 50
+            },
+        411: {
+            'mean': 140,
+            'stdev': 90
+            },
+        421: {
+            'mean': 340,
+            'stdev': 20
+            },
+        511: {
+            'mean': 60,
+            'stdev': 30
+            },
+        512: {
+            'mean': 70,
+            'stdev': 30
+            },
+        611: {
+            'mean': 80,
+            'stdev': 30
+            },
+        711: {
+            'mean': 10,
+            'stdev': 30
+            },
+        911: {
+            'mean': 100,
+            'stdev': 20
+            },
+        921: {
+            'mean': 1008,
+            'stdev': 90
+            },
+
+        }
+    settings = classes[pcrafi_construction_class]
+    d = norm(loc=settings['mean'], scale=settings['stdev'])
+    damage = d.cdf(pcrafi_minimum_floor_height_class)
+    return float(damage)
 
 
 # This postprocessor function is also used in the aggregation_summary
