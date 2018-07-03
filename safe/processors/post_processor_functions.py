@@ -176,68 +176,69 @@ def post_processor_pcrafi_damage_ratio_function(
         pcrafi_minimum_floor_height_class=None):
     classes = {
         111: {
-            'mean': 70,
-            'stdev': 20
+            'mean': 0.7,
+            'stdev': 0.2
             },
 
         121: {
-            'mean': 343,
-            'stdev': 43
+            'mean': 0.7,
+            'stdev': 0.2
             },
         122: {
-            'mean': 45,
-            'stdev': 1
+            'mean': 0.7,
+            'stdev': 0.2
             },
         211: {
-            'mean': 190,
-            'stdev': 3
+            'mean': 1.5,
+            'stdev': 0.5
             },
         221: {
-            'mean': 10,
-            'stdev': 10
+            'mean': 1.5,
+            'stdev': 0.5
             },
         311: {
-            'mean': 109,
-            'stdev': 33
+            'mean': 1.5,
+            'stdev': 0.5
             },
         321: {
-            'mean': 45,
-            'stdev': 50
+            'mean': 1.5,
+            'stdev': 0.5
             },
         411: {
-            'mean': 140,
-            'stdev': 90
+            'mean': 1.5,
+            'stdev': 0.5
             },
         421: {
-            'mean': 340,
-            'stdev': 20
+            'mean': 1.5,
+            'stdev': 0.5
             },
         511: {
-            'mean': 60,
-            'stdev': 30
+            'mean': 1.5,
+            'stdev': 0.5
             },
         512: {
-            'mean': 70,
-            'stdev': 30
+            'mean': 1.5,
+            'stdev': 0.5
             },
         611: {
-            'mean': 80,
-            'stdev': 30
+            'mean': 1.5,
+            'stdev': 0.5
             },
         711: {
-            'mean': 10,
-            'stdev': 30
+            'mean': 1.5,
+            'stdev': 0.5
             },
         911: {
-            'mean': 100,
-            'stdev': 20
+            'mean': 1.5,
+            'stdev': 0.5
             },
         921: {
-            'mean': 1008,
-            'stdev': 90
+            'mean': 1.5,
+            'stdev': 0.5
             },
 
         }
+
     settings = classes[pcrafi_construction_class]
     d = norm(loc=settings['mean'], scale=settings['stdev'])
     damage = d.cdf(pcrafi_minimum_floor_height_class)
