@@ -186,7 +186,8 @@ from safe.impact_function.create_extra_layers import (
 from safe.impact_function.impact_function_utilities import (
     check_input_layer, report_urls)
 from safe.impact_function.postprocessors import (
-    run_single_post_processor, enough_input)
+    run_single_post_processor, enough_input, should_run,
+    )
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 from safe.impact_function.style import (
@@ -2414,21 +2415,25 @@ class ImpactFunction():
             layer_title(layer)
 
         for post_processor in post_processors:
-            valid, message = enough_input(layer, post_processor['input'])
-            name = post_processor['name']
-
-            if valid:
-                valid, message = run_single_post_processor(
-                    layer, post_processor)
+            run, run_message = should_run(layer.keywords, post_processor)
+            if run:
+                valid, message = enough_input(layer, post_processor['input'])
+                name = post_processor['name']
                 if valid:
-                    self.set_state_process('post_processor', name)
-                    message = '{name} : Running'.format(name=name)
-                    LOGGER.info(message)
+                    valid, message = run_single_post_processor(
+                        layer, post_processor)
+                    if valid:
+                        self.set_state_process('post_processor', name)
+                        message = '{name} : Running'.format(name=name)
+                        LOGGER.info(message)
 
+                else:
+                    message = u'{name} : Could not run : {reason}'.format(
+                        name=name, reason=message)
+                    LOGGER.info(message)
+                    pass
             else:
-                # message = u'{name} : Could not run : {reason}'.format(
-                #     name=name, reason=message)
-                # LOGGER.info(message)
+                LOGGER.info(run_message)
                 pass
 
         self.debug_layer(layer, add_to_datastore=False)
