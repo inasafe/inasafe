@@ -2428,12 +2428,12 @@ class ImpactFunction():
                         LOGGER.info(message)
 
                 else:
-                    message = u'{name} : Could not run : {reason}'.format(
-                        name=name, reason=message)
-                    LOGGER.info(message)
+                    # message = u'{name} : Could not run : {reason}'.format(
+                    #     name=name, reason=message)
+                    # LOGGER.info(message)
                     pass
             else:
-                LOGGER.info(run_message)
+                # LOGGER.info(run_message)
                 pass
 
         self.debug_layer(layer, add_to_datastore=False)
