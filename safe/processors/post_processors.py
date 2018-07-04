@@ -288,7 +288,8 @@ post_processor_filter_demo = {
     'key': 'post_processor_filter_demo',
     'name': tr('Should run filter demo Processor'),
     'description': tr(
-        'A post processor to demo how to use the should run filter'
+        'A post processor to demo how to use the should run filter. this '
+        'postrocessor would run only for flood on structure'
     ),
     'run_filter': {
         'hazard': ['flood'],

@@ -272,22 +272,29 @@ def run_single_post_processor(layer, post_processor):
 def should_run(keywords, post_processor):
     exposure = keywords['exposure_keywords']['exposure']
     hazard = keywords['hazard_keywords']['hazard']
-
     try:
         run_filter = post_processor['run_filter']
-        if (hazard in run_filter['hazard'] and
-                exposure in run_filter['exposure']):
-            return True, None
-        else:
-            msg = 'Postprocessor "{name}" did not run because hazard ' \
-                  '"{hazard}" and exposure "{exposure}" are not in its ' \
-                  'run_filter "{run_filter}"'.format(
-                    name=post_processor['name'], hazard=hazard,
-                    exposure=exposure, run_filter=run_filter)
-            return False, msg
     except KeyError:
-        # if no should_run is defined we run the postprocessor
+        # if no run_filter is defined we run the postprocessor
         return True, None
+
+    msg = 'Postprocessor "{name}" did not run because hazard ' \
+          '"{hazard}" and exposure "{exposure}" are not in its ' \
+          'run_filter "{run_filter}"'.format(
+        name=post_processor['name'], hazard=hazard,
+        exposure=exposure, run_filter=run_filter)
+
+    # if an hazard filter is defined the current hazard needs to be defined in
+    # there
+    if 'hazard' in run_filter and hazard not in run_filter['hazard']:
+        return False, msg
+
+    # if an exposure filter is defined the current exposure needs to be
+    # defined in there
+    if 'exposure' in run_filter and exposure not in run_filter['exposure']:
+        return False, msg
+
+    return True, None
 
 
 def enough_input(layer, post_processor_input):
