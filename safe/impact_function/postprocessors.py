@@ -269,6 +269,28 @@ def run_single_post_processor(layer, post_processor):
     return True, None
 
 
+def should_run(keywords, post_processor):
+    exposure = keywords['exposure_keywords']['exposure']
+    hazard = keywords['hazard_keywords']['hazard']
+
+    try:
+        run_filter = post_processor['run_filter']
+        if (hazard in run_filter['hazard'] and
+                exposure in run_filter['exposure']):
+            return True, None
+        else:
+            msg = 'Postprocessor "{name}" did not run because hazard ' \
+                  '"{hazard}" and exposure "{exposure}" are not in its ' \
+                  'run_filter "{run_filter}"'.format(
+                    name=post_processor['name'], hazard=hazard,
+                    exposure=exposure, run_filter=run_filter)
+            return False, msg
+    except KeyError:
+        # if no should_run is defined we run the postprocessor
+        return True, None
+
+
+
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 

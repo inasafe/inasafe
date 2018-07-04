@@ -283,3 +283,40 @@ post_processor_affected = {
         }
     }
 }
+
+post_processor_filter_demo = {
+    'key': 'post_processor_filter_demo',
+    'name': tr('Should run filter demo Processor'),
+    'description': tr(
+        'A post processor to demo how to use the should run filter'
+    ),
+    'run_filter': {
+        'hazard': ['flood'],
+        'exposure': ['structure']
+        },
+    'input': {
+        'hazard_class': {
+            'value': hazard_class_field,
+            'type': field_input_type,
+        },
+        'exposure': {
+            'type': keyword_input_type,
+            'value': ['exposure_keywords', 'exposure'],
+        },
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification'],
+        },
+        'hazard': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'hazard'],
+        },
+    },
+    'output': {
+        'affected': {
+            'value': affected_field,
+            'type': function_process,
+            'function': post_processor_affected_function
+        }
+    }
+}
