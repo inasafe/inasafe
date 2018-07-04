@@ -290,7 +290,6 @@ def should_run(keywords, post_processor):
         return True, None
 
 
-
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 
