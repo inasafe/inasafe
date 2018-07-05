@@ -59,7 +59,8 @@ from safe.test.utilities import load_test_vector_layer
 from safe.impact_function.postprocessors import (
     run_single_post_processor,
     evaluate_formula,
-    enough_input, should_run,
+    enough_input,
+    should_run,
     )
 
 

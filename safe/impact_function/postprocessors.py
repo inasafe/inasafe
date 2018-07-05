@@ -270,6 +270,13 @@ def run_single_post_processor(layer, post_processor):
 
 
 def should_run(keywords, post_processor):
+    """
+    Check if the postprocessor should run for the current hazard and exposure
+    :param keywords: impact layer keywords
+    :param post_processor: the post processor instance to check
+    :returns: Tuple with True if success, else False with an error message.
+    :rtype: (bool, str)
+    """
     exposure = keywords['exposure_keywords']['exposure']
     hazard = keywords['hazard_keywords']['hazard']
     try:
@@ -278,13 +285,13 @@ def should_run(keywords, post_processor):
         # if no run_filter is defined we run the postprocessor
         return True, None
 
-    msg = 'Postprocessor "{name}" did not run because hazard ' \
-          '"{hazard}" and exposure "{exposure}" are not in its ' \
-          'run_filter "{run_filter}"'.format(
-            name=post_processor['name'],
-            hazard=hazard,
-            exposure=exposure,
-            run_filter=run_filter)
+    msg = tr('Postprocessor "{name}" did not run because hazard "{hazard}" '
+             'and exposure "{exposure}" are not in its run_filter '
+             '"{run_filter}"'.format(
+                name=post_processor['name'],
+                hazard=hazard,
+                exposure=exposure,
+                run_filter=run_filter))
 
     # if an hazard filter is defined the current hazard needs to be defined in
     # there
