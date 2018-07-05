@@ -29,6 +29,7 @@ changelog=
     - QGIS3 port with Python 3 and Qt 5
     - Enable line for structure exposure
     - Add Tonga and Fiji currency and administration boundary definition
+    - Possibility to simply add postprocessors only for a certain combination of hazard and exposure
     Version 4.4.0:
     - Add Geonode uploader
     - Add back Sentry configuration (need to be enabled in your settings)
