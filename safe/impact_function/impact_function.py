@@ -187,7 +187,7 @@ from safe.impact_function.impact_function_utilities import (
     check_input_layer, report_urls)
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input, should_run,
-    )
+)
 from safe.impact_function.provenance_utilities import (
     get_map_title, get_analysis_question)
 from safe.impact_function.style import (

@@ -281,8 +281,10 @@ def should_run(keywords, post_processor):
     msg = 'Postprocessor "{name}" did not run because hazard ' \
           '"{hazard}" and exposure "{exposure}" are not in its ' \
           'run_filter "{run_filter}"'.format(
-        name=post_processor['name'], hazard=hazard,
-        exposure=exposure, run_filter=run_filter)
+            name=post_processor['name'],
+            hazard=hazard,
+            exposure=exposure,
+            run_filter=run_filter)
 
     # if an hazard filter is defined the current hazard needs to be defined in
     # there
