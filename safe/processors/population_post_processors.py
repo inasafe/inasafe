@@ -76,7 +76,7 @@ post_processor_displaced_ratio = {
         'to the hazard class'),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'hazard': {
             'type': keyword_input_type,
@@ -122,7 +122,7 @@ post_processor_displaced = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -170,7 +170,7 @@ post_processor_fatality_ratio = {
         'model.'),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         # Taking hazard classification
         'classification': {
@@ -215,7 +215,7 @@ post_processor_fatalities = {
         'A post processor to calculate the number of fatalities. '),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -260,7 +260,7 @@ post_processor_child_bearing_age = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -303,7 +303,7 @@ post_processor_pregnant = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -345,7 +345,7 @@ post_processor_lactating = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -387,7 +387,7 @@ post_processor_male = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -429,7 +429,7 @@ post_processor_female = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -470,7 +470,7 @@ post_processor_hygiene_packs = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'female_displaced':
             {
@@ -504,7 +504,7 @@ post_processor_infant = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -545,7 +545,7 @@ post_processor_child = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -586,7 +586,7 @@ post_processor_youth = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -627,7 +627,7 @@ post_processor_adult = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -668,7 +668,7 @@ post_processor_elderly = {
             displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -709,7 +709,7 @@ post_processor_under_5 = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -750,7 +750,7 @@ post_processor_over_60 = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -792,7 +792,7 @@ post_processor_disability_vulnerability = {
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
         'exposure': ['population']
-        },
+    },
     'input': {
         'population_displaced': {
             'value': displaced_field,
