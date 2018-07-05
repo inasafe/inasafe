@@ -74,6 +74,9 @@ post_processor_displaced_ratio = {
     'description': tr(
         'A post processor to add the population displacement ratio according '
         'to the hazard class'),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'hazard': {
             'type': keyword_input_type,
@@ -117,6 +120,9 @@ post_processor_displaced = {
         'A post processor to calculate the number of displaced people. '
         '"Displaced" is defined as: {displaced_concept}').format(
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -162,6 +168,9 @@ post_processor_fatality_ratio = {
         'A post processor to add the population fatality ratio according '
         'to the hazard class. Only the MMI classification has a fatality '
         'model.'),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         # Taking hazard classification
         'classification': {
@@ -204,6 +213,9 @@ post_processor_fatalities = {
     'name': tr('Fatalities Post Processor'),
     'description': tr(
         'A post processor to calculate the number of fatalities. '),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -246,6 +258,9 @@ post_processor_child_bearing_age = {
         child_bearing_age_concept=concepts[
             'child_bearing_age']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -286,6 +301,9 @@ post_processor_pregnant = {
         pregnant_concept=concepts[
             'pregnant']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -325,6 +343,9 @@ post_processor_lactating = {
         lactating_concept=concepts[
             'lactating']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -364,6 +385,9 @@ post_processor_male = {
         '{displaced_concept}').format(
         male_concept=concepts['male']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -403,6 +427,9 @@ post_processor_female = {
         '{displaced_concept}').format(
         female_concept=concepts['female']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -441,6 +468,9 @@ post_processor_hygiene_packs = {
         'who are displaced. "Displaced" is defined as: '
         '{displaced_concept}').format(
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'female_displaced':
             {
@@ -472,6 +502,9 @@ post_processor_infant = {
         '{displaced_concept}').format(
             infant_concept=concepts['infant']['description'],
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -510,6 +543,9 @@ post_processor_child = {
         '{displaced_concept}').format(
             child_concept=concepts['child']['description'],
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -548,6 +584,9 @@ post_processor_youth = {
         '{displaced_concept}').format(
             youth_concept=concepts['youth']['description'],
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -586,6 +625,9 @@ post_processor_adult = {
         '{displaced_concept}').format(
             adult_concept=concepts['adult']['description'],
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -624,6 +666,9 @@ post_processor_elderly = {
         'defined as: {displaced_concept}').format(
             elderly_concept=concepts['elderly']['description'],
             displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -662,6 +707,9 @@ post_processor_under_5 = {
         '"Displaced" is defined as: {displaced_concept}').format(
         under_5_concept=concepts['under_5']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -700,6 +748,9 @@ post_processor_over_60 = {
         '"Displaced" is defined as: {displaced_concept}').format(
         over_60_concept=concepts['over_60']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
@@ -739,6 +790,9 @@ post_processor_disability_vulnerability = {
         '"Displaced" is defined as: {displaced_concept}').format(
         disabled_concept=concepts['disabled']['description'],
         displaced_concept=concepts['displaced_people']['description']),
+    'run_filter': {
+        'exposure': ['population']
+        },
     'input': {
         'population_displaced': {
             'value': displaced_field,
