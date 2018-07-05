@@ -284,6 +284,12 @@ post_processor_affected = {
     }
 }
 
+# EXEMPLE Usage of a postprocessor with filters
+# from safe.definitions.hazard import (
+#     hazard_flood,
+#     hazard_cyclone,
+#     )
+# from safe.definitions.exposure import exposure_population
 # post_processor_filter_example = {
 #     'key': 'post_processor_filter_test',
 #     'name': tr('Should run filter Processor for tests'),
@@ -295,8 +301,8 @@ post_processor_affected = {
 #         'limitation only the specific field.'
 #     ),
 #     'run_filter': {
-#         'hazard': ['flood', 'cyclone'],
-#         'exposure': ['structure']
+#         'hazard': [hazard_flood['key']', hazard_cyclone['key']],
+#         'exposure': [exposure_structure['key']]
 #         },
 #     'input': {},
 #     'output': {}
