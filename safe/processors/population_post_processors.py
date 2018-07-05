@@ -121,7 +121,7 @@ post_processor_displaced = {
         '"Displaced" is defined as: {displaced_concept}').format(
         displaced_concept=concepts['displaced_people']['description']),
     'run_filter': {
-        'exposure': ['population']
+        'exposure': [exposure_population['key']]
     },
     'input': {
         # input as a list means, try to get the input from the
@@ -214,7 +214,7 @@ post_processor_fatalities = {
     'description': tr(
         'A post processor to calculate the number of fatalities. '),
     'run_filter': {
-        'exposure': ['population']
+        'exposure': [exposure_population['key']]
     },
     'input': {
         # input as a list means, try to get the input from the
