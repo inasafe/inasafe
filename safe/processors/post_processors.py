@@ -284,40 +284,20 @@ post_processor_affected = {
     }
 }
 
-post_processor_filter_demo = {
-    'key': 'post_processor_filter_demo',
-    'name': tr('Should run filter demo Processor'),
-    'description': tr(
-        'A post processor to demo how to use the should run filter. this '
-        'postrocessor would run only for flood on structure'
-    ),
-    'run_filter': {
-        'hazard': ['flood'],
-        'exposure': ['structure']
-        },
-    'input': {
-        'hazard_class': {
-            'value': hazard_class_field,
-            'type': field_input_type,
-        },
-        'exposure': {
-            'type': keyword_input_type,
-            'value': ['exposure_keywords', 'exposure'],
-        },
-        'classification': {
-            'type': keyword_input_type,
-            'value': ['hazard_keywords', 'classification'],
-        },
-        'hazard': {
-            'type': keyword_input_type,
-            'value': ['hazard_keywords', 'hazard'],
-        },
-    },
-    'output': {
-        'affected': {
-            'value': affected_field,
-            'type': function_process,
-            'function': post_processor_affected_function
-        }
-    }
-}
+# post_processor_filter_example = {
+#     'key': 'post_processor_filter_test',
+#     'name': tr('Should run filter Processor for tests'),
+#     'description': tr(
+#         'A post processor to demo how to use the should run filter. this '
+#         'postrocessor would run only for flood or cyclone on structure. The '
+#         'run_filter can be completely omitted to allow the postprocessor to '
+#         'always run. Also only one of the two filters can be defined to put'
+#         'limitation only the specific field.'
+#     ),
+#     'run_filter': {
+#         'hazard': ['flood', 'cyclone'],
+#         'exposure': ['structure']
+#         },
+#     'input': {},
+#     'output': {}
+# }

@@ -3,6 +3,7 @@
 
 
 import unittest
+import copy
 
 from safe.definitions.constants import INASAFE_TEST
 from safe.test.utilities import get_qgis_app
@@ -37,7 +38,8 @@ from safe.processors import (
     post_processor_size,
     post_processor_affected,
     field_input_type,
-    post_processor_additional_rice)
+    post_processor_additional_rice,
+    )
 from safe.processors import (
     dynamic_field_input_type,
     needs_profile_input_type)
@@ -57,7 +59,8 @@ from safe.test.utilities import load_test_vector_layer
 from safe.impact_function.postprocessors import (
     run_single_post_processor,
     evaluate_formula,
-    enough_input)
+    enough_input, should_run,
+    )
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -336,6 +339,76 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         self.assertIn(affected_field['field_name'], impact_fields)
+
+    def test_should_run(self):
+        """Test to check the post processor input checker."""
+
+        post_processor_fake = copy.deepcopy(post_processor_affected)
+        post_processor_fake['run_filter'] = {
+            'hazard': ['flood', 'cyclone'],
+            'exposure': ['structure']
+            }
+
+        # ###
+        # Part 1 tests full run_filter defined (hazard and exposure)
+        # ###
+        # Layer keywords
+        keywords = {
+            'hazard_keywords': {
+                'hazard': 'flood',
+                },
+            'exposure_keywords': {
+                'exposure': 'structure'
+                }
+            }
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertTrue(run)
+
+        keywords['hazard_keywords']['hazard'] = 'cyclone'
+        keywords['exposure_keywords']['exposure'] = 'population'
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertFalse(run)
+
+        keywords['hazard_keywords']['hazard'] = 'earthquake'
+        keywords['exposure_keywords']['exposure'] = 'structure'
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertFalse(run)
+
+        # ###
+        # Part 2 tests with partial filters
+        # ###
+
+        # no hazard run_filter defined
+        keywords['hazard_keywords']['hazard'] = 'earthquake'
+        keywords['exposure_keywords']['exposure'] = 'structure'
+        del(post_processor_fake['run_filter']['hazard'])
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertTrue(run)
+        post_processor_fake['run_filter']['hazard'] = [
+            'flood', 'cyclone']
+
+        # no exposure run_filter defined
+        keywords['hazard_keywords']['hazard'] = 'cyclone'
+        keywords['exposure_keywords']['exposure'] = 'population'
+        del(post_processor_fake['run_filter']['exposure'])
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertTrue(run)
+        post_processor_fake['run_filter']['exposure'] = ['structure']
+
+        # run_filter defined without content
+        keywords['hazard_keywords']['hazard'] = 'earthquake'
+        keywords['exposure_keywords']['exposure'] = 'population'
+        del(post_processor_fake['run_filter']['hazard'])
+        del(post_processor_fake['run_filter']['exposure'])
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertTrue(run)
+
+        # no run_filter defined
+        keywords['hazard_keywords']['hazard'] = 'earthquake'
+        keywords['exposure_keywords']['exposure'] = 'structure'
+        del(post_processor_fake['run_filter'])
+        run, _ = should_run(keywords, post_processor_fake)
+        self.assertTrue(run)
 
     def test_enough_input(self):
         """Test to check the post processor input checker."""

@@ -57,7 +57,6 @@ post_processors = [
      gender_vulnerability_postprocessors +
      productivity_post_processors) + [
     post_processor_additional_rice,
-    post_processor_filter_demo,
 ]
 
 pre_processors = [
