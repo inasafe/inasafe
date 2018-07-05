@@ -352,7 +352,7 @@ class TestPostProcessors(unittest.TestCase):
         # ###
         # Part 1 tests full run_filter defined (hazard and exposure)
         # ###
-        # Layer keywords
+        # Impact Layer fake keywords
         keywords = {
             'hazard_keywords': {
                 'hazard': 'flood',
