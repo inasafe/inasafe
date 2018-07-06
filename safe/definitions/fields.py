@@ -1725,6 +1725,207 @@ disabled_displaced_count_field = {
 }
 
 # # # # # # # # # #
+# PCRAFI post processor fields
+# # # # # # # # # #
+
+# Inputs
+pcrafi_construction_class_id_field = {
+    'key': 'pcrafi_construction_class_id_field',
+    'name': tr('PCRAFI Construction class id field'),
+    'field_name': 'pcrafi_constr_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI construction class ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+pcrafi_minimum_floor_height_id_field = {
+    'key': 'pcrafi_minimum_floor_height_id_field',
+    'name': tr('PCRAFI Minimum floor height id field'),
+    'field_name': 'pcrafi_floor_height_class',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # short description
+        'The PCRAFI minimum floor height ID as defined by the PCRAFI data standard.'),
+    'help_text': tr(
+        'This will be used by some post processors to calculate detailed building damage.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Output
+pcrafi_damage_ratio_output = {
+    'key': 'pcrafi_damage_ratio_output',
+    'name': tr('PCRAFI Damage ratio'),
+    'field_name': 'pcrafi_damage_ratio',
+    'type': QVariant.Double,
+    'length': 8,
+    'precision': 4,
+    'description': tr(
+        'The PCRAFI damage ratio field represents the building damage ratio as calculated by the PCRAFI post processor.'),
+    'help_text': tr('A value of 0 means unaffected, a value of 1 means completely destroyed'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_output = {
+    'key': 'pcrafi_damage_state_output',
+    'name': tr('PCRAFI Damage state'),
+    'field_name': 'pcrafi_damage_state',
+    'type': QVariant.String, # TODO : this should probably be an enum if this exists in InaSAFE ?
+    'length': 8,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state field represents the building damage state as calculated by the PCRAFI post processor.'),
+    'help_text': tr('The damage states are not well defined yet, they are just arbitrarily mapped from the damage ratio.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_0_count_field = {
+    'key': 'pcrafi_damage_state_0_count_field',
+    'name': tr('PCRAFI Damage state 0 count'),
+    'field_name': 'pcrafi_damage_state_0_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 0 field represents how many buildings are in damage state 0.'),
+    'help_text': tr('Damage state 0 means unaffected'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_1_count_field = {
+    'key': 'pcrafi_damage_state_1_count_field',
+    'name': tr('PCRAFI Damage state 1 count'),
+    'field_name': 'pcrafi_damage_state_1_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 1 field represents how many buildings are in damage state 1.'),
+    'help_text': tr('Damage state 1 means interior damaged only'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_2_count_field = {
+    'key': 'pcrafi_damage_state_2_count_field',
+    'name': tr('PCRAFI Damage state 2 count'),
+    'field_name': 'pcrafi_damage_state_2_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 2 field represents how many buildings are in damage state 2.'),
+    'help_text': tr('Damage state 2 means lightly damaged'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_3_count_field = {
+    'key': 'pcrafi_damage_state_3_count_field',
+    'name': tr('PCRAFI Damage state 3 count'),
+    'field_name': 'pcrafi_damage_state_3_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 3 field represents how many buildings are in damage state 3.'),
+    'help_text': tr('Damage state 3 means moderately damaged'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_4_count_field = {
+    'key': 'pcrafi_damage_state_4_count_field',
+    'name': tr('PCRAFI Damage state 4 count'),
+    'field_name': 'pcrafi_damage_state_4_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 4 field represents how many buildings are in damage state 4.'),
+    'help_text': tr('Damage state 4 means severly damaged'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+pcrafi_damage_state_5_count_field = {
+    'key': 'pcrafi_damage_state_5_count_field',
+    'name': tr('PCRAFI Damage state 5 count'),
+    'field_name': 'pcrafi_damage_state_5_count',
+    'type': qvariant_whole_numbers,
+    'length': 10,
+    'precision': 0,
+    'description': tr(
+        'The PCRAFI damage state 5 field represents how many buildings are in damage state 5.'),
+    'help_text': tr('Damage state 5 means completely destroyed'), # TODO : description according to actual definition
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# # # # # # # # # #
 # Count, outputs (Absolute values)
 # # # # # # # # # #
 
@@ -2997,7 +3198,14 @@ count_fields = [
     # Vulnerability fields
     under_5_displaced_count_field,
     over_60_displaced_count_field,
-    disabled_displaced_count_field
+    disabled_displaced_count_field,
+    # PCRAFI # TODO : make this DRY as this is already defined in pcrafi_field_group.py
+    pcrafi_damage_state_0_count_field,
+    pcrafi_damage_state_1_count_field,
+    pcrafi_damage_state_2_count_field,
+    pcrafi_damage_state_3_count_field,
+    pcrafi_damage_state_4_count_field,
+    pcrafi_damage_state_5_count_field,
 ] + minimum_needs_fields
 
 # And also additional minimum needs

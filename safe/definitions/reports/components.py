@@ -374,7 +374,10 @@ aggregation_postprocessors_component = {
         'sections': {
             'minimum_needs': {
                 'header': tr('Estimated number of minimum needs per week')
-            }
+            },            
+            'pcrafi': {
+                'header': tr('Number of structure per damage state')
+            },
         },
         'defaults': {
             'aggregation_header': tr('Aggregation area'),
@@ -395,6 +398,9 @@ aggregation_postprocessors_component = {
                 'No calculations produced.'),
             'no_age_rate_message': tr(
                 'Age ratio is not found. '
+                'No calculations produced.'),
+            'no_pcrafi_message': tr(
+                'PCRAFI damage state not found. '
                 'No calculations produced.'),
             'no_vulnerability_rate_message': tr(
                 'Vulnerability ratio is not found. '

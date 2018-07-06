@@ -7,11 +7,12 @@ from collections import OrderedDict
 # noinspection PyUnresolvedReferences
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitions.exposure import exposure_population
+from safe.definitions.exposure import exposure_population, exposure_structure
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
-    vulnerability_displaced_count_groups)
+    vulnerability_displaced_count_groups,
+    pcrafi_damage_state_count_group)
 from safe.definitions.fields import (
     aggregation_name_field,
     displaced_field,
@@ -85,6 +86,51 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     if not use_aggregation:
         section_header_format = resolve_from_dictionary(
             extra_args, ['defaults', 'section_header_format_no_aggregation'])
+
+    """PCRAFI Groups."""
+    if exposure_type == exposure_structure:
+        # this section was copied from Age Groups below, more or less just replacing age by pcrafi
+        pcrafi_section_header = resolve_from_dictionary(
+            extra_args, ['sections', 'pcrafi', 'header'])
+        pcrafi_items = {
+            'group': pcrafi_damage_state_count_group,
+            'group_header': pcrafi_section_header,
+            'fields': pcrafi_damage_state_count_group['fields']
+        }
+
+        # check pcrafi_fields exists
+        for field in pcrafi_items['fields']:
+            if field['key'] in analysis_layer_fields:
+                no_pcrafi_field = False
+                break
+        else:
+            no_pcrafi_field = True
+        
+        context['sections']['pcrafi'] = []
+        pcrafi_section_header = section_header_format.format(
+            header_name=pcrafi_damage_state_count_group['header_name'])
+        if no_pcrafi_field:
+            context['sections']['pcrafi'].append(
+                {
+                    'header': pcrafi_section_header,
+                    'empty': True,
+                    'message': resolve_from_dictionary(
+                        extra_args, ['defaults', 'no_pcrafi_message'])
+                }
+            )
+        else:
+            context['sections']['pcrafi'].append(
+                create_section(
+                    aggregation_summary,
+                    analysis_layer,
+                    pcrafi_items,
+                    pcrafi_section_header,
+                    use_aggregation=use_aggregation,
+                    use_rounding=False,
+                    extra_component_args=extra_args,
+                    is_displacement=False)
+            )
+            context['sections_not_empty'] = True
 
     # all subsequent sections are only for population exposure type
     if not exposure_type == exposure_population:
