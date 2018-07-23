@@ -1,6 +1,5 @@
 
 from safe.definitions.fields import (
-    pcrafi_damage_state_0_count_field,
     pcrafi_damage_state_1_count_field,
     pcrafi_damage_state_2_count_field,
     pcrafi_damage_state_3_count_field,
@@ -15,8 +14,7 @@ pcrafi_damage_state_count_group = {
     'header_name': tr('Damage state'),
     'description': tr(
         'TODO'),
-    'fields': [    
-        pcrafi_damage_state_0_count_field,
+    'fields': [
         pcrafi_damage_state_1_count_field,
         pcrafi_damage_state_2_count_field,
         pcrafi_damage_state_3_count_field,

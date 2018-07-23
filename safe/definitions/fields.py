@@ -1810,25 +1810,6 @@ pcrafi_damage_state_output = {
     # Null value can be replaced by default or not
     'replace_null': False
 }
-pcrafi_damage_state_0_count_field = {
-    'key': 'pcrafi_damage_state_0_count_field',
-    'name': tr('PCRAFI Damage state 0 count'),
-    'field_name': 'pcrafi_damage_state_0_count',
-    'type': qvariant_whole_numbers,
-    'length': 10,
-    'precision': 0,
-    'description': tr(
-        'The PCRAFI damage state 0 field represents how many buildings are in damage state 0.'),
-    'help_text': tr('Damage state 0 means unaffected'), # TODO : description according to actual definition
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
 pcrafi_damage_state_1_count_field = {
     'key': 'pcrafi_damage_state_1_count_field',
     'name': tr('PCRAFI Damage state 1 count'),
@@ -3200,7 +3181,6 @@ count_fields = [
     over_60_displaced_count_field,
     disabled_displaced_count_field,
     # PCRAFI # TODO : make this DRY as this is already defined in pcrafi_field_group.py
-    pcrafi_damage_state_0_count_field,
     pcrafi_damage_state_1_count_field,
     pcrafi_damage_state_2_count_field,
     pcrafi_damage_state_3_count_field,

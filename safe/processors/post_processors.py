@@ -28,7 +28,6 @@ from safe.definitions.fields import (
     pcrafi_minimum_floor_height_id_field,
     pcrafi_damage_ratio_output,
     pcrafi_damage_state_output,
-    pcrafi_damage_state_0_count_field,
     pcrafi_damage_state_1_count_field,
     pcrafi_damage_state_2_count_field,
     pcrafi_damage_state_3_count_field,
@@ -369,11 +368,6 @@ post_processor_pcrafi_damage_states = {
             'value': pcrafi_damage_state_output,
             'type': function_process,
             'function': post_processor_pcrafi_damage_state_function
-        },
-        'ds0': {
-            'value': pcrafi_damage_state_0_count_field,
-            'type': function_process,
-            'function': post_processor_pcrafi_damage_state_function_factory('DS0')
         },
         'ds1': {
             'value': pcrafi_damage_state_1_count_field,
