@@ -287,18 +287,21 @@ def post_processor_pcrafi_damage_ratio_function(
     }
 
     # Getting the flood height as a numeric value (retromapping from the hazard classification)
-    classification_definition = None
-    for c in get_classifications('flood'):
-        if c['key'] == classification:
-            classification_definition = c
-            break
+    if hazard_class == not_exposed_class['key']:
+        flood_numeric_value = 0
+    else:
+        classification_definition = None
+        for c in get_classifications('flood'):
+            if c['key'] == classification:
+                classification_definition = c
+                break
 
-    class_definition = None
-    for c in classification_definition['classes']:
-        if c['key'] == hazard_class:
-            class_definition = c
-            break
-    flood_numeric_value = class_definition['numeric_default_max']
+        class_definition = None
+        for c in classification_definition['classes']:
+            if c['key'] == hazard_class:
+                class_definition = c
+                break
+        flood_numeric_value = class_definition['numeric_default_max']
 
     # Getting the floor height as a numeric value (retromapping from the floor height class)
     floor_height_range = pcrafi_floor_height_range[pcrafi_minimum_floor_height_class]
@@ -330,8 +333,10 @@ def post_processor_pcrafi_damage_state_function(pcrafi_damage_ratio=None):
     # This maps from damage ratio to damage states, currently mapping is abritrary (ranges are [min;max[ )
     # TODO : this should probably be defined somewhere in definitions
     pcrafi_damage_state_ranges = {
-        'DS0' : [-big_number,0.001],
-        'DS1' : [0.001,0.25],
+        # we must make sure lowerbound of first DS is higher than cumulative_norm_distribution(0,mean,stddev),
+        # if not we get incoherent results as unaffected areas aren't aggregated in the hazard value
+        'DS0' : [-big_number,0.0015],
+        'DS1' : [0.0015,0.25],
         'DS2' : [0.25,0.5],
         'DS3' : [0.5,0.75],
         'DS4' : [0.75,1.0],

@@ -756,7 +756,7 @@ flood_pcrafi_hazard_classes = {
             'value': 1,
             'color': light_green,
             'name': tr('Very low'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Flooding of between 0 and 20 centimetres. '),
             'fatality_rate': None,
