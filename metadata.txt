@@ -27,6 +27,7 @@ status=alpha
 changelog=
     Version 5.0.0:
     - QGIS3 port
+    - Possibility to add postprocessors only for a certain combination of hazard and exposure
     Version 4.4.0:
     - Add Geonode uploader
     - Add back Sentry configuration (need to be enabled in your settings)

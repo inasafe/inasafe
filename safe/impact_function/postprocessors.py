@@ -269,6 +269,43 @@ def run_single_post_processor(layer, post_processor):
     return True, None
 
 
+def should_run(keywords, post_processor):
+    """
+    Check if the postprocessor should run for the current hazard and exposure
+    :param keywords: impact layer keywords
+    :param post_processor: the post processor instance to check
+    :returns: Tuple with True if success, else False with an error message.
+    :rtype: (bool, str)
+    """
+    exposure = keywords['exposure_keywords']['exposure']
+    hazard = keywords['hazard_keywords']['hazard']
+    try:
+        run_filter = post_processor['run_filter']
+    except KeyError:
+        # if no run_filter is defined we run the postprocessor
+        return True, None
+
+    msg = tr('Postprocessor "{name}" did not run because hazard "{hazard}" '
+             'and exposure "{exposure}" are not in its run_filter '
+             '"{run_filter}"'.format(
+                name=post_processor['name'],
+                hazard=hazard,
+                exposure=exposure,
+                run_filter=run_filter))
+
+    # if an hazard filter is defined the current hazard needs to be defined in
+    # there
+    if 'hazard' in run_filter and hazard not in run_filter['hazard']:
+        return False, msg
+
+    # if an exposure filter is defined the current exposure needs to be
+    # defined in there
+    if 'exposure' in run_filter and exposure not in run_filter['exposure']:
+        return False, msg
+
+    return True, None
+
+
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 

@@ -24,6 +24,8 @@ from safe.definitions.field_groups.gender_vulnerability_field_group import (
     gender_vulnerability_ratio_group,
     gender_vulnerability_count_group,
     gender_vulnerability_displaced_count_group)
+from safe.definitions.field_groups.pcrafi_field_group import (
+    pcrafi_damage_state_count_group)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2017, The InaSAFE Project"
@@ -86,7 +88,8 @@ all_field_groups = [
     gender_vulnerability_displaced_count_group,
     age_vulnerability_ratio_group,
     age_vulnerability_count_group,
-    age_vulnerability_displaced_count_group
+    age_vulnerability_displaced_count_group,
+    pcrafi_damage_state_count_group,
 ]
 
 # Update notes for each group
@@ -167,3 +170,8 @@ vulnerability_displaced_count_groups = [
     gender_vulnerability_displaced_count_group,
     disability_vulnerability_displaced_count_group
 ]
+
+pcrafi_count_groups = [
+    pcrafi_damage_state_count_group,
+]
+

@@ -18,7 +18,9 @@ from safe.definitions.fields import (
     exposure_type_field,
     productivity_rate_field,
     production_cost_rate_field,
-    production_value_rate_field)
+    production_value_rate_field,
+    pcrafi_construction_class_id_field,
+    pcrafi_minimum_floor_height_id_field)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.units import (
@@ -321,6 +323,8 @@ exposure_structure = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
+        pcrafi_construction_class_id_field,
+        pcrafi_minimum_floor_height_id_field,
         # feature_value_field, disabled in V4.0, ET 13/02/17
         # feature_rate_field disabled in V4.0, ET 13/02/17
     ],

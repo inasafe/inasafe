@@ -859,8 +859,9 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
 
         impact_layer.keywords['hazard_keywords'] = {
-            'classification': 'flood_hazard_classes'
-        }
+            'classification': 'flood_hazard_classes',
+            'hazard': 'flood',
+            }
         impact_layer.keywords['exposure_keywords'] = {
             'exposure': exposure_population['key'],
         }

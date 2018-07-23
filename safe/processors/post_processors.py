@@ -7,7 +7,10 @@
 
 import logging
 
-from safe.definitions.exposure import exposure_place
+from safe.definitions.exposure import (
+    exposure_place,
+    exposure_structure
+)
 from safe.definitions.extra_keywords import (
     extra_keyword_earthquake_longitude,
     extra_keyword_earthquake_latitude
@@ -20,9 +23,21 @@ from safe.definitions.fields import (
     feature_value_field,
     size_field,
     hazard_class_field,
-    affected_field
+    affected_field,
+    pcrafi_construction_class_id_field,
+    pcrafi_minimum_floor_height_id_field,
+    pcrafi_damage_ratio_output,
+    pcrafi_damage_state_output,
+    pcrafi_damage_state_1_count_field,
+    pcrafi_damage_state_2_count_field,
+    pcrafi_damage_state_3_count_field,
+    pcrafi_damage_state_4_count_field,
+    pcrafi_damage_state_5_count_field,
 )
-from safe.definitions.hazard import hazard_earthquake
+from safe.definitions.hazard import (
+    hazard_earthquake,
+    hazard_flood,
+)
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.processors.post_processor_functions import (
     calculate_bearing,
@@ -30,7 +45,11 @@ from safe.processors.post_processor_functions import (
     calculate_distance,
     multiply,
     size,
-    post_processor_affected_function)
+    post_processor_affected_function,
+    post_processor_pcrafi_damage_ratio_function,
+    post_processor_pcrafi_damage_state_function,
+    post_processor_pcrafi_damage_state_function_factory,
+    )
 from safe.processors.post_processor_inputs import (
     geometry_property_input_type,
     layer_property_input_type,
@@ -283,3 +302,121 @@ post_processor_affected = {
         }
     }
 }
+
+post_processor_pcrafi_damage_ratio = {
+    'key': 'post_processor_pcrafi_damage_ratio',
+    'name': tr('PCRAFI Post-processor for structures damage ratio'),
+    'description': tr(
+        'A post processor that calculates building damage ratio for the PCRAFI buildings dataset.'
+    ),
+    'run_filter': {
+        'hazard': hazard_flood['key'],
+        'exposure': exposure_structure['key'],
+    },
+    'input': {
+        'hazard_class': {
+            'value': hazard_class_field,
+            'type': field_input_type,
+        },
+        'exposure': {
+            'type': keyword_input_type,
+            'value': ['exposure_keywords', 'exposure'],
+        },
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification'],
+        },
+        'hazard': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'hazard'],
+        },
+        'pcrafi_construction_class': {
+            'type': field_input_type,
+            'value': pcrafi_construction_class_id_field,
+        },
+        'pcrafi_minimum_floor_height_class': {
+            'type': field_input_type,
+            'value': pcrafi_minimum_floor_height_id_field,
+        },
+    },
+    'output': {
+        'damage_ratio': {
+            'value': pcrafi_damage_ratio_output,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_ratio_function
+        }
+    }
+}
+
+post_processor_pcrafi_damage_states = {
+    'key': 'post_processor_pcrafi_damage_states',
+    'name': tr('PCRAFI Post-processor for structures damage state'),
+    'description': tr(
+        'A post processor that assigns damage state according to damage ratio for the PCRAFI buildings dataset.'
+    ),
+    'run_filter': {
+        'exposure': exposure_structure['key'],
+    },
+    'input': {
+        'pcrafi_damage_ratio': {
+            'type': field_input_type,
+            'value': pcrafi_damage_ratio_output,
+        },
+    },
+    'output': {
+        'damage_state': {
+            'value': pcrafi_damage_state_output,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function
+        },
+        'ds1': {
+            'value': pcrafi_damage_state_1_count_field,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function_factory('DS1')
+        },
+        'ds2': {
+            'value': pcrafi_damage_state_2_count_field,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function_factory('DS2')
+        },
+        'ds3': {
+            'value': pcrafi_damage_state_3_count_field,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function_factory('DS3')
+        },
+        'ds4': {
+            'value': pcrafi_damage_state_4_count_field,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function_factory('DS4')
+        },
+        'ds5': {
+            'value': pcrafi_damage_state_5_count_field,
+            'type': function_process,
+            'function': post_processor_pcrafi_damage_state_function_factory('DS5')
+        }
+    }
+}
+
+# EXEMPLE Usage of a postprocessor with filters
+# from safe.definitions.hazard import (
+#     hazard_flood,
+#     hazard_cyclone,
+#     )
+# from safe.definitions.exposure import exposure_population
+# post_processor_filter_example = {
+#     'key': 'post_processor_filter_test',
+#     'name': tr('Should run filter Processor for tests'),
+#     'description': tr(
+#         'A post processor to demo how to use the should run filter. this '
+#         'postrocessor would run only for flood or cyclone on structure. The '
+#         'run_filter can be completely omitted to allow the postprocessor to '
+#         'always run. Also only one of the two filters can be defined to put'
+#         'limitation only the specific field.'
+#     ),
+#     'run_filter': {
+#         'hazard': [hazard_flood['key']', hazard_cyclone['key']],
+#         'exposure': [exposure_structure['key']]
+#         },
+#     'input': {},
+#     'output': {}
+# }

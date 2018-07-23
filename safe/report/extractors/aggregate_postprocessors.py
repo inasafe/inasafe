@@ -7,11 +7,12 @@ from collections import OrderedDict
 # noinspection PyUnresolvedReferences
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitions.exposure import exposure_population
+from safe.definitions.exposure import exposure_population, exposure_structure
 from safe.definitions.field_groups import (
     age_displaced_count_group,
     gender_displaced_count_group,
-    vulnerability_displaced_count_groups)
+    vulnerability_displaced_count_groups,
+    pcrafi_damage_state_count_group)
 from safe.definitions.fields import (
     aggregation_name_field,
     displaced_field,
@@ -71,7 +72,67 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     # Get exposure type definition
     exposure_type = definition(exposure_keywords['exposure'])
 
-    # this entire section is only for population exposure type
+    context['component_key'] = component_metadata.key
+    context['use_aggregation'] = use_aggregation
+    context['header'] = resolve_from_dictionary(
+        extra_args, 'header')
+
+    group_header_format = resolve_from_dictionary(
+        extra_args, ['defaults', 'group_header_format'])
+
+    section_header_format = resolve_from_dictionary(
+        extra_args,
+        ['defaults', 'section_header_format'])
+    if not use_aggregation:
+        section_header_format = resolve_from_dictionary(
+            extra_args, ['defaults', 'section_header_format_no_aggregation'])
+
+    """PCRAFI Groups."""
+    if exposure_type == exposure_structure:
+        # this section was copied from Age Groups below, more or less just replacing age by pcrafi
+        pcrafi_section_header = resolve_from_dictionary(
+            extra_args, ['sections', 'pcrafi', 'header'])
+        pcrafi_items = {
+            'group': pcrafi_damage_state_count_group,
+            'group_header': pcrafi_section_header,
+            'fields': pcrafi_damage_state_count_group['fields']
+        }
+
+        # check pcrafi_fields exists
+        for field in pcrafi_items['fields']:
+            if field['key'] in analysis_layer_fields:
+                no_pcrafi_field = False
+                break
+        else:
+            no_pcrafi_field = True
+        
+        context['sections']['pcrafi'] = []
+        pcrafi_section_header = section_header_format.format(
+            header_name=pcrafi_damage_state_count_group['header_name'])
+        if no_pcrafi_field:
+            context['sections']['pcrafi'].append(
+                {
+                    'header': pcrafi_section_header,
+                    'empty': True,
+                    'message': resolve_from_dictionary(
+                        extra_args, ['defaults', 'no_pcrafi_message'])
+                }
+            )
+        else:
+            context['sections']['pcrafi'].append(
+                create_section(
+                    aggregation_summary,
+                    analysis_layer,
+                    pcrafi_items,
+                    pcrafi_section_header,
+                    use_aggregation=use_aggregation,
+                    use_rounding=False,
+                    extra_component_args=extra_args,
+                    is_displacement=False)
+            )
+            context['sections_not_empty'] = True
+
+    # all subsequent sections are only for population exposure type
     if not exposure_type == exposure_population:
         return context
 
@@ -88,21 +149,6 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         # in case no displaced field
         # let each section handled itself
         zero_displaced = False
-
-    context['component_key'] = component_metadata.key
-    context['use_aggregation'] = use_aggregation
-    context['header'] = resolve_from_dictionary(
-        extra_args, 'header')
-
-    group_header_format = resolve_from_dictionary(
-        extra_args, ['defaults', 'group_header_format'])
-
-    section_header_format = resolve_from_dictionary(
-        extra_args,
-        ['defaults', 'section_header_format'])
-    if not use_aggregation:
-        section_header_format = resolve_from_dictionary(
-            extra_args, ['defaults', 'section_header_format_no_aggregation'])
 
     """Age Groups."""
     age_items = {
@@ -323,7 +369,8 @@ def create_section(
         use_aggregation=True,
         units_label=None,
         use_rounding=True,
-        extra_component_args=None):
+        extra_component_args=None,
+        is_displacement=True):
     """Create demographic section context.
 
     :param aggregation_summary: Aggregation summary
@@ -351,6 +398,10 @@ def create_section(
         metadata
     :type extra_component_args: dict
 
+    :param is_displacement: whether we're aggregating a popuplation displacement
+        column (if not, we skip totals)
+    :type is_displacement: bool
+
     :return: context for gender section
     :rtype: dict
 
@@ -362,14 +413,16 @@ def create_section(
             section_header,
             units_label=units_label,
             use_rounding=use_rounding,
-            extra_component_args=extra_component_args)
+            extra_component_args=extra_component_args,
+            is_displacement=is_displacement)
     else:
         return create_section_without_aggregation(
             aggregation_summary, analysis_layer, postprocessor_fields,
             section_header,
             units_label=units_label,
             use_rounding=use_rounding,
-            extra_component_args=extra_component_args)
+            extra_component_args=extra_component_args,
+            is_displacement=is_displacement)
 
 
 def create_section_with_aggregation(
@@ -377,7 +430,8 @@ def create_section_with_aggregation(
         section_header,
         units_label=None,
         use_rounding=True,
-        extra_component_args=None):
+        extra_component_args=None,
+        is_displacement=True):
     """Create demographic section context with aggregation breakdown.
 
     :param aggregation_summary: Aggregation summary
@@ -401,6 +455,10 @@ def create_section_with_aggregation(
     :param extra_component_args: extra_args passed from report component
         metadata
     :type extra_component_args: dict
+
+    :param is_displacement: whether we're aggregating a popuplation displacement
+        column (if not, we skip totals)
+    :type is_displacement: bool
 
     :return: context for gender section
     :rtype: dict
@@ -429,9 +487,9 @@ def create_section_with_aggregation(
 
     # figuring out displaced field
     # no displaced field, can't show result
-    if displaced_field['key'] not in analysis_layer_fields:
+    if is_displacement and displaced_field['key'] not in analysis_layer_fields:
         return {}
-    if displaced_field['key'] not in aggregation_summary_fields:
+    if is_displacement and displaced_field['key'] not in aggregation_summary_fields:
         return {}
 
     """Generating header name for columns."""
@@ -443,8 +501,9 @@ def create_section_with_aggregation(
         extra_component_args, ['defaults', 'total_population_header'])
     columns = [
         aggregation_summary.title() or default_aggregation_header,
-        total_population_header,
     ]
+    if is_displacement:
+        columns.append(total_population_header)
     row_values = []
 
     group_fields_found = []
@@ -501,30 +560,32 @@ def create_section_with_aggregation(
 
         aggregation_name_index = aggregation_summary.fields().lookupField(
             aggregation_name_field['field_name'])
-        displaced_field_name = aggregation_summary_fields[
-            displaced_field['key']]
-        displaced_field_index = aggregation_summary.fields().lookupField(
-            displaced_field_name)
-
         aggregation_name = feature[aggregation_name_index]
-        total_displaced = feature[displaced_field_index]
-
-        if not total_displaced or total_displaced is None:
-            # skip if total displaced null
-            continue
-
-        total_displaced = format_number(
-            feature[displaced_field_index],
-            use_rounding=use_rounding,
-            is_population=True)
-
+        
         row = [
             aggregation_name,
-            total_displaced,
         ]
 
-        if total_displaced == '0' and not use_rounding:
-            continue
+        if is_displacement:
+            displaced_field_name = aggregation_summary_fields[
+                displaced_field['key']]
+            displaced_field_index = aggregation_summary.fields().lookupField(
+                displaced_field_name)
+            total_displaced = feature[displaced_field_index]
+
+            if not total_displaced or total_displaced is None:
+                # skip if total displaced null
+                continue
+
+            total_displaced = format_number(
+                feature[displaced_field_index],
+                use_rounding=use_rounding,
+                is_population=True)
+
+            row.append(total_displaced,)
+
+            if total_displaced == '0' and not use_rounding:
+                continue
 
         for output_field in postprocessors_fields_found:
             field_name = aggregation_summary_fields[output_field['key']]
@@ -541,20 +602,22 @@ def create_section_with_aggregation(
 
     """Generating total rows."""
 
-    total_displaced_field_name = analysis_layer_fields[
-        displaced_field['key']]
-    value = value_from_field_name(
-        total_displaced_field_name, analysis_layer)
-    value = format_number(
-        value,
-        use_rounding=use_rounding,
-        is_population=True)
+    
     total_header = resolve_from_dictionary(
         extra_component_args, ['defaults', 'total_header'])
     totals = [
         total_header,
-        value
     ]
+    if is_displacement:
+        total_displaced_field_name = analysis_layer_fields[
+            displaced_field['key']]
+        value = value_from_field_name(
+            total_displaced_field_name, analysis_layer)
+        value = format_number(
+            value,
+            use_rounding=use_rounding,
+            is_population=True)
+        totals.append(value)
     for output_field in postprocessors_fields_found:
         field_name = analysis_layer_fields[output_field['key']]
         value = value_from_field_name(field_name, analysis_layer)
@@ -591,7 +654,8 @@ def create_section_without_aggregation(
         section_header,
         units_label=None,
         use_rounding=True,
-        extra_component_args=None):
+        extra_component_args=None,
+        is_displacement=True):
     """Create demographic section context without aggregation.
 
     :param aggregation_summary: Aggregation summary
@@ -616,9 +680,14 @@ def create_section_without_aggregation(
         metadata
     :type extra_component_args: dict
 
+    :param is_displacement: whether we're aggregating a popuplation displacement
+        column (if not, we skip totals)
+    :type is_displacement: bool
+
     :return: context for gender section
     :rtype: dict
     """
+
     aggregation_summary_fields = aggregation_summary.keywords[
         'inasafe_fields']
     analysis_layer_fields = analysis_layer.keywords[
@@ -634,22 +703,24 @@ def create_section_without_aggregation(
         return {}
 
     # figuring out displaced field
-    try:
-        analysis_layer_fields[displaced_field['key']]
-        aggregation_summary_fields[displaced_field['key']]
-    except KeyError:
-        # no displaced field, can't show result
-        return {}
+    if is_displacement:
+        try:
+            analysis_layer_fields[displaced_field['key']]
+            aggregation_summary_fields[displaced_field['key']]
+        except KeyError:
+            # no displaced field, can't show result
+            return {}
 
     """Generating header name for columns."""
 
     # First column header is aggregation title
-    total_population_header = resolve_from_dictionary(
-        extra_component_args, ['defaults', 'total_population_header'])
     columns = [
         section_header,
-        total_population_header,
     ]
+    if is_displacement:
+        total_population_header = resolve_from_dictionary(
+            extra_component_args, ['defaults', 'total_population_header'])
+        columns.append(total_population_header)
 
     """Generating values for rows."""
     row_values = []
