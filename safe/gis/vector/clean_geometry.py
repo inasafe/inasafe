@@ -36,8 +36,15 @@ def clean_layer(layer):
     for feature in layer.getFeatures(request):
         geom = feature.geometry()
         geometry_cleaned = geometry_checker(geom)
-        if geometry_cleaned and not geom.equals(geometry_cleaned):
-            layer.changeGeometry(feature.id(), geometry_cleaned, True)
+        # Geometry now is clean (can be the same geom, or different geom)
+        if geometry_cleaned:
+            # Only update if there is a change in the geometry
+            if not geom.equals(geometry_cleaned):
+                layer.changeGeometry(feature.id(), geometry_cleaned, True)
+            # Geometry is already cleaned, so we don't do anything.
+            else:
+                pass
+        # Geometry is not clean, delete it.
         else:
             count += 1
             layer.deleteFeature(feature.id())
