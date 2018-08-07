@@ -32,14 +32,15 @@ def display_information_message_bar(
         message=None,
         more_details=None,
         button_text=tr('Show details ...'),
-        duration=8):
+        duration=8,
+        iface_object=iface):
     """
     Display an information message bar.
 
-    :param iface: The QGIS IFace instance. Note that we cannot
+    :param iface_object: The QGIS IFace instance. Note that we cannot
         use qgis.utils.iface since it is not available in our
         test environment.
-    :type iface: QgisInterface
+    :type iface_object: QgisInterface
 
     :param title: The title of the message bar.
     :type title: basestring
@@ -56,8 +57,8 @@ def display_information_message_bar(
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
     """
-    iface.messageBar().clearWidgets()
-    widget = iface.messageBar().createMessage(title, message)
+    iface_object.messageBar().clearWidgets()
+    widget = iface_object.messageBar().createMessage(title, message)
 
     if more_details:
         button = QPushButton(widget)
@@ -67,7 +68,7 @@ def display_information_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, Qgis.Info, duration)
+    iface_object.messageBar().pushWidget(widget, Qgis.Info, duration)
 
 
 def display_success_message_bar(
@@ -75,14 +76,15 @@ def display_success_message_bar(
         message=None,
         more_details=None,
         button_text=tr('Show details ...'),
-        duration=8):
+        duration=8,
+        iface_object=iface):
     """
     Display a success message bar.
 
-    :param iface: The QGIS IFace instance. Note that we cannot
+    :param iface_object: The QGIS IFace instance. Note that we cannot
         use qgis.utils.iface since it is not available in our
         test environment.
-    :type iface: QgisInterface
+    :type iface_object: QgisInterface
 
     :param title: The title of the message bar.
     :type title: basestring
@@ -100,8 +102,8 @@ def display_success_message_bar(
     :type duration: int
     """
 
-    iface.messageBar().clearWidgets()
-    widget = iface.messageBar().createMessage(title, message)
+    iface_object.messageBar().clearWidgets()
+    widget = iface_object.messageBar().createMessage(title, message)
 
     if more_details:
         button = QPushButton(widget)
@@ -111,7 +113,7 @@ def display_success_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, Qgis.Success, duration)
+    iface_object.messageBar().pushWidget(widget, Qgis.Success, duration)
 
 
 def display_warning_message_box(parent=None, title=None, message=None):
@@ -132,7 +134,8 @@ def display_warning_message_bar(
         message=None,
         more_details=None,
         button_text=tr('Show details ...'),
-        duration=8):
+        duration=8,
+        iface_object=iface):
     """
     Display a warning message bar.
 
@@ -150,10 +153,15 @@ def display_warning_message_bar(
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
+
+    :param iface_object: The QGIS IFace instance. Note that we cannot
+        use qgis.utils.iface since it is not available in our
+        test environment.
+    :type iface_object: QgisInterface
     """
 
-    iface.messageBar().clearWidgets()
-    widget = iface.messageBar().createMessage(title, message)
+    iface_object.messageBar().clearWidgets()
+    widget = iface_object.messageBar().createMessage(title, message)
 
     if more_details:
         button = QPushButton(widget)
@@ -163,7 +171,7 @@ def display_warning_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, Qgis.Warning, duration)
+    iface_object.messageBar().pushWidget(widget, Qgis.Warning, duration)
 
 
 def display_critical_message_box(parent=None, title=None, message=None):
@@ -184,7 +192,9 @@ def display_critical_message_bar(
         message=None,
         more_details=None,
         button_text=tr('Show details ...'),
-        duration=8):
+        duration=8,
+        iface_object=iface
+):
     """
     Display a critical message bar.
 
@@ -202,10 +212,15 @@ def display_critical_message_bar(
 
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
+
+    :param iface_object: The QGIS IFace instance. Note that we cannot
+        use qgis.utils.iface since it is not available in our
+        test environment.
+    :type iface_object: QgisInterface
     """
 
-    iface.messageBar().clearWidgets()
-    widget = iface.messageBar().createMessage(title, message)
+    iface_object.messageBar().clearWidgets()
+    widget = iface_object.messageBar().createMessage(title, message)
 
     if more_details:
         button = QPushButton(widget)
@@ -215,4 +230,4 @@ def display_critical_message_bar(
                 title=title, message=more_details))
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, Qgis.Critical, duration)
+    iface_object.messageBar().pushWidget(widget, Qgis.Critical, duration)

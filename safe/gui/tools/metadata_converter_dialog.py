@@ -289,7 +289,9 @@ class MetadataConverterDialog(QDialog, FORM_CLASS):
         display_success_message_bar(
             tr('Metadata Conversion Success'),
             tr('You can find your copied layer with metadata version 3.5 in '
-               '%s' % output_path))
+               '%s' % output_path),
+            iface_object=self.iface
+        )
         super(MetadataConverterDialog, self).accept()
 
     def select_output_directory(self):

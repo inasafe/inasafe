@@ -529,12 +529,16 @@ class Dock(QDockWidget, FORM_CLASS):
                 display_critical_message_bar(
                     title=self.tr('Error while saving'),
                     message=self.tr(
-                        'The destination location must be writable.'))
+                        'The destination location must be writable.'),
+                    iface_object=self.iface
+                )
 
             except Exception:  # pylint: disable=broad-except
                 display_critical_message_bar(
                     title=self.tr('Error while saving'),
-                    message=self.tr('Something went wrong.'))
+                    message=self.tr('Something went wrong.'),
+                    iface_object=self.iface
+                )
 
         disable_busy_cursor()
 
@@ -853,7 +857,9 @@ class Dock(QDockWidget, FORM_CLASS):
             display_critical_message_bar(
                 "InaSAFE",
                 self.tr('Please select a valid layer before printing. '
-                        'No Impact Function found.'))
+                        'No Impact Function found.'),
+                iface_object=self
+            )
 
     def show_help(self):
         """Open the help dialog."""
@@ -997,7 +1003,7 @@ class Dock(QDockWidget, FORM_CLASS):
                             keywords))
             except InvalidLayerError as e:
                 display_critical_message_bar(
-                    tr("Invalid Layer"), str(e))
+                    tr("Invalid Layer"), str(e), iface_object=self.iface)
                 self.impact_function = None
 
             show_keywords = True
@@ -1304,7 +1310,10 @@ class Dock(QDockWidget, FORM_CLASS):
         """
         if self.conflicting_plugin_detected:
             display_critical_message_bar(
-                tr('Conflicting plugin'), conflicting_plugin_string())
+                tr('Conflicting plugin'),
+                conflicting_plugin_string(),
+                iface_object=self.iface
+            )
 
         # Start the analysis
         self.impact_function = self.validate_impact_function()
@@ -1384,7 +1393,8 @@ class Dock(QDockWidget, FORM_CLASS):
                 tr('Reports'),
                 tr('Reports are not going to be generated because of your '
                    'InaSAFE settings.'),
-                duration=10
+                duration=10,
+                iface_object=self.iface
             )
 
         if self.impact_function.debug_mode:
@@ -1483,7 +1493,8 @@ class Dock(QDockWidget, FORM_CLASS):
                     self.tr('Analysis environment ready'),
                     message,
                     self.tr('More info ...'),
-                    2)
+                    duration=2,
+                    iface_object=self.iface)
 
             if self.aggregation:
                 crs = self.aggregation.crs()
@@ -1510,7 +1521,9 @@ class Dock(QDockWidget, FORM_CLASS):
             if show_warnings:
                 display_warning_message_bar(
                     'InaSAFE',
-                    tr('The requested extent is not overlapping your layers.'))
+                    tr('The requested extent is not overlapping your layers.'),
+                    iface_object=self.iface
+                )
             self.run_button.setEnabled(False)
             self.impact_function = None
             return None
@@ -1522,7 +1535,9 @@ class Dock(QDockWidget, FORM_CLASS):
                 display_warning_message_bar(
                     'InaSAFE',
                     self.tr('No overlapping extents'),
-                    no_overlap_message())
+                    no_overlap_message(),
+                    iface_object=self.iface
+                )
             self.run_button.setEnabled(False)
             self.impact_function = None
             return None
