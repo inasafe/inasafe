@@ -16,7 +16,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-qgis_iface()
+iface = qgis_iface()
 
 
 class TestRecomputeCounts(unittest.TestCase):

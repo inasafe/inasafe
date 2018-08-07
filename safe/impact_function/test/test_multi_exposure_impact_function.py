@@ -72,7 +72,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-qgis_iface()
+iface = qgis_iface()
 
 
 class TestMultiExposureImpactFunction(unittest.TestCase):

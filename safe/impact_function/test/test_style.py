@@ -7,7 +7,7 @@ from safe.definitions.utilities import definition
 from safe.test.utilities import qgis_iface, load_test_vector_layer
 from safe.impact_function.style import layer_title
 
-qgis_iface()
+iface = qgis_iface()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
