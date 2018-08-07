@@ -29,7 +29,7 @@ from safe.datastore.folder import Folder
 from safe.gis.vector.tools import create_memory_layer
 from safe.test.utilities import load_test_raster_layer, load_test_vector_layer
 
-qgis_iface()
+iface = qgis_iface()
 
 
 class TestFolder(unittest.TestCase):
