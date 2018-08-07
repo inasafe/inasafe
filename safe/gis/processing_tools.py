@@ -23,8 +23,26 @@ def initialize_processing():
     Initializes processing, if it's not already been done
     """
 
-    # Required if running from command line
+    need_initialize = False
+
+    needed_algorithms = [
+        'native:clip',
+        'gdal:cliprasterbyextent',
+        'native:union',
+        'native:intersection'
+    ]
+
     if not QgsApplication.processingRegistry().algorithms():
+        need_initialize = True
+
+    if not need_initialize:
+        for needed_algorithm in needed_algorithms:
+            if not QgsApplication.processingRegistry().algorithmById(
+                    needed_algorithm):
+                need_initialize = True
+                break
+
+    if need_initialize:
         QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
         processing.Processing.initialize()
 
