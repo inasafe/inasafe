@@ -19,7 +19,8 @@ from safe.test.utilities import (
     set_canvas_crs,
     populate_dock,
     GEOCRS,
-    set_small_jakarta_extent)
+    set_small_jakarta_extent,
+    qgis_iface)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -27,6 +28,8 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
+
+iface = qgis_iface()
 
 
 # noinspection PyArgumentList

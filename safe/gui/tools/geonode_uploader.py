@@ -189,7 +189,7 @@ class GeonodeUploaderDialog(QDialog, FORM_CLASS):
             display_success_message_bar(
                 tr('Uploading done'),
                 tr('Successfully uploaded to {external_link}').format(
-                    external_link=external_link)
+                    external_link=external_link),
             )
         else:
             display_warning_message_box(
