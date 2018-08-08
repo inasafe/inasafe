@@ -73,8 +73,8 @@ LangString WELCOME_TITLE ${LANG_INDONESIAN} "Instalatur InaSAFE [[VERSION]]"
 LangString WELCOME_TITLE ${LANG_ENGLISH} "InaSAFE [[VERSION]] Installer"
 !define MUI_WELCOMEPAGE_TITLE $(WELCOME_TITLE)
 
-LangString WELCOME_TEXT ${LANG_INDONESIAN} "Perangkat ini akan memandu Anda "
-LangString WELCOME_TEXT ${LANG_ENGLISH} "Alat pengaturan ini akan memandu Anda melalui proses menginstal plugin InaSAFE. Perhatikan bahwa itu tidak menginstal QGIS sendiri - Anda harus melakukannya secara terpisah."
+LangString WELCOME_TEXT ${LANG_INDONESIAN} "Alat pengaturan ini akan memandu Anda melalui proses menginstal plugin InaSAFE. Perhatikan bahwa itu tidak menginstal QGIS sendiri - Anda harus melakukannya secara terpisah."
+LangString WELCOME_TEXT ${LANG_ENGLISH} "This setup tool will guide you through the process of installing the InaSAFE plugin. Note that it does not install QGIS itself - you must do that separately."
 !define MUI_WELCOMEPAGE_TEXT $(WELCOME_TEXT)
 
 
