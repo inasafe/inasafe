@@ -26,7 +26,9 @@ status=alpha
 
 changelog=
     Version 5.0.0:
-    - QGIS3 port
+    - QGIS3 port with Python 3 and Qt 5
+    - Enable line for structure exposure
+    - Add Tonga and Fiji currency and administration boundary definition
     Version 4.4.0:
     - Add Geonode uploader
     - Add back Sentry configuration (need to be enabled in your settings)
