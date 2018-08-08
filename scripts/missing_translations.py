@@ -33,8 +33,7 @@ if __name__ == '__main__':
             shell=True,
             stdin=PIPE,
             stdout=PIPE,
-            stderr=PIPE,
-            encoding='utf8')
+            stderr=PIPE)
 
         message = '%s[%s]: ' % ('QT', locale)
         status = 'Unknown'
