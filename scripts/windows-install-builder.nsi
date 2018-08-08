@@ -24,6 +24,7 @@ Name "InaSAFE [[VERSION]]"
 OutFile "InaSAFE-[[VERSION]]-plugin.exe"
 
 # define installation directory
+# TODO(IS): currently only install to default profile directory.
 InstallDir $DOCUMENTS\..\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\inasafe
 
 # For removing Start Menu shortcut in Windows 7
@@ -93,7 +94,8 @@ LangString WELCOME_TEXT ${LANG_ENGLISH} "Alat pengaturan ini akan memandu Anda m
 !define MUI_TEXT_FINISH_INFO_REBOOT "Not used"
 !define MUI_TEXT_FINISH_REBOOTNOW "Not used"
 !define MUI_TEXT_FINISH_REBOOTLATER "Not used"
-!define MUI_TEXT_FINISH_INFO_TEXT "To use InaSAFE, start QGIS and you should find it installed under the Plugins -> InaSAFE menu."
+# !define MUI_TEXT_FINISH_INFO_TEXT "To use InaSAFE, start QGIS and you should find it installed under the Plugins -> InaSAFE menu."
+!define MUI_TEXT_FINISH_INFO_TEXT "To use InaSAFE, start QGIS, go to Plugins -> Manage and Install Plugins, find InaSAFE and enable it by checking the check box next to it. After that you should find it installed under the Plugins -> InaSAFE menu."
 !define MUI_UNTEXT_WELCOME_INFO_TITLE "Uninstall InaSAFE [[VERSION]]"
 !define MUI_UNTEXT_WELCOME_INFO_TEXT "Press the next button below to continue with the uninstall process. Please note that any additional files you might have put into the InaSAFE plugins folder will be deleted!"
 !define MUI_UNTEXT_CONFIRM_TITLE "Confirm you wish to uninstall"
@@ -125,8 +127,9 @@ LangString WELCOME_TEXT ${LANG_ENGLISH} "Alat pengaturan ini akan memandu Anda m
 
 # start default section
 Section
+    # No longer works, since the config is managed per profile in config file
     ;Added by Tim to set the reg key so that the plugin is enabled by default
-    WriteRegStr HKEY_CURRENT_USER "Software\QGIS\QGIS3\PythonPlugins" "inasafe" "true"
+    # WriteRegStr HKEY_CURRENT_USER "Software\QGIS\QGIS3\PythonPlugins" "inasafe" "true"
 
     SetOutPath $INSTDIR
     File /r /tmp/nsis-data/inasafe/*
