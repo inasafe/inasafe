@@ -24,7 +24,7 @@ Name "InaSAFE [[VERSION]]"
 OutFile "InaSAFE-[[VERSION]]-plugin.exe"
 
 # define installation directory
-InstallDir $DOCUMENTS\..\.qgis2\python\plugins\inasafe
+InstallDir $DOCUMENTS\..\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\inasafe
 
 # For removing Start Menu shortcut in Windows 7
 RequestExecutionLevel user
@@ -68,12 +68,12 @@ RequestExecutionLevel user
 !define MUI_WELCOMEFINISHPAGE_BITMAP ".\Installer-Files\WelcomeFinishPage.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP ".\Installer-Files\WelcomeFinishPage.bmp"
 
-LangString WELCOME_TITLE ${LANG_INDONESIAN} "Indonesian title"
+LangString WELCOME_TITLE ${LANG_INDONESIAN} "Instalatur InaSAFE [[VERSION]]"
 LangString WELCOME_TITLE ${LANG_ENGLISH} "InaSAFE [[VERSION]] Installer"
 !define MUI_WELCOMEPAGE_TITLE $(WELCOME_TITLE)
 
-LangString WELCOME_TEXT ${LANG_INDONESIAN} "FOO BAR"
-LangString WELCOME_TEXT ${LANG_ENGLISH} "This setup tool will guide you through the process of installing the InaSAFE plugin. Note that it does not install QGIS itself - you must do that separately."
+LangString WELCOME_TEXT ${LANG_INDONESIAN} "Perangkat ini akan memandu Anda "
+LangString WELCOME_TEXT ${LANG_ENGLISH} "Alat pengaturan ini akan memandu Anda melalui proses menginstal plugin InaSAFE. Perhatikan bahwa itu tidak menginstal QGIS sendiri - Anda harus melakukannya secara terpisah."
 !define MUI_WELCOMEPAGE_TEXT $(WELCOME_TEXT)
 
 
@@ -126,7 +126,7 @@ LangString WELCOME_TEXT ${LANG_ENGLISH} "This setup tool will guide you through 
 # start default section
 Section
     ;Added by Tim to set the reg key so that the plugin is enabled by default
-    WriteRegStr HKEY_CURRENT_USER "Software\QGIS\QGIS2\PythonPlugins" "inasafe" "true"
+    WriteRegStr HKEY_CURRENT_USER "Software\QGIS\QGIS3\PythonPlugins" "inasafe" "true"
 
     SetOutPath $INSTDIR
     File /r /tmp/nsis-data/inasafe/*
