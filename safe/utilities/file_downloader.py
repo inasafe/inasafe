@@ -165,7 +165,9 @@ class FileDownloader():
 
         elif result == QNetworkReply.ProtocolUnknownError or \
                 result == QNetworkReply.HostNotFoundError:
-            LOGGER.exception('Host not found : %s' % self.url.encodedHost())
+            # See http://doc.qt.io/qt-5/qurl-obsolete.html#encodedHost
+            encoded_host = self.url.toAce(self.url.host())
+            LOGGER.exception('Host not found : %s' % encoded_host)
             return False, tr(
                 'Sorry, the server is unreachable. Please try again later.')
 
