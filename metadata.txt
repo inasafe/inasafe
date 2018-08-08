@@ -17,7 +17,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
 version=5.0.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
