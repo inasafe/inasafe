@@ -35,17 +35,16 @@ def clean_layer(layer):
     request = QgsFeatureRequest().setSubsetOfAttributes([])
     for feature in layer.getFeatures(request):
         geom = feature.geometry()
-        geometry_cleaned = geometry_checker(geom)
-        # Geometry now is clean (can be the same geom, or different geom)
-        if geometry_cleaned:
-            # Only update if there is a change in the geometry
-            if not geom.equals(geometry_cleaned):
-                layer.changeGeometry(feature.id(), geometry_cleaned, True)
-            # Geometry is already cleaned, so we don't do anything.
-            else:
-                pass
-        # Geometry is not clean, delete it.
+        was_valid, geometry_cleaned = geometry_checker(geom)
+
+        if was_valid:
+            # Do nothing if it was valid
+            pass
+        elif not was_valid and geometry_cleaned:
+            # Update the geometry if it was not valid, and clean now
+            layer.changeGeometry(feature.id(), geometry_cleaned, True)
         else:
+            # Delete if it was not valid and not able to be cleaned
             count += 1
             layer.deleteFeature(feature.id())
 
@@ -71,19 +70,21 @@ def geometry_checker(geometry):
     :param geometry: The geometry to check and clean.
     :type geometry: QgsGeometry
 
-    :return: A cleaned geometry, or None if the geometry could not be repaired
-    :rtype: QgsGeometry
+    :return: Tuple of bool and cleaned geometry. True if the geometry is
+        already valid, False if the geometry was not valid.
+        A cleaned geometry, or None if the geometry could not be repaired
+    :rtype: (bool, QgsGeometry)
     """
     if geometry is None:
         # The geometry can be None.
-        return None
+        return False, None
 
     if geometry.isGeosValid():
-        return geometry
+        return True, geometry
     else:
         new_geom = geometry.makeValid()
         if new_geom.isGeosValid():
-            return new_geom
+            return False, new_geom
         else:
             # Make valid was not enough, the feature will be deleted.
-            return None
+            return False, None
