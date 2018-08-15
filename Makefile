@@ -338,7 +338,7 @@ docker-test:
 	@echo
 	@echo "----------------------------------"
 	@echo "Run tests in docker"
-	@echo "Image: kartoza/qgis-testing:boundlessgeo-2.14.7"
+	@echo "Image: elpaso/qgis-testing-environment:master"
 	@echo "You can change the tested package in 'test_suite.py' in the 'test_package' function."
 	@echo "----------------------------------"
 	@./run-docker-test.sh
