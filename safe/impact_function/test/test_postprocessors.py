@@ -10,8 +10,14 @@ from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
-from safe.definitions.exposure import exposure_population
-from safe.definitions.hazard import hazard_generic
+from safe.definitions.exposure import (exposure_population,
+                                       exposure_structure,
+)
+from safe.definitions.hazard import (hazard_generic,
+                                     hazard_cyclone,
+                                     hazard_flood,
+                                     hazard_earthquake,
+)
 from safe.definitions.hazard_classifications import generic_hazard_classes
 from safe.definitions.fields import (
     male_displaced_count_field,
@@ -213,7 +219,7 @@ class TestPostProcessors(unittest.TestCase):
             'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         impact_layer.keywords['exposure_keywords'] = {
-            'exposure': 'population'
+            'exposure': exposure_population['key']
         }
         self.assertIsNotNone(impact_layer)
 
@@ -244,7 +250,7 @@ class TestPostProcessors(unittest.TestCase):
             'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         impact_layer.keywords['exposure_keywords'] = {
-            'exposure': 'population'
+            'exposure': exposure_population['key']
         }
         self.assertIsNotNone(impact_layer)
 
@@ -325,11 +331,11 @@ class TestPostProcessors(unittest.TestCase):
 
         # Need to add keywords on the fly.
         impact_layer.keywords['hazard_keywords'] = {
-            'hazard': 'flood',
+            'hazard': hazard_flood['key'],
             'classification': 'flood_hazard_classes'
         }
         impact_layer.keywords['exposure_keywords'] = {
-            'exposure': 'structure'
+            'exposure': exposure_structure['key']
         }
 
         result, message = run_single_post_processor(
@@ -346,8 +352,8 @@ class TestPostProcessors(unittest.TestCase):
 
         post_processor_fake = copy.deepcopy(post_processor_affected)
         post_processor_fake['run_filter'] = {
-            'hazard': ['flood', 'cyclone'],
-            'exposure': ['structure']
+            'hazard': [hazard_flood['key'], hazard_cyclone['key']],
+            'exposure': [exposure_structure['key']]
             }
 
         # ###
@@ -356,22 +362,22 @@ class TestPostProcessors(unittest.TestCase):
         # Impact Layer fake keywords
         keywords = {
             'hazard_keywords': {
-                'hazard': 'flood',
+                'hazard': hazard_flood['key'],
                 },
             'exposure_keywords': {
-                'exposure': 'structure'
+                'exposure': exposure_structure['key']
                 }
             }
         run, _ = should_run(keywords, post_processor_fake)
         self.assertTrue(run)
 
-        keywords['hazard_keywords']['hazard'] = 'cyclone'
-        keywords['exposure_keywords']['exposure'] = 'population'
+        keywords['hazard_keywords']['hazard'] = hazard_cyclone['key']
+        keywords['exposure_keywords']['exposure'] = exposure_population['key']
         run, _ = should_run(keywords, post_processor_fake)
         self.assertFalse(run)
 
-        keywords['hazard_keywords']['hazard'] = 'earthquake'
-        keywords['exposure_keywords']['exposure'] = 'structure'
+        keywords['hazard_keywords']['hazard'] = hazard_earthquake['key']
+        keywords['exposure_keywords']['exposure'] = exposure_structure['key']
         run, _ = should_run(keywords, post_processor_fake)
         self.assertFalse(run)
 
@@ -380,33 +386,34 @@ class TestPostProcessors(unittest.TestCase):
         # ###
 
         # no hazard run_filter defined
-        keywords['hazard_keywords']['hazard'] = 'earthquake'
-        keywords['exposure_keywords']['exposure'] = 'structure'
+        keywords['hazard_keywords']['hazard'] = hazard_earthquake['key']
+        keywords['exposure_keywords']['exposure'] = exposure_structure['key']
         del(post_processor_fake['run_filter']['hazard'])
         run, _ = should_run(keywords, post_processor_fake)
         self.assertTrue(run)
         post_processor_fake['run_filter']['hazard'] = [
-            'flood', 'cyclone']
+            hazard_flood['key'], hazard_cyclone['key']]
 
         # no exposure run_filter defined
-        keywords['hazard_keywords']['hazard'] = 'cyclone'
-        keywords['exposure_keywords']['exposure'] = 'population'
+        keywords['hazard_keywords']['hazard'] = hazard_cyclone['key']
+        keywords['exposure_keywords']['exposure'] = exposure_population['key']
         del(post_processor_fake['run_filter']['exposure'])
         run, _ = should_run(keywords, post_processor_fake)
         self.assertTrue(run)
-        post_processor_fake['run_filter']['exposure'] = ['structure']
+        post_processor_fake['run_filter']['exposure'] = [
+            exposure_structure['key']]
 
         # run_filter defined without content
-        keywords['hazard_keywords']['hazard'] = 'earthquake'
-        keywords['exposure_keywords']['exposure'] = 'population'
+        keywords['hazard_keywords']['hazard'] = hazard_earthquake['key']
+        keywords['exposure_keywords']['exposure'] = exposure_population['key']
         del(post_processor_fake['run_filter']['hazard'])
         del(post_processor_fake['run_filter']['exposure'])
         run, _ = should_run(keywords, post_processor_fake)
         self.assertTrue(run)
 
         # no run_filter defined
-        keywords['hazard_keywords']['hazard'] = 'earthquake'
-        keywords['exposure_keywords']['exposure'] = 'structure'
+        keywords['hazard_keywords']['hazard'] = hazard_earthquake['key']
+        keywords['exposure_keywords']['exposure'] = exposure_structure['key']
         del(post_processor_fake['run_filter'])
         run, _ = should_run(keywords, post_processor_fake)
         self.assertTrue(run)
