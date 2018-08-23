@@ -273,7 +273,9 @@ def should_run(keywords, post_processor):
     """
     Check if the postprocessor should run for the current hazard and exposure
     :param keywords: impact layer keywords
+    :type keywords: dict
     :param post_processor: the post processor instance to check
+    :type post_processor: dict
     :returns: Tuple with True if success, else False with an error message.
     :rtype: (bool, str)
     """
