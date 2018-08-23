@@ -37,7 +37,7 @@ from safe.processors.post_processor_inputs import (
     size_calculator_input_value,
     keyword_input_type,
     field_input_type,
-    )
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -98,9 +98,9 @@ post_processor_distance = {
     'description': tr(
         'A post processor to calculate the distance between two points.'),
     'run_filter': {
-         'hazard': [hazard_earthquake['key']],
-         'exposure': [exposure_place['key']]
-         },
+        'hazard': [hazard_earthquake['key']],
+        'exposure': [exposure_place['key']]
+    },
     'input': {
         'distance_calculator': {
             'type': layer_property_input_type,
@@ -123,9 +123,9 @@ post_processor_distance = {
                 'hazard_keywords',
                 'extra_keywords',
                 extra_keyword_earthquake_longitude['key']
-                ]
-            },
+            ]
         },
+    },
     'output': {
         'size': {
             'value': distance_field,
@@ -141,10 +141,10 @@ post_processor_bearing = {
     'description': tr(
         'A post processor to calculate the bearing angle between two points.'
     ),
-    'run_filter':{
+    'run_filter': {
         'hazard': [hazard_earthquake['key']],
         'exposure': [exposure_place['key']]
-        },
+    },
     'input': {
         'place_geometry': {
             'type': geometry_property_input_type

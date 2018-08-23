@@ -54,7 +54,7 @@ from safe.definitions.hazard_classifications import earthquake_mmi_scale
 from safe.processors import (
     function_process,
     formula_process,
-    )
+)
 from safe.processors.post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
@@ -66,7 +66,7 @@ from safe.processors.post_processor_inputs import (
     keyword_input_type,
     dynamic_field_input_type,
     keyword_value_expected,
-    )
+)
 from safe.utilities.i18n import tr
 
 # A postprocessor can be defined with a formula or with a python function.
@@ -871,8 +871,8 @@ all_population_post_processors = (
 # Adding requirement for exposure = population, beside exposed population
 # post processor
 population_exposure_filter = {
-        'exposure': [exposure_population['key']]
-    }
+    'exposure': [exposure_population['key']]
+}
 for pp in all_population_post_processors:
     try:
         pp['run_filter'].update(population_exposure_filter)
