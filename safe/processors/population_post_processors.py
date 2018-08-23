@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from safe.definitions.concepts import concepts
 from safe.definitions.exposure import exposure_population
+from safe.definitions.hazard import hazard_earthquake
 # Displaced field
 from safe.definitions.fields import (
     child_bearing_age_displaced_count_field,
@@ -52,7 +53,8 @@ from safe.definitions.fields import (
 from safe.definitions.hazard_classifications import earthquake_mmi_scale
 from safe.processors import (
     function_process,
-    formula_process)
+    formula_process,
+    )
 from safe.processors.post_processor_functions import (
     multiply,
     post_processor_population_displacement_function,
@@ -63,7 +65,8 @@ from safe.processors.post_processor_inputs import (
     field_input_type,
     keyword_input_type,
     dynamic_field_input_type,
-    keyword_value_expected)
+    keyword_value_expected,
+    )
 from safe.utilities.i18n import tr
 
 # A postprocessor can be defined with a formula or with a python function.
@@ -169,7 +172,8 @@ post_processor_fatality_ratio = {
         'to the hazard class. Only the MMI classification has a fatality '
         'model.'),
     'run_filter': {
-        'exposure': [exposure_population['key']]
+        'exposure': [exposure_population['key']],
+        'hazard': [hazard_earthquake['key']]
     },
     'input': {
         # Taking hazard classification
@@ -866,12 +870,11 @@ all_population_post_processors = (
 
 # Adding requirement for exposure = population, beside exposed population
 # post processor
-population_exposure_input = {
-    'population_exposure': {
-        'type': keyword_value_expected,
-        'value': ['exposure_keywords', 'exposure'],
-        'expected_value': exposure_population['key']
+population_exposure_filter = {
+        'exposure': [exposure_population['key']]
     }
-}
 for pp in all_population_post_processors:
-    pp['input'].update(population_exposure_input)
+    try:
+        pp['run_filter'].update(population_exposure_filter)
+    except KeyError:
+        pp['run_filter'] = population_exposure_filter

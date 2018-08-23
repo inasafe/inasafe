@@ -37,7 +37,7 @@ from safe.processors.post_processor_inputs import (
     size_calculator_input_value,
     keyword_input_type,
     field_input_type,
-    keyword_value_expected)
+    )
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -97,6 +97,10 @@ post_processor_distance = {
     'name': tr('Distance Post Processor'),
     'description': tr(
         'A post processor to calculate the distance between two points.'),
+    'run_filter': {
+         'hazard': [hazard_earthquake['key']],
+         'exposure': [exposure_place['key']]
+         },
     'input': {
         'distance_calculator': {
             'type': layer_property_input_type,
@@ -119,19 +123,9 @@ post_processor_distance = {
                 'hazard_keywords',
                 'extra_keywords',
                 extra_keyword_earthquake_longitude['key']
-            ]
+                ]
+            },
         },
-        'earthquake_hazard': {
-            'type': keyword_value_expected,
-            'value': ['hazard_keywords', 'hazard'],
-            'expected_value': hazard_earthquake['key']
-        },
-        'place_exposure': {
-            'type': keyword_value_expected,
-            'value': ['exposure_keywords', 'exposure'],
-            'expected_value': exposure_place['key']
-        }
-    },
     'output': {
         'size': {
             'value': distance_field,
@@ -147,6 +141,10 @@ post_processor_bearing = {
     'description': tr(
         'A post processor to calculate the bearing angle between two points.'
     ),
+    'run_filter':{
+        'hazard': [hazard_earthquake['key']],
+        'exposure': [exposure_place['key']]
+        },
     'input': {
         'place_geometry': {
             'type': geometry_property_input_type
@@ -167,16 +165,6 @@ post_processor_bearing = {
                 extra_keyword_earthquake_longitude['key']
             ]
         },
-        'earthquake_hazard': {
-            'type': keyword_value_expected,
-            'value': ['hazard_keywords', 'hazard'],
-            'expected_value': hazard_earthquake['key']
-        },
-        'place_exposure': {
-            'type': keyword_value_expected,
-            'value': ['exposure_keywords', 'exposure'],
-            'expected_value': exposure_place['key']
-        }
     },
     'output': {
         'size': {
@@ -193,21 +181,15 @@ post_processor_cardinality = {
     'description': tr(
         'A post processor to calculate the cardinality of an angle.'
     ),
+    'run_filter': {
+        'exposure': [exposure_place['key']],
+        'hazard': [hazard_earthquake['key']]
+    },
     'input': {
         'angle': {
             'type': field_input_type,
             'value': bearing_field
         },
-        'earthquake_hazard': {
-            'type': keyword_value_expected,
-            'value': ['hazard_keywords', 'hazard'],
-            'expected_value': hazard_earthquake['key']
-        },
-        'place_exposure': {
-            'type': keyword_value_expected,
-            'value': ['exposure_keywords', 'exposure'],
-            'expected_value': exposure_place['key']
-        }
     },
     'output': {
         'size': {
