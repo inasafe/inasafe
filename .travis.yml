@@ -14,7 +14,7 @@ env:
     # Tags from elpaso
     # - QGIS_VERSION_TAG=release-2_8
     # - QGIS_VERSION_TAG=release-2_14
-    - QGIS_VERSION_TAG=master
+    - QGIS_VERSION_TAG=ltr-3_4
 
     # Tags from boundlessgeo
     # - QGIS_VERSION_TAG=release # Current 2.14
