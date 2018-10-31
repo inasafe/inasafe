@@ -27,6 +27,7 @@ import unittest
 import tempfile
 import shutil
 import os
+import urllib.request
 
 from qgis.PyQt.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
 from qgis.PyQt.QtNetwork import QNetworkReply
@@ -193,6 +194,7 @@ class OsmDownloaderTest(unittest.TestCase):
         # provide Fake QNetworkAccessManager
         self.network_manager = FakeQNetworkAccessManager()
 
+    @unittest.skip('The current server is not reliable.')
     def test_fetch_zip(self):
         """Test fetch zip method.
 
