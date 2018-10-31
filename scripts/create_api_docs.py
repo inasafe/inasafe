@@ -150,9 +150,9 @@ def get_python_files_from_list(files, excluded_files=None):
         excluded_files = ['__init__.py']
     python_files = []
     for fl in files:
-        if (fl.endswith('.py') and
-                fl not in excluded_files and not
-                fl.startswith('test')):
+        if (fl.endswith('.py')
+                and fl not in excluded_files
+                and not fl.startswith('test')):
             python_files.append(fl)
 
     return python_files
