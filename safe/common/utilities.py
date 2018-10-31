@@ -348,9 +348,10 @@ def format_decimal(interval, value):
     my_number_decimal = str(value).split('.')[1][:decimal_places]
     if len(set(my_number_decimal)) == 1 and my_number_decimal[-1] == '0':
         return my_number_int
-    return (add_separators(int(my_number_int))
-            + decimal_separator()
-            + my_number_decimal)
+    formatted_decimal = (add_separators(int(my_number_int))
+                         + decimal_separator()
+                         + my_number_decimal)
+    return formatted_decimal
 
 
 def get_significant_decimal(my_decimal):
