@@ -164,9 +164,9 @@ class FieldMappingTab(QWidget, object):
                 continue
             field_item = QListWidgetItem(self.field_list)
             field_item.setFlags(
-                Qt.ItemIsEnabled |
-                Qt.ItemIsSelectable |
-                Qt.ItemIsDragEnabled)
+                Qt.ItemIsEnabled
+                | Qt.ItemIsSelectable
+                | Qt.ItemIsDragEnabled)
             field_item.setData(Qt.UserRole, field.name())
             field_item.setText(field.name())
             self.field_list.addItem(field_item)

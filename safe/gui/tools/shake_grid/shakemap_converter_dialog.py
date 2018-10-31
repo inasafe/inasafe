@@ -299,8 +299,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
                 QgsProject.instance().addMapLayer(self.output_layer)
                 iface.zoomToActiveLayer()
 
-        if (self.keyword_wizard_checkbox.isChecked() and
-                self.keyword_wizard_checkbox.isEnabled()):
+        if (self.keyword_wizard_checkbox.isChecked()
+                and self.keyword_wizard_checkbox.isEnabled()):
             self.launch_keyword_wizard()
 
         self.done(self.Accepted)

@@ -53,9 +53,9 @@ post_processor_additional_rice = {
         'additional_rice_ratio': {
             'type': constant_input_type,
             'value': (
-                EXTRA_CALORIES_NEEDED_PER_DAY *
-                DAY_IN_A_WEEK *
-                KG_RICE_PER_CALORIES),
+                EXTRA_CALORIES_NEEDED_PER_DAY
+                * DAY_IN_A_WEEK
+                * KG_RICE_PER_CALORIES),
         }
     },
     'output': {

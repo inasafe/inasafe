@@ -91,9 +91,9 @@ def reclassify(layer, exposure_key=None):
         attributes = feature.attributes()
         source_value = attributes[continuous_index]
         classified_value = reclassify_value(source_value, thresholds)
-        if classified_value is None or \
-                (hasattr(classified_value, 'isNull') and
-                    classified_value.isNull()):
+        if (classified_value is None
+                or (hasattr(classified_value, 'isNull')
+                    and classified_value.isNull())):
             layer.deleteFeature(feature.id())
         else:
             layer.changeAttributeValue(

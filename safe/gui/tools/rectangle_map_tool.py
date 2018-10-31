@@ -104,8 +104,8 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         :return:
         """
         self.rubber_band.reset(QgsWkbTypes.PolygonGeometry)
-        if (start_point.x() == end_point.x() or
-                start_point.y() == end_point.y()):
+        if (start_point.x() == end_point.x()
+                or start_point.y() == end_point.y()):
             return
 
         point1 = start_point

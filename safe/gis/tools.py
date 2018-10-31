@@ -101,8 +101,9 @@ def reclassify_value(one_value, ranges):
     :return: The classified value or None.
     :rtype: float or None
     """
-    if one_value is None or (hasattr(one_value, 'isNull') and
-                             one_value.isNull()):
+    if (one_value is None
+            or (hasattr(one_value, 'isNull')
+                and one_value.isNull())):
         return None
 
     for threshold_id, threshold in list(ranges.items()):

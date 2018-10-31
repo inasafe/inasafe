@@ -178,9 +178,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         clean_unique_values = []
         for unique_value in unique_values:
-            if unique_value is None \
-                    or (hasattr(unique_value, 'isNull') and
-                        unique_value.isNull()):
+            if (unique_value is None
+                    or (hasattr(unique_value, 'isNull')
+                        and unique_value.isNull())):
                 # Don't classify features with NULL value
                 continue
             clean_unique_values.append(unique_value)
@@ -218,11 +218,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 else:
                     condition_1 = False
                 condition_2 = (
-                    field_type < 10 and
-                    'numeric_default_min' in default_class and
-                    'numeric_default_max' in default_class and (
-                        default_class['numeric_default_min'] <= unique_value <=
-                        default_class['numeric_default_max']))
+                    field_type < 10
+                    and 'numeric_default_min' in default_class
+                    and 'numeric_default_max' in default_class
+                    and (default_class['numeric_default_min']
+                         <= unique_value
+                         <= default_class['numeric_default_max']))
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True
@@ -241,16 +242,16 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         value_map_classification_name = self.parent.get_existing_keyword(
             'classification')
         # Do not continue if there is no value_map in existing keywords
-        if (value_map is None or
-                value_map_classification_name != classification['key']):
+        if (value_map is None
+                or value_map_classification_name != classification['key']):
             return
 
         # Do not continue if user selected different field
         field_keyword = self.parent.field_keyword_for_the_layer()
         field = self.parent.get_existing_keyword('inasafe_fields').get(
             field_keyword)
-        if (not is_raster_layer(self.parent.layer) and
-                field != self.parent.step_kw_field.selected_fields()):
+        if (not is_raster_layer(self.parent.layer)
+                and field != self.parent.step_kw_field.selected_fields()):
             return
 
         unassigned_values = list()
@@ -299,9 +300,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             value_as_string = value is not None and str(value) or 'NULL'
             list_item = QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(
-                Qt.ItemIsEnabled |
-                Qt.ItemIsSelectable |
-                Qt.ItemIsDragEnabled)
+                Qt.ItemIsEnabled
+                | Qt.ItemIsSelectable
+                | Qt.ItemIsDragEnabled)
             list_item.setData(Qt.UserRole, value)
             list_item.setText(value_as_string)
             self.lstUniqueValues.addItem(list_item)
@@ -327,9 +328,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 string_value = value is not None and str(value) or 'NULL'
                 tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
-                    Qt.ItemIsEnabled |
-                    Qt.ItemIsSelectable |
-                    Qt.ItemIsDragEnabled)
+                    Qt.ItemIsEnabled
+                    | Qt.ItemIsSelectable
+                    | Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
 

@@ -426,8 +426,10 @@ class Dock(QDockWidget, FORM_CLASS):
                 else:
                     invalid_logo_size = True
 
-        if (self.organisation_logo_path and show_logos_flag and
-                not invalid_logo_size and not logo_not_exist):
+        if (self.organisation_logo_path
+                and show_logos_flag
+                and not invalid_logo_size
+                and not logo_not_exist):
             self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
@@ -608,9 +610,9 @@ class Dock(QDockWidget, FORM_CLASS):
         selected_exposure_layer = layer_from_combo(self.exposure_layer_combo)
 
         # more than 1 because No aggregation is always there
-        if ((self.aggregation_layer_combo.count() > 1) and
-                (selected_hazard_layer is not None) and
-                (selected_exposure_layer is not None)):
+        if ((self.aggregation_layer_combo.count() > 1)
+                and (selected_hazard_layer is not None)
+                and (selected_exposure_layer is not None)):
             self.aggregation_layer_combo.setEnabled(True)
         else:
             self.aggregation_layer_combo.setCurrentIndex(0)
@@ -691,8 +693,8 @@ class Dock(QDockWidget, FORM_CLASS):
         self.aggregation_layer_combo.clear()
 
         for layer in layers:
-            if (self.show_only_visible_layers_flag and
-                    (layer not in canvas_layers)):
+            if (self.show_only_visible_layers_flag
+                    and (layer not in canvas_layers)):
                 continue
 
             # store uuid in user property of list widget for layers

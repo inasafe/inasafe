@@ -135,8 +135,8 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
             self._parameter.default = None
         # The last radio button (custom) is checked, get the value from the
         # line edit
-        elif (radio_button_checked_id ==
-                len(self._parameter.default_values) - 1):
+        elif (radio_button_checked_id
+              == len(self._parameter.default_values) - 1):
             self._parameter.default_values[radio_button_checked_id] \
                 = self.custom_value.value()
             self._parameter.default = self.custom_value.value()
@@ -170,8 +170,8 @@ class DefaultSelectParameterWidget(SelectParameterWidget):
 
     def toggle_custom_value(self):
         radio_button_checked_id = self.default_input_button_group.checkedId()
-        if (radio_button_checked_id ==
-                len(self._parameter.default_values) - 1):
+        if (radio_button_checked_id
+                == len(self._parameter.default_values) - 1):
             self.custom_value.setDisabled(False)
         else:
             self.custom_value.setDisabled(True)

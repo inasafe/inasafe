@@ -198,14 +198,14 @@ def aggregation_result_extractor(impact_report, component_metadata):
                 column_index = len(type_total_values)
                 # cut column header
                 type_header_labels = (
-                    type_header_labels[:column_index] +
-                    type_header_labels[column_index + 1:])
+                    type_header_labels[:column_index]
+                    + type_header_labels[column_index + 1:])
                 # cut all row values for the column
                 for item in rows:
                     type_values = item['type_values']
                     item['type_values'] = (
-                        type_values[:column_index] +
-                        type_values[column_index + 1:])
+                        type_values[:column_index]
+                        + type_values[column_index + 1:])
                 continue
             type_total_values.append(affected_value_string_formatted)
 

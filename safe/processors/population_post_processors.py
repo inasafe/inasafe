@@ -797,12 +797,12 @@ disabled_vulnerability_postprocessors = [
 ]
 
 all_population_post_processors = (
-    female_postprocessors +
-    age_postprocessors +
-    gender_postprocessors +
-    age_vulnerability_postprocessors +
-    gender_vulnerability_postprocessors +
-    disabled_vulnerability_postprocessors
+    female_postprocessors
+    + age_postprocessors
+    + gender_postprocessors
+    + age_vulnerability_postprocessors
+    + gender_vulnerability_postprocessors
+    + disabled_vulnerability_postprocessors
 ) + [
     post_processor_displaced_ratio,
     post_processor_displaced,

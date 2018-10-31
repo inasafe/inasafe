@@ -422,8 +422,8 @@ def qgis_composer_extractor(impact_report, component_metadata):
             'exposure_keywords', {}).get('source') or unknown_source_text)
     if provenance['aggregation_layer']:
         aggregation_source = (
-            provenance['aggregation_keywords'].get('source') or
-            unknown_source_text)
+            provenance['aggregation_keywords'].get('source')
+            or unknown_source_text)
     else:
         aggregation_source = aggregation_not_used
 

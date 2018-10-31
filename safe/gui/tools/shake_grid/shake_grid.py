@@ -1044,8 +1044,10 @@ def convert_mmi_data(
     if output_path is not None:
         output_dir, output_basename = os.path.split(output_path)
         output_basename, _ = os.path.splitext(output_basename)
-        LOGGER.debug('output_dir : ' + output_dir +
-                     'output_basename : ' + output_basename)
+        LOGGER.debug(
+            'output_dir : '
+            + output_dir
+            + 'output_basename : ' + output_basename)
     else:
         output_dir = output_path
         output_basename = None

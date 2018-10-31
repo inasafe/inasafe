@@ -414,8 +414,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer_geometry = ec['key']
         else:
             # For aggregation layers, use a simplified test and return
-            if (keywords and 'layer_purpose' in keywords and
-                    keywords['layer_purpose'] == layer_purpose):
+            if (keywords and 'layer_purpose' in keywords
+                    and keywords['layer_purpose'] == layer_purpose):
                 return True
             if not keywords and is_polygon_layer(layer):
                 return True
@@ -436,13 +436,13 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Compare layer keywords with explicitly set constraints
         # Reject if layer purpose missing or doesn't match
-        if ('layer_purpose' not in keywords or
-                keywords['layer_purpose'] != layer_purpose):
+        if ('layer_purpose' not in keywords
+                or keywords['layer_purpose'] != layer_purpose):
             return False
 
         # Reject if layer subcategory doesn't match
-        if (layer_purpose in keywords and
-                keywords[layer_purpose] != subcategory):
+        if (layer_purpose in keywords
+                and keywords[layer_purpose] != subcategory):
             return False
 
         return True
@@ -588,12 +588,12 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Enable the Back button unless it's not the first step
         self.pbnBack.setEnabled(
-            step not in [self.step_kw_purpose, self.step_fc_functions1] or
-            self.parent_step is not None)
+            step not in [self.step_kw_purpose, self.step_fc_functions1]
+            or self.parent_step is not None)
 
         # Set Next button label
-        if (step in [self.step_kw_summary, self.step_fc_analysis] and
-                self.parent_step is None):
+        if (step in [self.step_kw_summary, self.step_fc_analysis]
+                and self.parent_step is None):
             self.pbnNext.setText(tr('Finish'))
         elif step == self.step_fc_summary:
             self.pbnNext.setText(tr('Run'))

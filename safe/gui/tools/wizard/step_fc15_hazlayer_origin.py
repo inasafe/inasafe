@@ -32,8 +32,8 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return (bool(self.rbHazLayerFromCanvas.isChecked() or
-                     self.rbHazLayerFromBrowser.isChecked()))
+        return (bool(self.rbHazLayerFromCanvas.isChecked()
+                     or self.rbHazLayerFromBrowser.isChecked()))
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.

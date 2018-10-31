@@ -267,8 +267,8 @@ def analysis_provenance_details_simplified_extractor(
         'provenance': provenance_format.format(
             layer_name=hazard_keywords.get('title'),
             source=QgsDataSourceUri.removePassword(
-                decode_full_layer_uri(hazard_keywords.get('source'))[0] or
-                default_source))
+                decode_full_layer_uri(hazard_keywords.get('source'))[0]
+                or default_source))
     }
 
     exposure_keywords = impact_report.impact_function.provenance[
@@ -282,8 +282,8 @@ def analysis_provenance_details_simplified_extractor(
         'provenance': provenance_format.format(
             layer_name=exposure_keywords.get('title'),
             source=QgsDataSourceUri.removePassword(
-                decode_full_layer_uri(exposure_keywords.get('source'))[0] or
-                default_source))
+                decode_full_layer_uri(exposure_keywords.get('source'))[0]
+                or default_source))
     }
 
     aggregation_keywords = impact_report.impact_function.provenance[
@@ -297,8 +297,8 @@ def analysis_provenance_details_simplified_extractor(
         provenance_string = provenance_format.format(
             layer_name=aggregation_keywords.get('title'),
             source=QgsDataSourceUri.removePassword(
-                decode_full_layer_uri(aggregation_keywords.get('source'))[0] or
-                default_source))
+                decode_full_layer_uri(aggregation_keywords.get('source'))[0]
+                or default_source))
     else:
         aggregation_not_used = resolve_from_dictionary(
             extra_args, ['defaults', 'aggregation_not_used'])

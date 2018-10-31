@@ -590,8 +590,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         if unparsed_contents == '':
             unparsed_contents = 'No failures in parsing files\n'
         full_messages = (
-            parsed_message + parsed_contents + '\n\n' +
-            unparsed_message + unparsed_contents)
+            parsed_message + parsed_contents + '\n\n'
+            + unparsed_message + unparsed_contents)
         return full_messages
 
     @pyqtSlot()
@@ -636,8 +636,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                     report.append('F: %s\n' % name_item)
                     fail_count += 1
             except Exception as e:  # pylint: disable=W0703
-                LOGGER.exception('Batch execution failed. The exception: ' +
-                                 str(e))
+                LOGGER.exception(
+                    'Batch execution failed. The exception: ' + str(e))
                 report.append('F: %s\n' % name_item)
                 fail_count += 1
                 self.disable_busy_cursor()
