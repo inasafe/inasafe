@@ -208,8 +208,12 @@ class GeoPackage(DataStore):
 
         spatial_reference = osr.SpatialReference()
         qgis_spatial_reference = vector_layer.crs().authid()
-        spatial_reference.ImportFromEPSG(
-            int(qgis_spatial_reference.split(':')[1]))
+        # Use 4326 as default if the spatial reference is not found
+        epsg = 4326
+        epsg_string = qgis_spatial_reference
+        if epsg_string:
+            epsg = int(epsg_string.split(':')[1])
+        spatial_reference.ImportFromEPSG(epsg)
 
         vector_datasource = self.vector_driver.Open(
             self.uri.absoluteFilePath(), True)
