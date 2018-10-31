@@ -206,8 +206,7 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 layer_id = layer.data(LAYER_PURPOSE_KEY_OR_ID_ROLE)
                 layer = registry.mapLayer(layer_id)
                 style_document = QDomDocument()
-                error = ''
-                layer.exportNamedStyle(style_document, error)
+                layer.exportNamedStyle(style_document)
 
                 layers.append((
                     FROM_CANVAS['key'],
