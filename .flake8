@@ -4,4 +4,4 @@ max-line-length = 79
 
 # E12x continuation line indentation
 
-ignore = E121,E722
+ignore = E121,E722,W503
