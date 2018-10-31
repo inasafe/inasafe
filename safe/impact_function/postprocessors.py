@@ -129,8 +129,8 @@ def run_single_post_processor(layer, post_processor):
                 is_constant_input = (
                     value['type'] == constant_input_type)
                 is_field_input = (
-                    value['type'] == field_input_type or
-                    value['type'] == dynamic_field_input_type)
+                    value['type'] == field_input_type
+                    or value['type'] == dynamic_field_input_type)
                 is_geometry_input = (
                     value['type'] == geometry_property_input_type)
                 is_keyword_input = (

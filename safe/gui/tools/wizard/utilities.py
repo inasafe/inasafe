@@ -99,9 +99,9 @@ def layer_description_html(layer, keywords=None):
     else:
         keyword_version = None
 
-    if (keywords and
-            keyword_version and
-            is_keyword_version_supported(keyword_version)):
+    if (keywords
+            and keyword_version
+            and is_keyword_version_supported(keyword_version)):
         # The layer has valid keywords
         purpose = keywords.get('layer_purpose')
         if purpose == layer_purpose_hazard['key']:
@@ -162,10 +162,11 @@ def layer_description_html(layer, keywords=None):
             %s
         """ % (tr('This layer has no valid keywords assigned'),
                tr('SOURCE'), source,
-               tr('TYPE'), is_raster_layer(layer) and 'raster' or
-               'vector (%s)' % geom_type,
-               tr('In the next step you will be able' +
-                  ' to assign keywords to this layer.'))
+               tr('TYPE'), is_raster_layer(layer)
+               and 'raster'
+               or 'vector (%s)' % geom_type,
+               tr('In the next step you will be able'
+                  + ' to assign keywords to this layer.'))
     return description
 
 

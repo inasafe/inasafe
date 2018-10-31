@@ -224,9 +224,9 @@ class PrintReportDialog(QtWidgets.QDialog, FORM_CLASS):
         """
         templates_dir = QtCore.QDir(path)
         templates_dir.setFilter(
-            QtCore.QDir.Files |
-            QtCore.QDir.NoSymLinks |
-            QtCore.QDir.NoDotAndDotDot)
+            QtCore.QDir.Files
+            | QtCore.QDir.NoSymLinks
+            | QtCore.QDir.NoDotAndDotDot)
         templates_dir.setNameFilters(['*.qpt', '*.QPT'])
         report_files = templates_dir.entryList()
         if not unwanted_templates:

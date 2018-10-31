@@ -26,9 +26,9 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return (bool(self.rbAggLayerFromCanvas.isChecked() or
-                     self.rbAggLayerFromBrowser.isChecked() or
-                     self.rbAggLayerNoAggregation.isChecked()))
+        return (bool(self.rbAggLayerFromCanvas.isChecked()
+                     or self.rbAggLayerFromBrowser.isChecked()
+                     or self.rbAggLayerNoAggregation.isChecked()))
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.

@@ -478,11 +478,13 @@ class DonutChartContext(SVGChartContext):
         # calculate center of slice, angle increments clockwise
         # from 90 degree position
         center_slice_x = (
-            center_point[0] +
-            center_slice_radius * math.cos(mean_angle))
+            center_point[0]
+            + center_slice_radius
+            * math.cos(mean_angle))
         center_slice_y = (
-            center_point[1] +
-            center_slice_radius * math.sin(mean_angle))
+            center_point[1]
+            + center_slice_radius
+            * math.sin(mean_angle))
         show_label = True
         # if percentage is less than 10%, do not show label
         if 1.0 * slice_value / total_values < 0.1:

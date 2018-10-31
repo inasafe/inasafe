@@ -437,11 +437,11 @@ def convert_metadata(keywords, **converter_parameters):
                         exposure_class_field)
         # Data type is only used in population exposure and in v4.x it is
         # always count
-        if (exposure == exposure_population['key'] and layer_geometry ==
-                layer_geometry_raster['key']):
+        if (exposure == exposure_population['key'] and layer_geometry
+                == layer_geometry_raster['key']):
             new_keywords['datatype'] = 'count'
-        if (exposure == exposure_population['key'] and
-                layer_geometry == layer_geometry_polygon['key']):
+        if (exposure == exposure_population['key']
+                and layer_geometry == layer_geometry_polygon['key']):
             if inasafe_fields.get(exposure_name_field['key']):
                 new_keywords['area_name_field'] = inasafe_fields[
                     exposure_name_field['key']]

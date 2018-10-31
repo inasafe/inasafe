@@ -304,11 +304,11 @@ class ImpactReport():
             self._impact = (
                 impact or self._impact_function.impact)
             self._exposure_summary_table = (
-                exposure_summary_table or
-                self._impact_function.exposure_summary_table)
+                exposure_summary_table
+                or self._impact_function.exposure_summary_table)
             self._aggregation_summary = (
-                aggregation_summary or
-                self._impact_function.aggregation_summary)
+                aggregation_summary
+                or self._impact_function.aggregation_summary)
         if extra_layers is None:
             extra_layers = []
         self._extra_layers = extra_layers

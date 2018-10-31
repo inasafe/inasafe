@@ -622,8 +622,8 @@ class MultiExposureImpactFunction():
                         'Layer fields is not equal for %s' %
                         if_property)
                     return False, message
-                if (layer_a.featureCount() !=
-                        layer_b.featureCount()):
+                if (layer_a.featureCount()
+                        != layer_b.featureCount()):
                     message = (
                         'Feature count is not equal for %s' %
                         if_property)
@@ -680,8 +680,8 @@ class MultiExposureImpactFunction():
                             '[Non Layer] The not equal property is %s.\n'
                             'A: %s\nB: %s' % (if_property, string_a, string_b))
                         return False, message
-                elif (isinstance(property_a, tuple) or
-                        isinstance(property_a, list)):
+                elif (isinstance(property_a, tuple)
+                      or isinstance(property_a, list)):
                     if len(property_a) == len(property_b) == 0:
                         continue
                     elif len(property_a) and \

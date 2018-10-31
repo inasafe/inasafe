@@ -120,8 +120,8 @@ class DefaultValueParameterWidget(GenericParameterWidget):
     def toggle_custom_value(self):
         """Enable or disable the custom value line edit."""
         radio_button_checked_id = self.input_button_group.checkedId()
-        if (radio_button_checked_id ==
-                len(self._parameter.options) - 1):
+        if (radio_button_checked_id
+                == len(self._parameter.options) - 1):
             self.custom_value.setDisabled(False)
         else:
             self.custom_value.setDisabled(True)

@@ -144,9 +144,9 @@ def exposure_summary_table(
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
-        if (hazard_class == '' or hazard_class is None or
-                (hasattr(hazard_class, 'isNull') and
-                    hazard_class.isNull())):
+        if (hazard_class == '' or hazard_class is None
+                or (hasattr(hazard_class, 'isNull')
+                    and hazard_class.isNull())):
             hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)

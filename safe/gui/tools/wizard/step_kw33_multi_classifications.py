@@ -859,8 +859,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or (hasattr(unique_value, 'isNull') and
-                                        unique_value.isNull()):
+            if (unique_value is None
+                    or (hasattr(unique_value, 'isNull')
+                        and unique_value.isNull())):
                 # Don't classify features with NULL value
                 continue
             # Capitalization of the value and removing '_' (raw OSM data).
@@ -877,11 +878,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 else:
                     condition_1 = False
                 condition_2 = (
-                    field_type < 10 and
-                    'numeric_default_min' in default_class and
-                    'numeric_default_max' in default_class and (
-                        default_class['numeric_default_min'] <= unique_value <
-                        default_class['numeric_default_max']))
+                    field_type < 10
+                    and 'numeric_default_min' in default_class
+                    and 'numeric_default_max' in default_class
+                    and (default_class['numeric_default_min']
+                         <= unique_value
+                         < default_class['numeric_default_max']))
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True
@@ -917,8 +919,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
-            if unique_value is None or (hasattr(unique_value, 'isNull') and
-                                        unique_value.isNull()):
+            if (unique_value is None
+                    or (hasattr(unique_value, 'isNull')
+                        and unique_value.isNull())):
                 # Don't classify features with NULL value
                 continue
             # check in value map
@@ -986,9 +989,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             value_as_string = value is not None and str(value) or 'NULL'
             list_item = QListWidgetItem(list_unique_values)
             list_item.setFlags(
-                Qt.ItemIsEnabled |
-                Qt.ItemIsSelectable |
-                Qt.ItemIsDragEnabled)
+                Qt.ItemIsEnabled
+                | Qt.ItemIsSelectable
+                | Qt.ItemIsDragEnabled)
             list_item.setData(Qt.UserRole, value)
             list_item.setText(value_as_string)
             list_unique_values.addItem(list_item)
@@ -1020,9 +1023,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
                 string_value = value is not None and str(value) or 'NULL'
                 tree_leaf = QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
-                    Qt.ItemIsEnabled |
-                    Qt.ItemIsSelectable |
-                    Qt.ItemIsDragEnabled)
+                    Qt.ItemIsEnabled
+                    | Qt.ItemIsSelectable
+                    | Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
 

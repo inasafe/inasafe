@@ -398,8 +398,8 @@ class ImpactFunction():
                                 'Layer fields is not equal for %s' %
                                 if_property)
                             return False, message
-                        if (property_a.featureCount() !=
-                                property_b.featureCount()):
+                        if (property_a.featureCount()
+                                != property_b.featureCount()):
                             message = (
                                 'Feature count is not equal for %s' %
                                 if_property)

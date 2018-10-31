@@ -180,8 +180,8 @@ class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
         """
         input_path = self.layer.currentLayer().source()
         output_path = (
-            os.path.splitext(input_path)[0] + '_multi_buffer' +
-            os.path.splitext(input_path)[1])
+            os.path.splitext(input_path)[0] + '_multi_buffer'
+            + os.path.splitext(input_path)[1])
         self.output_form.setText(output_path)
 
     def populate_hazard_classification(self):
@@ -247,9 +247,9 @@ class MultiBufferDialog(QtWidgets.QDialog, FORM_CLASS):
         if not self.layer.currentLayer():
             self.button_box.button(
                 QtWidgets.QDialogButtonBox.Ok).setEnabled(False)
-        elif (self.hazard_class_form.count() > 0 and
-                self.layer.currentLayer().name() and
-                len(self.output_form.text()) >= 0):
+        elif (self.hazard_class_form.count() > 0
+              and self.layer.currentLayer().name()
+              and len(self.output_form.text()) >= 0):
             self.button_box.button(
                 QtWidgets.QDialogButtonBox.Ok).setEnabled(True)
         else:

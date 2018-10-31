@@ -190,9 +190,9 @@ class GroupSelectParameterWidget(GenericParameterWidget):
                     # Update list widget
                     field_item = QListWidgetItem(self.list_widget)
                     field_item.setFlags(
-                        Qt.ItemIsEnabled |
-                        Qt.ItemIsSelectable |
-                        Qt.ItemIsDragEnabled)
+                        Qt.ItemIsEnabled
+                        | Qt.ItemIsSelectable
+                        | Qt.ItemIsDragEnabled)
                     field_item.setData(Qt.UserRole, field)
                     field_item.setText(field)
                     self.list_widget.addItem(field_item)

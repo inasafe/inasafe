@@ -225,8 +225,8 @@ class WizardStepBrowser(WizardStep):
 
         # Classification
         classification_row = ''
-        if (lay_req['layer_mode'] == layer_mode_classified and
-                layer_purpose == layer_purpose_hazard['key']):
+        if (lay_req['layer_mode'] == layer_mode_classified
+                and layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
             classification_obj = hazard_classification
             classification_key = classification_obj['key']
@@ -249,8 +249,8 @@ class WizardStepBrowser(WizardStep):
                         lay_classification, req_classifications)
                 classification_row = (
                     (
-                        '<tr><td><b>%s</b></td>' +
-                        '<td>%s</td><td>%s</td></tr>')
+                        '<tr><td><b>%s</b></td>'
+                        + '<td>%s</td><td>%s</td></tr>')
                     % (
                         classification_key_name,
                         lay_classification,
@@ -282,8 +282,8 @@ class WizardStepBrowser(WizardStep):
                     lay_unit, req_units = emphasize(lay_unit, req_units)
                 units_row = (
                     (
-                        '<tr><td><b>%s</b></td>' +
-                        '<td>%s</td><td>%s</td></tr>')
+                        '<tr><td><b>%s</b></td>'
+                        + '<td>%s</td><td>%s</td></tr>')
                     % (unit_key_name, lay_unit, req_units))
 
         html = '''

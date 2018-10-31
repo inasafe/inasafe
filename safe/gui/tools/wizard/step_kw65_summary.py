@@ -79,16 +79,16 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                 haz = layer_purpose_hazard['key']
                 exp = layer_purpose_exposure['key']
                 agg = layer_purpose_aggregation['key']
-                if (parent_step == self.parent.step_fc_hazlayer_from_canvas and
-                        not self.parent.get_compatible_canvas_layers(haz)):
+                if (parent_step == self.parent.step_fc_hazlayer_from_canvas
+                        and not self.parent.get_compatible_canvas_layers(haz)):
                     new_step = self.parent.step_fc_hazlayer_origin
-                elif (parent_step ==
-                      self.parent.step_fc_explayer_from_canvas and
-                      not self.parent.get_compatible_canvas_layers(exp)):
+                elif (parent_step
+                      == self.parent.step_fc_explayer_from_canvas
+                      and not self.parent.get_compatible_canvas_layers(exp)):
                     new_step = self.parent.step_fc_explayer_origin
-                elif (parent_step ==
-                      self.parent.step_fc_agglayer_from_canvas and
-                      not self.parent.get_compatible_canvas_layers(agg)):
+                elif (parent_step
+                      == self.parent.step_fc_agglayer_from_canvas
+                      and not self.parent.get_compatible_canvas_layers(agg)):
                     new_step = self.parent.step_fc_agglayer_origin
                 else:
                     new_step = parent_step

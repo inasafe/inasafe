@@ -384,8 +384,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
             self.combos_exposures[one_exposure['key']] = combo
 
         for layer in layers:
-            if (show_only_visible_layers and
-                    (layer not in canvas_layers)):
+            if (show_only_visible_layers
+                    and (layer not in canvas_layers)):
                 continue
 
             try:

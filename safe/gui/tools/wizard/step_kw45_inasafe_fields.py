@@ -90,8 +90,8 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         :returns: A list where each value represents inasafe field.
         :rtype: list
         """
-        if (self.parent.get_layer_geometry_key() ==
-                layer_geometry_raster['key']):
+        if (self.parent.get_layer_geometry_key()
+                == layer_geometry_raster['key']):
             return []
         # Get hazard or exposure value
         layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[

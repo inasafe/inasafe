@@ -68,8 +68,8 @@ class FieldMappingDialog(QDialog, FORM_CLASS):
         self.layer_combo_box = QgsMapLayerComboBox()
         # Filter only for Polygon and Point
         self.layer_combo_box.setFilters(
-            QgsMapLayerProxyModel.PolygonLayer |
-            QgsMapLayerProxyModel.PointLayer)
+            QgsMapLayerProxyModel.PolygonLayer
+            | QgsMapLayerProxyModel.PointLayer)
         # Filter out a layer that don't have layer groups
         excepted_layers = []
         for i in range(self.layer_combo_box.count()):
