@@ -103,6 +103,20 @@ class SafeTranslationsTest(unittest.TestCase):
         message = 'expected %s but got %s' % (expected_message, real_message)
         self.assertEqual(expected_message, real_message, message)
 
+        # run qgis on portuguese
+        _ = get_qgis_app('pt', qsetting=INASAFE_TEST)
+
+        expected_locale = 'pt'
+        self.assertEqual(locale(INASAFE_TEST), expected_locale)
+
+        # check for english translation
+        expected_message = (
+            u'Começando')
+        real_message = tr(
+            'Getting started')
+        message = 'expected %s but got %s' % (expected_message, real_message)
+        self.assertEqual(expected_message, real_message, message)
+
         # run qgis on english
         _ = get_qgis_app(qsetting=INASAFE_TEST)
 
