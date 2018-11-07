@@ -25,7 +25,7 @@ DIR := ${CURDIR}
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
-LOCALES = en id fr vi es_ES pt
+LOCALES = en id fr vi es_ES
 
 default: quicktest
 
@@ -52,7 +52,6 @@ test-translations:
 	@python scripts/missing_translations.py `pwd` af
 	@python scripts/missing_translations.py `pwd` es_ES
 	@python scripts/missing_translations.py `pwd` vi
-	@python scripts/missing_translations.py `pwd` pt
 
 
 translation-stats:
