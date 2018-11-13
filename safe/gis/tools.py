@@ -11,6 +11,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsDataSourceURI,
+    QgsMapLayer
 )
 
 from safe.common.exceptions import InvalidLayerError
@@ -297,6 +298,15 @@ def load_layer_without_provider(layer_uri, layer_name='tmp'):
     layer = QgsRasterLayer(layer_uri, layer_name, RASTER_DRIVERS[0])
     if layer.isValid():
         return layer
+
+    # Let's try QLR
+    _, extension = os.path.splitext(layer_uri)
+    if extension.lower() == '.qlr':
+        layer = QgsMapLayer.fromLayerDefinitionFile(layer_uri)
+        if layer:
+            layer = layer[0]
+        if layer.isValid():
+            return layer
 
     # Then try all other drivers
     for driver in VECTOR_DRIVERS[1:]:

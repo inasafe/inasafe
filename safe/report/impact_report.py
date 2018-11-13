@@ -249,6 +249,15 @@ class QGISCompositionContext(object):
         """
         return self._save_as_raster
 
+    @save_as_raster.setter
+    def save_as_raster(self, value):
+        """Boolean that indicates the composition will be saved as Raster.
+
+        :param value: bool value. Set true for raster.
+        :type value: bool
+        """
+        self._save_as_raster = value
+
 
 class ImpactReport(object):
 
