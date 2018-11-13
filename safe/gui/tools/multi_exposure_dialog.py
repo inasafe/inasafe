@@ -594,7 +594,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 display_warning_message_bar(
                     tr('Reports'),
                     tr('Reports are not going to be generated because of your '
-                       'InaSAFE settings.'),
+                       'InaSAFE settings. Check your InaSAFE settings, in the '
+                       'advanced panel with the developer mode enabled.'),
                     duration=10,
                     iface_object=self.iface
                 )
@@ -666,7 +667,8 @@ class MultiExposureDialog(QDialog, FORM_CLASS):
                 display_warning_message_bar(
                     tr('Reports'),
                     tr('Reports are not going to be generated because of your '
-                       'InaSAFE settings.'),
+                       'InaSAFE settings. Check your InaSAFE settings, in the '
+                       'advanced panel with the developer mode enabled.'),
                     duration=10,
                     iface_object=self.iface
                 )
