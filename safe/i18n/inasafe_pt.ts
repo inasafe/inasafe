@@ -274,7 +274,7 @@
     <message>
         <location filename="exposure.py" line="259"/>
         <source>Structures</source>
-        <translation type="unfinished"/>
+        <translation>Estruturas</translation>
     </message>
     <message>
         <location filename="dynamic_translations.py" line="97"/>
@@ -639,7 +639,7 @@
     <message>
         <location filename="units.py" line="193"/>
         <source>Area</source>
-        <translation type="unfinished"/>
+        <translation>Área</translation>
     </message>
     <message>
         <location filename="minimum_needs.py" line="30"/>
@@ -674,7 +674,7 @@
     <message>
         <location filename="exposure.py" line="40"/>
         <source>Population</source>
-        <translation type="unfinished"/>
+        <translation>População</translation>
     </message>
     <message>
         <location filename="exposure_classifications.py" line="822"/>
@@ -719,7 +719,7 @@
     <message>
         <location filename="exposure.py" line="75"/>
         <source>How will warnings be disseminated?</source>
-        <translation type="unfinished"/>
+        <translation>Como os avisos serão divulgados?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="41"/>
@@ -729,7 +729,7 @@
     <message>
         <location filename="units.py" line="35"/>
         <source>generic</source>
-        <translation type="unfinished"/>
+        <translation>genérico</translation>
     </message>
     <message>
         <location filename="hazard.py" line="134"/>
@@ -749,7 +749,7 @@
     <message>
         <location filename="units.py" line="17"/>
         <source>feet</source>
-        <translation type="unfinished"/>
+        <translation>pés</translation>
     </message>
     <message>
         <location filename="extra_keywords.py" line="247"/>
@@ -903,7 +903,7 @@
     <message>
         <location filename="units.py" line="309"/>
         <source>Units</source>
-        <translation type="unfinished"/>
+        <translation>Unidades</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="445"/>
@@ -1118,7 +1118,7 @@
     <message>
         <location filename="units.py" line="32"/>
         <source>Generic</source>
-        <translation type="unfinished"/>
+        <translation>Genérico</translation>
     </message>
     <message>
         <location filename="hazard.py" line="133"/>
@@ -1143,7 +1143,7 @@
     <message>
         <location filename="units.py" line="16"/>
         <source>Feet</source>
-        <translation type="unfinished"/>
+        <translation>pés</translation>
     </message>
     <message>
         <location filename="units.py" line="20"/>
@@ -2154,7 +2154,7 @@
     <message>
         <location filename="exposure.py" line="299"/>
         <source>Are the other public services accessible?</source>
-        <translation type="unfinished"/>
+        <translation>Os outros serviços públicos são acessíveis?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="297"/>
@@ -2164,22 +2164,22 @@
     <message>
         <location filename="exposure.py" line="77"/>
         <source>Which group or population is most affected?</source>
-        <translation type="unfinished"/>
+        <translation>Qual grupo ou população é mais afetado?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="78"/>
         <source>Who are the vulnerable people in the population and why?</source>
-        <translation type="unfinished"/>
+        <translation>Quem são as pessoas vulneráveis na população e porquê?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="83"/>
         <source>What are the security factors for relief responders?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os fatores de segurança para socorristas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="82"/>
         <source>Who are the key people responsible for coordination?</source>
-        <translation type="unfinished"/>
+        <translation>Quem são os principais responsáveis pela coordenação?</translation>
     </message>
     <message>
         <location filename="utilities.py" line="51"/>
@@ -2239,7 +2239,7 @@
     <message>
         <location filename="exposure.py" line="91"/>
         <source>What are people&apos;s likely movements?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os movimentos prováveis das pessoas?</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="52"/>
@@ -2649,52 +2649,52 @@
     <message>
         <location filename="exposure.py" line="415"/>
         <source>What type of crops are planted in the affected fields?</source>
-        <translation type="unfinished"/>
+        <translation>Que tipo de culturas são plantadas nos campos afetados?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="416"/>
         <source>How long will the activity or function of the land cover be disturbed?</source>
-        <translation type="unfinished"/>
+        <translation>Por quanto tempo a atividade ou função da cobertura da terra será perturbada? </translation>
     </message>
     <message>
         <location filename="exposure.py" line="418"/>
         <source>What proportion of the land cover is damaged?</source>
-        <translation type="unfinished"/>
+        <translation>Que proporção da cobertura da terra está danificada?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="419"/>
         <source>What potential losses will result from the land cover damage?</source>
-        <translation type="unfinished"/>
+        <translation>Quais perdas potenciais resultarão do dano da cobertura da terra?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="421"/>
         <source>How much productivity will be lost during this event?</source>
-        <translation type="unfinished"/>
+        <translation>Quanta produtividade será perdida durante este evento?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="422"/>
         <source>Which crops were ready for harvest during this event?</source>
-        <translation type="unfinished"/>
+        <translation>Quais culturas estavam prontas para a colheita durante este evento?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="423"/>
         <source>What is the ownership system of the land/crops/field?</source>
-        <translation type="unfinished"/>
+        <translation>Qual é o sistema de propriedade da terra / culturas / campo?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="424"/>
         <source>Are the land/crops/field accessible after the event?</source>
-        <translation type="unfinished"/>
+        <translation>As terras / culturas / campos são acessíveis após o evento?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="425"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
-        <translation type="unfinished"/>
+        <translation>Que ações urgentes podem ser tomadas para normalizar a terra / lavoura / campo?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="427"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
-        <translation type="unfinished"/>
+        <translation>Quais ferramentas ou equipamentos são necessários para a recuperação inicial da terra / culturas / campo?</translation>
     </message>
     <message>
         <location filename="exposure_classifications.py" line="628"/>
@@ -3005,7 +3005,7 @@
     <message>
         <location filename="exposure.py" line="336"/>
         <source>Places</source>
-        <translation type="unfinished"/>
+        <translation>Locais</translation>
     </message>
     <message>
         <location filename="exposure.py" line="184"/>
@@ -3050,22 +3050,22 @@
     <message>
         <location filename="exposure.py" line="92"/>
         <source>How will we reach displaced people?</source>
-        <translation type="unfinished"/>
+        <translation>Como chegaremos às pessoas deslocadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="347"/>
         <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from the point at which the place is represented on the map.</source>
-        <translation type="unfinished"/>
+        <translation>Onde os lugares são representados como um único ponto, o efeito do perigo sobre o lugar inteiro pode diferir do ponto em que o lugar é representado no mapa.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="115"/>
         <source>What kind of food does the population normally consume?</source>
-        <translation type="unfinished"/>
+        <translation>Que tipo de comida a população normalmente consome?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="105"/>
         <source>What are the critical non-food items required by the affected population?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os itens críticos não alimentares exigidos pela população afetada?</translation>
     </message>
     <message>
         <location filename="concepts.py" line="309"/>
@@ -3300,137 +3300,137 @@
     <message>
         <location filename="exposure.py" line="81"/>
         <source>How will we distribute relief items?</source>
-        <translation type="unfinished"/>
+        <translation>Como vamos distribuir itens de ajuda?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="80"/>
         <source>Where can we obtain additional relief items?</source>
-        <translation type="unfinished"/>
+        <translation>Onde podemos obter itens de socorro adicionais?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="84"/>
         <source>Are there enough victim identification units?</source>
-        <translation type="unfinished"/>
+        <translation>Existem unidades de identificação de vítimas suficientes?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="93"/>
         <source>Are there enough covered floor areas available for the displaced people?</source>
-        <translation type="unfinished"/>
+        <translation>Há áreas de piso cobertas suficientes disponíveis para as pessoas deslocadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="95"/>
         <source>What are the land-use rights for the settlement location?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os direitos de uso da terra para o local de assentamento?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="99"/>
         <source>What is the appropriate construction for temporary or transitional household shelter?</source>
-        <translation type="unfinished"/>
+        <translation>Qual é a construção apropriada para abrigos temporários ou transitórios?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="101"/>
         <source>What are the existing environmental risks or vulnerabilities at the shelter location?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os riscos ou vulnerabilidades ambientais existentes no local do abrigo?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="103"/>
         <source>Are there enough clothing, bedding and household items available for the displaced people?</source>
-        <translation type="unfinished"/>
+        <translation>Há roupas, roupas de cama e utensílios domésticos suficientes disponíveis para as pessoas deslocadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="107"/>
         <source>Are the non-food items available at an active local market?</source>
-        <translation type="unfinished"/>
+        <translation>Os itens não alimentares estão disponíveis em um mercado local ativo?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="116"/>
         <source>Are there any alternative source of food?</source>
-        <translation type="unfinished"/>
+        <translation>Existe alguma fonte alternativa de alimentos?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="117"/>
         <source>Is there enough food for the displaced people?</source>
-        <translation type="unfinished"/>
+        <translation>Há comida suficiente para as pessoas deslocadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="118"/>
         <source>Are there any crops that can be used for consumption?</source>
-        <translation type="unfinished"/>
+        <translation>Existem culturas que podem ser usadas para consumo?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="119"/>
         <source>Are there large numbers of separated children?</source>
-        <translation type="unfinished"/>
+        <translation>Há um grande número de crianças separadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="126"/>
         <source>What water and sanitation practices were the population accustomed to before the emergency?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são as práticas de água e saneamento que a população estava acostumada antes da emergência?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="128"/>
         <source>What type of outreach system would work for hygiene promotion for this situation?</source>
-        <translation type="unfinished"/>
+        <translation>Que tipo de sistema de divulgação trabalharia para promoção de higiene para esta situação?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="130"/>
         <source>What is the current water supply source and who are the present users?</source>
-        <translation type="unfinished"/>
+        <translation>Qual é a fonte atual de abastecimento de água e quem são os usuários atuais?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="132"/>
         <source>Are there enough water supply, sanitation and hygiene, items available for displaced people?</source>
-        <translation type="unfinished"/>
+        <translation>Há abastecimento de água, saneamento e higiene suficientes, itens disponíveis para pessoas deslocadas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="134"/>
         <source>Are water collection points close enough to where people live?</source>
-        <translation type="unfinished"/>
+        <translation>Os pontos de coleta de água estão próximos o suficiente para onde as pessoas vivem?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="136"/>
         <source>Are water collection points safe?</source>
-        <translation type="unfinished"/>
+        <translation>Os pontos de coleta de água são seguros?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="137"/>
         <source>Is the water source contaminated or at risk of contamination?</source>
-        <translation type="unfinished"/>
+        <translation>A fonte de água está contaminada ou em risco de contaminação?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="139"/>
         <source>Are there alternative sources of water nearby?</source>
-        <translation type="unfinished"/>
+        <translation>Existem fontes alternativas de água nas proximidades?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="140"/>
         <source>Is there a drainage problem?</source>
-        <translation type="unfinished"/>
+        <translation>Existe algum problema de drenagem?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="147"/>
         <source>What are the existing health problems?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são os problemas de saúde existentes?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="148"/>
         <source>What are the potential epidemic diseases?</source>
-        <translation type="unfinished"/>
+        <translation>Quais são as potenciais doenças epidêmicas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="149"/>
         <source>Are there any potential disease outbreaks?</source>
-        <translation type="unfinished"/>
+        <translation>Existem surtos potenciais de doenças?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="150"/>
         <source>Are there any healthcare sources that are accessible and functioning?</source>
-        <translation type="unfinished"/>
+        <translation>Existem fontes de saúde acessíveis e em funcionamento?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="157"/>
         <source>The Sphere Handbook: Humanitarian Charter and Minimum Standards in Humanitarian Response</source>
-        <translation type="unfinished"/>
+        <translation>The Sphere Handbook: Carta Humanitária e Padrões Mínimos em Resposta Humanitária</translation>
     </message>
     <message>
         <location filename="exposure.py" line="225"/>
@@ -3440,7 +3440,7 @@
     <message>
         <location filename="exposure.py" line="226"/>
         <source>Where will we get the equipment needed to open roads?</source>
-        <translation type="unfinished"/>
+        <translation>Onde conseguiremos o equipamento necessário para abrir estradas?</translation>
     </message>
     <message>
         <location filename="exposure.py" line="294"/>
@@ -5315,12 +5315,12 @@
     <message>
         <location filename="exposure.py" line="178"/>
         <source>Number of people</source>
-        <translation type="unfinished"/>
+        <translation>Número de pessoas</translation>
     </message>
     <message>
         <location filename="exposure.py" line="380"/>
         <source>how many</source>
-        <translation type="unfinished"/>
+        <translation>quantos</translation>
     </message>
     <message>
         <location filename="exposure.py" line="185"/>
@@ -5330,12 +5330,12 @@
     <message>
         <location filename="exposure.py" line="195"/>
         <source>Numbers for road lengths have been rounded to the nearest 10 metres if the total is less than 1,000; nearest 100 metres if more than 1,000 and less than 100,000; and nearest 1000 metres if more than 100,000.</source>
-        <translation type="unfinished"/>
+        <translation>Os números dos comprimentos das estradas foram arredondados para os 10 metros mais próximos se o total for inferior a 1.000; 100 metros mais próximos, se forem mais de 1.000 e menos de 100.000; e os 1000 metros mais próximos, se forem mais de 100.000.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="199"/>
         <source>Rounding is applied to all road lengths, which may cause discrepancies between subtotals and totals.</source>
-        <translation type="unfinished"/>
+        <translation>O arredondamento é aplicado a todos os comprimentos da estrada, o que pode causar discrepâncias entre subtotais e totais.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="254"/>
@@ -5345,32 +5345,32 @@
     <message>
         <location filename="exposure.py" line="255"/>
         <source>what length of</source>
-        <translation type="unfinished"/>
+        <translation>que comprimento de</translation>
     </message>
     <message>
         <location filename="exposure.py" line="379"/>
         <source>Number of places</source>
-        <translation type="unfinished"/>
+        <translation>Número de lugares</translation>
     </message>
     <message>
         <location filename="exposure.py" line="396"/>
         <source>Areas reported for land cover have been rounded to the nearest 10 hectares if the total is less than 1,000; nearest 100 hectares if more than 1,000 and less than 100,000; and nearest 1000 hectares if more than 100,000.</source>
-        <translation type="unfinished"/>
+        <translation>As áreas relatadas para cobertura da terra foram arredondadas para os 10 hectares mais próximos se o total for inferior a 1.000; 100 hectares mais próximos se forem mais de 1.000 e menos de 100.000; e mais próximo de 1000 hectares, se mais de 100.000.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="400"/>
         <source>Rounding is applied to all land cover areas, which may cause discrepancies between subtotals and totals.</source>
-        <translation type="unfinished"/>
+        <translation>O arredondamento é aplicado a todas as áreas de cobertura da terra, o que pode causar discrepâncias entre subtotais e totais.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="462"/>
         <source>Area of landcover</source>
-        <translation type="unfinished"/>
+        <translation>Área de cobertura do Terra</translation>
     </message>
     <message>
         <location filename="exposure.py" line="463"/>
         <source>what area of</source>
-        <translation type="unfinished"/>
+        <translation>qual área de</translation>
     </message>
     <message>
         <location filename="keyword_properties.py" line="140"/>
@@ -5665,7 +5665,7 @@
     <message>
         <location filename="provenance_utilities.py" line="75"/>
         <source>In the event of a {hazard_name}, {exposure_measure} {exposure_name} might be affected?</source>
-        <translation type="unfinished"/>
+        <translation>Em caso das {hazard_name}, {exposure_measure} {exposure_name} podem ser afetados?</translation>
     </message>
     <message>
         <location filename="provenance_utilities.py" line="67"/>
@@ -5900,7 +5900,7 @@
     <message>
         <location filename="exposure.py" line="51"/>
         <source>Exposed population varies by the time (day or night, weekends, holidays etc.). Such variations are not included in the analysis.</source>
-        <translation type="unfinished"/>
+        <translation>A população exposta varia de acordo com o horário (dia ou noite, fins de semana, feriados etc.). Essas variações não são incluídas na análise.</translation>
     </message>
     <message>
         <location filename="hazard_exposure_specifications.py" line="20"/>
@@ -6585,7 +6585,7 @@
     <message>
         <location filename="exposure.py" line="97"/>
         <source>What is the ownership of the shelter or settlement location?</source>
-        <translation type="unfinished"/>
+        <translation>Qual é a propriedade do abrigo ou localização do assentamento?</translation>
     </message>
     <message>
         <location filename="fields.py" line="289"/>
@@ -6640,7 +6640,7 @@
     <message>
         <location filename="exposure.py" line="61"/>
         <source>If displacement counts are 0, no minimum needs and displaced related postprocessors will be shown.</source>
-        <translation type="unfinished"/>
+        <translation>Se as contagens de deslocamento forem 0, nenhuma necessidade mínima e pós-processadores relacionados serão mostrados.</translation>
     </message>
     <message>
         <location filename="fields.py" line="478"/>
@@ -7683,52 +7683,52 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="exposure.py" line="47"/>
         <source>population exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notas gerais de exposição da população</translation>
     </message>
     <message>
         <location filename="exposure.py" line="413"/>
         <source>general checklist</source>
-        <translation type="unfinished"/>
+        <translation>lista geral de verificações</translation>
     </message>
     <message>
         <location filename="exposure.py" line="89"/>
         <source>shelter, settlement, and non-food item</source>
-        <translation type="unfinished"/>
+        <translation>abrigo, assentamento e item não alimentar</translation>
     </message>
     <message>
         <location filename="exposure.py" line="113"/>
         <source>food security and nutrition</source>
-        <translation type="unfinished"/>
+        <translation>segurança alimentar e nutrição</translation>
     </message>
     <message>
         <location filename="exposure.py" line="124"/>
         <source>sanitation and clean water</source>
-        <translation type="unfinished"/>
+        <translation>saneamento e água limpa</translation>
     </message>
     <message>
         <location filename="exposure.py" line="145"/>
         <source>health facilities</source>
-        <translation type="unfinished"/>
+        <translation>infraestructura de saúde</translation>
     </message>
     <message>
         <location filename="exposure.py" line="191"/>
         <source>road exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notas gerais de exposição rodoviária</translation>
     </message>
     <message>
         <location filename="exposure.py" line="268"/>
         <source>structure exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notas gerais de exposição estrutura</translation>
     </message>
     <message>
         <location filename="exposure.py" line="343"/>
         <source>place exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>colocar notas gerais de exposição</translation>
     </message>
     <message>
         <location filename="exposure.py" line="392"/>
         <source>land cover exposure general notes</source>
-        <translation type="unfinished"/>
+        <translation>notas gerais de exposição à cobertura do solo</translation>
     </message>
     <message>
         <location filename="age_vulnerability_field_group.py" line="49"/>
@@ -8529,7 +8529,7 @@ Citations:
     <message>
         <location filename="exposure.py" line="54"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1,000 if more than 100,000.</source>
-        <translation type="unfinished"/>
+        <translation>Os números informados para as contagens da população foram arredondados para as 10 pessoas mais próximas, se o total for inferior a 1.000; 100 pessoas mais próximas se forem mais de 1.000 e menos de 100.000; e mais próximo de 1.000 se mais de 100.000.</translation>
     </message>
     <message>
         <location filename="population_post_processors.py" line="161"/>
@@ -10261,7 +10261,7 @@ Citations:
     <message>
         <location filename="exposure.py" line="331"/>
         <source>Number of structures</source>
-        <translation type="unfinished"/>
+        <translation>Número de estruturas</translation>
     </message>
     <message>
         <location filename="fields.py" line="1942"/>
@@ -11456,17 +11456,17 @@ Citations:
     <message>
         <location filename="exposure.py" line="58"/>
         <source>Rounding is applied to all population values, which may cause discrepancies between subtotals and totals.</source>
-        <translation type="unfinished"/>
+        <translation>O arredondamento é aplicado a todos os valores da população, o que pode causar discrepâncias entre subtotais e totais.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="275"/>
         <source>Numbers reported for structures have been rounded to the nearest 100 if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.</source>
-        <translation type="unfinished"/>
+        <translation>Os números relatados para estruturas foram arredondados para as 100 mais próximas, se mais de 1.000 e menos de 100.000; e mais próximo de 1000 se mais de 100.000.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="278"/>
         <source>Rounding is applied to all structure counts greater than 1,000 which may cause discrepancies between subtotals and totals.</source>
-        <translation type="unfinished"/>
+        <translation>O arredondamento é aplicado a todas as contagens de estrutura maiores que 1.000, o que pode causar discrepâncias entre subtotais e totais.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="385"/>
@@ -12720,7 +12720,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock_base.ui" line="83"/>
         <source>how many</source>
-        <translation type="unfinished"/>
+        <translation>quantos</translation>
     </message>
     <message>
         <location filename="dock_base.ui" line="122"/>
