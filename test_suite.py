@@ -106,7 +106,8 @@ def test_manually():
 def test_one():
     """Run a single test"""
     from safe.gui.tools.test.test_extent_selector import ExtentSelectorTest
-    unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(unittest.makeSuite(ExtentSelectorTest, 'test'))
+    test_runner = unittest.TextTestRunner(verbosity=3, stream=sys.stdout)
+    test_runner.run(unittest.makeSuite(ExtentSelectorTest, 'test'))
 
 
 if __name__ == '__main__':

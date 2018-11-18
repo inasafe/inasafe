@@ -6,23 +6,12 @@ env:
     - ON_TRAVIS=true
     - MUTE_LOGS=true
     - WITH_PYTHON_PEP=true
-    - IMAGE=elpaso/qgis-testing-environment
-    # - IMAGE=boundlessgeo/qgis-testing-environment
-    # - IMAGE=kartoza/qgis-testing
+    # - IMAGE=qgis/qgis
+    - IMAGE=elpaso/qgis  # Temporary for testing
 
   matrix:
-    # Tags from elpaso
-    # - QGIS_VERSION_TAG=release-2_8
-    # - QGIS_VERSION_TAG=release-2_14
-    - QGIS_VERSION_TAG=master
-
-    # Tags from boundlessgeo
-    # - QGIS_VERSION_TAG=release # Current 2.14
-    # - QGIS_VERSION_TAG=master_2 # Current 2.17
-    # - QGIS_VERSION_TAG=master # Current 3.0
-
-    # Tags from kartoza
-    #- QGIS_VERSION_TAG=boundlessgeo-2.14.7
+    # QGIS Master
+    - QGIS_VERSION_TAG=latest
 
 language: python
 
@@ -64,8 +53,6 @@ install:
   - docker exec -it qgis-testing-environment sh -c "pip3 install -r /tests_directory/REQUIREMENTS_TESTING.txt"
 
 script:
-
-
   # The real test
   - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
   - make pep257
@@ -89,7 +76,6 @@ notifications:
     - tim@kartoza.com
     - ismail@kartoza.com
     - rizky@kartoza.com
-    - etienne@kartoza.com
     - rohmat@kartoza.com
 
 sudo: false
