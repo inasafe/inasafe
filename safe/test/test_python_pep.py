@@ -24,13 +24,13 @@ class TestPythonPep(unittest.TestCase):
             os.path.join(os.path.dirname(__file__), '../../'))
         if sys.platform.startswith('win'):
             # ET I don't know on windows.
-            pass
+            return
 
-        else:
-            # OSX and linux just delegate to make
-            command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
-            default_number_lines = 5
+        # OSX and linux just delegate to make
+        command = ['make', 'flake8']
+        output = Popen(
+            command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
+        default_number_lines = 5
 
         # make pep8 produces some extra lines by default.
         lines = len(output.splitlines()) - default_number_lines

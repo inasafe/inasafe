@@ -116,7 +116,8 @@ def main():
                 for param in a_parameter.value:
                     show_parameter_value(param)
             else:
-                print((a_parameter.guid, a_parameter.name, a_parameter.value))
+                # print(a_parameter.guid, a_parameter.name, a_parameter.value)
+                pass
 
         try:
             the_parameters = the_parameter_container.get_parameters()

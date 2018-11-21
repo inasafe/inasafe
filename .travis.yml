@@ -6,8 +6,7 @@ env:
     - ON_TRAVIS=true
     - MUTE_LOGS=true
     - WITH_PYTHON_PEP=true
-    # - IMAGE=qgis/qgis
-    - IMAGE=elpaso/qgis  # Temporary for testing
+    - IMAGE=qgis/qgis
 
   matrix:
     # QGIS Master
