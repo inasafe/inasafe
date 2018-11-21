@@ -814,8 +814,7 @@ class TestImpactFunction(unittest.TestCase):
             scenario, expected_steps, expected_outputs = read_json_flow(
                 json_file)
             if scenario.get('enable', True):
-                print("Test JSON scenario : ")
-                print(json_file)
+                print('Test JSON scenario : {}'.format(json_file))
                 self.test_scenario(json_file, test_loader=True)
                 count += 1
         self.assertEqual(len(json_files), count)

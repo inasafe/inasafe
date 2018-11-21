@@ -426,7 +426,6 @@ def is_plugin_installed(name):
     :rtype: bool
     """
     for directory in plugin_paths:
-        print(join(directory, name))
         if isdir(join(directory, name)):
             return True
     return False

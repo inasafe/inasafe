@@ -194,7 +194,6 @@ class OsmDownloaderTest(unittest.TestCase):
         # provide Fake QNetworkAccessManager
         self.network_manager = FakeQNetworkAccessManager()
 
-    @unittest.skip('The current server is not reliable.')
     def test_fetch_zip(self):
         """Test fetch zip method.
 

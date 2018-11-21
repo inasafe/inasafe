@@ -1,7 +1,11 @@
 # coding=utf-8
 
 """Tests for the keyword wizard."""
+import unittest
 
+from safe.definitions.constants import INASAFE_TEST
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
 import os
 import shutil
@@ -41,13 +45,10 @@ from safe.definitions.utilities import (default_classification_thresholds,
                                         get_compulsory_fields)
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.test.utilities import (clone_raster_layer, clone_shp_layer,
-                                 dict_values_sorted, get_qgis_app,
-                                 load_test_vector_layer, standard_data_path)
+                                 dict_values_sorted, load_test_vector_layer,
+                                 standard_data_path)
 from safe.utilities.unicode import byteify
 
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.tools.wizard
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
