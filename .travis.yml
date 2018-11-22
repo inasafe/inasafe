@@ -9,8 +9,8 @@ env:
     - IMAGE=qgis/qgis
 
   matrix:
-    # QGIS Master
     - QGIS_VERSION_TAG=latest
+    - QGIS_VERSION_TAG=release-3_4
 
 language: python
 
