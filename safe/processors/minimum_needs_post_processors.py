@@ -99,8 +99,8 @@ def initialize_minimum_needs_post_processors():
         """
 
         processor = {
-            'key': 'post_processor_{key}'.format(key=field_key),
-            'name': '{field_name} Post Processor'.format(
+            'key': u'post_processor_{key}'.format(key=field_key),
+            'name': u'{field_name} Post Processor'.format(
                 field_name=field_name),
             'description': field_description,
             'input': {
