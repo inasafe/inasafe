@@ -64,9 +64,9 @@ def _initializes_minimum_needs_fields():
                 'field_name': _normalize_field_name(need_parameter.name),
             }
 
-            key = '{namespace}__{key}_count_field'.format(**format_args)
-            name = '{name}'.format(**format_args)
-            field_name = '{namespace}__{field_name}'.format(**format_args)
+            key = u'{namespace}__{key}_count_field'.format(**format_args)
+            name = u'{name}'.format(**format_args)
+            field_name = u'{namespace}__{field_name}'.format(**format_args)
             field_type = QVariant.LongLong  # See issue #4039
             length = 11  # See issue #4039
             precision = 0
