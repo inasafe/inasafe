@@ -599,7 +599,7 @@
     <message>
         <location filename="components.py" line="429"/>
         <source>Aggregation</source>
-        <translation type="unfinished"/>
+        <translation>Agregação</translation>
     </message>
     <message>
         <location filename="dynamic_translations.py" line="173"/>
@@ -669,7 +669,7 @@
     <message>
         <location filename="components.py" line="382"/>
         <source>Total</source>
-        <translation type="unfinished"/>
+        <translation>Total</translation>
     </message>
     <message>
         <location filename="exposure.py" line="40"/>
@@ -689,17 +689,17 @@
     <message>
         <location filename="hazard_classifications.py" line="1375"/>
         <source>Low</source>
-        <translation type="unfinished"/>
+        <translation>Baixo</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1349"/>
         <source>Medium</source>
-        <translation type="unfinished"/>
+        <translation>Médio</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1320"/>
         <source>High</source>
-        <translation type="unfinished"/>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="exposure.py" line="300"/>
@@ -724,7 +724,7 @@
     <message>
         <location filename="exposure.py" line="41"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
-        <translation type="unfinished"/>
+        <translation>A&lt;b&gt; população&lt;/b&gt; descreve as pessoas que podem estar expostas a um perigo específico.</translation>
     </message>
     <message>
         <location filename="units.py" line="35"/>
@@ -759,12 +759,12 @@
     <message>
         <location filename="components.py" line="177"/>
         <source>MMI</source>
-        <translation type="unfinished"/>
+        <translation>MMI</translation>
     </message>
     <message>
         <location filename="units.py" line="242"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
-        <translation type="unfinished"/>
+        <translation>A escala &lt;b&gt;de Intensidade de Mercalli modificada (MMI) &lt;/b&gt;descreve a intensidade da agitação do solo de um terremoto com base nos efeitos observados pelas pessoas na superfície.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1254"/>
@@ -1148,92 +1148,92 @@
     <message>
         <location filename="units.py" line="20"/>
         <source>&lt;b&gt;Feet&lt;/b&gt; are an imperial unit of measure. There are 12 inches in 1 foot and 3 feet in 1 yard.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Os pés &lt;/b&gt;são uma unidade imperiativa de medida. Existem 12 polegadas em 1 pé e 3 pés em 1 jarda.</translation>
     </message>
     <message>
         <location filename="units.py" line="36"/>
         <source>A generic unit for value that does not have unit or we do not know about the unit. It also can be used for normalised values.</source>
-        <translation type="unfinished"/>
+        <translation>Uma unidade genérica para valor que não tem unidade ou não sabemos sobre a unidade. Também pode ser usado para valores normalizados.</translation>
     </message>
     <message>
         <location filename="units.py" line="52"/>
         <source>&lt;b&gt;Kilograms per square metre&lt;/b&gt; is a metric unit of measure where the weight is specified according to area.  This unit is relevant for hazards such as volcanic ash.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Quilogramas por metro quadrado&lt;/b&gt; é uma unidade métrica de medida em que o peso é especificado de acordo com a área. Esta unidade é relevante para perigos como cinzas vulcânicas.</translation>
     </message>
     <message>
         <location filename="units.py" line="129"/>
         <source>Kilometres</source>
-        <translation type="unfinished"/>
+        <translation>Kilometros</translation>
     </message>
     <message>
         <location filename="units.py" line="130"/>
         <source>kilometres</source>
-        <translation type="unfinished"/>
+        <translation>Kilometros</translation>
     </message>
     <message>
         <location filename="units.py" line="132"/>
         <source>km</source>
-        <translation type="unfinished"/>
+        <translation>Km</translation>
     </message>
     <message>
         <location filename="units.py" line="133"/>
         <source>&lt;b&gt;Kilometres&lt;/b&gt; are a metric unit of measure. There are 1000 metres in 1 kilometre (km).</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Quilômetros&lt;/b&gt; são uma unidade métrica de medida. Existem 1000 metros em 1 km (km).</translation>
     </message>
     <message>
         <location filename="units.py" line="145"/>
         <source>Metres</source>
-        <translation type="unfinished"/>
+        <translation>Metros</translation>
     </message>
     <message>
         <location filename="units.py" line="148"/>
         <source>m</source>
-        <translation type="unfinished"/>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="units.py" line="149"/>
         <source>&lt;b&gt;Metres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Os medidores &lt;/b&gt; são uma unidade métrica de medida. Existem 100 centímetros em 1 metro.</translation>
     </message>
     <message>
         <location filename="units.py" line="206"/>
         <source>Millimetres</source>
-        <translation type="unfinished"/>
+        <translation>Milímetros</translation>
     </message>
     <message>
         <location filename="units.py" line="207"/>
         <source>millimetres</source>
-        <translation type="unfinished"/>
+        <translation>milímetros</translation>
     </message>
     <message>
         <location filename="units.py" line="209"/>
         <source>mm</source>
-        <translation type="unfinished"/>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="units.py" line="210"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Milímetros&lt;/b&gt; são uma unidade métrica de medida. Existem 1000 milímetros em 1 metro.</translation>
     </message>
     <message>
         <location filename="units.py" line="257"/>
         <source>Percentage</source>
-        <translation type="unfinished"/>
+        <translation>Percentagem</translation>
     </message>
     <message>
         <location filename="units.py" line="256"/>
         <source>percentages</source>
-        <translation type="unfinished"/>
+        <translation>Percentagens</translation>
     </message>
     <message>
         <location filename="units.py" line="258"/>
         <source>%%</source>
-        <translation type="unfinished"/>
+        <translation>%%</translation>
     </message>
     <message>
         <location filename="units.py" line="259"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
-        <translation type="unfinished"/>
+        <translation>Os valores percentuais variam de 0 a 100. Ele representa uma proporção de cem.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="72"/>
@@ -1278,12 +1278,12 @@
     <message>
         <location filename="units.py" line="294"/>
         <source>Density</source>
-        <translation type="unfinished"/>
+        <translation>Densidade</translation>
     </message>
     <message>
         <location filename="units.py" line="311"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
-        <translation type="unfinished"/>
+        <translation>A unidade de exposição define a unidade para a exposição, por exemplo, as pessoas podem ser medidas como contagem ou densidade (contagem por área).</translation>
     </message>
     <message>
         <location filename="error_message.py" line="191"/>
@@ -1434,12 +1434,12 @@
     <message>
         <location filename="components.py" line="220"/>
         <source>Land cover</source>
-        <translation type="unfinished"/>
+        <translation>Cobertura de terra</translation>
     </message>
     <message>
         <location filename="units.py" line="51"/>
         <source>kg/m2</source>
-        <translation type="unfinished"/>
+        <translation>kg/m2</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1916"/>
@@ -1484,7 +1484,7 @@
     <message>
         <location filename="components.py" line="830"/>
         <source>Report produced by</source>
-        <translation type="unfinished"/>
+        <translation>Relatório produzido por</translation>
     </message>
     <message>
         <location filename="exposure.py" line="222"/>
@@ -1504,22 +1504,22 @@
     <message>
         <location filename="caveats.py" line="34"/>
         <source>The layers contained &quot;no data&quot; values. This missing data was carried through to the impact layer.</source>
-        <translation type="unfinished"/>
+        <translation>As camadas continham valores &quot;sem dados&quot;. Esses dados perdidos foram transportados para a camada de impacto.</translation>
     </message>
     <message>
         <location filename="caveats.py" line="37"/>
         <source>&quot;No data&quot; values in the impact layer were treated as 0 when counting the affected or total population.</source>
-        <translation type="unfinished"/>
+        <translation>Os valores &quot;sem dados&quot; na camada de impacto foram tratados como 0 ao contar a população afetada ou total.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="510"/>
         <source>Wet</source>
-        <translation type="unfinished"/>
+        <translation>molhado</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="992"/>
         <source>Dry</source>
-        <translation type="unfinished"/>
+        <translation>seco</translation>
     </message>
     <message>
         <location filename="batch_help.py" line="41"/>
@@ -1644,7 +1644,7 @@
     <message>
         <location filename="definitions_help.py" line="331"/>
         <source>Minimum Needs</source>
-        <translation type="unfinished"/>
+        <translation>Necessidades Mínimas</translation>
     </message>
     <message>
         <location filename="function_options_help.py" line="96"/>
@@ -2869,27 +2869,27 @@
     <message>
         <location filename="exposure.py" line="337"/>
         <source>A &lt;b&gt;place&lt;/b&gt; is used to indicate that a particular location is known by a particular name.</source>
-        <translation type="unfinished"/>
+        <translation>Um&lt;b&gt; local&lt;/b&gt;é usado para indicar que um determinado local é conhecido por um nome específico.</translation>
     </message>
     <message>
         <location filename="units.py" line="222"/>
         <source>Centimetres</source>
-        <translation type="unfinished"/>
+        <translation>Centímetros</translation>
     </message>
     <message>
         <location filename="units.py" line="223"/>
         <source>centimetres</source>
-        <translation type="unfinished"/>
+        <translation>centímetros</translation>
     </message>
     <message>
         <location filename="units.py" line="225"/>
         <source>cm</source>
-        <translation type="unfinished"/>
+        <translation>cm</translation>
     </message>
     <message>
         <location filename="units.py" line="226"/>
         <source>&lt;b&gt;Centimetres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Centímetros &lt;/b&gt;são uma unidade métrica de medida. Existem 100 centímetros em 1 metro.</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="414"/>
@@ -2899,12 +2899,12 @@
     <message>
         <location filename="units.py" line="275"/>
         <source>Number of people (or any other exposure element) per pixel, building or area. &lt;p&gt;In a raster file, a pixel would have a value assigned to it representing the number (or count) of people in that pixel.&lt;/p&gt; &lt;p&gt;In a vector file, a value would be assigned to an object (e.g. a building or area) representing the number of people in that object.&lt;/p&gt; </source>
-        <translation type="unfinished"/>
+        <translation>Número de pessoas (ou qualquer outro elemento de exposição) por pixel, prédio ou área.&lt;p&gt; Em um arquivo raster, um pixel teria um valor atribuído a ele representando o número (ou contagem) de pessoas nesse pixel&lt;/p&gt;.&lt;p&gt; Em um arquivo vetorial, um valor seria atribuído a um objeto (por exemplo, um edifício ou área) representando o número de pessoas nesse objeto.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="units.py" line="296"/>
         <source>Number of people (or any other exposure element) per unit of area. &lt;p&gt; e.g. 35 people per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Número de pessoas (ou qualquer outro elemento de exposição) por unidade de área.&lt;p&gt; por exemplo. 35 pessoas por km2&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="exposure_classifications.py" line="496"/>
@@ -3015,7 +3015,7 @@
     <message>
         <location filename="units.py" line="224"/>
         <source>Length</source>
-        <translation type="unfinished"/>
+        <translation>comprimento</translation>
     </message>
     <message>
         <location filename="memory_checker.py" line="164"/>
@@ -3205,7 +3205,7 @@
     <message>
         <location filename="caveats.py" line="21"/>
         <source>The impacts on roads, people, buildings and other exposure elements may be underestimated if the exposure data are incomplete.</source>
-        <translation type="unfinished"/>
+        <translation>Os impactos nas estradas, pessoas, edifícios e outros elementos de exposição podem ser subestimados se os dados de exposição estiverem incompletos.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="85"/>
@@ -3215,7 +3215,7 @@
     <message>
         <location filename="concepts.py" line="155"/>
         <source>People who are affected by a hazardous event. People can be affected directly or indirectly. Affected people may experience short-term or long-term consequences to their lives, livelihoods or health and in the economic, physical, social, cultural and environmental assets. In InaSAFE, people who are killed during the event are also considered affected.</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas que são afetadas por um evento perigoso. As pessoas podem ser afetadas direta ou indiretamente. As pessoas afectadas podem sofrer consequências a curto ou a longo prazo nas suas vidas, meios de subsistência ou saúde e nos activos económicos, físicos, sociais, culturais e ambientais. No InaSAFE, as pessoas que são mortas durante o evento também são consideradas afetadas.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="399"/>
@@ -3730,7 +3730,7 @@
     <message>
         <location filename="components.py" line="832"/>
         <source>Analysis Name</source>
-        <translation type="unfinished"/>
+        <translation>Nome da análise</translation>
     </message>
     <message>
         <location filename="fields.py" line="315"/>
@@ -3915,7 +3915,7 @@
     <message>
         <location filename="components.py" line="189"/>
         <source>Fatalities</source>
-        <translation type="unfinished"/>
+        <translation>Fatalidades</translation>
     </message>
     <message>
         <location filename="fields.py" line="1768"/>
@@ -3925,7 +3925,7 @@
     <message>
         <location filename="components.py" line="185"/>
         <source>Displaced</source>
-        <translation type="unfinished"/>
+        <translation>Deslocado</translation>
     </message>
     <message>
         <location filename="fields.py" line="1813"/>
@@ -4040,7 +4040,7 @@
     <message>
         <location filename="hazard_classifications.py" line="1301"/>
         <source>Very high</source>
-        <translation type="unfinished"/>
+        <translation>Muito alto</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="1409"/>
@@ -4320,42 +4320,42 @@
     <message>
         <location filename="units.py" line="19"/>
         <source>ft</source>
-        <translation type="unfinished"/>
+        <translation>pés</translation>
     </message>
     <message>
         <location filename="units.py" line="68"/>
         <source>km/h</source>
-        <translation type="unfinished"/>
+        <translation>Km/h</translation>
     </message>
     <message>
         <location filename="units.py" line="69"/>
         <source>&lt;b&gt;The kilometre per hour&lt;/b&gt; is a unit of speed, expressing the number of kilometres covered in one hour.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;O quilômetro por hora&lt;/b&gt; é uma unidade de velocidade, expressando o número de quilômetros percorridos em uma hora.</translation>
     </message>
     <message>
         <location filename="units.py" line="84"/>
         <source>mph</source>
-        <translation type="unfinished"/>
+        <translation>mph</translation>
     </message>
     <message>
         <location filename="units.py" line="85"/>
         <source>&lt;b&gt;The mile per hour&lt;/b&gt; is a unit of speed, expressing the number of statute miles covered in one hour.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;A milha por hora &lt;/b&gt;é uma unidade de velocidade, expressando o número de milhas de estatuto cobertas em uma hora.</translation>
     </message>
     <message>
         <location filename="units.py" line="116"/>
         <source>kn</source>
-        <translation type="unfinished"/>
+        <translation>Kn</translation>
     </message>
     <message>
         <location filename="units.py" line="117"/>
         <source>&lt;b&gt;The knot&lt;/b&gt; is a unit of speed, expressing the number of nautical miles covered in one hour.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;O Knot é &lt;/b&gt;uma unidade de velocidade, expressando o número de milhas náuticas percorridas em uma hora.</translation>
     </message>
     <message>
         <location filename="units.py" line="431"/>
         <source>#</source>
-        <translation type="unfinished"/>
+        <translation>#</translation>
     </message>
     <message>
         <location filename="zonal_statistics.py" line="89"/>
@@ -5120,12 +5120,12 @@
     <message>
         <location filename="provenance_utilities.py" line="36"/>
         <source>{exposure_name} affected by {hazard_name} event</source>
-        <translation type="unfinished"/>
+        <translation>{exposure_name} afetada por evento de {hazard_name}</translation>
     </message>
     <message>
         <location filename="provenance_utilities.py" line="41"/>
         <source>{exposure_name} affected by {hazard_name} hazard</source>
-        <translation type="unfinished"/>
+        <translation>{exposure_name} afetada por perigo de {hazard_name}</translation>
     </message>
     <message>
         <location filename="text.py" line="66"/>
@@ -5140,42 +5140,42 @@
     <message>
         <location filename="components.py" line="373"/>
         <source>Detailed demographic breakdown</source>
-        <translation type="unfinished"/>
+        <translation>Demografia detalhada</translation>
     </message>
     <message>
         <location filename="components.py" line="380"/>
         <source>Aggregation area</source>
-        <translation type="unfinished"/>
+        <translation>Área de Agregação</translation>
     </message>
     <message>
         <location filename="components.py" line="286"/>
         <source>Columns and rows containing only 0 or &quot;No data&quot; values are excluded from the tables.</source>
-        <translation type="unfinished"/>
+        <translation>Colunas e linhas contendo apenas valores 0 ou &quot;Sem dados&quot; são excluídas das tabelas.</translation>
     </message>
     <message>
         <location filename="components.py" line="352"/>
         <source>Aggregation Result</source>
-        <translation type="unfinished"/>
+        <translation>Resultado de agregação</translation>
     </message>
     <message>
         <location filename="components.py" line="120"/>
         <source>Hazard Zone</source>
-        <translation type="unfinished"/>
+        <translation>Zona de risco</translation>
     </message>
     <message>
         <location filename="components.py" line="813"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Desconhecido</translation>
     </message>
     <message>
         <location filename="components.py" line="814"/>
         <source>Not used</source>
-        <translation type="unfinished"/>
+        <translation>Não usado</translation>
     </message>
     <message>
         <location filename="components.py" line="834"/>
         <source>Geographic Coordinates - {crs}</source>
-        <translation type="unfinished"/>
+        <translation>Coordenadas geográficas - {crs}</translation>
     </message>
     <message>
         <location filename="components.py" line="831"/>
@@ -5210,12 +5210,12 @@
     <message>
         <location filename="components.py" line="329"/>
         <source>Minimum needs</source>
-        <translation type="unfinished"/>
+        <translation>Necessidades mínimas</translation>
     </message>
     <message>
         <location filename="components.py" line="482"/>
         <source>Estimated total population</source>
-        <translation type="unfinished"/>
+        <translation>População total estimada</translation>
     </message>
     <message>
         <location filename="impact_report.py" line="724"/>
@@ -5255,12 +5255,12 @@
     <message>
         <location filename="caveats.py" line="24"/>
         <source>The analysis extent is limited to the extent of the aggregation layer or analysis extent. Hazard and exposure data outside the analysis extent are not included in the impact layer, impact map or impact reports.</source>
-        <translation type="unfinished"/>
+        <translation>A extensão da análise é limitada à extensão da camada de agregação ou à extensão da análise. Dados de risco e exposição fora da extensão da análise não são incluídos na camada de impacto, mapa de impacto ou relatórios de impacto.</translation>
     </message>
     <message>
         <location filename="caveats.py" line="29"/>
         <source>Structures overlapping the analysis extent may be assigned a hazard status lower than that to which they are exposed outside the analysis area.</source>
-        <translation type="unfinished"/>
+        <translation>Estruturas que se sobrepõem à extensão da análise podem receber um estado de perigo inferior àquele a que estão expostas fora da área de análise.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="22"/>
@@ -5270,7 +5270,7 @@
     <message>
         <location filename="concepts.py" line="139"/>
         <source>People who are present in hazard zones and are thereby subject to potential losses. In InaSAFE, people who are exposed are those people who are within the extent of the hazard.</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas que estão presentes em zonas de risco e, portanto, estão sujeitas a perdas potenciais. No InaSAFE, as pessoas que estão expostas são aquelas que estão dentro da extensão do risco.</translation>
     </message>
     <message>
         <location filename="concepts.py" line="145"/>
@@ -5325,7 +5325,7 @@
     <message>
         <location filename="exposure.py" line="185"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is defined as a route used by a vehicle or people to travel between two or more points.</source>
-        <translation type="unfinished"/>
+        <translation>Uma&lt;b&gt; estrada &lt;/b&gt;é definida como uma rota usada por um veículo ou pessoas para viajar entre dois ou mais pontos.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="195"/>
@@ -5390,7 +5390,7 @@
     <message>
         <location filename="fields.py" line="1914"/>
         <source>Total Not Exposed</source>
-        <translation type="unfinished"/>
+        <translation>Total Não Eexposto</translation>
     </message>
     <message>
         <location filename="fields.py" line="1920"/>
@@ -5405,7 +5405,7 @@
     <message>
         <location filename="hazard_classifications.py" line="64"/>
         <source>Not exposed</source>
-        <translation type="unfinished"/>
+        <translation>Não exposto</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="68"/>
@@ -5455,32 +5455,32 @@
     <message>
         <location filename="components.py" line="235"/>
         <source>{exposure} type</source>
-        <translation type="unfinished"/>
+        <translation>{exposure} tipo</translation>
     </message>
     <message>
         <location filename="components.py" line="236"/>
         <source>{exposure} class</source>
-        <translation type="unfinished"/>
+        <translation>{exposure} classe</translation>
     </message>
     <message>
         <location filename="components.py" line="330"/>
         <source>Relief items to be provided {frequency}</source>
-        <translation type="unfinished"/>
+        <translation>Itens de alívio a serem fornecidos {frequency}</translation>
     </message>
     <message>
         <location filename="components.py" line="335"/>
         <source>{name} [{unit_abbreviation}]</source>
-        <translation type="unfinished"/>
+        <translation>{name} [{unit_abbreviation}]</translation>
     </message>
     <message>
         <location filename="components.py" line="816"/>
         <source>Software</source>
-        <translation type="unfinished"/>
+        <translation>Software</translation>
     </message>
     <message>
         <location filename="components.py" line="827"/>
         <source>InaSAFE {version}</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE {version}</translation>
     </message>
     <message>
         <location filename="components.py" line="833"/>
@@ -5490,22 +5490,22 @@
     <message>
         <location filename="units.py" line="191"/>
         <source>Square Metres</source>
-        <translation type="unfinished"/>
+        <translation>Metros quadrados</translation>
     </message>
     <message>
         <location filename="units.py" line="192"/>
         <source>square metres</source>
-        <translation type="unfinished"/>
+        <translation>metros quadrados</translation>
     </message>
     <message>
         <location filename="units.py" line="194"/>
         <source>mÂ²</source>
-        <translation type="unfinished"/>
+        <translation>mÂ²</translation>
     </message>
     <message>
         <location filename="units.py" line="195"/>
         <source>&lt;b&gt;Square Metres&lt;/b&gt; are a metric unit of measure.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Os metros quadrados&lt;/b&gt; são uma unidade métrica de medida.</translation>
     </message>
     <message>
         <location filename="prepare_vector_layer.py" line="101"/>
@@ -5830,12 +5830,12 @@
     <message>
         <location filename="units.py" line="100"/>
         <source>m/s</source>
-        <translation type="unfinished"/>
+        <translation>m/s</translation>
     </message>
     <message>
         <location filename="units.py" line="101"/>
         <source>&lt;b&gt;The Metres per second&lt;/b&gt; is a unit of speed, expressing the number of metres covered in one second.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Os Metros por segundo &lt;/b&gt;são uma unidade de velocidade, expressando o número de metros cobertos em um segundo.</translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.py" line="151"/>
@@ -6315,7 +6315,7 @@
     <message>
         <location filename="components.py" line="138"/>
         <source>Not Exposed</source>
-        <translation type="unfinished"/>
+        <translation>Não exposto</translation>
     </message>
     <message>
         <location filename="components.py" line="231"/>
@@ -6325,37 +6325,37 @@
     <message>
         <location filename="components.py" line="300"/>
         <source>For this analysis, the following displacement rates were used: {rate_description}</source>
-        <translation type="unfinished"/>
+        <translation>Para esta análise, foram utilizadas as seguintes taxas de deslocamento: {rate_description}</translation>
     </message>
     <message>
         <location filename="components.py" line="447"/>
         <source>source not available</source>
-        <translation type="unfinished"/>
+        <translation>fonte não disponível</translation>
     </message>
     <message>
         <location filename="components.py" line="448"/>
         <source>reference unspecified</source>
-        <translation type="unfinished"/>
+        <translation>referência não especificada</translation>
     </message>
     <message>
         <location filename="components.py" line="449"/>
         <source>not used</source>
-        <translation type="unfinished"/>
+        <translation>Não usado</translation>
     </message>
     <message>
         <location filename="components.py" line="464"/>
         <source>Impact Function</source>
-        <translation type="unfinished"/>
+        <translation>Função de Impacto</translation>
     </message>
     <message>
         <location filename="units.py" line="50"/>
         <source>Weight/area</source>
-        <translation type="unfinished"/>
+        <translation>Peso / área</translation>
     </message>
     <message>
         <location filename="units.py" line="115"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>Velocidade</translation>
     </message>
     <message>
         <location filename="sanity_check.py" line="94"/>
@@ -6635,7 +6635,7 @@
     <message>
         <location filename="concepts.py" line="215"/>
         <source>Displaced people are people who, for different reasons and circumstances because of risk or disaster, have to leave their place of residence. In InaSAFE, demographic and minimum needs reports are based on displaced / evacuated people.</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas deslocadas são pessoas que, por diferentes razões e circunstâncias por causa de risco ou desastre, precisam deixar seu local de residência. No InaSAFE, os relatórios demográficos e de necessidades mínimas são baseados em pessoas deslocadas / evacuadas.</translation>
     </message>
     <message>
         <location filename="exposure.py" line="61"/>
@@ -6700,32 +6700,32 @@
     <message>
         <location filename="components.py" line="103"/>
         <source>Analysis question</source>
-        <translation type="unfinished"/>
+        <translation>Pergunta de análise</translation>
     </message>
     <message>
         <location filename="components.py" line="118"/>
         <source>General Report</source>
-        <translation type="unfinished"/>
+        <translation>Relatório Geral</translation>
     </message>
     <message>
         <location filename="components.py" line="176"/>
         <source>MMI Detail</source>
-        <translation type="unfinished"/>
+        <translation>Detalhe MMI</translation>
     </message>
     <message>
         <location filename="components.py" line="483"/>
         <source>Exposed</source>
-        <translation type="unfinished"/>
+        <translation>Exposto</translation>
     </message>
     <message>
         <location filename="components.py" line="218"/>
         <source>Structure</source>
-        <translation type="unfinished"/>
+        <translation>Estructura</translation>
     </message>
     <message>
         <location filename="components.py" line="219"/>
         <source>Road</source>
-        <translation type="unfinished"/>
+        <translation>Estrada</translation>
     </message>
     <message>
         <location filename="components.py" line="237"/>
@@ -6735,12 +6735,12 @@
     <message>
         <location filename="components.py" line="390"/>
         <source>Analysis produced 0 displaced count. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>A análise produziu 0 contagens deslocadas. Nenhum cálculo produzido.</translation>
     </message>
     <message>
         <location filename="components.py" line="381"/>
         <source>Total Displaced Population</source>
-        <translation type="unfinished"/>
+        <translation>População Total Deslocada</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="148"/>
@@ -6800,17 +6800,17 @@
     <message>
         <location filename="units.py" line="161"/>
         <source>Hectare</source>
-        <translation type="unfinished"/>
+        <translation>Hectare</translation>
     </message>
     <message>
         <location filename="units.py" line="163"/>
         <source>hectares</source>
-        <translation type="unfinished"/>
+        <translation>hectare</translation>
     </message>
     <message>
         <location filename="units.py" line="166"/>
         <source>&lt;b&gt;Hectare&lt;/b&gt; is an SI accepted metric system unit of area equal to 100 ares (10,000 mÂ²) and primarily used in the measurement of land</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Hectare&lt;/b&gt; é uma unidade do sistema métrico aceita pelo SI com área igual a 100 ares (10.000 m²) e usada principalmente na medição de terras</translation>
     </message>
     <message>
         <location filename="hazard_exposure_specifications.py" line="20"/>
@@ -7305,7 +7305,7 @@
     <message>
         <location filename="hazard_classifications.py" line="1404"/>
         <source>hazard zone</source>
-        <translation type="unfinished"/>
+        <translation>zona de risco</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="408"/>
@@ -7370,7 +7370,7 @@
     <message>
         <location filename="components.py" line="119"/>
         <source>Estimated {title} affected per {unit}</source>
-        <translation type="unfinished"/>
+        <translation>Estimada {title} afetada por {unit}</translation>
     </message>
     <message>
         <location filename="field_mapping_dialog.py" line="67"/>
@@ -8163,12 +8163,12 @@ You can select more than 1 field. InaSAFE will sum up the value of the fields th
     <message>
         <location filename="components.py" line="291"/>
         <source>affected notes</source>
-        <translation type="unfinished"/>
+        <translation>notas afetadas</translation>
     </message>
     <message>
         <location filename="components.py" line="298"/>
         <source>displacement rates notes</source>
-        <translation type="unfinished"/>
+        <translation>notas de taxas de deslocamento</translation>
     </message>
     <message>
         <location filename="field_mapping_dialog.py" line="291"/>
@@ -8419,7 +8419,7 @@ Citations:
     <message>
         <location filename="components.py" line="430"/>
         <source>Analysis Environment</source>
-        <translation type="unfinished"/>
+        <translation>Ambiente de Análise</translation>
     </message>
     <message>
         <location filename="definitions_help.py" line="292"/>
@@ -8539,17 +8539,17 @@ Citations:
     <message>
         <location filename="components.py" line="455"/>
         <source>Hazard source</source>
-        <translation type="unfinished"/>
+        <translation>Fonte de perigo</translation>
     </message>
     <message>
         <location filename="components.py" line="458"/>
         <source>Exposure source</source>
-        <translation type="unfinished"/>
+        <translation>Fonte de exposição</translation>
     </message>
     <message>
         <location filename="components.py" line="461"/>
         <source>Aggregation source</source>
-        <translation type="unfinished"/>
+        <translation>Fonte de agregação</translation>
     </message>
     <message>
         <location filename="hazard_classifications.py" line="149"/>
@@ -8619,57 +8619,57 @@ Citations:
     <message>
         <location filename="components.py" line="284"/>
         <source>analysis notes</source>
-        <translation type="unfinished"/>
+        <translation>notas de análise</translation>
     </message>
     <message>
         <location filename="components.py" line="304"/>
         <source>{name} - {displacement_rate:.0%}</source>
-        <translation type="unfinished"/>
+        <translation>{name} - {displacement_rate:.0%}</translation>
     </message>
     <message>
         <location filename="components.py" line="307"/>
         <source>fatality rates notes</source>
-        <translation type="unfinished"/>
+        <translation>notas de taxas de fatalidade</translation>
     </message>
     <message>
         <location filename="components.py" line="309"/>
         <source>For this analysis, the following fatality rates were used: {rate_description}</source>
-        <translation type="unfinished"/>
+        <translation>Para esta análise, foram utilizadas as seguintes taxas de fatalidade: {rate_description}</translation>
     </message>
     <message>
         <location filename="components.py" line="313"/>
         <source>{name} - {fatality_rate}%</source>
-        <translation type="unfinished"/>
+        <translation>{name} - {fatality_rate}%</translation>
     </message>
     <message>
         <location filename="components.py" line="376"/>
         <source>Estimated number of minimum needs per week</source>
-        <translation type="unfinished"/>
+        <translation>Número estimado de necessidades mínimas por semana</translation>
     </message>
     <message>
         <location filename="components.py" line="384"/>
         <source>Estimated number of people displaced by {header_name} per aggregation area</source>
-        <translation type="unfinished"/>
+        <translation>Número estimado de pessoas deslocadas por {header_name} por área de agregação</translation>
     </message>
     <message>
         <location filename="components.py" line="389"/>
         <source>{header_name} breakdown</source>
-        <translation type="unfinished"/>
+        <translation>Divisão de {header_name}</translation>
     </message>
     <message>
         <location filename="components.py" line="393"/>
         <source>Gender ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>Razão de gênero não foi encontrada. Nenhum cálculo produzido.</translation>
     </message>
     <message>
         <location filename="components.py" line="396"/>
         <source>Age ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>A proporção de idade não foi encontrada. Nenhum cálculo produzido.</translation>
     </message>
     <message>
         <location filename="components.py" line="399"/>
         <source>Vulnerability ratio is not found. No calculations produced.</source>
-        <translation type="unfinished"/>
+        <translation>A taxa de vulnerabilidade não foi encontrada. Nenhum cálculo produzido.</translation>
     </message>
     <message>
         <location filename="earthquake.py" line="117"/>
@@ -8729,7 +8729,7 @@ Citations:
     <message>
         <location filename="units.py" line="182"/>
         <source>Weight</source>
-        <translation type="unfinished"/>
+        <translation>Peso</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.py" line="175"/>
@@ -9451,7 +9451,7 @@ Citations:
     <message>
         <location filename="provenance.py" line="48"/>
         <source>Analysis Question</source>
-        <translation type="unfinished"/>
+        <translation>Pergunta de Análise</translation>
     </message>
     <message>
         <location filename="provenance.py" line="53"/>
@@ -9631,7 +9631,7 @@ Citations:
     <message>
         <location filename="components.py" line="241"/>
         <source>Estimated loss by affected {exposure} type</source>
-        <translation type="unfinished"/>
+        <translation>Perda estimada pelo tipo {exposure} afetado</translation>
     </message>
     <message>
         <location filename="concepts.py" line="700"/>
@@ -9816,17 +9816,17 @@ Citations:
     <message>
         <location filename="components.py" line="332"/>
         <source>Additional items to be provided {frequency}</source>
-        <translation type="unfinished"/>
+        <translation>Itens adicionais a serem fornecidos {frequency}</translation>
     </message>
     <message>
         <location filename="units.py" line="329"/>
         <source>One</source>
-        <translation type="unfinished"/>
+        <translation>Um</translation>
     </message>
     <message>
         <location filename="units.py" line="330"/>
         <source>Ones</source>
-        <translation type="unfinished"/>
+        <translation>Uns</translation>
     </message>
     <message>
         <location filename="generic_expressions.py" line="155"/>
@@ -9836,17 +9836,17 @@ Citations:
     <message>
         <location filename="units.py" line="347"/>
         <source>Tens</source>
-        <translation type="unfinished"/>
+        <translation>Dezenas</translation>
     </message>
     <message>
         <location filename="units.py" line="363"/>
         <source>Hundred</source>
-        <translation type="unfinished"/>
+        <translation>Centena</translation>
     </message>
     <message>
         <location filename="units.py" line="364"/>
         <source>Hundreds</source>
-        <translation type="unfinished"/>
+        <translation>Centenas</translation>
     </message>
     <message>
         <location filename="generic_expressions.py" line="156"/>
@@ -9856,37 +9856,37 @@ Citations:
     <message>
         <location filename="units.py" line="382"/>
         <source>Thousands</source>
-        <translation type="unfinished"/>
+        <translation>milhar</translation>
     </message>
     <message>
         <location filename="units.py" line="397"/>
         <source>Million</source>
-        <translation type="unfinished"/>
+        <translation>milhão</translation>
     </message>
     <message>
         <location filename="units.py" line="398"/>
         <source>Millions</source>
-        <translation type="unfinished"/>
+        <translation>milhões</translation>
     </message>
     <message>
         <location filename="units.py" line="413"/>
         <source>Billion</source>
-        <translation type="unfinished"/>
+        <translation>Bilhão</translation>
     </message>
     <message>
         <location filename="units.py" line="414"/>
         <source>Billions</source>
-        <translation type="unfinished"/>
+        <translation>Bilhões</translation>
     </message>
     <message>
         <location filename="units.py" line="429"/>
         <source>Trillion</source>
-        <translation type="unfinished"/>
+        <translation>Trilhão</translation>
     </message>
     <message>
         <location filename="units.py" line="430"/>
         <source>Trillions</source>
-        <translation type="unfinished"/>
+        <translation>Trilhões</translation>
     </message>
     <message>
         <location filename="developer_help.py" line="104"/>
@@ -9941,17 +9941,17 @@ Citations:
     <message>
         <location filename="concepts.py" line="138"/>
         <source>Exposed People</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas Exposto</translation>
     </message>
     <message>
         <location filename="concepts.py" line="154"/>
         <source>Affected People</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas Afetados</translation>
     </message>
     <message>
         <location filename="concepts.py" line="214"/>
         <source>Displaced People</source>
-        <translation type="unfinished"/>
+        <translation>Pessoas Deslocados</translation>
     </message>
     <message>
         <location filename="fields.py" line="1829"/>
@@ -9961,12 +9961,12 @@ Citations:
     <message>
         <location filename="components.py" line="526"/>
         <source>In this analysis, people are considered to be affected if they are exposed to the hazard, and considered to be displaced if they exposed to high or medium hazard.</source>
-        <translation type="unfinished"/>
+        <translation>Nesta análise, as pessoas são consideradas afetadas se forem expostas ao perigo e consideradas deslocadas se expostas a alto ou médio risco.</translation>
     </message>
     <message>
         <location filename="components.py" line="530"/>
         <source>{displacement_rate:.0%} affected in {name} {classification_unit}</source>
-        <translation type="unfinished"/>
+        <translation>{displacement_rate:.0%} afetada em {name} {classification_unit}</translation>
     </message>
     <message>
         <location filename="infographic.py" line="67"/>
@@ -10241,17 +10241,17 @@ Citations:
     <message>
         <location filename="units.py" line="179"/>
         <source>Hundreds Kilogram</source>
-        <translation type="unfinished"/>
+        <translation>Centena de quilograma</translation>
     </message>
     <message>
         <location filename="units.py" line="181"/>
         <source>hundreds kilograms</source>
-        <translation type="unfinished"/>
+        <translation>Centenas de quilogramas</translation>
     </message>
     <message>
         <location filename="units.py" line="184"/>
         <source>&lt;b&gt;A hundred kilograms&lt;/b&gt; is a unit of weight equal to 100 kilograms.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Cem quilos &lt;/b&gt;é uma unidade de peso igual a 100 quilos.</translation>
     </message>
     <message>
         <location filename="constants.py" line="33"/>
@@ -10266,7 +10266,7 @@ Citations:
     <message>
         <location filename="fields.py" line="1942"/>
         <source>Total Exposed</source>
-        <translation type="unfinished"/>
+        <translation>Total Exposto</translation>
     </message>
     <message>
         <location filename="fields.py" line="1948"/>
@@ -10311,17 +10311,17 @@ Citations:
     <message>
         <location filename="components.py" line="238"/>
         <source>Estimated {title} {unit} affected by {exposure} type</source>
-        <translation type="unfinished"/>
+        <translation>Estimativa {title} {unit} afetada pelo tipo {exposure}</translation>
     </message>
     <message>
         <location filename="components.py" line="354"/>
         <source>Estimated {title} {unit} affected by aggregation area</source>
-        <translation type="unfinished"/>
+        <translation>Estimativa {title} {unit} afetada pela área de agregação</translation>
     </message>
     <message>
         <location filename="components.py" line="387"/>
         <source>Estimated number of people displaced by {header_name} </source>
-        <translation type="unfinished"/>
+        <translation>Número estimado de pessoas deslocadas por {header_name}</translation>
     </message>
     <message>
         <location filename="generic_expressions.py" line="151"/>
@@ -11121,7 +11121,7 @@ Citations:
     <message>
         <location filename="components.py" line="123"/>
         <source>Exposure status</source>
-        <translation type="unfinished"/>
+        <translation>Estado de exposição</translation>
     </message>
     <message>
         <location filename="generic_expressions.py" line="320"/>
@@ -11166,7 +11166,7 @@ Citations:
     <message>
         <location filename="components.py" line="293"/>
         <source>Exposures in the following hazard classes are considered affected: {hazard_classes}</source>
-        <translation type="unfinished"/>
+        <translation>As exposições nas seguintes classes de perigo são consideradas afetadas: {hazard_classes}</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="1509"/>
@@ -11471,7 +11471,7 @@ Citations:
     <message>
         <location filename="exposure.py" line="385"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular hazard. This might include crops, forest and urban areas.</source>
-        <translation type="unfinished"/>
+        <translation>Os&lt;b&gt; dados de exposição da cobertura do solo&lt;/b&gt; descrevem características na superfície da terra que podem estar expostas a um perigo específico. Isso pode incluir plantações, florestas e áreas urbanas.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="1439"/>
@@ -11671,7 +11671,7 @@ Citations:
     <message>
         <location filename="components.py" line="251"/>
         <source>Total exposed population</source>
-        <translation type="unfinished"/>
+        <translation>População total exposta</translation>
     </message>
     <message>
         <location filename="impact_report_help.py" line="68"/>
@@ -11951,7 +11951,7 @@ Citations:
     <message>
         <location filename="infographic.py" line="79"/>
         <source>Estimated number of people exposed by hazard level</source>
-        <translation type="unfinished"/>
+        <translation>Número estimado de pessoas expostas por nível de perigo</translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="116"/>
@@ -12221,7 +12221,7 @@ Citations:
     <message>
         <location filename="exposure.py" line="260"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility, power lines or bridge.</source>
-        <translation type="unfinished"/>
+        <translation>Uma&lt;b&gt; estrutura&lt;/b&gt; pode ser qualquer elemento relativamente permanente feito pelo homem, tal como um edifício (uma estrutura fechada com paredes e um telhado), instalação de telecomunicações, linhas de energia ou ponte.</translation>
     </message>
     <message>
         <location filename="report_descriptions.py" line="45"/>
@@ -12524,7 +12524,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="multi_exposure_dialog_base.ui" line="62"/>
         <source>Aggregation</source>
-        <translation type="unfinished"/>
+        <translation>Agregação</translation>
     </message>
     <message>
         <location filename="multi_exposure_dialog_base.ui" line="24"/>
@@ -12933,7 +12933,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="182"/>
         <source>m</source>
-        <translation type="unfinished"/>
+        <translation>m</translation>
     </message>
     <message>
         <location filename="multi_buffer_dialog_base.ui" line="209"/>
