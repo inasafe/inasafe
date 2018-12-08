@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-IMAGE=elpaso/qgis-testing-environment
-#IMAGE=kartoza/qgis-testing
-QGIS_VERSION_TAG=master
+IMAGE=qgis/qgis
+QGIS_VERSION_TAG=release-3_4
 
 DISPLAY=${DISPLAY:-:99}
 

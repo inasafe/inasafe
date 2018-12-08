@@ -338,7 +338,7 @@ docker-test:
 	@echo
 	@echo "----------------------------------"
 	@echo "Run tests in docker"
-	@echo "Image: elpaso/qgis-testing-environment:master"
+	@echo "Image: qgis/qgis with the LTR version of QGIS"
 	@echo "You can change the tested package in 'test_suite.py' in the 'test_package' function."
 	@echo "----------------------------------"
 	@./run-docker-test.sh
