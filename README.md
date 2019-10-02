@@ -15,15 +15,7 @@ which contains modules for risk calculations, GIS functionality and
 functions for impact modelling.
 
 
-Story queue on Waffle:
-
-* [![Stories in Ready](https://badge.waffle.io/inasafe/inasafe.svg?label=ready&title=Ready)](http://waffle.io/inasafe/inasafe)
-* [![Stories in In Progress](https://badge.waffle.io/inasafe/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/inasafe/inasafe)
-
-[![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
-
 * Current Travis test status master: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe)
-* Current Landscape code health master: [![Landscape Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
 * Current Travis test status develop: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe)
 * Current Landscape code health develop: [![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
 * PyPi Downloads for InaSAFE: [![PyPI version](https://badge.fury.io/py/inasafe-core.svg)](https://badge.fury.io/py/inasafe-core)
