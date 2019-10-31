@@ -11,7 +11,8 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitions.fields import hazard_class_field
+from safe.definitions.fields import (
+    hazard_id_field, aggregation_id_field, hazard_class_field)
 from safe.definitions.hazard_classifications import (
     hazard_classification, not_exposed_class)
 from safe.definitions.layer_purposes import layer_purpose_exposure_summary
@@ -57,6 +58,11 @@ def assign_highest_value(exposure, hazard):
     output_layer_name = assign_highest_value_steps['output_layer_name']
 
     hazard_inasafe_fields = hazard.keywords['inasafe_fields']
+    haz_id_field = hazard_inasafe_fields[hazard_id_field['key']]
+    try:
+        aggr_id_field = hazard_inasafe_fields[aggregation_id_field['key']]
+    except AttributeError:
+        aggr_id_field = None
 
     if not hazard.keywords.get('classification'):
         raise InvalidKeywordsForProcessingAlgorithm
@@ -93,14 +99,39 @@ def assign_highest_value(exposure, hazard):
     levels = [key['key'] for key in layer_classification['classes']]
     levels.append(not_exposed_class['key'])
 
+    def _hazard_sort_key(feature):
+        """Custom feature sort function.
+
+        The function were intended to sort hazard features, in order
+        for maintaining consistencies between subsequent runs.
+
+        With controlled order, we will have the same output if one
+        hazard spans over multiple aggregation boundaries.
+        """
+        if aggr_id_field:
+            return (
+                feature[haz_id_field] or feature.id(),
+                feature[aggr_id_field])
+        return feature[haz_id_field] or feature.id()
+
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:
         expression = '"%s" = \'%s\'' % (hazard_field, hazard_value)
         hazard_request = QgsFeatureRequest().setFilterExpression(expression)
         update_map = {}
-        for area in hazard.getFeatures(hazard_request):
+        areas = sorted(
+            hazard.getFeatures(hazard_request), key=_hazard_sort_key)
+        for area in areas:
             geometry = area.geometry().constGet()
             intersects = spatial_index.intersects(geometry.boundingBox())
+
+            # to force consistencies between subsequent runs, sort the index.
+            # ideally each exposure feature needs to have prioritization
+            # value/score to determine which hazard/aggregation it belongs to,
+            # in case one feature were intersected with one or more high
+            # hazard geometry. sorting the ids works by ignoring this
+            # tendencies but still maintains consistencies for subsequent run.
+            intersects.sort()
 
             # use prepared geometry: makes multiple intersection tests faster
             geometry_prepared = QgsGeometry.createGeometryEngine(
