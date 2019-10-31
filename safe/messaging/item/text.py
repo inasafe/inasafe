@@ -164,7 +164,7 @@ class PlainText(Text):
         attributes = self.html_attributes()
         # Deal with long file names that prevent wrapping
         wrappable_text = self.to_text().replace(os.sep, '<wbr>' + os.sep)
-        if icon is not '' and attributes is not '':
+        if icon and attributesRe:
             return '<span%s>%s%s</span>' % (attributes, icon, wrappable_text)
         else:
             return self.to_text()

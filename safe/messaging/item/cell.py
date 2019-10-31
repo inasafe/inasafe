@@ -108,17 +108,17 @@ class Cell(MessageElement):
         :rtype: basestring
         """
         # Apply bootstrap alignment classes first
-        if self.align is 'left':
+        if self.align.lower() == 'left':
             if self.style_class is None:
                 self.style_class = 'text-left'
             else:
                 self.style_class += ' text-left'
-        elif self.align is 'right':
+        elif self.align.lower() == 'right':
             if self.style_class is None:
                 self.style_class = 'text-right'
             else:
                 self.style_class += ' text-right'
-        elif self.align is 'center':
+        elif self.align.lower() == 'center':
             if self.style_class is None:
                 self.style_class = 'text-center'
             else:
