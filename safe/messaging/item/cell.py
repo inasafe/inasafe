@@ -108,21 +108,22 @@ class Cell(MessageElement):
         :rtype: basestring
         """
         # Apply bootstrap alignment classes first
-        if self.align.lower() == 'left':
-            if self.style_class is None:
-                self.style_class = 'text-left'
-            else:
-                self.style_class += ' text-left'
-        elif self.align.lower() == 'right':
-            if self.style_class is None:
-                self.style_class = 'text-right'
-            else:
-                self.style_class += ' text-right'
-        elif self.align.lower() == 'center':
-            if self.style_class is None:
-                self.style_class = 'text-center'
-            else:
-                self.style_class += ' text-center'
+        if self.align:
+            if self.align.lower() == 'left':
+                if self.style_class is None:
+                    self.style_class = 'text-left'
+                else:
+                    self.style_class += ' text-left'
+            elif self.align.lower() == 'right':
+                if self.style_class is None:
+                    self.style_class = 'text-right'
+                else:
+                    self.style_class += ' text-right'
+            elif self.align.lower() == 'center':
+                if self.style_class is None:
+                    self.style_class = 'text-center'
+                else:
+                    self.style_class += ' text-center'
 
         # Special case for when we want to put a nested table in a cell
         # We don't use isinstance because of recursive imports with table
