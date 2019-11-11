@@ -414,6 +414,10 @@ class TestImpactFunction(unittest.TestCase):
             message
         )
 
+    @unittest.skipIf(
+        os.environ.get('QGIS_VERSION_TAG') == 'release-3_4',
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_not_exposed_exposure(self):
         """Test if we can run 0 exposed features over a raster hazard."""
         hazard_layer = load_test_raster_layer(
