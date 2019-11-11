@@ -2,7 +2,6 @@
 
 """Test for Impact Function."""
 
-
 import getpass
 import json
 import logging
@@ -1103,7 +1102,6 @@ class TestImpactFunction(unittest.TestCase):
         for key in output_layer_provenance_keys:
             self.assertIn(key, list(impact_function.provenance.keys()))
 
-    @unittest.skip('The test is failed in QGIS 3.4')
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.
 
@@ -1135,10 +1133,10 @@ class TestImpactFunction(unittest.TestCase):
         expected_value = {
             'population': 69,
             'total': 9.0,
-            'minimum_needs__rice': 491,
-            'minimum_needs__clean_water': 11763,
-            'minimum_needs__toilets': 8,
-            'minimum_needs__drinking_water': 3072,
+            'minimum_needs__rice': 492,
+            'minimum_needs__clean_water': 11764,
+            'minimum_needs__toilets': 9,
+            'minimum_needs__drinking_water': 3073,
             'minimum_needs__family_kits': 35,
             'male': 34,
             'female': 34,
@@ -1150,9 +1148,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self._check_minimum_fields_value(expected_value, impact_function)
 
-    # expected to fail until raster postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_raster_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on raster exposure.
 
@@ -1188,17 +1183,17 @@ class TestImpactFunction(unittest.TestCase):
         # TODO: should include demographic postprocessor value too
         expected_value = {
             'total_affected': 9.208200000039128,
-            'minimum_needs__rice': 25,
+            'minimum_needs__rice': 22,
             'minimum_needs__toilets': 0,
-            'minimum_needs__drinking_water': 161,
-            'minimum_needs__clean_water': 616,
+            'minimum_needs__drinking_water': 140,
+            'minimum_needs__clean_water': 538,
             'male': 4,
             'female': 4,
             'youth': 2,
             'adult': 6,
             'elderly': 0,
             'total': 162.7667000000474,
-            'minimum_needs__family_kits': 1,
+            'minimum_needs__family_kits': 2,
             'total_not_affected': 153.55850000000828,
         }
 
