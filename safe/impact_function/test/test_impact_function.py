@@ -116,7 +116,7 @@ from safe.definitions.constants import (
 )
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
-from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
@@ -415,7 +415,7 @@ class TestImpactFunction(unittest.TestCase):
         )
 
     @unittest.skipIf(
-        os.environ.get('QGIS_VERSION_TAG') == 'release-3_4',
+        qgis_version() < 31000,
         'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
     )
     def test_not_exposed_exposure(self):
@@ -803,6 +803,10 @@ class TestImpactFunction(unittest.TestCase):
         ]
         self.assertEqual(len(json_files), len(scenarios))
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         path = standard_data_path('scenario')
