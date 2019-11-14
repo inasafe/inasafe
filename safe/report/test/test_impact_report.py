@@ -67,6 +67,7 @@ from safe.test.utilities import (
 from safe.utilities.resources import resources_path
 from safe.utilities.settings import delete_setting, set_setting, setting
 from safe.utilities.utilities import readable_os_version
+from safe.utilities.gis import qgis_version
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
@@ -428,6 +429,10 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_general_report_from_multi_exposure_impact_function(self):
         """Test generate analysis result from multi exposure impact function.
 
