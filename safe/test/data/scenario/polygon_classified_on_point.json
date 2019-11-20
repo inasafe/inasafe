@@ -48,6 +48,7 @@
         "use_same_projection_as_aggregation":true
       },
       "process":[
+        "Clean hazard polygons from possible invalid geometries",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
