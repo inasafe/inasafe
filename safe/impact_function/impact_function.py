@@ -2173,6 +2173,14 @@ class ImpactFunction():
             self.hazard = reproject(self.hazard, self._crs)
             self.debug_layer(self.hazard, check_fields=False)
 
+        # Clean hazard layer from possible invalid geometries
+        # See issue: https://github.com/inasafe/inasafe/issues/5074
+        self.set_state_process(
+            'hazard',
+            'Clean hazard polygons from possible invalid geometries')
+        self.hazard = clean_layer(self.hazard)
+
+        # Clip hazard to analysis extent
         self.set_state_process(
             'hazard',
             'Clip and mask hazard polygons with the analysis layer')
