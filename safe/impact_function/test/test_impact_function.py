@@ -1190,10 +1190,10 @@ class TestImpactFunction(unittest.TestCase):
         # TODO: should include demographic postprocessor value too
         expected_value = {
             'total_affected': 9.208200000039128,
-            'minimum_needs__rice': 22,
+            'minimum_needs__rice': 23,
             'minimum_needs__toilets': 0,
-            'minimum_needs__drinking_water': 140,
-            'minimum_needs__clean_water': 538,
+            'minimum_needs__drinking_water': 143,
+            'minimum_needs__clean_water': 547,
             'male': 4,
             'female': 4,
             'youth': 2,
