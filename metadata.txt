@@ -15,7 +15,7 @@ description=InaSAFE is free software that allows disaster managers to study real
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 # If you change VERSION and STATUS here, please also change in safe/definitions/versions.py, Travis will FAIL !
-version=5.0.0
+version=5.0.1
 # alpha, beta, rc or final
 status=final
 
@@ -25,6 +25,12 @@ status=final
 # Optional items:
 
 changelog=
+    Version 5.0.1:
+    - Fix contour calculation in QGIS 3.4
+    - Fix inconsistent aggregation count behaviour
+    - Fix hazard preparation geometries. Now automatically validate hazard geometries
+    - Fix wrong clipping dtype for raster hazard
+    - Fix minimum needs value reports
     Version 5.0.0:
     - QGIS3 port with Python 3 and Qt 5
     - Enable line for structure exposure

@@ -1,3 +1,82 @@
+Changelog for version 5.0.1
+================================
+
+a7e8de619 (HEAD -> develop, origin/develop, origin/HEAD, inasafe/develop) Fix minimum needs value report
+4ddb24dd0 change clipping dtype to be the same as input
+234c3619a Fix scenario unit test files
+9cdb6c617 Fix hazard preparation geometries
+5559b831d Skip some tests
+7bc7207a2 Skip stalling unit tests in QGIS 3.4
+21859c36e Enable minimum needs unit test
+987c18b08 Skip test_contour unit test in QGIS 3.4
+58f051764 Change contour shp extension to gpkg in unittest
+05f3a268b Fix typo and null error
+cb8b24952 Maintenance commit for repo
+915c72752 Fix and enable skipped unittests
+02601d3b9 Fix inconsistent aggregation behaviour
+346ab517f Fix contour calculation in QGIS 3.4
+831d60abb (pierrealixt/develop) update local docker test configuration
+8e4ad741f improve error message when reports are not going to be generated
+94bab203d disable OSM Reporter
+bad0cb9e7 enable QGIS 3.4 on travis
+048f1645b skip windows flake8 check, review print, move up get_qgis_app
+3084befbc Fix relative root location of Makefile for pep test.
+c67e5f210 use the official QGIS docker base image for travis
+bd00bfeac (tag: version-5_0_0, pierrealixt/master, inasafe/master) flake8 fixes
+b6c3913df use new run_filter system where applicable
+fc0355d28 add type docs
+1ea25cedd use key instead of hardcoded names in tests
+b09e8ec3f use key instead of hardcoded names
+4ded0fa0a update example usage
+634914cb9 use exposure_population['key'] instead of hardcoding population
+02a2496aa fix @ismailsunni feedback
+e139a3c25 fix flake8 issues
+eec44097d added change log
+25d918a76 Typos fix
+ab70d8cc2 added run_filter population to all population postprocessors
+e40136d9c added tests and code documetntation
+676ca05c7 fixed the logic to allow filtering only on one of hazard or exposure
+c3d013b8d remove verbosity
+d84b04d03 add the possibility to filter on which exposure/hazard combination a processor can run
+167d10e27 text to update initial user message
+aa7bbe8e9 Revert "update text to update user message"
+2624e9471 Revert "fix error"
+603eb60ff update text to update user message
+a5dec644e fix error
+90d84a6fb Fix code climate.
+090e2b6ef Update to the new flake8 standard (W504)
+5c440a135 Skip some failed unittest in QGIS 3.4
+b502ae580 Skip unrealiable outside resource.
+f03f23999 Remove unexpected argument.
+622ff31a7 Use EPSG 4326 as default.
+7d35ad234 First attempt to follow new flake8.
+58bcf109c update comment about docker-test
+c0bb93cf3 Fix wrong English sentence.
+f57119a81 Update windows installer.
+bb708a6bf Set release status to final.
+ee5a27037 Update windows installer builder script.
+961a96e73 Update changelog for v5.0
+85d25da64 Fix script for checking missing translation.
+b2cd50ded Update translation.
+8c13fca46 Fix obsolete method in Qt.
+2c76fc3ac Show easier to read Qt Version.
+caffc0ded Set parameter version to 2.0.0
+ff66713f4 Better geometry_checker to avoid checking geometry equality.
+f663dd707 Fix logic in the clean geometry and add comments to make it clear.
+12e8b4876 Add more flag before initialize processing algorithm.
+ef35a9aa3 Ensure that clean_layer updates layer with repaired geometries
+75e82b0bb Fix iface=None in unit test.
+41d6b78f1 Add iface variable.
+f60bfe0ca Accept line layers for structures
+9d4baf070 Update test result
+7152def43 Style
+ca483580e Also use native intersection and union algorithms
+9c7cab1eb Style
+5dcc9b325 Try to fix segfault
+711860fd5 Replace custom clip alg with built-in processing algorithm
+44eaed37e Set encoding when calling Popen
+5cb7966ae add definitions for Tonga and Fiji
+
 Changelog for version 4.4.0
 ================================
 
