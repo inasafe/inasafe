@@ -40,20 +40,12 @@ install:
   - pip install --upgrade pip
   - pip install --upgrade pep257
   - pip install --upgrade flake8
-  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}:/tests_directory -e QGIS_VERSION_TAG=release-3_4 -e WITH_PYTHON_PEP=${WITH_PYTHON_PEP} -e INASAFE_LOGGING_LEVEL=50 -e INASAFE_DISABLE_WELCOME_MESSAGE=1 -e ON_TRAVIS=${ON_TRAVIS} -e MUTE_LOGS=${MUTE_LOGS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
+  - docker-compose up -d
   - sleep 10
-  - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
-
-  # FIX default installation because the sources must be in "inasafe" parent folder
-  - docker exec -it qgis-testing-environment sh -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/inasafe"
-  - docker exec -it qgis-testing-environment sh -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/inasafe"
-
-  - docker exec -it qgis-testing-environment sh -c "pip3 install -r /tests_directory/REQUIREMENTS.txt"
-  - docker exec -it qgis-testing-environment sh -c "pip3 install -r /tests_directory/REQUIREMENTS_TESTING.txt"
 
 script:
   # The real test
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
+  - docker-compose exec qgis-testing-environment qgis_testrunner.sh test_suite.test_package
   - make pep257
   - make flake8
 

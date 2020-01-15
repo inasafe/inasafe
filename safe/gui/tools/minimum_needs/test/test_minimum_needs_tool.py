@@ -77,9 +77,16 @@ class MinimumNeedsTest(unittest.TestCase):
 
         self.assertFalse(ok_button.isEnabled())
 
+        # Close because this is a modal dialog
+        dialog.reject()
+
         input_layer = load_test_vector_layer('other', 'minimum_needs.shp')
 
         QgsProject.instance().addMapLayers([input_layer])
+
+        # Open the dialog again
+        dialog = NeedsCalculatorDialog(PARENT)
+        ok_button = dialog.button_box.button(QtWidgets.QDialogButtonBox.Ok)
 
         # Test Ok button with layer and displaced field
         # selected in the combo box
