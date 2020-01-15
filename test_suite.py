@@ -97,9 +97,8 @@ def test_manually():
 
     You can change this function as much as you want.
     """
-    from .safe.gis.vector.test.test_assign_highest_value import \
-        TestAssignHighestValueVector
-    test_suite = unittest.makeSuite(TestAssignHighestValueVector, 'test')
+    from safe.test.test_init import TestInit
+    test_suite = unittest.makeSuite(TestInit, 'test')
     _run_tests(test_suite, 'custom test class')
 
 
