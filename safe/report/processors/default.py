@@ -504,28 +504,46 @@ def qgis_composer_renderer(impact_report, component):
             layer_set = [l for l in layers if isinstance(l, QgsMapLayer)]
             composer_map.setLayers(layer_set)
             map_overview_extent = None
+
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
                 extent = coord_transform.transform(map_extent_option)
-                for l in [layer for layer in layers if
-                          isinstance(layer, QgsMapLayer)]:
-                    layer_extent = coord_transform.transform(l.extent())
-                    if l.name() == map_overview['id']:
-                        map_overview_extent = layer_extent
             else:
-                # if map extent not provided, try to calculate extent
-                # from list of given layers. Combine it so all layers were
-                # shown properly
+                # create new map extent
                 extent = QgsRectangle()
                 extent.setMinimal()
-                for l in [layer for layer in layers if
-                          isinstance(layer, QgsMapLayer)]:
-                    # combine extent if different layer is provided.
-                    layer_extent = coord_transform.transform(l.extent())
+            for l in [layer for layer in layers if
+                      isinstance(layer, QgsMapLayer)]:
+                layer_extent = coord_transform.transform(l.extent())
+                if map_extent_option and isinstance(
+                        map_extent_option, QgsRectangle):
+                    # If map extent is not provided, try to calculate extent
+                    # from list of given layers. Combine it so all layers were
+                    # shown properly.
                     extent.combineExtentWith(layer_extent)
-                    if l.name() == map_overview['id']:
-                        map_overview_extent = layer_extent
+                if l.name() == map_overview['id']:
+                    analysis_extent = (
+                        impact_report.impact_function.analysis_extent)
+                    analysis_extent = coord_transform.transform(
+                        analysis_extent.boundingBox())
+                    layer_center = layer_extent.center()
+                    analysis_center = analysis_extent.center()
+
+                    # move extent by this number
+                    extent_transform = 5000  # random number just for testing
+
+                    if layer_center.x() >= analysis_center.x():
+                        min_x = layer_extent.xMinimum() - extent_transform
+                        max_x = layer_extent.xMaximum() - extent_transform
+                    else:
+                        min_x = layer_extent.xMinimum() + extent_transform
+                        max_x = layer_extent.xMaximum() + extent_transform
+                    map_overview_extent = QgsRectangle(
+                        min_x,
+                        layer_extent.yMinimum(),
+                        max_x,
+                        layer_extent.yMaximum())
 
             width = extent.width()
             height = extent.height()
