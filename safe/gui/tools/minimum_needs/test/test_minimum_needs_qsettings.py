@@ -12,19 +12,19 @@ Contact : christian@kartoza.com
      (at your option) any later version.
 
 """
-
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import importlib
+import json
 import unittest
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from qgis.PyQt.QtCore import QSettings
-import json
 
 from parameters.parameter_exceptions import (
     InvalidMaximumError,
@@ -32,6 +32,8 @@ from parameters.parameter_exceptions import (
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.utilities.resources import resources_path
 
 
 class TestNeedsProfile(NeedsProfile):
@@ -41,7 +43,6 @@ class TestNeedsProfile(NeedsProfile):
     :param test_profile: The mock replacement of Minimum Needs
     """
     # noinspection PyMissingConstructor
-
     def __init__(self, test_profile='Test Minimum Needs Settings'):
         self.settings = QSettings(test_profile)
         self.settings.clear()
@@ -192,3 +193,19 @@ class MinimumNeedsTest(unittest.TestCase):
             '}]}')
         profile.minimum_needs = json.loads(json_string)
         self.assertRaises(ValueOutOfBounds, profile.get_needs_parameters)
+
+    def test_unicode_min_needs(self):
+        """Test that loading Unicode minimum needs will work."""
+        profile = TestNeedsProfile()
+        unicode_min_needs_path = resources_path(
+            'minimum_needs/Moz_minimum_needs_pt.json')
+        profile.read_from_file(unicode_min_needs_path)
+        profile.save()
+
+        resource = profile.minimum_needs['resources'][1]
+        resource_name = resource['Resource name']
+
+        # Check resource name may have unicode value
+        self.assertEqual(
+            resource_name,
+            u'\u00e1gua para beber')

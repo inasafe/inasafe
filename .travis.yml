@@ -26,6 +26,7 @@ branches:
     - master
     - develop
     - experimental
+    - inasafe_4
 
 addons:
   apt:

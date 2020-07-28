@@ -1129,7 +1129,8 @@ class MultiExposureImpactFunction():
             iface=None,
             ordered_layers_uri=None,
             legend_layers_uri=None,
-            use_template_extent=False):
+            use_template_extent=False,
+            pre_process_callback=None):
         """Generate Impact Report independently by the Impact Function.
 
         :param components: Report components to be generated.
@@ -1152,6 +1153,12 @@ class MultiExposureImpactFunction():
 
         :param use_template_extent: A condition for using template extent.
         :type use_template_extent: bool
+
+        :param pre_process_callback: A callback that will be executed before
+            running process_component.
+            An instance of impact_report will be passed down to this callback
+            function.
+        :type pre_process_callback: func(impact_report)
 
         :returns: Tuple of error code and message
         :type: tuple
@@ -1346,6 +1353,11 @@ class MultiExposureImpactFunction():
                 self._impact_report.output_folder = output_folder
             else:
                 self._impact_report.output_folder = join(layer_dir, 'output')
+
+            # Run preprocess if any
+            if pre_process_callback and callable(pre_process_callback):
+                self._impact_report = pre_process_callback(
+                    impact_report=self.impact_report)
 
             error_code, message = self._impact_report.process_components()
             if error_code == ImpactReport.REPORT_GENERATION_FAILED:
