@@ -484,7 +484,7 @@ class ImpactFunction():
             text += '*' * space
 
             if tree.children:
-                text += '\ '
+                text += r'\ '
             else:
                 text += '| '
             text += tree.__str__()
