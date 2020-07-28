@@ -10,7 +10,7 @@ from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
     QgsDataSourceUri,
-    QgsMapLayer
+    QgsLayerDefinition
 )
 
 from safe.common.exceptions import InvalidLayerError
@@ -302,10 +302,10 @@ def load_layer_without_provider(layer_uri, layer_name='tmp'):
     # Let's try QLR
     _, extension = os.path.splitext(layer_uri)
     if extension.lower() == '.qlr':
-        layer = QgsMapLayer.fromLayerDefinitionFile(layer_uri)
-        if layer:
-            layer = layer[0]
-        if layer.isValid():
+        layers = QgsLayerDefinition.loadLayerDefinitionLayers(layer_uri)
+        if layers:
+            layer = layers[0]
+        if layer and layer.isValid():
             return layer
 
     # Then try all other drivers
