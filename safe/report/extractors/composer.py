@@ -363,8 +363,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     else:  # single IF
         layers = [impact_report.impact]
     symbol_count = 0
-    for l in layers:
-        layer = l
+    for layer in layers:
         """:type: qgis.core.QgsMapLayer"""
         try:
             symbol_count += len(layer.legendSymbologyItems())

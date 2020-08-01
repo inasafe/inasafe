@@ -846,17 +846,17 @@ class MultiExposureImpactFunction():
         set_provenance(
             self._provenance,
             provenance_multi_exposure_layers,
-            [l.source() for l in self._exposures])
+            [_layer.source() for _layer in self._exposures])
         # reference to original layer being used
         set_provenance(
             self._provenance,
             provenance_multi_exposure_layers_id,
-            [l.id() for l in self._exposures])
+            [_layer.id() for _layer in self._exposures])
         set_provenance(
             self._provenance,
             provenance_multi_exposure_keywords,
-            {l.keywords['exposure']: copy_layer_keywords(l.keywords)
-                for l in self.exposures})
+            {_layer.keywords['exposure']: copy_layer_keywords(_layer.keywords)
+                for _layer in self.exposures})
         set_provenance(
             self._provenance,
             provenance_hazard_layer,

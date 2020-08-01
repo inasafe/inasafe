@@ -1977,7 +1977,6 @@ class ImpactFunction():
                         LOGGER.info(
                             'We are adding {ratio} = {value} to the exposure '
                             'default values.'.format(
-                                count=count_key,
                                 ratio=ratio_field,
                                 value=default_value))
 

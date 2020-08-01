@@ -147,7 +147,7 @@ flake8:
 	@echo "Flake8 issues"
 	@echo "-----------"
 	@python3 -m flake8 --version
-	@python3 -m flake8 || true
+	@python3 -m flake8
 
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support

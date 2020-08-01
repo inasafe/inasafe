@@ -485,8 +485,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                      'keywords': keywords}]
 
         # Move layers without keywords to the end
-        l1 = [l for l in layers if l['keywords']]
-        l2 = [l for l in layers if not l['keywords']]
+        l1 = [_layer for _layer in layers if _layer['keywords']]
+        l2 = [_layer for _layer in layers if not _layer['keywords']]
         layers = l1 + l2
 
         return layers
