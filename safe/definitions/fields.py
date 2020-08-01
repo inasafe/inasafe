@@ -33,6 +33,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 default_field_length = 10
+default_string_field_length = 255
 default_field_precision = 5
 default_ratio_field_precision = 2
 
@@ -71,7 +72,7 @@ exposure_name_field = {
     'name': tr('Exposure Name'),
     'field_name': 'exposure_name',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(  # short description
         'A NAME attribute in the exposure layer.'),
@@ -95,7 +96,7 @@ exposure_type_field = {
     'name': tr('Exposure Type'),
     'field_name': 'exposure_type',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(  # 'Short description'
         'A TYPE attribute in the exposure layer.'),
@@ -123,7 +124,7 @@ exposure_class_field = {
     'name': tr('Exposure Class'),
     'field_name': 'exposure_class',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(  # Short description
         'A CLASS attribute in the exposure layer.'),
@@ -176,7 +177,7 @@ hazard_name_field = {
     'name': tr('Hazard Name'),
     'field_name': 'hazard_name',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(  # short description
         'A NAME attribute in the hazard layer.'),
@@ -230,7 +231,7 @@ hazard_class_field = {
     'name': tr('Hazard Class'),
     'field_name': 'hazard_class',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'help_text': tr('A CLASS attribute for the hazard.'),
     'description': tr(
@@ -282,7 +283,7 @@ aggregation_name_field = {
     'name': tr('Aggregation Name'),
     'field_name': 'aggregation_name',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'help_text': tr(  # short description
         'A NAME attribute in the aggregation layer.'),
@@ -309,7 +310,7 @@ analysis_name_field = {
     'name': tr('Analysis Name'),
     'field_name': 'analysis_name',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'absolute': False,
     'help_text': tr(  # short description
@@ -338,7 +339,7 @@ profiling_function_field = {
     'name': tr('Profiling function'),
     'field_name': 'function',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'help_text': tr('The name of the function being measured.'),
     'description': tr(
@@ -1349,7 +1350,7 @@ affected_field = {
     'name': tr('Affected'),
     'field_name': 'affected',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(
         'The affected field indicates whether a feature is affected by the '
@@ -2568,7 +2569,7 @@ direction_field = {
     'field_name': 'direction',
     'header_name': tr('Direction'),
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'description': tr(
         'Cardinality of a bearing angle.'),
@@ -2723,7 +2724,7 @@ contour_colour_field = {
     'name': tr('Contour Colour Field'),
     'field_name': 'RGB',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'absolute': True,
     'help_text': tr('The color for the contour.'),
@@ -2745,7 +2746,7 @@ contour_roman_field = {
     'name': tr('Contour Roman Label Field'),
     'field_name': 'ROMAN',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'absolute': True,
     'help_text': tr('The roman for the contour.'),
@@ -2766,7 +2767,7 @@ contour_halign_field = {
     'name': tr('Contour Horizontal Align Field'),
     'field_name': 'ALIGN',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'absolute': True,
     'help_text': tr('The horizontal align for the contour label.'),
@@ -2786,7 +2787,7 @@ contour_valign_field = {
     'name': tr('Contour Vertical Align Field'),
     'field_name': 'VALIGN',
     'type': QVariant.String,
-    'length': default_field_length,
+    'length': default_string_field_length,
     'precision': 0,
     'absolute': True,
     'help_text': tr('The vertical align for the contour label.'),
