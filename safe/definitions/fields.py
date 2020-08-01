@@ -32,10 +32,15 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+# This default QgsField value must be coherent with what default values we use
+# default_field_length must be higher than default value's max digits
 default_field_length = 10
+# default_string_field_length must be higher than default string keywords
+# used by all the fields
 default_string_field_length = 255
+# field precision must cover highest precision number used by InaSAFE globally
 default_field_precision = 5
-default_ratio_field_precision = 2
+default_ratio_field_precision = 4
 
 # # # # # # # # # #
 # Exposure
