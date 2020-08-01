@@ -34,11 +34,11 @@ from qgis.PyQt.QtCore import QT_VERSION_STR, QSettings  # NOQA We can't move to
 from raven.handlers.logging import SentryHandler  # NOQA
 from safe.common.utilities import log_file_path  # NOQA
 from safe.common.version import get_version  # NOQA
-from safe.definitions.provenance import (
-    provenance_gdal_version,
-    provenance_os,
-    provenance_qgis_version,
-    provenance_qt_version,
+from safe.definitions.provenance import (  # NOQA
+    provenance_gdal_version,  # NOQA
+    provenance_os,  # NOQA
+    provenance_qgis_version,  # NOQA
+    provenance_qt_version,  # NOQA
 )  # NOQA
 from safe.definitions.sentry import PRODUCTION_SERVER  # NOQA
 from safe.utilities.i18n import tr  # NOQA

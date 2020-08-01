@@ -626,7 +626,7 @@ def romanise(number):
     """Return the roman numeral for a number.
 
     Note that this only works for number in interval range [0, 12] since at
-    the moment we only use it on realtime earthquake to conver MMI value.
+    the moment we only use it on realtime earthquake to convert MMI value.
 
     :param number: The number that will be romanised
     :type number: float

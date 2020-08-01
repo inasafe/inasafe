@@ -171,8 +171,8 @@ def convolve(input, weights, mask=None, slow=False):
             average = 0.0
             if slow:
                 # Iterate over weights/kernel.
-                for k in range(weights.shape[0]):
-                    for l in range(weights.shape[1]):
+                for k in range(weights.shape[0]):  # NOQA
+                    for l in range(weights.shape[1]):  # NOQA
                         # Get coordinates of tiled_input array that match given
                         # weights
                         m = i + k - hw_row

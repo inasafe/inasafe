@@ -25,7 +25,7 @@ DIR := ${CURDIR}
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
-LOCALES = en id fr vi es_ES
+LOCALES = en id fr vi es_ES pt
 
 default: quicktest
 
@@ -52,6 +52,7 @@ test-translations:
 	@python scripts/missing_translations.py `pwd` af
 	@python scripts/missing_translations.py `pwd` es_ES
 	@python scripts/missing_translations.py `pwd` vi
+	@python scripts/missing_translations.py `pwd` pt
 
 
 translation-stats:
@@ -146,7 +147,7 @@ flake8:
 	@echo "Flake8 issues"
 	@echo "-----------"
 	@python3 -m flake8 --version
-	@python3 -m flake8 || true
+	@python3 -m flake8
 
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support

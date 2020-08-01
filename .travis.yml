@@ -10,7 +10,7 @@ env:
 
   matrix:
     - QGIS_VERSION_TAG=latest
-    - QGIS_VERSION_TAG=release-3_4
+    - QGIS_VERSION_TAG=release-3_10
 
 language: python
 
@@ -26,6 +26,7 @@ branches:
     - master
     - develop
     - experimental
+    - inasafe_4
 
 addons:
   apt:

@@ -321,10 +321,19 @@ class ShakeGrid():
             data_element = data_element[0]
             data = data_element.firstChild.nodeValue
 
-            # Extract the 1,2 and 5th (MMI) columns and populate mmi_data
-            longitude_column = 0
-            latitude_column = 1
-            mmi_column = 4
+            # Find grid_field of LON LAT and MMI
+            grid_field = ['LON', 'LAT', 'MMI']
+            grid_fields = document.getElementsByTagName('grid_field')
+            grid_fields = {
+                f.attributes['name'].nodeValue: int(
+                    f.attributes['index'].nodeValue)
+                for f in grid_fields
+                if f.attributes['name'].nodeValue in grid_field
+            }
+            # grid_field index are one-based
+            longitude_column = grid_fields['LON'] - 1
+            latitude_column = grid_fields['LAT'] - 1
+            mmi_column = grid_fields['MMI'] - 1
             lon_list = []
             lat_list = []
             mmi_list = []
@@ -741,11 +750,14 @@ class ShakeGrid():
         output_file_base = os.path.join(
             self.output_dir,
             '%s-contours-%s.' % (self.output_basename, algorithm))
-        output_file = output_file_base + 'shp'
+        # There are minor issues with shapefile, so we switch to gpkg
+        # See https://github.com/inasafe/inasafe/issues/5063
+        output_file = output_file_base + 'gpkg'
         if os.path.exists(output_file) and force_flag is not True:
             return output_file
         elif os.path.exists(output_file):
             try:
+                os.remove(output_file_base + 'gpkg')
                 os.remove(output_file_base + 'shp')
                 os.remove(output_file_base + 'shx')
                 os.remove(output_file_base + 'dbf')
@@ -758,7 +770,9 @@ class ShakeGrid():
         tif_path = self.mmi_to_raster(force_flag, algorithm)
         # Based largely on
         # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-        driver = ogr.GetDriverByName('ESRI Shapefile')
+        # Use Geopackage driver to overcome this:
+        # See https://github.com/inasafe/inasafe/issues/5063
+        driver = ogr.GetDriverByName('GPKG')
         ogr_dataset = driver.CreateDataSource(output_file)
         if ogr_dataset is None:
             # Probably the file existed and could not be overriden

@@ -1,2 +1,4 @@
-flake8:
-  version: 2
+linter:
+  flake8:
+    target: safe/
+    config: .flake8

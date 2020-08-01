@@ -661,7 +661,7 @@ class Dock(QDockWidget, FORM_CLASS):
             called this function.
         :type *args: list
 
-        ..note:: \*args is only used for debugging purposes.
+        ..note:: *args is only used for debugging purposes.
         """
         _ = args  # NOQA
         # Prevent recursion
@@ -1662,12 +1662,23 @@ def remove_provenance_project_variables():
     project_context_scope = QgsExpressionContextUtils.projectScope(
         QgsProject.instance())
     existing_variable_names = project_context_scope.variableNames()
+    # "layers" variable is now a QgsWeakMapLayerPointer.
+    # There is no way to get it as python object.
+    try:
+        existing_variable_names.remove('layers')
+    except ValueError:
+        pass
 
     # Save the existing variables that's not provenance variable.
     existing_variables = {}
     for existing_variable_name in existing_variable_names:
-        existing_variables[existing_variable_name] = \
-            project_context_scope.variable(existing_variable_name)
+        try:
+            existing_variables[existing_variable_name] = \
+                project_context_scope.variable(existing_variable_name)
+        except TypeError as e:
+            LOGGER.warning(
+                'Cannot retrieve variable name: {}\nError: {}'.format(
+                    existing_variable_name, e))
     for the_provenance in provenance_list:
         if the_provenance['provenance_key'] in existing_variables:
             existing_variables.pop(the_provenance['provenance_key'])
