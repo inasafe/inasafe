@@ -1,7 +1,7 @@
 InaSAFE
 =======
 
-[![InaSAFE Screenshot](http://inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://www.inasafe.org)
+[![InaSAFE Screenshot](http://inasafe.org/wp-content/uploads/2017/06/InaSAFE-screenshot-lores-1.jpg)](http://www.inasafe.org)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
@@ -14,13 +14,6 @@ The latest source code is available at
 which contains modules for risk calculations, GIS functionality and
 functions for impact modelling.
 
-
-Story queue on Waffle:
-
-* [![Stories in Ready](https://badge.waffle.io/inasafe/inasafe.svg?label=ready&title=Ready)](http://waffle.io/inasafe/inasafe)
-* [![Stories in In Progress](https://badge.waffle.io/inasafe/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/inasafe/inasafe)
-
-[![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
 * Current Travis test status master: [![Travis Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe)
 * Current Landscape code health master: [![Landscape Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
@@ -90,6 +83,7 @@ History
 * Version 3.0 was released in March 2015 which added support
   for using the QGIS API within impact functions.
 * Version 4.0 was released in March 2017.
+* Version 5.0 was released in November 2018 which add support for QGIS 3.x
 
 Disclaimer
 ==========
@@ -137,14 +131,4 @@ data or data being rendered inaccurate or losses sustained by you or third
 parties or a failure of the program to operate with any other programs),
 even if such holder or other party has been advised of the possibility of
 such damages.
-
-Thank you
-=========
-[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)](https://www.jetbrains.com/pycharm) 
-
-We use [PyCharm](https://www.jetbrains.com/pycharm) for our python development work 
-
-JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
-open source projects' programme. Please support them by buying a professional 
-license if you are able to!
 
