@@ -67,6 +67,7 @@ from safe.test.utilities import (
 from safe.utilities.resources import resources_path
 from safe.utilities.settings import delete_setting, set_setting, setting
 from safe.utilities.utilities import readable_os_version
+from safe.utilities.gis import qgis_version
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
@@ -428,6 +429,10 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_general_report_from_multi_exposure_impact_function(self):
         """Test generate analysis result from multi exposure impact function.
 
@@ -1114,7 +1119,6 @@ class TestImpactReport(unittest.TestCase):
 
         # shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.skip('The test is failed in QGIS 3.4')
     def test_minimum_needs_outputs(self):
         """Test generate minimum needs section.
 
@@ -1157,7 +1161,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': 'Toilets',
-                            'value': '0'
+                            'value': '10'
                         }],
                     'total_header': 'Total'
                 },
@@ -1224,7 +1228,6 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.skip('The test is failed in QGIS 3.4')
     def test_minimum_needs_outputs_modified(self):
         """Test generate minimum needs section with updated profile.
 
@@ -1296,7 +1299,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': 'Toilets',
-                            'value': '0'
+                            'value': '10'
                         }],
                     'total_header': 'Total'
                 },
@@ -1305,7 +1308,7 @@ class TestImpactReport(unittest.TestCase):
                     'needs': [
                         {
                             'header': 'Rice [kg]',
-                            'value': '40'
+                            'value': '50'
                         },
                         {
                             'header': 'Drinking Water [l]',
@@ -1744,7 +1747,6 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.skip('The test is failed in QGIS 3.4')
     def test_aggregate_post_processors_raster(self):
         """Test generate aggregate postprocessors rasters.
 
@@ -1795,11 +1797,13 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Age per aggregation area',
                         'notes': age_displaced_count_group['notes'],
-                        'rows': [['B', '10', '0', '0', '0'],
+                        'rows': [['B', '10', '0', '10', '0'],
                                  ['C', '10', '10', '10', '0'],
-                                 ['F', '10', '0', '10', '0'],
-                                 ['G', '10', '10', '10', '0'],
-                                 ['K', '10', '0', '10', '0']],
+                                 ['F', '10', '10', '10', '0'],
+                                 ['G', '10', '10', '10', '10'],
+                                 ['H', '10', '0', '0', '0'],
+                                 ['K', '10', '0', '10', '0'],
+                                 ['L', '10', '0', '10', '0']],
                         'columns': ['Aggregation area',
                                     'Total Displaced Population',
                                     {
@@ -1826,11 +1830,13 @@ class TestImpactReport(unittest.TestCase):
                         'header': 'Estimated number of people displaced by '
                                   'Gender per aggregation area',
                         'notes': gender_displaced_count_group['notes'],
-                        'rows': [['B', '10', '0'],
+                        'rows': [['B', '10', '10'],
                                  ['C', '10', '10'],
                                  ['F', '10', '10'],
                                  ['G', '10', '10'],
-                                 ['K', '10', '0']],
+                                 ['H', '10', '0'],
+                                 ['K', '10', '10'],
+                                 ['L', '10', '0']],
                         'columns': [
                             'Aggregation area',
                             'Total Displaced Population',
@@ -1875,9 +1881,11 @@ class TestImpactReport(unittest.TestCase):
                         'rows': [
                             ['B', '10', '10', '20', '80', '0', '0', '0'],
                             ['C', '10', '20', '90', '340', '10', '0', '10'],
-                            ['F', '10', '10', '70', '260', '0', '0', '10'],
+                            ['F', '10', '20', '70', '260', '10', '0', '10'],
                             ['G', '10', '20', '120', '430', '10', '0', '10'],
-                            ['K', '10', '10', '40', '130', '0', '0', '0']],
+                            ['H', '10', '10', '20', '50', '0', '0', '0'],
+                            ['K', '10', '10', '40', '130', '0', '0', '10'],
+                            ['L', '10', '10', '20', '60', '0', '0', '0']],
                         'columns': [
                             'Aggregation area',
                             'Total Displaced Population',
@@ -1919,7 +1927,7 @@ class TestImpactReport(unittest.TestCase):
                             '350',
                             '1,400',
                             '10',
-                            '0',
+                            '10',
                             '10']
                     }
                 ])

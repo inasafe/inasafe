@@ -83,7 +83,7 @@ def clip_by_extent(layer, extent):
         parameters['INPUT'] = layer.source()
         parameters['NO_DATA'] = ''
         parameters['PROJWIN'] = ','.join(bbox)
-        parameters['DATA_TYPE'] = 5
+        parameters['DATA_TYPE'] = 0
         parameters['COMPRESS'] = 4
         parameters['JPEGCOMPRESSION'] = 75
         parameters['ZLEVEL'] = 6

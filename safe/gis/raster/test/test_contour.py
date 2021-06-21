@@ -23,12 +23,15 @@ __revision__ = '$Format:%H$'
 
 
 class TestContour(unittest.TestCase):
-
     """Test Contour"""
 
+    @unittest.skipIf(
+        os.environ.get('QGIS_VERSION_TAG') == 'release-3_4',
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_contour(self):
         """Test create contour"""
-        output_file_path = unique_filename(suffix='-contour.shp')
+        output_file_path = unique_filename(suffix='-contour.gpkg')
         # Load shake map layer
         shakemap_layer = load_test_raster_layer(
             'hazard',
@@ -46,6 +49,10 @@ class TestContour(unittest.TestCase):
         self.assertTrue(os.path.exists(metadata_path))
         self.assertTrue(metadata_path.endswith('.xml'))
 
+    @unittest.skipIf(
+        os.environ.get('QGIS_VERSION_TAG') == 'release-3_4',
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_smoothing(self):
         """Test smoothing method."""
         # Load shake map layer
@@ -58,6 +65,10 @@ class TestContour(unittest.TestCase):
         smoothed_shakemap_path = smooth_shakemap(shakemap_layer.source())
         self.assertTrue(os.path.exists(smoothed_shakemap_path))
 
+    @unittest.skipIf(
+        os.environ.get('QGIS_VERSION_TAG') == 'release-3_4',
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_contour_shakemap(self):
         """Test for contour creation (with smoothing)."""
         # Original
@@ -69,7 +80,6 @@ class TestContour(unittest.TestCase):
             'grid-use_ascii.tif')
         contour_path = shakemap_contour(shakemap_layer_path)
         self.assertTrue(os.path.exists(contour_path))
-        print(contour_path)
 
 
 if __name__ == '__main__':

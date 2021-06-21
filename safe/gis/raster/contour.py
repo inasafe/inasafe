@@ -21,6 +21,7 @@ from safe.common.utilities import (
     temp_dir,
     unique_filename
 )
+from safe.definitions import contour_id_field
 from safe.definitions.constants import NUMPY_SMOOTHING
 from safe.definitions.fields import (
     contour_colour_field,
@@ -356,7 +357,9 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
     """
     # Set output path
     if not output_file_path:
-        output_file_path = unique_filename(suffix='.shp', dir=temp_dir())
+        # There are minor issues with shapefile, so we switch to gpkg
+        # See https://github.com/inasafe/inasafe/issues/5063
+        output_file_path = unique_filename(suffix='.gpkg', dir=temp_dir())
 
     output_directory = os.path.dirname(output_file_path)
     output_file_name = os.path.basename(output_file_path)
@@ -364,7 +367,9 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
 
     # Based largely on
     # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-    driver = ogr.GetDriverByName('ESRI Shapefile')
+    # Use Geopackage driver to overcome this:
+    # See https://github.com/inasafe/inasafe/issues/5063
+    driver = ogr.GetDriverByName('GPKG')
     ogr_dataset = driver.CreateDataSource(output_file_path)
     if ogr_dataset is None:
         # Probably the file existed and could not be overriden
@@ -372,7 +377,9 @@ def shakemap_contour(shakemap_layer_path, output_file_path='', active_band=1):
             'Could not create datasource for:\n%s. Check that the file '
             'does not already exist and that you do not have file system '
             'permissions issues' % output_file_path)
-    layer = ogr_dataset.CreateLayer('contour')
+    # Set default fid
+    options = ['FID={}'.format(contour_id_field['field_name'])]
+    layer = ogr_dataset.CreateLayer('contour', options=options)
 
     for contour_field in contour_fields:
         field_definition = create_ogr_field_from_definition(contour_field)

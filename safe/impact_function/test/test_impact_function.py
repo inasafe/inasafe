@@ -2,7 +2,6 @@
 
 """Test for Impact Function."""
 
-
 import getpass
 import json
 import logging
@@ -88,8 +87,7 @@ from safe.test.utilities import (
     standard_data_path,
     load_test_vector_layer,
     compare_wkt,
-    dict_values_sorted,
-)
+    dict_values_sorted)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
 
@@ -117,7 +115,7 @@ from safe.definitions.constants import (
 )
 from safe.gis.sanity_check import check_inasafe_fields
 from safe.utilities.unicode import byteify
-from safe.utilities.gis import wkt_to_rectangle
+from safe.utilities.gis import wkt_to_rectangle, qgis_version
 from safe.utilities.utilities import readable_os_version
 from safe.impact_function.impact_function import ImpactFunction
 from safe.impact_function.impact_function_utilities import check_input_layer
@@ -415,6 +413,10 @@ class TestImpactFunction(unittest.TestCase):
             message
         )
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_not_exposed_exposure(self):
         """Test if we can run 0 exposed features over a raster hazard."""
         hazard_layer = load_test_raster_layer(
@@ -800,6 +802,10 @@ class TestImpactFunction(unittest.TestCase):
         ]
         self.assertEqual(len(json_files), len(scenarios))
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         path = standard_data_path('scenario')
@@ -814,8 +820,7 @@ class TestImpactFunction(unittest.TestCase):
             scenario, expected_steps, expected_outputs = read_json_flow(
                 json_file)
             if scenario.get('enable', True):
-                print("Test JSON scenario : ")
-                print(json_file)
+                print('Test JSON scenario : {}'.format(json_file))
                 self.test_scenario(json_file, test_loader=True)
                 count += 1
         self.assertEqual(len(json_files), count)
@@ -1104,7 +1109,6 @@ class TestImpactFunction(unittest.TestCase):
         for key in output_layer_provenance_keys:
             self.assertIn(key, list(impact_function.provenance.keys()))
 
-    @unittest.skip('The test is failed in QGIS 3.4')
     def test_vector_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on vector exposure.
 
@@ -1136,10 +1140,10 @@ class TestImpactFunction(unittest.TestCase):
         expected_value = {
             'population': 69,
             'total': 9.0,
-            'minimum_needs__rice': 491,
-            'minimum_needs__clean_water': 11763,
-            'minimum_needs__toilets': 8,
-            'minimum_needs__drinking_water': 3072,
+            'minimum_needs__rice': 492,
+            'minimum_needs__clean_water': 11764,
+            'minimum_needs__toilets': 9,
+            'minimum_needs__drinking_water': 3073,
             'minimum_needs__family_kits': 35,
             'male': 34,
             'female': 34,
@@ -1151,9 +1155,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self._check_minimum_fields_value(expected_value, impact_function)
 
-    # expected to fail until raster postprocessor calculation in analysis
-    # impacted is fixed
-    @unittest.expectedFailure
     def test_raster_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors on raster exposure.
 
@@ -1189,17 +1190,17 @@ class TestImpactFunction(unittest.TestCase):
         # TODO: should include demographic postprocessor value too
         expected_value = {
             'total_affected': 9.208200000039128,
-            'minimum_needs__rice': 25,
+            'minimum_needs__rice': 23,
             'minimum_needs__toilets': 0,
-            'minimum_needs__drinking_water': 161,
-            'minimum_needs__clean_water': 616,
+            'minimum_needs__drinking_water': 143,
+            'minimum_needs__clean_water': 547,
             'male': 4,
             'female': 4,
             'youth': 2,
             'adult': 6,
             'elderly': 0,
             'total': 162.7667000000474,
-            'minimum_needs__family_kits': 1,
+            'minimum_needs__family_kits': 2,
             'total_not_affected': 153.55850000000828,
         }
 
@@ -1278,6 +1279,34 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsInstance(impact_function.impact, QgsVectorLayer)
         self.assertEqual(len(impact_function.outputs), 6)
 
+    def test_hazard_fix_geometries(self):
+        """Test if we can run hazard with invalid geometries.
+
+        The hazard layer is a raster layer.
+        When it went into hazard_preparation step, it was reclassified, and
+        polygonized.
+
+        However without cleaning the layer, it will contain invalid
+        geometries.
+        This unittest makes sure that these geometries fixed before clipped.
+        """
+        hazard_layer = load_test_raster_layer(
+            'gisv4', 'hazard', 'jakarta_continuous_flood.tif')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'jakarta_building.gpkg')
+        crs = QgsCoordinateReferenceSystem(4326)
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.crs = crs
+        impact_function.debug_mode = False
+        status, message = impact_function.prepare()
+        message = message.to_text() if message is not None else message
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+
+        status, message = impact_function.run()
+        message = message.to_text() if message is not None else message
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
 if __name__ == '__main__':
     unittest.main()

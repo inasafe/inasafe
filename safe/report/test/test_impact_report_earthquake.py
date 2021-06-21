@@ -23,6 +23,7 @@ from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
     load_test_raster_layer)
+from safe.utilities.gis import qgis_version
 from safe.utilities.resources import resources_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app(qsetting=INASAFE_TEST)
@@ -63,6 +64,10 @@ class TestEarthquakeReport(unittest.TestCase):
             actual_string = actual_file.read().strip()
             self.assertEqual(control_string, actual_string)
 
+    @unittest.skipIf(
+        qgis_version() < 31000,
+        'Skip this in QGIS 3.4 due to stall issue from core qgis thread.'
+    )
     def test_earthquake_population_without_aggregation(self):
         """Testing Earthquake in Population without aggregation.
 

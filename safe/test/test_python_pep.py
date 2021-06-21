@@ -1,6 +1,5 @@
 # coding=utf-8
 
-
 import unittest
 import os
 import sys
@@ -20,21 +19,18 @@ class TestPythonPep(unittest.TestCase):
         'We can use make flake8 separately')
     def test_flake8(self):
         """Test if the code is Flake8 compliant."""
-        if os.environ.get('ON_TRAVIS', False):
-            root = './'
-            command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
-            default_number_lines = 5
-        elif sys.platform.startswith('win'):
+        # Root is the root path of the repo
+        root = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '../../'))
+        if sys.platform.startswith('win'):
             # ET I don't know on windows.
-            pass
+            return
 
-        else:
-            # OSX and linux just delegate to make
-            root = '../../'
-            command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
-            default_number_lines = 5
+        # OSX and linux just delegate to make
+        command = ['make', 'flake8']
+        output = Popen(
+            command, stdout=PIPE, cwd=root, encoding='utf8').communicate()[0]
+        default_number_lines = 5
 
         # make pep8 produces some extra lines by default.
         lines = len(output.splitlines()) - default_number_lines
@@ -47,8 +43,10 @@ class TestPythonPep(unittest.TestCase):
         'We can use make pep257 separately')
     def test_pep257(self):
         """Test if docstrings are PEP257 compliant."""
+        # Root is the root path of the repo
+        root = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '../../'))
         if os.environ.get('ON_TRAVIS', False):
-            root = './'
             command = ['make', 'pep257']
             output = Popen(
                 command,
@@ -57,7 +55,6 @@ class TestPythonPep(unittest.TestCase):
                 encoding='utf8').communicate()[1]
             default_number_lines = 0
         elif sys.platform.startswith('win'):
-            root = '../../'
             command = [
                 'pep257',
                 '--ignore=D102,D103,D104,D105,D200,D201,D202,D203,'
@@ -77,7 +74,6 @@ class TestPythonPep(unittest.TestCase):
 
         else:
             # OSX and linux just delegate to make
-            root = '../../'
             command = ['make', 'pep257']
             output = Popen(
                 command,

@@ -1,5 +1,5 @@
 # For tests execution:
-deepdiff
-mock
-flake8
-pep257
+deepdiff==4.0.8
+mock==3.0.5
+flake8==3.7.9
+pep257==0.7.0

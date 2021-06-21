@@ -52,6 +52,7 @@
         "Clip raster by analysis bounding box",
         "Polygonize classified raster hazard",
         "Reproject hazard layer to aggregation CRS",
+        "Clean hazard polygons from possible invalid geometries",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",

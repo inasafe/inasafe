@@ -1,0 +1,21 @@
+version: '2.1'
+services:
+  qgis-testing-environment:
+    image: ${IMAGE}:${QGIS_VERSION_TAG}
+    volumes:
+      - ./:/tests_directory
+    environment:
+      QGIS_VERSION_TAG: "${QGIS_VERSION_TAG}"
+      WITH_PYTHON_PEP: "${WITH_PYTHON_PEP}"
+      INASAFE_LOGGING_LEVEL: 50
+      INASAFE_DISABLE_WELCOME_MESSAGE: 1
+      ON_TRAVIS: "${ON_TRAVIS}"
+      MUTE_LOGS: "${MUTE_LOGS}"
+      DISPLAY: ":99"
+    entrypoint: /tests_directory/scripts/docker/qgis-testing-entrypoint.sh
+    # Enable "command:" line below to immediately run unittests upon docker-compose up
+    # command: qgis_testrunner.sh test_suite.test_package
+    # Default behaviour of the container is to standby
+    command: tail -f /dev/null
+    # qgis_testrunner.sh needs tty for tee
+    tty: true
