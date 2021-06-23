@@ -108,11 +108,15 @@ def assign_highest_value(exposure, hazard):
         With controlled order, we will have the same output if one
         hazard spans over multiple aggregation boundaries.
         """
-        if aggr_id_field:
-            return (
-                feature[haz_id_field] or feature.id(),
-                feature[aggr_id_field])
-        return feature[haz_id_field] or feature.id()
+        hazard_class = feature[haz_id_field] or feature.id()
+        if aggr_id_field and feature[aggr_id_field]:
+            aggregation_class = feature[aggr_id_field]
+            # This returns a tuple with two elements, so Python can sort it
+            # by two kind of attributes
+            return hazard_class, aggregation_class
+
+        # This one also returns tuple, but one element
+        return hazard_class,
 
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:
