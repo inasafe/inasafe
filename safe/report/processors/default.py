@@ -471,21 +471,21 @@ def qgis_composer_renderer(impact_report, component):
         item_id = map_el.get('id')
         split_count = map_el.get('grid_split_count')
         layers = [
-            layer for layer in map_el.get('layers') if isinstance(
-                layer, QgsMapLayer)
+            _layer for _layer in map_el.get('layers') if isinstance(
+                _layer, QgsMapLayer)
         ]
         map_extent_option = map_el.get('extent')
         composer_map = layout_item(layout, item_id, QgsLayoutItemMap)
 
-        for index, layer in enumerate(layers):
+        for index, _layer in enumerate(layers):
             # we need to check whether the layer is registered or not
             registered_layer = (
-                QgsProject.instance().mapLayer(layer.id()))
+                QgsProject.instance().mapLayer(_layer.id()))
             if registered_layer:
-                if not registered_layer == layer:
+                if not registered_layer == _layer:
                     layers[index] = registered_layer
             else:
-                QgsProject.instance().addMapLayer(layer)
+                QgsProject.instance().addMapLayer(_layer)
 
         """:type: qgis.core.QgsLayoutItemMap"""
         if composer_map:
@@ -501,17 +501,17 @@ def qgis_composer_renderer(impact_report, component):
                 impact_report.use_template_extent) else None
 
             composer_map.setKeepLayerSet(True)
-            layer_set = [l for l in layers if isinstance(l, QgsMapLayer)]
+            layer_set = [_layer for _layer in layers if isinstance(
+                _layer, QgsMapLayer)]
             composer_map.setLayers(layer_set)
             map_overview_extent = None
             if map_extent_option and isinstance(
                     map_extent_option, QgsRectangle):
                 # use provided map extent
                 extent = coord_transform.transform(map_extent_option)
-                for l in [layer for layer in layers if
-                          isinstance(layer, QgsMapLayer)]:
-                    layer_extent = coord_transform.transform(l.extent())
-                    if l.name() == map_overview['id']:
+                for layer in layer_set:
+                    layer_extent = coord_transform.transform(layer.extent())
+                    if layer.name() == map_overview['id']:
                         map_overview_extent = layer_extent
             else:
                 # if map extent not provided, try to calculate extent
@@ -519,12 +519,11 @@ def qgis_composer_renderer(impact_report, component):
                 # shown properly
                 extent = QgsRectangle()
                 extent.setMinimal()
-                for l in [layer for layer in layers if
-                          isinstance(layer, QgsMapLayer)]:
+                for layer in layer_set:
                     # combine extent if different layer is provided.
-                    layer_extent = coord_transform.transform(l.extent())
+                    layer_extent = coord_transform.transform(layer.extent())
                     extent.combineExtentWith(layer_extent)
-                    if l.name() == map_overview['id']:
+                    if layer.name() == map_overview['id']:
                         map_overview_extent = layer_extent
 
             width = extent.width()
@@ -561,8 +560,8 @@ def qgis_composer_renderer(impact_report, component):
         item_id = leg_el.get('id')
         title = leg_el.get('title')
         layers = [
-            layer for layer in leg_el.get('layers') if isinstance(
-                layer, QgsMapLayer)
+            _layer for _layer in leg_el.get('layers') if isinstance(
+                _layer, QgsMapLayer)
         ]
         symbol_count = leg_el.get('symbol_count')
         column_count = leg_el.get('column_count')
@@ -584,17 +583,17 @@ def qgis_composer_renderer(impact_report, component):
 
             # set legend
             root_group = legend.model().rootGroup()
-            for layer in layers:
+            for _layer in layers:
                 # we need to check whether the layer is registered or not
                 registered_layer = (
-                    QgsProject.instance().mapLayer(layer.id()))
+                    QgsProject.instance().mapLayer(_layer.id()))
                 if registered_layer:
-                    if not registered_layer == layer:
-                        layer = registered_layer
+                    if not registered_layer == _layer:
+                        _layer = registered_layer
                 else:
-                    QgsProject.instance().addMapLayer(layer)
+                    QgsProject.instance().addMapLayer(_layer)
                 # used for customizations
-                tree_layer = root_group.addLayer(layer)
+                tree_layer = root_group.addLayer(_layer)
                 if impact_report.legend_layers or (
                         not impact_report.multi_exposure_impact_function):
                     QgsLegendRenderer.setNodeLegendStyle(

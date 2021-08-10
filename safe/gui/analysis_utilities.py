@@ -122,11 +122,13 @@ def add_debug_layers_to_canvas(impact_function):
 
         # Let's style layers which have a geometry and have
         # hazard_class
+        not_allowed_geom = [
+            QgsWkbTypes.NullGeometry,
+            QgsWkbTypes.UnknownGeometry
+        ]
         if qgis_layer.type() == QgsMapLayer.VectorLayer:
-            if qgis_layer.geometryType() not in [
-                        QgsWkbTypes.NullGeometry,
-                        QgsWkbTypes.UnknownGeometry
-                    ] and classification: # noqa
+            if qgis_layer.geometryType() not in not_allowed_geom \
+                    and classification: # noqa
                 if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
                     hazard_class_style(qgis_layer, classes, True)
 

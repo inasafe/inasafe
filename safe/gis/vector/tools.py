@@ -6,7 +6,7 @@
 import logging
 from math import isnan
 
-import ogr
+from osgeo import ogr
 from qgis.core import (
     QgsSpatialIndex,
     QgsFeatureRequest,

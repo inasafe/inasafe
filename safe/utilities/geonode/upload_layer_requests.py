@@ -175,7 +175,7 @@ def upload(server, session, base_file, charset='UTF-8'):
     result = session.get(upload_url)
 
     # Get the upload CSRF token
-    expression = re.compile('csrf_token(\s*)=(\s*)"([a-zA-Z0-9]*?)",')
+    expression = re.compile(r'csrf_token(\s*)=(\s*)"([a-zA-Z0-9]*?)",')
     match = expression.search(result.text)
     csrf_token = match.groups()[2]
 

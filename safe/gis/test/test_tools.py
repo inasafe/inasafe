@@ -59,6 +59,19 @@ class GisToolsTest(unittest.TestCase):
         self.assertEqual(purpose, 'undefined')
         self.assertEqual(len(layer.fields()), 4)
 
+        # QLR
+        # This QLR contains a file based reference layer to
+        # small_grid.geojson, and it should work the same way
+        # as if we load small_grid.geojson
+        # In practice we could put the non file-based layer (PostGIS/WFS)
+        # and load it from QLR
+        path = standard_data_path(
+            'gisv4', 'aggregation', 'small_grid.qlr')
+        layer, purpose = load_layer(path)
+        self.assertTrue(layer.isValid())
+        self.assertEqual(layer.name(), 'small_grid')
+        self.assertEqual(purpose, 'aggregation')
+
     @unittest.skipIf(True, 'You need a PostGIS database and edit the URI.')
     def test_load_layer_from_uri_with_postgis(self):
         """Test we can load a layer with different parameters in POSTGIS."""

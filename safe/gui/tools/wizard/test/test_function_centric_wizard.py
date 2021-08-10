@@ -118,7 +118,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
 
         structure_layer = load_test_vector_layer(
             'exposure',
-            'buildings.shp',
+            'buildings.gpkg',
             clone=True)
 
         test_layers = [volcano_layer, structure_layer]

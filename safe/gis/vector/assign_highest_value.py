@@ -117,7 +117,14 @@ def assign_highest_value(exposure, hazard):
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:
         expression = '"%s" = \'%s\'' % (hazard_field, hazard_value)
-        hazard_request = QgsFeatureRequest().setFilterExpression(expression)
+        order_by_hazard_field = QgsFeatureRequest.OrderByClause(
+            haz_id_field)
+        order_by_aggregation_field = QgsFeatureRequest.OrderByClause(
+            aggr_id_field)
+        order_by = QgsFeatureRequest.OrderBy(
+            [order_by_hazard_field, order_by_aggregation_field])
+        hazard_request = QgsFeatureRequest()\
+            .setOrderBy(order_by).setFilterExpression(expression)
         update_map = {}
         areas = sorted(
             hazard.getFeatures(hazard_request), key=_hazard_sort_key)
