@@ -25,12 +25,9 @@ status=final
 # Optional items:
 
 changelog=
-<<<<<<< HEAD
-=======
     Version 5.0.2:
     - Fix sorting
     - Small crash fixes
->>>>>>> upstream/develop
     Version 5.0.1:
     - Fix contour calculation in QGIS 3.4
     - Fix inconsistent aggregation count behaviour
