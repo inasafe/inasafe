@@ -497,7 +497,7 @@ class Dock(QDockWidget, FORM_CLASS):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-    @pyqtSlot(QgsMapLayer, str)
+    # @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
@@ -661,7 +661,7 @@ class Dock(QDockWidget, FORM_CLASS):
             called this function.
         :type *args: list
 
-        ..note:: *args is only used for debugging purposes.
+        ..note:: \*args is only used for debugging purposes.
         """
         _ = args  # NOQA
         # Prevent recursion
@@ -769,7 +769,7 @@ class Dock(QDockWidget, FORM_CLASS):
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
 
-    @pyqtSlot(bool)
+    #@pyqtSlot(bool)
     def toggle_rubber_bands(self, flag):
         """Disabled/enable the rendering of rubber bands.
 
@@ -943,7 +943,7 @@ class Dock(QDockWidget, FORM_CLASS):
         self.question_group.setEnabled(True)
         self.question_group.setVisible(True)
 
-    @pyqtSlot(QgsMapLayer)
+    #@pyqtSlot(QgsMapLayer)
     def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
 
@@ -1223,7 +1223,7 @@ class Dock(QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QDesktopServices.openUrl(QUrl.fromLocalFile(path))
 
-    @pyqtSlot(QgsRectangle, QgsCoordinateReferenceSystem)
+    #@pyqtSlot(QgsRectangle, QgsCoordinateReferenceSystem)
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
@@ -1662,23 +1662,12 @@ def remove_provenance_project_variables():
     project_context_scope = QgsExpressionContextUtils.projectScope(
         QgsProject.instance())
     existing_variable_names = project_context_scope.variableNames()
-    # "layers" variable is now a QgsWeakMapLayerPointer.
-    # There is no way to get it as python object.
-    try:
-        existing_variable_names.remove('layers')
-    except ValueError:
-        pass
 
     # Save the existing variables that's not provenance variable.
     existing_variables = {}
     for existing_variable_name in existing_variable_names:
-        try:
-            existing_variables[existing_variable_name] = \
-                project_context_scope.variable(existing_variable_name)
-        except TypeError as e:
-            LOGGER.warning(
-                'Cannot retrieve variable name: {}\nError: {}'.format(
-                    existing_variable_name, e))
+        existing_variables[existing_variable_name] = \
+            project_context_scope.variable(existing_variable_name)
     for the_provenance in provenance_list:
         if the_provenance['provenance_key'] in existing_variables:
             existing_variables.pop(the_provenance['provenance_key'])
