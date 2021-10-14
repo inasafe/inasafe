@@ -66,8 +66,6 @@ notifications:
 
   email:
     - tim@kartoza.com
-    - ismail@kartoza.com
     - rizky@kartoza.com
-    - rohmat@kartoza.com
 
 sudo: false
