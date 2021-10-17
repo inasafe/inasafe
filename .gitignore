@@ -56,6 +56,7 @@ scripts/nightly-build-repo/apache.conf
 setup.cfg
 .svn
 .vagrant
+.vscode
 venv
 !.gitkeep
 # This is a temporary working file for building the windows installer that does string replacement on version name
