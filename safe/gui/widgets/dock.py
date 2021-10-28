@@ -14,12 +14,10 @@ from qgis.core import (
     QgsExpressionContextUtils,
     QgsGeometry,
     QgsLayerTreeLayer,
-    QgsMapLayer,
     QgsProject,
-    QgsRectangle,
     QgsApplication
 )
-from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot
+from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot # NOQA pylint: disable=unused-import
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
 from qgis.PyQt.QtWidgets import (
     QAction,
@@ -497,7 +495,8 @@ class Dock(QDockWidget, FORM_CLASS):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-    # TODO: commented, but need to do a proper GUI testing for latest QGIS Version
+    # TODO: commented, but need to do a proper GUI testing for
+    #  latest QGIS Version
     # @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
@@ -770,7 +769,8 @@ class Dock(QDockWidget, FORM_CLASS):
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
 
-    # TODO: commented, but need to do a proper GUI testing for latest QGIS Version
+    # TODO: commented, but need to do a proper GUI testing for
+    #  latest QGIS Version
     #  @pyqtSlot(bool)
     def toggle_rubber_bands(self, flag):
         """Disabled/enable the rendering of rubber bands.
@@ -945,7 +945,8 @@ class Dock(QDockWidget, FORM_CLASS):
         self.question_group.setEnabled(True)
         self.question_group.setVisible(True)
 
-    # TODO: commented, but need to do a proper GUI testing for latest QGIS Version
+    # TODO: commented, but need to do a proper GUI testing for
+    #  latest QGIS Version
     #  @pyqtSlot(QgsMapLayer)
     def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
@@ -1226,7 +1227,8 @@ class Dock(QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
             QDesktopServices.openUrl(QUrl.fromLocalFile(path))
 
-    # TODO: commented, but need to do a proper GUI testing for latest QGIS Version
+    # TODO: commented, but need to do a proper GUI testing for
+    #  latest QGIS Version
     #  @pyqtSlot(QgsRectangle, QgsCoordinateReferenceSystem)
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
