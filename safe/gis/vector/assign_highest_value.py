@@ -99,21 +99,6 @@ def assign_highest_value(exposure, hazard):
     levels = [key['key'] for key in layer_classification['classes']]
     levels.append(not_exposed_class['key'])
 
-    def _hazard_sort_key(feature):
-        """Custom feature sort function.
-
-        The function were intended to sort hazard features, in order
-        for maintaining consistencies between subsequent runs.
-
-        With controlled order, we will have the same output if one
-        hazard spans over multiple aggregation boundaries.
-        """
-        if aggr_id_field:
-            return (
-                feature[haz_id_field] or feature.id(),
-                feature[aggr_id_field])
-        return feature[haz_id_field] or feature.id()
-
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:
         expression = '"%s" = \'%s\'' % (hazard_field, hazard_value)
@@ -126,9 +111,7 @@ def assign_highest_value(exposure, hazard):
         hazard_request = QgsFeatureRequest()\
             .setOrderBy(order_by).setFilterExpression(expression)
         update_map = {}
-        areas = sorted(
-            hazard.getFeatures(hazard_request), key=_hazard_sort_key)
-        for area in areas:
+        for area in hazard.getFeatures(hazard_request):
             geometry = area.geometry().constGet()
             intersects = spatial_index.intersects(geometry.boundingBox())
 

@@ -28,4 +28,7 @@ import logging
 
 from safe.common.custom_logging import setup_logger
 
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('172.17.0.1', port=5678, stdoutToServer=True, stderrToServer=True)
+
 setup_logger('InaSAFE')

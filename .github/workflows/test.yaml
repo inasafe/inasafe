@@ -1,0 +1,79 @@
+# Adapted from previous .travis.yml file in this repo
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+    # Only run this pipeline if any of these paths changes
+    - "safe"
+    - "safe_extras"
+    - ".github/workflows/test.yaml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - edited
+    branches:
+      - develop
+
+env:
+  # Global environment variable
+  IMAGE: qgis/qgis
+  WITH_PYTHON_PEP: "true"
+  MUTE_LOGS: "true"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        qgis_version_tag: 
+          - latest
+          - release-3_10
+          - release-3_12
+          - release-3_14
+          - release-3_16
+          - release-3_18
+          - release-3_20
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      
+      - name: Preparing docker-compose environment
+        env:
+          QGIS_VERSION_TAG: ${{ matrix.qgis_version_tag }}
+        run: |
+          cat << EOF > .env
+          QGIS_VERSION_TAG=${QGIS_VERSION_TAG}
+          IMAGE=${IMAGE}
+          ON_TRAVIS=true
+          MUTE_LOGS=${MUTE_LOGS}
+          WITH_PYTHON_PEP=${WITH_PYTHON_PEP}
+          EOF
+
+
+      - name: Preparing test environment
+        run: |
+          cat .env
+          docker pull "${IMAGE}":${{ matrix.qgis_version_tag }}
+          pip install -U pip
+          pip install -U pep257
+          pip install -U flake8
+          docker-compose up -d
+          sleep 10
+      
+      - name: Lint test
+        run: |
+          make pep257
+          make flake8
+
+      - name: Run test suite
+        run: |
+          docker-compose exec -T qgis-testing-environment qgis_testrunner.sh test_suite.test_package
