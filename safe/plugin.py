@@ -575,7 +575,9 @@ class Plugin():
         self._create_field_mapping_action()
         self._create_multi_exposure_action()
         self._create_metadata_converter_action()
-        self._create_osm_downloader_action()
+        # TODO: temporarily disabled this until we have a fix
+        # issue: https://github.com/inasafe/inasafe/issues/5109
+        # self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petabencana_layer_action()
         self._create_geonode_uploader_action()
