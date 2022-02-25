@@ -411,7 +411,9 @@ class Dock(QDockWidget, FORM_CLASS):
 
                 if too_wide or too_high:
                     pixmap = pixmap.scaled(
-                        int(maximum_width), int(maximum_height), Qt.KeepAspectRatio)
+                        int(maximum_width), 
+                        int(maximum_height), 
+                        Qt.KeepAspectRatio)
 
                 self.organisation_logo.setMaximumWidth(maximum_width)
                 # We have manually scaled using logic above
