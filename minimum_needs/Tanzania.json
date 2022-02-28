@@ -1,0 +1,66 @@
+{
+  "profile": "Tanzania",
+  "provenance": " Nation disaster operation guideline for Tanzania",
+  "resources": [
+    {
+      "Resource name": "Mchele",
+      "Minimum allowed": 2.8,
+      "Default": 2.8,
+      "Maximum allowed": 5.0,
+      "Unit abbreviation": "kg",
+      "Resource description": "Rice for basic carbohydrate provision",
+      "Units": "Kilograms",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit abbreviation }} of {{ Resource name }}.  Should not be supplied if another carbohydrate resource has already been supplied.",
+      "Frequency": "weekly",
+      "Unit": "Kilogram"
+    },
+    {
+      "Resource name": "Maharage",
+      "Frequency": "weekly",
+      "Default": 1.4,
+      "Maximum allowed": 5.0,
+      "Unit abbreviation": "kg",
+      "Resource description": "Basic n",
+      "Units": "Kilograms",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit abbreviation }} of {{ Resource name }}. Should not be supplied if another carbohydrate resource has already been supplied.",
+      "Minimum allowed": 1.4,
+      "Unit": "Kilogram"
+    },
+    {
+      "Resource name": "Drinking water",
+      "Frequency": "weekly",
+      "Default": 2.0,
+      "Maximum allowed": 100.0,
+      "Unit abbreviation": "l",
+      "Resource description": "Water for drinking and cooking",
+      "Units": "Litres",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit abbreviation }} of {{ Resource name }}.",
+      "Minimum allowed": 2.0,
+      "Unit": "Litre"
+    },
+    {
+      "Resource name": "Cooking sets",
+      "Frequency": "per event",
+      "Default": 0.2,
+      "Maximum allowed": 0.5,
+      "Unit abbreviation": "set",
+      "Resource description": "Pots,cups",
+      "Units": "sets",
+      "Readable sentence": "A displaced family should be provided with {{ Default }} {{ Unit abbreviation }} of {{ Resource name }}. ",
+      "Minimum allowed": 0.2,
+      "Unit": "set"
+    },
+    {
+      "Resource name": "Unga wa Ugali",
+      "Minimum allowed": 2.8,
+      "Default": 2.8,
+      "Maximum allowed": 5.0,
+      "Unit abbreviation": "kg",
+      "Resource description": "Maize meal- stable food",
+      "Units": "Kilograms",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit abbreviation }} of {{ Resource name }}. Should not be supplied if another carbohydrate resource has already been supplied.",
+      "Frequency": "weekly",
+      "Unit": "Kilogram"
+    }
+  ]
+}
