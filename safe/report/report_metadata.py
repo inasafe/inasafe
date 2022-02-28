@@ -68,7 +68,7 @@ class ReportComponentsMetadata():
         .. versionadded:: 4.0
         """
         self._key = key
-        if isinstance(processor, collections.Callable):
+        if isinstance(processor, collections.abc.Callable):
             self._processor = processor
         elif isinstance(processor, str):
             _package, _method = processor.rsplit('.', 1)
