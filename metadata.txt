@@ -24,7 +24,6 @@ status=final
 
 # Optional items:
 
-<<<<<<< HEAD
     Version 5.0.6:
     - Bug fixes only - fix deprecated jinja calls
     Version 5.0.5:
