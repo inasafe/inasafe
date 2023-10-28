@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo "Export the plugin to a zip with no .git folder"
 echo "And build a windows installer" 
 

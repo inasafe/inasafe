@@ -748,7 +748,9 @@ class ImpactReport():
             # load extractors
             try:
                 if not component.context:
-                    if isinstance(component.extractor, collections.Callable):
+                    if isinstance(
+                        component.extractor, 
+                        collections.abc.Callable):
                         _extractor_method = component.extractor
                     else:
                         _package_name = (
@@ -800,7 +802,8 @@ class ImpactReport():
 
             try:
                 # load processor
-                if isinstance(component.processor, collections.Callable):
+                if isinstance(
+                    component.processor, collections.abc.Callable):
                     _renderer = component.processor
                 else:
                     _package_name = '%(report-key)s.renderer.%(component-key)s'

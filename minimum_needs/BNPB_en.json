@@ -1,0 +1,66 @@
+{
+    "resources": [
+        {
+            "Default": "2.8",
+            "Minimum allowed": "0",
+            "Maximum allowed": "100",
+            "Frequency": "weekly",
+            "Resource name": "Rice",
+            "Resource description": "Basic food",
+            "Unit": "kilogram",
+            "Units": "kilograms",
+            "Unit abbreviation": "kg",
+            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }}."
+        },
+        {
+            "Default": "17.5",
+            "Minimum allowed": "0",
+            "Maximum allowed": "100",
+            "Frequency": "weekly",
+            "Resource name": "Drinking Water",
+            "Resource description": "For drinking",
+            "Unit": "litre",
+            "Units": "litres",
+            "Unit abbreviation": "l",
+            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }} for drinking."
+        },
+        {
+            "Default": "67",
+            "Minimum allowed": "10",
+            "Maximum allowed": "100",
+            "Frequency": "weekly",
+            "Resource name": "Clean Water",
+            "Resource description": "For washing",
+            "Unit": "litre",
+            "Units": "litres",
+            "Unit abbreviation": "l",
+            "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }} for washing."
+        },
+        {
+            "Default": "0.2",
+            "Minimum allowed": "0.2",
+            "Maximum allowed": "0.2",
+            "Frequency": "weekly",
+            "Resource name": "Family Kits",
+            "Resource description": "Hygiene kits",
+            "Unit": "",
+            "Units": "",
+            "Unit abbreviation": "",
+            "Readable sentence": "Each family of 5 persons should be provided with 1 Family Kit per week."
+        },
+        {
+            "Default": "0.05",
+            "Minimum allowed": "0.02",
+            "Maximum allowed": "0.05",
+            "Frequency": "once",
+            "Resource name": "Toilets",
+            "Resource description": "",
+            "Unit": "",
+            "Units": "",
+            "Unit abbreviation": "",
+            "Readable sentence": "A toilet should be provided for every 20 persons."
+        }
+    ],
+    "provenance": "The minimum needs are based on Perka 7/2008.",
+    "profile": "BNPB_en"
+}

@@ -115,7 +115,6 @@ def jinja2_renderer(impact_report, component):
         os.path.abspath(main_template_folder))
     extensions = [
         'jinja2.ext.i18n',
-        'jinja2.ext.with_',
         'jinja2.ext.loopcontrols',
         'jinja2.ext.do',
     ]

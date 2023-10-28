@@ -1,0 +1,66 @@
+{
+    "resources": [
+        {
+            "Default": "2.8",
+            "Minimum allowed": "0",
+            "Maximum allowed": "100",
+            "Frequency": "mingguan",
+            "Resource name": "beras",
+            "Resource description": "makanan pokok",
+            "Unit": "kilogram",
+            "Units": "kilogram",
+            "Unit abbreviation": "kg",
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }}."
+        },
+        {
+            "Default": "17.5",
+            "Minimum allowed": "0",
+            "Maximum allowed": "100",
+            "Frequency": "mingguan",
+            "Resource name": "Air Minum",
+            "Resource description": "Untuk minum",
+            "Unit": "liter",
+            "Units": "liter",
+            "Unit abbreviation": "l",
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }} untuk minum."
+        },
+        {
+            "Default": "67",
+            "Minimum allowed": "10",
+            "Maximum allowed": "100",
+            "Frequency": "mingguan",
+            "Resource name": "Air Bersih",
+            "Resource description": "Untuk sanitasi",
+            "Unit": "liter",
+            "Units": "liter",
+            "Unit abbreviation": "l",
+            "Readable sentence": "Setiap individu harus disediakan {{ Default }} {{ Units }} dari {{ Resource name }} {{ Frequency }} untuk sanitasi."
+        },
+        {
+            "Default": "0.2",
+            "Minimum allowed": "0.2",
+            "Maximum allowed": "0.2",
+            "Frequency": "mingguan",
+            "Resource name": "Piranti pokok Keluarga",
+            "Resource description": "Piranti kebersihan",
+            "Unit": "",
+            "Units": "",
+            "Unit abbreviation": "",
+            "Readable sentence": "Setiap individu harus disediakan sepaket piranti pokok keluarga per minggu."
+        },
+        {
+            "Default": "0.05",
+            "Minimum allowed": "0.02",
+            "Maximum allowed": "0.05",
+            "Frequency": "sekali",
+            "Resource name": "Toilet",
+            "Resource description": "",
+            "Unit": "",
+            "Units": "",
+            "Unit abbreviation": "",
+            "Readable sentence": "Satu toilet harus disediakan untuk setiap 20 orang."
+        }
+    ],
+    "provenance": "Standar kebutuhan dasar ini berdasarkan pada Perka BNPB no.7 tahun 2008.",
+    "profile": "BNPB_id"
+}
