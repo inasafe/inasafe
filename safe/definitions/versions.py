@@ -8,7 +8,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 # InaSAFE version (please synchronize with metadata.txt or travis will fail !)
-inasafe_version = '5.0.5'
+inasafe_version = '5.0.6'
 # alpha, beta, rc or final (Travis will fail)
 inasafe_release_status = 'final'
 
