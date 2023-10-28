@@ -802,12 +802,8 @@ class ImpactReport():
 
             try:
                 # load processor
-<<<<<<< Updated upstream
                 if isinstance(
                     component.processor, collections.abc.Callable):
-=======
-                if isinstance(component.processor, collections.abc.Callable):
->>>>>>> Stashed changes
                     _renderer = component.processor
                 else:
                     _package_name = '%(report-key)s.renderer.%(component-key)s'
