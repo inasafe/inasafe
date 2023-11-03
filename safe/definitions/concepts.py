@@ -742,6 +742,19 @@ concepts['production_value'] = {
         }
     ],
 }
+
+concepts['vulnerability'] = {
+    'group': tr('Vulnerability'),
+    'key': 'vulnerability',
+    'description': tr('Vulnerability'),
+    'citations': [
+        {
+            'text': '',
+            'link': ''
+        }
+    ],
+}
+
 # Boilerplate for adding a new concept...
 #  concepts[''] = {
 #    'description': tr(

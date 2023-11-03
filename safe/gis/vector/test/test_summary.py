@@ -15,6 +15,7 @@ from safe.definitions.fields import (
     productivity_field,
     production_cost_field,
     production_value_field,
+    exposure_vulnerability_score_field,
 )
 from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.gis.vector.summary_1_aggregate_hazard import (
@@ -69,6 +70,51 @@ class TestSummary(unittest.TestCase):
         layer = aggregate_hazard_summary(impact, aggregate_hazard)
 
         self.assertIn(total_field['key'], layer.keywords['inasafe_fields'])
+
+        check_inasafe_fields(layer)
+
+        fields = impact.keywords['inasafe_fields']
+        exposure_class = fields[exposure_class_field['key']]
+        exposure_class_index = impact.fields().lookupField(exposure_class)
+        unique_exposure = impact.uniqueValues(exposure_class_index)
+
+        # One field per exposure type
+        # Number of previous fields in the layer
+        # 3 : 1 fields for absolute values, 2 fields for affected and total.
+        self.assertEqual(
+            layer.fields().count(),
+            len(unique_exposure) + number_of_fields + 3
+        )
+
+    def test_impact_summary_with_vulnerability_score(self):
+        """Test we can aggregate the impact to the aggregate hazard."""
+        impact = load_test_vector_layer(
+            'gisv4',
+            'impacts',
+            'buildings-with-vulnerability-score.geojson')
+
+        aggregate_hazard = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'aggregate_classified_hazard.geojson',
+            clone=True)
+
+        aggregate_hazard.keywords['hazard_keywords'] = {
+            'hazard': 'generic',
+            'classification': 'generic_hazard_classes'
+        }
+        impact.keywords['classification'] = {
+            'classification': 'generic_structure_classes'
+        }
+        impact.keywords['exposure_keywords'] = {
+            'exposure': 'structure'
+        }
+
+        number_of_fields = aggregate_hazard.fields().count()
+
+        layer = aggregate_hazard_summary(impact, aggregate_hazard)
+
+        self.assertIn(exposure_vulnerability_score_field['key'], layer.keywords['inasafe_fields'])
 
         check_inasafe_fields(layer)
 
