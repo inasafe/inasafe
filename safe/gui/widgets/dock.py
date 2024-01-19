@@ -9,13 +9,16 @@ import shutil
 from datetime import datetime
 from numbers import Number
 
+from functools import partial
+
 from qgis.core import (
+    QgsApplication,
     QgsCoordinateReferenceSystem,
     QgsExpressionContextUtils,
     QgsGeometry,
     QgsLayerTreeLayer,
     QgsProject,
-    QgsApplication
+    QgsTask
 )
 from qgis.PyQt.QtCore import Qt, QUrl, pyqtSlot # NOQA pylint: disable=unused-import
 from qgis.PyQt.QtGui import QDesktopServices, QPixmap
@@ -974,7 +977,7 @@ class Dock(QDockWidget, FORM_CLASS):
         # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
-
+            #
             # list of layer purpose to show impact report
             impacted_layer = [
                 layer_purpose_exposure_summary['key'],
@@ -1001,14 +1004,27 @@ class Dock(QDockWidget, FORM_CLASS):
             if provenances:
                 set_provenance_to_project_variables(provenances)
             try:
-                if is_multi_exposure:
-                    self.impact_function = (
-                        MultiExposureImpactFunction.load_from_output_metadata(
-                            keywords))
-                elif provenances:
-                    self.impact_function = (
-                        ImpactFunction.load_from_output_metadata(
-                            keywords))
+                # Loading an impact function using the output metadata in a
+                # main thread will create a UI lag for large metadata
+                # to avoid this we use a background task.
+
+                load_function = partial(
+                    self.load_impact_function,
+                    is_multi_exposure,
+                    provenances,
+                    keywords
+                )
+
+                load_impact_function_task = QgsTask.fromFunction(
+                    tr('Load impact function'),
+                    load_function,
+                    on_finished=self.save_impact_function
+                )
+
+                QgsApplication.taskManager().addTask(
+                    load_impact_function_task
+                )
+
             except InvalidLayerError as e:
                 display_critical_message_bar(
                     tr("Invalid Layer"), str(e), iface_object=self.iface)
@@ -1072,6 +1088,53 @@ class Dock(QDockWidget, FORM_CLASS):
         except Exception as e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             send_error_message(self, error_message)
+
+    def load_impact_function(
+            self,
+            is_multi_exposure,
+            provenances,
+            keywords,
+            task
+    ):
+        """ Impact function task handler which is responsible for
+        running the main logic for impact function loading using
+        output metadata
+
+        :param is_multi_exposure: Whether to use multi exposure function.
+        :type is_multi_exposure: bool
+
+        :param provenances: Whether provenances are available in keywords
+         in order to use a normal impact function.
+        :type provenances: bool
+
+        :param keywords: The layer keywords
+        :type keywords: dict
+
+        :param task: The QGIS task wrapper used when creating task from function
+        :type task: QgsTaskWrapper
+
+        returns impact_function: The created impact function
+        rtype impact_function: ImpactFunction
+        """
+
+        if is_multi_exposure:
+            return MultiExposureImpactFunction.load_from_output_metadata(keywords)
+        elif provenances:
+            return ImpactFunction.load_from_output_metadata(keywords)
+
+        return None
+
+    def save_impact_function(self, exception, result=None):
+        """Saves the task result as the dock impact function
+
+        :param exception: Exception message.
+        :type exception: str
+
+        :param result: The loaded impact function.
+        :type result: ImpactFunction
+        """
+        if result:
+            self.impact_function = result
 
     def save_state(self):
         """Save the current state of the ui to an internal class member.
