@@ -7,7 +7,7 @@ raven.context
 """
 from __future__ import absolute_import
 
-from collections import Mapping, Iterable
+from collections.abc import Mapping, Iterable
 from threading import local
 from weakref import ref as weakref
 

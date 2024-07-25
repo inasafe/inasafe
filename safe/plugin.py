@@ -119,6 +119,10 @@ class Plugin():
             'developer_mode', False, expected_type=bool)
         self.hide_developer_buttons = (
             inasafe_release_status == 'final' and not developer_mode)
+        if developer_mode:
+            import debugpy  # pylint: disable=import-outside-toplevel
+            debugpy.listen(("0.0.0.0", 5678))
+            #debugpy.wait_for_client()        
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):

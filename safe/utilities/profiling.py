@@ -123,7 +123,11 @@ def profile(fn):
         else:
             ROOT = current_step
 
+        # Dirty hack
+        #try:
         ret = fn(*args, **kwargs)
+        #except:
+        #    ret = None
 
         current_step.ended()
         return ret
