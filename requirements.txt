@@ -1,0 +1,13 @@
+AccessControl
+blinker
+contextlib2
+exam
+flask_login
+pycassa
+python_dateutil
+thread
+unittest2
+uwsgi
+web
+Werkzeug
+ZConfig
