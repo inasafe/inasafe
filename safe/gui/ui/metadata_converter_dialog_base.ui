@@ -122,7 +122,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header location="global">QtWebKit/QWebView</header>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
   <customwidget>
    <class>QgsMapLayerComboBox</class>

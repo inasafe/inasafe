@@ -24,6 +24,7 @@ in pkgs.mkShell rec {
     qgis
     # Would be nice if this worked, we could replace the same logic in the QGIS start script
     #qgis.override { extraPythonPackages = ps: [ ps.numpy ps.future ps.geopandas ps.rasterio ];}
+    gum
   ];
   # Run this command, only after creating the virtual environment
   PROJECT_ROOT = builtins.getEnv "PWD";

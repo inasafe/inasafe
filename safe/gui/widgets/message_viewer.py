@@ -42,7 +42,7 @@ HTML_STR_MODE = 2
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class MessageViewer(QtWebKitWidgets.QWebView):
+class MessageViewer(QtWebKitWidgets.QWebEngineView):
 
     """A simple message queue."""
 
@@ -62,7 +62,7 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
         if self.dev_mode:
             self.settings().globalSettings().setAttribute(
-                QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
+                QtWebKit.QtWebEngineWidgets.QtWebEngineWidgets.QWebEngineSettings.DeveloperExtrasEnabled, True)
 
         # Always gets replaced when a new message is passed
         self.static_message = None
@@ -132,13 +132,13 @@ class MessageViewer(QtWebKitWidgets.QWebView):
 
         # add select all
         action_select_all = self.page().action(
-            QtWebKitWidgets.QWebPage.SelectAll
+            QtWebKitWidgets.QtWebEngineWidgets.QtWebEngineWidgets.QWebEnginePage.SelectAll
         )
         action_select_all.setEnabled(not self.page_to_text() == '')
         context_menu.addAction(action_select_all)
 
         # add copy
-        action_copy = self.page().action(QtWebKitWidgets.QWebPage.Copy)
+        action_copy = self.page().action(QtWebKitWidgets.QtWebEngineWidgets.QtWebEngineWidgets.QWebEnginePage.Copy)
         if qt_at_least('4.8.0'):
             action_copy.setEnabled(not self.selectedHtml() == '')
         else:
@@ -165,7 +165,7 @@ class MessageViewer(QtWebKitWidgets.QWebView):
         # add view source if in dev mode
         if self.dev_mode:
             action_copy = self.page().action(
-                QtWebKitWidgets.QWebPage.InspectElement
+                QtWebKitWidgets.QtWebEngineWidgets.QtWebEngineWidgets.QWebEnginePage.InspectElement
             )
             action_copy.setEnabled(True)
             context_menu.addAction(action_copy)

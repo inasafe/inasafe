@@ -8,7 +8,8 @@ import sys
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # NOQA pylint: disable=unused-import
-from qgis.PyQt import Qt, QtWebKit
+from qgis.PyQt import Qt
+import QWebEngineView
 from pydispatch import dispatcher
 
 from safe.messaging import (
@@ -30,7 +31,7 @@ DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
-class WebView(QtWebKit.QWebView):
+class WebView(QWebEngineView):
 
     """A simple message queue mockup."""
 

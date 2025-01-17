@@ -23,7 +23,7 @@ from qgis.PyQt.QtWidgets import (
     QSizePolicy
 )
 from qgis.PyQt.QtGui import QFont
-from qgis.PyQt.QtWebKitWidgets import QWebView
+from qgis.PyQt.QtWebEngineWidgets import QWebEngineView
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 from qgis.core import QgsRasterBandStats
@@ -456,12 +456,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             message.add(table)
 
         # status_text_edit = QTextBrowser(None)
-        status_text_edit = QWebView(None)
+        status_text_edit = QWebEngineView(None)
         status_text_edit.setSizePolicy(
             QSizePolicy.Ignored,
             QSizePolicy.Ignored)
 
-        status_text_edit.page().mainFrame().setScrollBarPolicy(
+        status_text_edit.page().setScrollBarPolicy(
             Qt.Horizontal,
             Qt.ScrollBarAlwaysOff)
         html_string = html_header() + message.to_html() + html_footer()
