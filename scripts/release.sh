@@ -26,7 +26,6 @@ TARGZFILE="/tmp/${DIR}.tar.gz"
 mkdir -p ${WORKDIR}
 # Archive source code of the current branch to tar gz file.
 # Use git-archive-all since we use git submodule.
-brew install git-archive-all
 git-archive-all ${TARGZFILE}
 # Extract the file
 tar -xf ${TARGZFILE} -C ${WORKDIR}
@@ -73,7 +72,7 @@ rm -rf ${WORKDIR}/${DIR}/*.bat
 
 pushd .
 cd ${WORKDIR}
-find . -name test -exec /bin/rm -rf {} \;
+find . -name test -exec rm -rf {} \;
 # Compress all images shipped
 #for FILE in `find . -type f -name "*.png"`
 #do
@@ -114,9 +113,6 @@ echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
 echo "${OUT}"
 
-# For nsis installer
-brew install rpl
-brew install makensis
 cp scripts/windows-install-builder.nsi scripts/build.nsi
 rpl "[[VERSION]]" "${VERSION}" scripts/build.nsi
 rm -rf /tmp/nsis-data
