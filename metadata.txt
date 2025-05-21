@@ -23,7 +23,7 @@ status=final
 # end of mandatory metadata
 
 # Optional items:
-changelog=
+changelog= 
     Version 5.0.7:
     - Bug fixes only - fix deprecated imp calls
     Version 5.0.6:
