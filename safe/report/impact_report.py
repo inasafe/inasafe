@@ -7,7 +7,8 @@ Easily customize map report or document based report.
 """
 
 
-import imp
+import importlib.util
+import importlib.machinery
 import logging
 import os
 import shutil
@@ -39,7 +40,6 @@ WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
 class InaSAFEReportContext():
 
     """A class to compile all InaSAFE related context for reporting uses.
@@ -56,6 +56,17 @@ class InaSAFEReportContext():
         self._supporters_logo = supporters_logo_path()
         self._north_arrow = default_north_arrow_path()
         self._disclaimer = disclaimer()
+
+    def load_source(self, modname, filename):
+        loader = importlib.machinery.SourceFileLoader(modname, filename)
+        spec = importlib.util.spec_from_file_location(modname, filename, loader=loader)
+        module = importlib.util.module_from_spec(spec)
+        # The module is always executed and not cached in sys.modules.
+        # Uncomment the following line to cache the module.
+        # sys.modules[module.__name__] = module
+        loader.exec_module(module)
+        return module
+
 
     @property
     def north_arrow(self):
@@ -765,7 +776,7 @@ class ImpactReport():
                             self.metadata.template_folder,
                             component.extractor
                         )
-                        _module = imp.load_source(
+                        _module = self.load_source(
                             _package_name, _extractor_path)
                         _extractor_method = getattr(_module, 'extractor')
                 else:
@@ -817,7 +828,7 @@ class ImpactReport():
                         self.metadata.template_folder,
                         component.processor
                     )
-                    _module = imp.load_source(_package_name, _renderer_path)
+                    _module = self.load_source(_package_name, _renderer_path)
                     _renderer = getattr(_module, 'renderer')
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED

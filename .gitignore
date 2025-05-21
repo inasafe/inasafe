@@ -70,3 +70,5 @@ safe/metadata/test/inasafe/
 htmlcov/
 dist/
 inasafe_core.egg-info/
+.vscode-extensions/
+refactor.sh
