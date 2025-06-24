@@ -9,7 +9,7 @@ from safe.definitions.currencies import idr
 from safe.definitions.messages import disclaimer
 
 inasafe_default_settings = {
-    'visibleLayersOnlyFlag': True,
+    'visibleLayersOnlyFlag': False,
     'set_layer_from_title_flag': True,
     'setZoomToImpactFlag': True,
     'set_show_only_impact_on_report': False,
