@@ -1,0 +1,1062 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# trendspotter <j.podhorecky@volny.cz>, 2019
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-11 15:35+0000\n"
+"PO-Revision-Date: 2017-07-20 23:40+0000\n"
+"Last-Translator: trendspotter <j.podhorecky@volny.cz>, 2019\n"
+"Language-Team: Czech (https://www.transifex.com/inasafe/teams/57794/cs/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: core/settings/base.py:20
+msgid "English"
+msgstr "Angličtina"
+
+#: core/settings/base.py:21
+msgid "Indonesian"
+msgstr "Indonéština"
+
+#: realtime/forms/ash.py:33
+msgid "Event time"
+msgstr "Čas události"
+
+#: realtime/forms/ash.py:41
+msgid "Alert level"
+msgstr "Úroveň výstrahy"
+
+#: realtime/forms/ash.py:43
+msgid "Normal"
+msgstr "Normální"
+
+#: realtime/forms/ash.py:44
+msgid "Waspada"
+msgstr "Buďte v pohotovosti"
+
+#: realtime/forms/ash.py:45
+msgid "Siaga"
+msgstr "Pohotovostní režim"
+
+#: realtime/forms/ash.py:46
+msgid "Awas"
+msgstr "Dávejte pozor"
+
+#: realtime/forms/ash.py:51
+msgid "Event timezone"
+msgstr "Časová zóna události"
+
+#: realtime/forms/ash.py:55
+msgid "Volcano name"
+msgstr "Název sopky"
+
+#: realtime/forms/ash.py:59
+#, python-brace-format
+msgid "{0} day(s)"
+msgstr "{0} den(dnů)"
+
+#: realtime/forms/ash.py:65
+msgid "Forecast duration (in days)"
+msgstr "Předpověď trvání (ve dnech)"
+
+#: realtime/forms/earthquake.py:34 realtime/forms/flood.py:18
+msgid "Start Date"
+msgstr "Počáteční datum"
+
+#: realtime/forms/earthquake.py:41 realtime/forms/flood.py:25
+msgid "End Date"
+msgstr "Konečné datum"
+
+#: realtime/forms/earthquake.py:45
+msgid "Minimum Magnitude"
+msgstr "Minimální magnituda"
+
+#: realtime/forms/earthquake.py:49
+msgid "Maximum Magnitude"
+msgstr "Maximální magnituda"
+
+#: realtime/forms/flood.py:28 realtime/forms/flood.py:34
+msgid "Minimum"
+msgstr "Minimum"
+
+#: realtime/forms/flood.py:31 realtime/forms/flood.py:37
+msgid "Maximum"
+msgstr "Maximum"
+
+#: realtime/helpers/base_indicator.py:59
+msgid "Healthy"
+msgstr "Zdravý"
+
+#: realtime/helpers/base_indicator.py:61
+msgid "Warning"
+msgstr "Varování"
+
+#: realtime/helpers/base_indicator.py:63
+msgid "Critical"
+msgstr "Kritický"
+
+#: realtime/helpers/base_indicator.py:65
+msgid "Not Available"
+msgstr "Není dostupný"
+
+#: realtime/helpers/realtime_broker_indicator.py:62
+msgid "Broker Connection Status"
+msgstr "Stav připojení Brokeru"
+
+#: realtime/helpers/realtime_broker_indicator.py:79
+#: realtime/helpers/rest_push_indicator.py:69
+#, python-format
+msgid "Status is considered in healthy state when the value is less than %s"
+msgstr "Stav je považován za zdravý, pokud je hodnota menší než %s"
+
+#: realtime/helpers/realtime_broker_indicator.py:84
+#: realtime/helpers/rest_push_indicator.py:74
+#, python-format
+msgid "Status is considered in warning state when the value is less than %s"
+msgstr "Stav je považován za stav výstrahy, pokud je hodnota menší než %s"
+
+#: realtime/helpers/realtime_broker_indicator.py:89
+#: realtime/helpers/rest_push_indicator.py:79
+#, python-format
+msgid ""
+"Status is considered in critical state when the value is greater than %s"
+msgstr "Stav je považován za kritický stav, když je hodnota větší než %s"
+
+#: realtime/helpers/rest_push_indicator.py:64
+#: realtime/templates/realtime/indicator.html:39
+msgid "Last REST Push"
+msgstr "Poslední REST Push"
+
+#: realtime/helpers/shake_event_indicator.py:76
+msgid "Last Shake Event"
+msgstr "Poslední otřesy"
+
+#: realtime/helpers/shake_event_indicator.py:81
+#: realtime/helpers/shake_event_indicator.py:91
+#: realtime/helpers/shake_event_indicator.py:101
+#: realtime/helpers/shakemap_push_indicator.py:88
+#: realtime/helpers/shakemap_push_indicator.py:98
+#: realtime/helpers/shakemap_push_indicator.py:108
+#, python-format
+msgid ""
+"Status is considered in healthy state when the value is less than "
+"%(factor).2f times of deviation (%(deviation)s) from average intervals "
+"(%(interval)s) which is %(range)s"
+msgstr ""
+"Stav je považován za zdravý stav, když jeho hodnota je menší než "
+"%(factor).2f násobek odchylky (%(deviation)s) od průměrných intervalů "
+"(%(interval)s), který je %(range)s"
+
+#: realtime/helpers/shakemap_push_indicator.py:83
+#: realtime/templates/realtime/indicator.html:38
+msgid "Last Shakemap Push"
+msgstr "Poslední Shakemap Push"
+
+#: realtime/models/ash.py:30 realtime/templates/realtime/ash/index.html:92
+msgid "Alert Level"
+msgstr "Úroveň výstrahy"
+
+#: realtime/models/ash.py:31
+msgid "The alert level of the volcano ash event."
+msgstr "Výstražná úroveň události sopečného popela."
+
+#: realtime/models/ash.py:36 realtime/templates/realtime/ash/index.html:199
+msgid "Hazard File"
+msgstr "Soubor nebezpečí"
+
+#: realtime/models/ash.py:37
+msgid "Hazard file formatted as GeoTIFF (*.tif) in EPSG:4326."
+msgstr "Soubor nebezpečí ve formátu GeoTIFF (*.tif) v souboru EPSG:4326."
+
+#: realtime/models/ash.py:42 realtime/templates/realtime/ash/index.html:205
+msgid "Impact Files"
+msgstr "Soubory dopadu"
+
+#: realtime/models/ash.py:43
+msgid "Impact files processed zipped"
+msgstr "Soubory s dopadem zpracovány do archivu zip"
+
+#: realtime/models/ash.py:49
+msgid "Event Date and Time"
+msgstr "Datum a čas události"
+
+#: realtime/models/ash.py:50
+msgid "The time the ash happened."
+msgstr "Čas, kdy se objevil sopečný popel."
+
+#: realtime/models/ash.py:53
+msgid "Time Zone Offset"
+msgstr "Posun časového pásma"
+
+#: realtime/models/ash.py:54
+msgid "The time zone offset of event time."
+msgstr "Časový posun události."
+
+#: realtime/models/ash.py:57
+msgid "Time Zone String"
+msgstr "Řetězec časového pásma"
+
+#: realtime/models/ash.py:58
+msgid "The time zone string of event time."
+msgstr "Řetězec časového pásma času události."
+
+#: realtime/models/ash.py:64
+msgid "Eruption height in metres (above vent height)"
+msgstr "Výška erupce v metrech (nad sopečným kráterem)"
+
+#: realtime/models/ash.py:68
+msgid "Duration of forecast for Ash Hazard in days"
+msgstr "Doba trvání předpovědi nebezpečí sopečného popela ve dnech"
+
+#: realtime/models/ash.py:71
+msgid "Celery task id"
+msgstr "Celery task id"
+
+#: realtime/models/ash.py:72
+msgid "Task id for processing"
+msgstr "ID úlohy pro zpracování"
+
+#: realtime/models/ash.py:77
+msgid "Celery task status"
+msgstr "Celery task status"
+
+#: realtime/models/ash.py:78
+msgid "Task status for processing"
+msgstr "Stav úlohy pro zpracování"
+
+#: realtime/models/ash.py:129 realtime/models/earthquake.py:91
+#: realtime/models/flood.py:156
+msgid "Language ID"
+msgstr "ID jazyka"
+
+#: realtime/models/ash.py:130 realtime/models/earthquake.py:92
+#: realtime/models/flood.py:157
+msgid "The language ID of the report"
+msgstr "ID jazyku reportu"
+
+#: realtime/models/ash.py:135
+msgid "Map PDF Report"
+msgstr "PDF Report o mapě"
+
+#: realtime/models/ash.py:136
+msgid "The map impact report stored as PDF"
+msgstr "Zpráva o mapě dopadu uložená v PDF"
+
+#: realtime/models/earthquake.py:15
+msgid "The Shake ID"
+msgstr "Shake ID"
+
+#: realtime/models/earthquake.py:16
+msgid "The Shake ID, which represents the time of the event."
+msgstr "ID Shake, které představuje čas události."
+
+#: realtime/models/earthquake.py:21
+msgid "Shake Grid XML File"
+msgstr "XML soubor Shake Grid"
+
+#: realtime/models/earthquake.py:22
+msgid "The Shake Grid to process"
+msgstr "Mřížka otřesů ke zpracování"
+
+#: realtime/models/earthquake.py:27
+msgid "MMI related file zipped"
+msgstr "Související soubor MMI v zip archivu"
+
+#: realtime/models/earthquake.py:28
+msgid "MMI related file, layers, and data, zipped."
+msgstr "Související soubory MMI, vrstvy a data, zip."
+
+#: realtime/models/earthquake.py:33
+msgid "The magnitude"
+msgstr "Magnituda"
+
+#: realtime/models/earthquake.py:34
+msgid "The magnitude of the event."
+msgstr "Magnituda události"
+
+#: realtime/models/earthquake.py:36 realtime/models/flood.py:94
+msgid "Date and Time"
+msgstr "Datum a čas"
+
+#: realtime/models/earthquake.py:37
+msgid "The time the shake happened."
+msgstr "Čas, kdy se stal otřes."
+
+#: realtime/models/earthquake.py:40
+msgid "The depth"
+msgstr "Hloubka"
+
+#: realtime/models/earthquake.py:41
+msgid "The depth of the event in km unit."
+msgstr "Hloubka události v jednotkách km"
+
+#: realtime/models/earthquake.py:43 realtime/models/volcano.py:28
+msgid "Location"
+msgstr "Umístění"
+
+#: realtime/models/earthquake.py:45 realtime/models/volcano.py:29
+msgid "The location of the shake event in longitude and latitude."
+msgstr "Umístění události otřesu v zeměpisné délce a šířce."
+
+#: realtime/models/earthquake.py:51
+#: realtime/templates/realtime/earthquake/index.html:165
+msgid "Location Description"
+msgstr "Popis místa"
+
+#: realtime/models/earthquake.py:52
+msgid "The description of the location e.g \"Bali\"."
+msgstr "Popis místa, např. \"Bali\"."
+
+#: realtime/models/earthquake.py:55
+msgid "Felt Earthquake"
+msgstr "Pocítění zemětřesení"
+
+#: realtime/models/earthquake.py:56
+msgid ""
+"Set to True if this particular event showed up as felt Earthquake in BMKG's "
+"List"
+msgstr ""
+"Nastavte na hodnotu True, pokud se tato událost objevila jako zemětřesení v "
+"BMKG seznamu"
+
+#: realtime/models/earthquake.py:97
+msgid "PDF Report"
+msgstr "PDF situační zpráva"
+
+#: realtime/models/earthquake.py:98
+msgid "The impact report stored as PDF"
+msgstr "Zpráva o dopadu je uložena ve formátu PDF"
+
+#: realtime/models/earthquake.py:102
+msgid "Image Report"
+msgstr "Obrazová zpráva"
+
+#: realtime/models/earthquake.py:103
+msgid "The impact report stored as PNG File"
+msgstr "Zpráva o dopadu je uložena jako soubor PNG"
+
+#: realtime/models/earthquake.py:107
+msgid "Image Report Thumbnail"
+msgstr "Miniatura obrazového reportu"
+
+#: realtime/models/earthquake.py:108
+msgid "The thumbnail of the report stored as PNG File"
+msgstr "Miniatura zprávy uložená jako soubor PNG"
+
+#: realtime/models/flood.py:16
+msgid "Alias of Boundary Level"
+msgstr "Úroveň Zástupce ohraničení"
+
+#: realtime/models/flood.py:17
+msgid "Alternate or human readable name for boundary level"
+msgstr "Alternativní nebo lidsky čitelný název pro hraniční úroveň"
+
+#: realtime/models/flood.py:20
+msgid "OSM Boundary Level"
+msgstr "Hraniční úroveň OSM"
+
+#: realtime/models/flood.py:21
+msgid "OSM Equivalent of boundary level"
+msgstr "OSM Ekvivalent hraniční úrovně"
+
+#: realtime/models/flood.py:24
+msgid "Parent boundary alias"
+msgstr "Zástupce Nadřazeného ohraničení"
+
+#: realtime/models/flood.py:25
+msgid "The parent of this boundary alias, it should also be a boundary alias"
+msgstr "Nadřazená hranice tohoto zástupce by měl být také zástupcem hranice"
+
+#: realtime/models/flood.py:42
+msgid "Upstream ID"
+msgstr "Upstream ID"
+
+#: realtime/models/flood.py:43
+msgid "ID used by upstream data source to identify boundaries"
+msgstr "ID použitého zdroje k nahrání dat kvůli identifikaci hranic"
+
+#: realtime/models/flood.py:47
+msgid "Boundary name"
+msgstr "Název hranice"
+
+#: realtime/models/flood.py:48
+msgid "Name entitled to this particular boundary"
+msgstr "Jméno oprávněné na tuto konkrétní hranici"
+
+#: realtime/models/flood.py:54
+msgid "Parent boundary"
+msgstr "Nadřazená hranice"
+
+#: realtime/models/flood.py:55
+msgid ""
+"The boundary parent of this particular boundary, if any. This should also be"
+" a boundary."
+msgstr ""
+"Nadřazená hranice této konkrétní hranice, pokud existuje. Ta by měla být "
+"také hranicí."
+
+#: realtime/models/flood.py:60 realtime/models/flood.py:61
+msgid "Geometry of the boundary"
+msgstr "Geometrie hranice"
+
+#: realtime/models/flood.py:65
+msgid "Boundary level alias"
+msgstr "Zástupce úrovně hranice"
+
+#: realtime/models/flood.py:66
+msgid "The alias of boundary level of this boundary"
+msgstr "Zástupce hraniční úrovně této hranice"
+
+#: realtime/models/flood.py:81
+msgid "The id of the event"
+msgstr "ID události"
+
+#: realtime/models/flood.py:82
+msgid "The id of the event, which represents time and interval"
+msgstr "ID události, která představuje čas a interval"
+
+#: realtime/models/flood.py:87 realtime/models/flood.py:103
+msgid "The source of hazard data"
+msgstr "Zdroj údajů o nebezpečí"
+
+#: realtime/models/flood.py:88
+msgid "The source of the hazard data used for analysis"
+msgstr "Zdroj údajů o rizicích použitých pro analýzu"
+
+#: realtime/models/flood.py:95
+msgid "The time the flood reported."
+msgstr "Čas hlášení povodní."
+
+#: realtime/models/flood.py:98
+msgid "Report interval"
+msgstr "Report intervalu"
+
+#: realtime/models/flood.py:99
+msgid "The interval of aggregated report in hours"
+msgstr "Interval agregované zprávy v hodinách"
+
+#: realtime/models/flood.py:102
+msgid "Flood Data Source"
+msgstr "Zdroj dat o záplavách"
+
+#: realtime/models/flood.py:106
+msgid "The Region id for source"
+msgstr "ID Regionu pro zdroj"
+
+#: realtime/models/flood.py:107
+msgid "The region of hazard data"
+msgstr "Oblast údajů o nebezpečnosti"
+
+#: realtime/models/flood.py:111
+#: realtime/templates/realtime/flood/index.html:262
+msgid "Hazard Layer"
+msgstr "Vrstva nebezpečí"
+
+#: realtime/models/flood.py:112
+msgid "Zipped file of Hazard Layer related files"
+msgstr "Archivované soubory související s vrstvou nebezpečí"
+
+#: realtime/models/flood.py:116
+#: realtime/templates/realtime/flood/index.html:268
+msgid "Impact Layer"
+msgstr "Vrstva dopadu"
+
+#: realtime/models/flood.py:117
+msgid "Zipped file of Impact Layer related files"
+msgstr "Archivované soubory související s vrstvou dopadu"
+
+#: realtime/models/flood.py:122
+msgid "Flooded Boundaries"
+msgstr "Zaplavené hranice"
+
+#: realtime/models/flood.py:123
+msgid "The linked boundaries flooded by this event"
+msgstr "Připojené hranice zaplavené touto událostí"
+
+#: realtime/models/flood.py:125 realtime/models/flood.py:126
+msgid "Total affected people by flood"
+msgstr "Celkový počet postižených lidí od povodní"
+
+#: realtime/models/flood.py:129
+msgid "Total boundary flooded"
+msgstr "Celková zaplavená hranice "
+
+#: realtime/models/flood.py:130
+msgid "Total boundary affected by flood"
+msgstr "Celková hranice ovlivněna povodní"
+
+#: realtime/models/flood.py:163
+msgid "Impact Report"
+msgstr "Report dopadu"
+
+#: realtime/models/flood.py:164
+msgid "Impact Report file in PDF"
+msgstr "Soubor zpráv o dopadu ve formátu PDF"
+
+#: realtime/models/flood.py:168
+#: realtime/templates/realtime/flood/index.html:273
+msgid "Impact Map"
+msgstr "Mapa dopadu"
+
+#: realtime/models/flood.py:169
+msgid "Impact Map file in PDF"
+msgstr "Soubor Mapy dopadu v PDF"
+
+#: realtime/models/flood.py:214 realtime/models/flood.py:237
+msgid "Flood Event"
+msgstr "Povodňová událost"
+
+#: realtime/models/flood.py:215 realtime/models/flood.py:238
+msgid "The flood event of the linked boundary"
+msgstr "Povodňová událost na propojené hranici"
+
+#: realtime/models/flood.py:219 realtime/models/flood.py:242
+msgid "Boundary"
+msgstr "Hranice"
+
+#: realtime/models/flood.py:220
+msgid "The linked boundary of the flood events"
+msgstr "Spojená hranice povodňových událostí"
+
+#: realtime/models/flood.py:223
+msgid "Impact Data"
+msgstr "Data dopadu"
+
+#: realtime/models/flood.py:224
+msgid "Impact data in the given boundary"
+msgstr "Údaje o dopadu v dané hranici"
+
+#: realtime/models/flood.py:243
+msgid "The linked parent boundary of the impact"
+msgstr "Související nadřazená hranice dopadu"
+
+#: realtime/models/flood.py:246 realtime/models/flood.py:247
+msgid "Geometry of the boundary of impact"
+msgstr "Geometrie hranice dopadu"
+
+#: realtime/models/flood.py:250
+msgid "Hazard Class"
+msgstr "Třída nebezpečí"
+
+#: realtime/models/flood.py:251
+msgid "Hazard class in the given boundary"
+msgstr "Třída nebezpečnosti v dané hranici"
+
+#: realtime/models/flood.py:255
+#: realtime/templates/realtime/flood/index.html:156
+msgid "Population Affected"
+msgstr "Postižené obyvatelstvo"
+
+#: realtime/models/flood.py:256
+msgid "The affected population in a given flood boundary"
+msgstr "Dotčená populace v dané záplavové hranici"
+
+#: realtime/models/volcano.py:22
+msgid "The Volcano Name"
+msgstr "Název sopky"
+
+#: realtime/models/volcano.py:23
+msgid "The name of the volcano"
+msgstr "Jméno sopky"
+
+#: realtime/models/volcano.py:36
+msgid "Volcano Elevation"
+msgstr "Nadmořská výška sopky"
+
+#: realtime/models/volcano.py:37
+msgid "The elevation of the volcano in meters"
+msgstr "Nadmořská výška sopky v metrech"
+
+#: realtime/models/volcano.py:42
+msgid "The region main name"
+msgstr "Hlavní název regionu"
+
+#: realtime/models/volcano.py:43
+msgid "The region where the volcano located"
+msgstr "Region, kde se nachází sopka"
+
+#: realtime/models/volcano.py:49
+msgid "The sub region main name"
+msgstr "Hlavní název části regionu"
+
+#: realtime/models/volcano.py:50
+msgid "The sub region where the volcano located"
+msgstr "Část regionu, kde se nachází sopka"
+
+#: realtime/models/volcano.py:56
+msgid "The province name"
+msgstr "Název provincie"
+
+#: realtime/models/volcano.py:57
+msgid "The province where the volcano located"
+msgstr "Provincie, kde se nachází sopka"
+
+#: realtime/models/volcano.py:63
+msgid "The district name"
+msgstr "Název okresu"
+
+#: realtime/models/volcano.py:64
+msgid "The district where the volcano located"
+msgstr "Okres, kde se nachází sopka"
+
+#: realtime/models/volcano.py:70
+msgid "Morphology"
+msgstr "Morfologie"
+
+#: realtime/models/volcano.py:71
+msgid "Morphology of the volcano"
+msgstr "Morfologie sopky"
+
+#: realtime/templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "Django site admin"
+
+#: realtime/templates/admin/base_site.html:7
+msgid "Django administration"
+msgstr "Administrace Django"
+
+#: realtime/templates/admin/base_site.html:13
+msgid "Welcome, "
+msgstr "Vítejte,"
+
+#: realtime/templates/admin/base_site.html:22
+msgid "Documentation"
+msgstr "Dokumentace"
+
+#: realtime/templates/admin/base_site.html:25
+msgid "Change password"
+msgstr "Změnit heslo"
+
+#: realtime/templates/admin/base_site.html:27
+msgid "Log out"
+msgstr "Odhlásit se"
+
+#: realtime/templates/realtime/ash/index.html:28
+msgid "InaSAFE Volcanic Ash"
+msgstr "InaSAFE sopečný popel"
+
+#: realtime/templates/realtime/ash/index.html:32
+msgid ""
+"\n"
+"                        This page contains <b>near realtime</b> volcanic ash\n"
+"                        impact assessments generated prior to or during recent\n"
+"                        volcanic ash eruptions in the Indonesia region.\n"
+"                        Hazard maps of volcanic ash thickness on the ground\n"
+"                        are produced by Indonesia’s Geological Agency,\n"
+"                        Badan Geologi (<a href=\"http://www.bgl.esdm.go.id\">http://www.bgl.esdm.go.id</a>)\n"
+"                        and used by the Indonesian National Disaster Management Agency (BNPB)\n"
+"                        to produce InaSAFE impact assessments\n"
+"                        (<a href=\"http://www.bnpb.go.id\">http://www.bnpb.go.id</a>\n"
+"                        or <a href=\"http://realtime.inasafe.org\">http://realtime.inasafe.org)</a>.\n"
+"                        InaSAFE Realtime Volcanic Ash assessments estimate the potential impact of volcanic\n"
+"                        ash on the ground. This information is used by disaster\n"
+"                        managers to help them understand the potential scale of the volcanic ash impact\n"
+"                        and to recommend mitigation activities for the most vulnerable communities.\n"
+"                        This is particularly important in the lead up to an eruption when communities\n"
+"                        have an opportunity to prepare for a possible hazard event.\n"
+"                    "
+msgstr ""
+"\n"
+" Tato stránka obsahuje praktické hodnocení vlivu sopečného popela <b>téměř v reálném čase</b>, které bylo generováno před, či během nedávných erupcí sopečného popela v oblasti Indonésie. Mapy nebezpečnosti tloušťky sopečného popela na zemi jsou vytvořeny indonéskou geologickou agenturou Badan Geologi (<a href=\"http://www.bgl.esdm.go.id\">http://www.bgl.esdm.go.id</a>) a používané Indonéskou národní agenturou pro řízení katastrof (BNPB) k vypracování posouzení dopadů InaSAFE (<a href=\"http://www.bnpb.go.id\">http://www.bnpb.go.id</a> nebo <a href=\"http://realtime.inasafe.org\">http://realtime.inasafe.org</a>). \n"
+"Hodnocení InaSAFE Reálného sopečného popela odhaduje potenciální dopad vulkanického popílku na zemi. Tyto informace používají manažeři katastrof, aby jim pomohli porozumět potenciálnímu rozsahu dopadů sopečného popela a doporučili činnosti ke zmírňování nejohroženějších komunit. Toto je obzvláště důležité v době, kdy dojde k erupci, kdy mají obce možnost připravit se na možné nebezpečné události."
+
+#: realtime/templates/realtime/ash/index.html:57
+#: realtime/templates/realtime/earthquake/index.html:56
+#: realtime/templates/realtime/flood/index.html:49
+msgid "Map"
+msgstr "Mapa"
+
+#: realtime/templates/realtime/ash/index.html:68
+msgid "Upload Volcanic Ash"
+msgstr "Nahrát sopečný popel"
+
+#: realtime/templates/realtime/ash/index.html:72
+msgid "Log in to Upload Volcanic Ash"
+msgstr "Přihlásit se kvůli nahrání sopečného popelu"
+
+#: realtime/templates/realtime/ash/index.html:83
+msgid "Ash Fall"
+msgstr "Spad popela"
+
+#: realtime/templates/realtime/ash/index.html:90
+#: realtime/templates/realtime/earthquake/index.html:164
+#: realtime/templates/realtime/flood/index.html:155
+msgid "Time"
+msgstr "Čas"
+
+#: realtime/templates/realtime/ash/index.html:91
+msgid "Volcano Name"
+msgstr "Název sopky"
+
+#: realtime/templates/realtime/ash/index.html:93
+msgid "District"
+msgstr "Okres"
+
+#: realtime/templates/realtime/ash/index.html:94
+msgid "Eruption Height"
+msgstr "Výška erupce"
+
+#: realtime/templates/realtime/ash/index.html:182
+#: realtime/templates/realtime/earthquake/index.html:311
+msgid "Zoom"
+msgstr "Přiblížení"
+
+#: realtime/templates/realtime/ash/index.html:188
+#: realtime/templates/realtime/ash/index.html:210
+#: realtime/templates/realtime/earthquake/index.html:317
+#: realtime/templates/realtime/earthquake/index.html:327
+#: realtime/templates/realtime/flood/index.html:251
+msgid "Report"
+msgstr "Report"
+
+#: realtime/templates/realtime/ash/index.html:194
+#: realtime/templates/realtime/earthquake/index.html:323
+#: realtime/templates/realtime/flood/index.html:257
+msgid "Download"
+msgstr "Stáhnout"
+
+#: realtime/templates/realtime/ash/index.html:268
+msgid "YYYY-MM-DD [at] HH:mm:ss ZZ"
+msgstr "YYYY-MM-DD [at] HH:mm:ss ZZ"
+
+#: realtime/templates/realtime/ash/upload_modal.html:25
+msgid "Upload Ash Event"
+msgstr "Nahrát událost popela"
+
+#: realtime/templates/realtime/ash/upload_modal.html:34
+msgid "Submit"
+msgstr "Odeslat"
+
+#: realtime/templates/realtime/base.html:128
+msgid "Account"
+msgstr "Účet"
+
+#: realtime/templates/realtime/base.html:133
+msgid "Log in"
+msgstr "Přihlásit se"
+
+#: realtime/templates/realtime/base.html:141
+msgid "Hi, "
+msgstr "Ahoj, "
+
+#: realtime/templates/realtime/base.html:146
+msgid "Super Admin Page"
+msgstr "Strana Super admina"
+
+#: realtime/templates/realtime/base.html:150
+msgid "Model Admin Page"
+msgstr "Strana Model admina"
+
+#: realtime/templates/realtime/base.html:153
+msgid "Log Out"
+msgstr "Odhlásit se"
+
+#: realtime/templates/realtime/earthquake/index.html:28
+msgid "InaSAFE Realtime Earthquake Reports"
+msgstr "Reporty o zemětřesení v reálném čase od InaSAFE"
+
+#: realtime/templates/realtime/earthquake/index.html:32
+msgid ""
+"\n"
+"                        This page contains <b>near realtime</b> earthquake impact assessments\n"
+"                        following recent earthquakes in the Indonesia region.\n"
+"                        Shakemaps of earthquake ground shaking are produced by the\n"
+"                        Indonesian Agency for Meteorology, Climatology and Geophysics (BMKG)\n"
+"                        and used by the Indonesian National Disaster Management Agency (BNPB)\n"
+"                        to produce InaSAFE impact assessments within minutes of an earthquake\n"
+"                        (\n"
+"                        <a href=\"http://www.bnpb.go.id\">http://www.bnpb.go.id</a>\n"
+"                        or\n"
+"                        <a href=\"http://realtime.inasafe.org\">http://realtime.inasafe.org</a>).\n"
+"                        This information is used by disaster managers to help them understand\n"
+"                        the potential scale of a disaster and to respond faster to the\n"
+"                        hardest hit communities. This is particularly important in the\n"
+"                        first few hours after a large earthquake when it may be difficult\n"
+"                        to get accurate on-the-ground information.\n"
+"                    "
+msgstr ""
+"\n"
+" Tato stránka obsahuje dopady zemětřesení <b>téměř v reálném čase</b> v důsledku nedávných zemětřesení v oblasti Indonésie. Shakemaps při zemětřesení jsou vytvářeny indonéskou agenturou pro meteorologii, klimatologii a geofyziku (BMKG) a používá je indonéská národní agentura pro řízení katastrof (BNPB) k vytvoření InaSAFE posudku dopadu během několika minut po zemětřesení ( <a href=\"http://www.bnpb.go.id\">http://www.bnpb.go.id</a> nebo <a href=\"http://realtime.inasafe.org\">http://realtime.inasafe.org</a>). Tyto informace používají manažeři katastrof, aby jim posudek pomohl porozumět potenciálnímu rozsahu katastrofy a mohli tak reagovat rychleji na nejčastěji postižené komunity. To je zvláště důležité v prvních několika hodinách po velkém zemětřesení, kdy může být obtížné získat přesné informace na místě."
+
+#: realtime/templates/realtime/earthquake/index.html:72
+#: realtime/templates/realtime/flood/index.html:65
+msgid "Filters"
+msgstr "Filtry"
+
+#: realtime/templates/realtime/earthquake/index.html:134
+msgid "Contextual Filters"
+msgstr "Kontextuální filtry"
+
+#: realtime/templates/realtime/earthquake/index.html:139
+msgid "Recent Large Earthquakes"
+msgstr "Nedávné velké zemětřesení"
+
+#: realtime/templates/realtime/earthquake/index.html:142
+msgid "Recent Small Earthquakes"
+msgstr "Nedávná malá zemětřesení"
+
+#: realtime/templates/realtime/earthquake/index.html:145
+msgid "Recent Felt Earthquakes"
+msgstr "Nedávné zemětřesení"
+
+#: realtime/templates/realtime/earthquake/index.html:157
+msgid "Earthquakes"
+msgstr "Zemětřesení"
+
+#: realtime/templates/realtime/earthquake/index.html:166
+msgid "Magnitude"
+msgstr "Magnituda"
+
+#: realtime/templates/realtime/earthquake/index.html:167
+msgid "Depth"
+msgstr "Hloubka"
+
+#: realtime/templates/realtime/earthquake/index.html:168
+msgid "Shake Id"
+msgstr "Id otřesu"
+
+#: realtime/templates/realtime/earthquake/index.html:181
+msgid ""
+"\n"
+"                <h2>Supporters</h2>\n"
+"\n"
+"                <p>Funded and supported by the\n"
+"                    <a href=\"http://dfat.gov.au/geo/indonesia/pages/indonesia.aspx\">Australian Government</a>,\n"
+"                    <a href=\"http://www.ga.gov.au/\">Geoscience Australia</a> and\n"
+"                    the <a href=\"http://www.gfdrr.org\">World Bank-GFDRR</a>.\n"
+"                </p>\n"
+"            "
+msgstr ""
+"\n"
+"<h2>Podporovatelé</h2> \n"
+"\n"
+"<p>Financováno a podporováno \n"
+"<a href=\"http://dfat.gov.au/geo/indonesia/pages/indonesia.aspx\">Australskou vládou</a>,\n"
+" <a href=\"http://www.ga.gov.au/\">Geoscience Australia</a>\n"
+" a <a href=\"http://www.gfdrr.org\">Světovou bankou - GFDRR</a>.\n"
+"</p> "
+
+#: realtime/templates/realtime/earthquake/index.html:192
+msgid ""
+"\n"
+"                <h2>Partners</h2>\n"
+"\n"
+"                <p>This software was developed with our partners in Indonesia:\n"
+"                    <a href=\"http://bnpb.go.id\">Badan Nasional\n"
+"                        Penanggulangan Bencana (BNPB)</a> and\n"
+"                    <a href=\"http://www.bmkg.go.id\">Badan Meteorologi, Klimatologi, dan\n"
+"                        Geofisika (BMKG)</a>\n"
+"                </p>\n"
+"\n"
+"            "
+msgstr ""
+"\n"
+" <h2>Partneři</h2>\n"
+"\n"
+" <p>Tento software byl vyvinut u našich partnerů v Indonésii: <a href=\"http://bnpb.go.id\">Badan Nasional Penanggulangan Bencana (BNPB)</a> a <a href=\"http://www.bmkg.go.id\">Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)</a></p> "
+
+#: realtime/templates/realtime/earthquake/index.html:205
+msgid ""
+"\n"
+"                <h2>InaSAFE</h2>\n"
+"\n"
+"                <p>This software is part of the\n"
+"                    <a href=\"http://inasafe.org\">InaSAFE</a> project.\n"
+"                </p>\n"
+"            "
+msgstr ""
+"\n"
+"                <h2>InaSAFE</h2>\n"
+"\n"
+"                <p>Tento software je součástí\n"
+"                    <a href=\"http://inasafe.org\">InaSAFE</a> projektu.\n"
+"                </p>\n"
+"            "
+
+#: realtime/templates/realtime/earthquake/index.html:332
+msgid "Grid XML"
+msgstr "Grid XML"
+
+#: realtime/templates/realtime/earthquake/index.html:337
+msgid "MMI output"
+msgstr "MMI výstup"
+
+#: realtime/templates/realtime/earthquake/index.html:396
+#, python-format
+msgid "Earthquake events %%(magnitude)s %%(date)s"
+msgstr "Zemětřesení %%(magnitude)s %%(date)s"
+
+#: realtime/templates/realtime/earthquake/index.html:397
+#, python-format
+msgid "with magnitudes between %%(min_magnitude)s and %%(max_magnitude)s"
+msgstr "s magnitudou mezi %%(min_magnitude)s a %%(max_magnitude)s"
+
+#: realtime/templates/realtime/earthquake/index.html:398
+#, python-format
+msgid "with magnitudes greater than or equal %%(min_magnitude)s"
+msgstr "s magnitudou větší nebo rovnou %%(min_magnitude)s"
+
+#: realtime/templates/realtime/earthquake/index.html:399
+#, python-format
+msgid "with magnitudes less than or equal %%(max_magnitude)s"
+msgstr "s magnitudou menší nebo rovnou %%(max_magnitude)s"
+
+#: realtime/templates/realtime/earthquake/index.html:400
+#, python-format
+msgid "over the period %%(start_moment)s and %%(end_moment)s"
+msgstr "během období %%(start_moment)s a %%(end_moment)s"
+
+#: realtime/templates/realtime/earthquake/index.html:401
+#, python-format
+msgid "since %%(start_moment)s"
+msgstr "od %%(start_moment)s"
+
+#: realtime/templates/realtime/earthquake/index.html:402
+#, python-format
+msgid "before %%(end_moment)s"
+msgstr "před %%(end_moment)s"
+
+#: realtime/templates/realtime/earthquake/index.html:418
+#: realtime/templates/realtime/flood/index.html:289
+msgid "YYYY-MM-DD [at] HH:mm:ss"
+msgstr "YYYY-MM-DD [at] HH:mm:ss"
+
+#: realtime/templates/realtime/earthquake/index.html:427
+msgid "Action"
+msgstr "Akce"
+
+#: realtime/templates/realtime/flood/index.html:28
+msgid "InaSAFE Flood Realtime"
+msgstr "InaSAFE Záplavy v reálném čase"
+
+#: realtime/templates/realtime/flood/index.html:32
+msgid ""
+"\n"
+"                        This page contains near realtime flood impact assessments following recent floods in Jakarta, Indonesia.\n"
+"                        Flood data used here is sourced from <a href=\"https://petabencana.id/\">PetaBencana.id</a> who use crowdsourced data from <a href=\"http://twitter.com\">Twitter</a>,\n"
+"                        Telegram, <a href=\"http://qlue.co.id/\">Qlue</a>, <a href=\"http://pasangmata.detik.com/\">PasangMata</a>, Z-Alert, and expert data review by BPBD-DKI Jakarta.\n"
+"                        A report is then generated every 6 hours for floods from the last 6 hour interval (if there was any flooding in that period).\n"
+"                        This report includes all flooded RWs during the last 6 hours and shows the deepest water depth recorded in the last 6 hours.\n"
+"                        This information is used by disaster managers to help them understand the potential scale of a disaster and to\n"
+"                        respond more quickly to the hardest hit communities. This is particularly important in the first few hours after a\n"
+"                        flood when it may be difficult to get accurate on-the-ground information. Although this service is currently specific to Jakarta, the platform is extensible so that we can add more cities and regions easily.\n"
+"                    "
+msgstr ""
+"\n"
+" Tato stránka obsahuje téměř v reálném čase vyhodnocení dopadů povodní po nedávných povodních v Jakartě v Indonésii. Údaje o povodních, které se zde používají, jsou získávány z <a href=\"https://petabencana.id/\">PetaBencana.id</a>, kteří využívají údaje z <a href=\"http://twitter.com\">Twitteru</a>, Telegram, <a href=\"http://qlue.co.id/\">Qlue</a>, <a href=\"http://pasangmata.detik.com/\">PasangMata</a>, Z-Alert od BPBD-DKI Jakarta. Zpráva se pak generuje každých 6 hodin pro povodni z posledního 6ti hodinového intervalu (pokud došlo v tomto období k záplavám). Tento přehled obsahuje všechny zaplavené RW během posledních 6 hodin a ukazuje nejhlubší hloubku vody zaznamenanou za posledních 6 hodin. \n"
+"Tyto informace používají manažeři katastrof, aby jim pomohli porozumět potenciálnímu rozsahu katastrofy a reagovat rychleji na nejvíce zasažené komunity. To je zvláště důležité v prvních hodinách po záplavě, kdy může být obtížné získat přesné informace na místě. Ačkoli je tato služba v současné době specifická pro Jakartu, platforma je rozšiřitelná, abychom mohli snadno přidávat více měst a regionů."
+
+#: realtime/templates/realtime/flood/index.html:72
+msgid "Event Time"
+msgstr "Čas události"
+
+#: realtime/templates/realtime/flood/index.html:85
+msgid "Number of People Affected"
+msgstr "Počet postižených osob"
+
+#: realtime/templates/realtime/flood/index.html:98
+msgid "Number of Flooded RWs"
+msgstr "Počet zaplavených RW"
+
+#: realtime/templates/realtime/flood/index.html:146
+#: realtime/templates/realtime/nav_second.html:9
+msgid "Flood"
+msgstr "Záplava"
+
+#: realtime/templates/realtime/flood/index.html:153
+#: realtime/templates/realtime/flood/index.html:154
+msgid "Event ID"
+msgstr "ID události"
+
+#: realtime/templates/realtime/flood/index.html:157
+msgid "Flooded RWs"
+msgstr "Zaplavené RW"
+
+#: realtime/templates/realtime/flood/index.html:245
+msgid "Show"
+msgstr "Zobrazit"
+
+#: realtime/templates/realtime/indicator.html:36
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: realtime/templates/realtime/indicator.html:37
+msgid "Email"
+msgstr "Email"
+
+#: realtime/templates/realtime/indicator.html:58
+#: realtime/templates/realtime/nav_second.html:20
+msgid "Indicator"
+msgstr "Indikátor"
+
+#: realtime/templates/realtime/indicator.html:59
+msgid "Value"
+msgstr "Hodnota"
+
+#: realtime/templates/realtime/indicator.html:60
+msgid "Status"
+msgstr "Stav"
+
+#: realtime/templates/realtime/indicator.html:61
+msgid "Notes"
+msgstr "Poznámky"
+
+#: realtime/templates/realtime/nav_second.html:6
+msgid "Earthquake"
+msgstr "Zemětřesení"
+
+#: realtime/templates/realtime/nav_second.html:13
+msgid "Volcanic Ash"
+msgstr "Sopečný popel"
+
+#: realtime/templates/realtime/nav_second.html:17
+msgid "API Browser"
+msgstr "API Browser"
+
+#: realtime/templatetags/realtime_extras.py:45
+#, python-format
+msgid "%d days"
+msgstr "%d dní"
+
+#: realtime/templatetags/realtime_extras.py:49
+#, python-format
+msgid "%d hours"
+msgstr "%d hodin"
+
+#: realtime/templatetags/realtime_extras.py:53
+#, python-format
+msgid "%d minutes"
+msgstr "%d minut"
+
+#: realtime/templatetags/realtime_extras.py:57
+#, python-format
+msgid "%d seconds"
+msgstr "%d vteřin"
+
+#: realtime/templatetags/realtime_extras.py:59
+#, python-format
+msgid "%d microseconds"
+msgstr "%d mikrosekund"
+
+#: realtime/views/earthquake.py:66 realtime/views/flood.py:64
+msgid "Select Area"
+msgstr "Vybrat oblast"
+
+#: realtime/views/earthquake.py:67 realtime/views/flood.py:65
+msgid "Remove Selection"
+msgstr "Odebrat výběr"
+
+#: realtime/views/earthquake.py:68 realtime/views/flood.py:66
+msgid "Select area within current zoom"
+msgstr "Vybrat oblast v rámci aktuálního zvětšení"
