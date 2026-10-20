@@ -147,6 +147,54 @@ exposure_class_field = {
     'replace_null': False
 }
 
+# exposure_vulnerability_score_count_field
+vulnerability_score_count_field = {
+    'key': 'vulnerability_score_exposure_count_field',
+    'name': tr('Exposure Vulnerability Score'),
+    'field_name': 'vulnerability_score_exposure_count',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # Short description
+        '...'),
+    'help_text': tr(
+        '...'
+        '...'
+        '...'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Exposure vulnerability score
+exposure_vulnerability_score_field = {
+    'key': 'exposure_vulnerability_score_field',
+    'name': tr('Exposure Vulnerability Score'),
+    'field_name': 'exposure_vulnerability_score',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(  # Short description
+        'A VULNERABILITY_SCORE attribute in the exposure layer.'),
+    'help_text': tr(
+        'The vulnerability score  attribute will be used'
+        '...'
+        '...'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # # # # # # # # # #
 # Hazard
 # # # # # # # # # #
@@ -1720,6 +1768,29 @@ disabled_displaced_count_field = {
         'The number of disabled people displaced for each feature.'),
     'help_text': tr(
         'The number of disabled people displaced for each feature.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+vulnerability_score_field = {
+    'key': 'vulnerability_score_field',
+    'name': tr('Vulnerability Score'),
+    'field_name': 'vulnerability_score',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'The vulnerability score field indicates ... '
+        '...'),
+    'help_text': tr(
+        '"Vulnerability" is defined as: {concept}').format(
+            concept=concepts['vulnerability']['description']),
     'citations': [
         {
             'text': None,

@@ -19,6 +19,8 @@ from safe.definitions.fields import (
     exposure_count_field,
     affected_field,
     size_field,
+    exposure_vulnerability_score_field,
+    vulnerability_score_count_field
 )
 from safe.definitions.hazard_classifications import not_exposed_class
 from safe.definitions.layer_purposes import (
@@ -70,6 +72,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
     source_fields = impact.keywords['inasafe_fields']
     target_fields = aggregate_hazard.keywords['inasafe_fields']
 
+    vul = exposure_vulnerability_score_field['key'] in source_fields
+
     target_compulsory_fields = [
         aggregation_id_field,
         aggregation_name_field,
@@ -110,10 +114,16 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
     dynamic_structure = [
         [exposure_count_field, unique_exposure],
     ]
+    additional_fields = [affected_field, total_field]
+
+    if vul:
+        additional_fields.append(
+            vulnerability_score_count_field)
+
     add_fields(
         aggregate_hazard,
         absolute_values,
-        [affected_field, total_field],
+        additional_fields,
         dynamic_structure,
     )
 
@@ -122,6 +132,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
     request = QgsFeatureRequest()
     request.setFlags(QgsFeatureRequest.NoGeometry)
     LOGGER.debug('Computing the aggregate hazard summary.')
+
+    vulnerability_sums = {}
+
     for feature in impact.getFeatures(request):
         # Field_index can be equal to 0.
         if field_index is not None:
@@ -142,6 +155,21 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
                 or (hasattr(exposure_value, 'isNull')
                     and exposure_value.isNull())):
             exposure_value = 'NULL'
+
+        if vul:
+            vulnerability_score = feature[source_fields[exposure_vulnerability_score_field['key']]]
+
+            if (vulnerability_score is None
+                    or vulnerability_score == ''
+                    or (hasattr(vulnerability_score, 'isNull')
+                        and vulnerability_score.isNull())):
+                vulnerability_score = 0
+
+            hazard_aggregation_key = f'{hazard_value} - {aggregation_value}'
+            if hazard_aggregation_key in vulnerability_sums.keys():
+                vulnerability_sums[hazard_aggregation_key] += vulnerability_score
+            else:
+                vulnerability_sums[hazard_aggregation_key] = vulnerability_score
 
         flat_table.add_value(
             value,
@@ -196,11 +224,24 @@ def aggregate_hazard_summary(impact, aggregate_hazard):
             classification=classification,
             hazard_class=feature_hazard_value)
         affected = tr(str(affected))
+
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure), affected)
 
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure) + 1, total)
+
+
+        if vul:
+            hazard_aggregation_key = f'{feature_hazard_id} - {aggregation_value}'
+            try:
+                vulnerability_score = vulnerability_sums[hazard_aggregation_key]
+            except Exception:
+                vulnerability_score = 0
+
+            aggregate_hazard.changeAttributeValue(
+                area.id(), shift + len(unique_exposure) + 2, vulnerability_score)
+
 
         for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
