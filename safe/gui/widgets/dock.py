@@ -322,8 +322,10 @@ class Dock(QDockWidget, FORM_CLASS):
         too_wide = pixmap.width() > dock_width
         if too_wide or too_high:
             pixmap = pixmap.scaled(
-                maximum_width, maximum_height, Qt.KeepAspectRatio)
-        self.organisation_logo.setMaximumWidth(maximum_width)
+                int(maximum_width),
+                int(maximum_height),
+                Qt.KeepAspectRatio)
+        self.organisation_logo.setMaximumWidth(int(maximum_width))
         # We have manually scaled using logic above
         self.organisation_logo.setScaledContents(False)
         self.organisation_logo.setPixmap(pixmap)
@@ -415,7 +417,7 @@ class Dock(QDockWidget, FORM_CLASS):
                         int(maximum_height),
                         Qt.KeepAspectRatio)
 
-                self.organisation_logo.setMaximumWidth(maximum_width)
+                self.organisation_logo.setMaximumWidth(int(maximum_width))
                 # We have manually scaled using logic above
                 self.organisation_logo.setScaledContents(False)
                 self.organisation_logo.setPixmap(pixmap)
